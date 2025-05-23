@@ -1,0 +1,72 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockManagement", "StockManagement\StockManagement\StockManagement.csproj", "{1A405DAD-566D-4FA9-9874-CE387445D2B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockManagement.Client", "StockManagement\StockManagement.Client\StockManagement.Client.csproj", "{6C7CB66C-B8A9-4FF8-8823-0430ED7E4ABF}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "StockManagement.Database", "StockManagement.Database\StockManagement.Database.sqlproj", "{F38D476B-C10B-412B-ACE9-0D28858698FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockManagement.Repositories", "StockManagement.Repositories\StockManagement.Repositories.csproj", "{9ED35CB8-6F9B-48EE-86FD-D6F1FAE69F1F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{010914A3-75D2-4AE2-B27C-416EF21A0FFE} = {010914A3-75D2-4AE2-B27C-416EF21A0FFE}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockManagement.Repositories.Interfaces", "StockManagement.Repositories.Interfaces\StockManagement.Repositories.Interfaces.csproj", "{259C4675-1D6E-410B-84CD-FD7D65BE4935}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockManagement.Models", "StockManagement.Models\StockManagement.Models.csproj", "{010914A3-75D2-4AE2-B27C-416EF21A0FFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockManagement.Services.Interfaces", "StockManagement.Services.Interfaces\StockManagement.Services.Interfaces.csproj", "{2E98488E-BF2B-4FE6-9D4C-C85444BE5168}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockManagement.Services", "StockManagement.Services\StockManagement.Services.csproj", "{108AE65A-B2BA-46AA-B9FA-8FFFCE21DA7B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A405DAD-566D-4FA9-9874-CE387445D2B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A405DAD-566D-4FA9-9874-CE387445D2B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A405DAD-566D-4FA9-9874-CE387445D2B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A405DAD-566D-4FA9-9874-CE387445D2B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C7CB66C-B8A9-4FF8-8823-0430ED7E4ABF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C7CB66C-B8A9-4FF8-8823-0430ED7E4ABF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C7CB66C-B8A9-4FF8-8823-0430ED7E4ABF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C7CB66C-B8A9-4FF8-8823-0430ED7E4ABF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F38D476B-C10B-412B-ACE9-0D28858698FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F38D476B-C10B-412B-ACE9-0D28858698FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F38D476B-C10B-412B-ACE9-0D28858698FF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{F38D476B-C10B-412B-ACE9-0D28858698FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F38D476B-C10B-412B-ACE9-0D28858698FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F38D476B-C10B-412B-ACE9-0D28858698FF}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{9ED35CB8-6F9B-48EE-86FD-D6F1FAE69F1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ED35CB8-6F9B-48EE-86FD-D6F1FAE69F1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ED35CB8-6F9B-48EE-86FD-D6F1FAE69F1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ED35CB8-6F9B-48EE-86FD-D6F1FAE69F1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{259C4675-1D6E-410B-84CD-FD7D65BE4935}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{259C4675-1D6E-410B-84CD-FD7D65BE4935}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{259C4675-1D6E-410B-84CD-FD7D65BE4935}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{259C4675-1D6E-410B-84CD-FD7D65BE4935}.Release|Any CPU.Build.0 = Release|Any CPU
+		{010914A3-75D2-4AE2-B27C-416EF21A0FFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{010914A3-75D2-4AE2-B27C-416EF21A0FFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{010914A3-75D2-4AE2-B27C-416EF21A0FFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{010914A3-75D2-4AE2-B27C-416EF21A0FFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E98488E-BF2B-4FE6-9D4C-C85444BE5168}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E98488E-BF2B-4FE6-9D4C-C85444BE5168}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E98488E-BF2B-4FE6-9D4C-C85444BE5168}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E98488E-BF2B-4FE6-9D4C-C85444BE5168}.Release|Any CPU.Build.0 = Release|Any CPU
+		{108AE65A-B2BA-46AA-B9FA-8FFFCE21DA7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{108AE65A-B2BA-46AA-B9FA-8FFFCE21DA7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{108AE65A-B2BA-46AA-B9FA-8FFFCE21DA7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{108AE65A-B2BA-46AA-B9FA-8FFFCE21DA7B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A881A362-536A-4896-BA82-9BA574A7B11A}
+	EndGlobalSection
+EndGlobal
