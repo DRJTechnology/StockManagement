@@ -1,2 +1,2 @@
-﻿CREATE USER [stockmanagement-user] FOR LOGIN [stockmanagement-user];
+﻿--CREATE USER [stockmanagement-user] FOR LOGIN [stockmanagement-user];
 
