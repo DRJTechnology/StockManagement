@@ -54,11 +54,11 @@ public partial class ProductsBase : ComponentBase
     {
         if (EditProduct.Id == 0)
         {
-            await ProductService.CreateAsync(EditProduct);
+            var newId = await ProductService.CreateAsync(EditProduct);
             Products.Add(
                 new ProductResponseModel()
                     { 
-                    Id = EditProduct.Id, 
+                    Id = newId, 
                     ProductName = EditProduct.ProductName, 
                     Deleted = false 
                 });

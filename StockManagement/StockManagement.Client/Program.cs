@@ -14,6 +14,6 @@ builder.Services.AddHttpClient("WebAPI", client => client.BaseAddress = new Uri(
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("WebAPI"));
 
 builder.Services.AddScoped<IProductDataService, ProductDataService>();
-
+builder.Services.AddScoped<IVenueDataService, VenueDataService>();
 
 await builder.Build().RunAsync();
