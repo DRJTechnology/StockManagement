@@ -12,20 +12,10 @@ else
 {
     <button class="btn btn-primary mb-2" @onclick="ShowAddForm">Add Venue</button>
 
-    @if (ShowForm)
-    {
-        <EditForm Model="EditVenue" OnValidSubmit="HandleValidSubmit">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-
-            <div class="mb-2">
-                <label>Name:</label>
-                <InputText class="form-control" @bind-Value="EditVenue.VenueName" autocomplete="off" />
-            </div>
-            <button class="btn btn-success" type="submit">Save</button>
-            <button class="btn btn-secondary ms-2" type="button" @onclick="CancelEdit">Cancel</button>
-        </EditForm>
-    }
+    <VenueEditModal Show="ShowForm"
+                    EditVenue="EditVenue"
+                    OnCancel="CancelEdit"
+                    OnValidSubmit="HandleValidSubmit" />
 
     <table class="table table-striped">
         <thead>
