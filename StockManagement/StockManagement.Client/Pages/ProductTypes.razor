@@ -12,20 +12,10 @@ else
 {
     <button class="btn btn-primary mb-2" @onclick="ShowAddForm">Add Product Type</button>
 
-    @if (ShowForm)
-    {
-        <EditForm Model="EditProductType" OnValidSubmit="HandleValidSubmit">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-
-            <div class="mb-2">
-                <label>Name:</label>
-                <InputText class="form-control" @bind-Value="EditProductType.ProductTypeName" />
-            </div>
-            <button class="btn btn-success" type="submit">Save</button>
-            <button class="btn btn-secondary ms-2" type="button" @onclick="CancelEdit">Cancel</button>
-        </EditForm>
-    }
+    <ProductTypeEditModal Show="ShowForm"
+                          EditProductType="EditProductType"
+                          OnCancel="CancelEdit"
+                          OnValidSubmit="HandleValidSubmit" />
 
     <table class="table table-striped">
         <thead>
