@@ -14,12 +14,14 @@ BEGIN
 		a.[Id],
 		a.[ActivityDate],
 		a.[ActionId],
+		act.[ActionName],
 		a.[ProductId],
 		p.[ProductName],
 		a.[ProductTypeId],
 		pt.[ProductTypeName],
 		a.[VenueId],
 		v.[VenueName],
+		a.[Quantity],
 		a.[Deleted],
 		a.[AmendUserID],
 		a.[AmendDate]
@@ -27,6 +29,7 @@ BEGIN
 	INNER JOIN [Product] p ON a.[ProductId] = p.Id
 	INNER JOIN [ProductType] pt ON a.[ProductTypeId] = pt.Id
 	INNER JOIN [Venue] v ON a.[VenueId] = v.Id
+	INNER JOIN [Action] act ON a.[ActionId] = act.Id
 	WHERE
 		a.[Deleted] <> 1
 	ORDER BY

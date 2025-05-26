@@ -1,0 +1,51 @@
+@page "/activities"
+@rendermode InteractiveWebAssembly
+@inherits ActivitiesBase
+
+<h3>Activities</h3>
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <button class="btn btn-primary mb-2" @onclick="ShowAddForm">Add Activity</button>
+
+    <ActivityEditModal Show="ShowForm"
+                       EditActivity="EditActivity"
+                       Lookups="Lookups"
+                       OnCancel="CancelEdit"
+                       OnValidSubmit="HandleValidSubmit" />
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Action</th>
+                <th>Product</th>
+                <th>Product Type</th>
+                <th>Venue</th>
+                <th>Quantity</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var activity in Activities)
+            {
+                <tr>
+                    <td>@activity.ActivityDate.ToShortDateString()</td>
+                    <td>@activity.ActionName</td>
+                    <td>@activity.ProductName</td>
+                    <td>@activity.ProductTypeName</td>
+                    <td>@activity.VenueName</td>
+                    <td>@activity.Quantity</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning" @onclick="() => Edit(activity)">Edit</button>
+                        <button class="btn btn-sm btn-danger ms-2" @onclick="() => Delete(activity.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

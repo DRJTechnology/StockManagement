@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[Action] (
-    [Id]              INT           IDENTITY (1, 1) NOT NULL,
+    [Id]              INT           NOT NULL,
     [ActionName]      NVARCHAR (50) NOT NULL,
     [Direction]       SMALLINT      NOT NULL,
     [AffectStockRoom] BIT           CONSTRAINT [DF_Action_AffectStockRoom] DEFAULT ((0)) NOT NULL,
