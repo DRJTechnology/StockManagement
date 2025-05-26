@@ -29,9 +29,11 @@ BEGIN
 	INNER JOIN [Venue] v ON a.[VenueId] = v.Id
 	WHERE
 		a.[Deleted] <> 1
-		--AND p.Deleted <> 1
-		--AND pt.Deleted <> 1
-		--AND v.Deleted <> 1
+	ORDER BY
+		a.[ActivityDate] DESC,
+		p.[ProductName] ASC,
+		pt.[ProductTypeName] ASC,
+		v.[VenueName] ASC
 
 	SET @Err = @@Error
 

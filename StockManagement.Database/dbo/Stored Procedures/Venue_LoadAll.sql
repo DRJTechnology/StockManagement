@@ -19,6 +19,8 @@ BEGIN
 	FROM [Venue]
 	WHERE
 		[Deleted] <> 1
+	ORDER BY
+		[VenueName] ASC
 
 	SET @Err = @@Error
 

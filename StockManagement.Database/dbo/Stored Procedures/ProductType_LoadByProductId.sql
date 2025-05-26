@@ -24,6 +24,8 @@ BEGIN
 		ppt.ProductId = @ProductId
 		AND pt.[Deleted] <> 1
 		AND ppt.[Deleted] <> 1
+	ORDER BY
+		pt.[ProductTypeName]
 
 	SET @Err = @@Error
 

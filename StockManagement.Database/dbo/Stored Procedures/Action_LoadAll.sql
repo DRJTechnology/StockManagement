@@ -18,6 +18,8 @@ BEGIN
 	FROM [Action]
 	WHERE
 		[Deleted] <> 1
+	ORDER BY
+		[ActionName] ASC
 
 	SET @Err = @@Error
 

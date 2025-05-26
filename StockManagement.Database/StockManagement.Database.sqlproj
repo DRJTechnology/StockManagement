@@ -60,6 +60,9 @@
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Stored Procedures\" />
     <Folder Include="Security\" />
+    <Folder Include="auth\" />
+    <Folder Include="auth\Tables\" />
+    <Folder Include="auth\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Venue.sql" />
@@ -93,5 +96,28 @@
     <Build Include="dbo\Stored Procedures\Activity_LoadAll.sql" />
     <Build Include="Security\stockmanagement-user.sql" />
     <Build Include="Security\RoleMemberships.sql" />
+    <Build Include="auth\Tables\AspNetUserTokens.sql" />
+    <Build Include="auth\Tables\AspNetUsers.sql" />
+    <Build Include="auth\Tables\AspNetUserRoles.sql" />
+    <Build Include="auth\Tables\AspNetUserLogins.sql" />
+    <Build Include="auth\Tables\AspNetUserClaims.sql" />
+    <Build Include="auth\Tables\AspNetRoles.sql" />
+    <Build Include="auth\Tables\AspNetRoleClaims.sql" />
+    <Build Include="auth\Stored Procedures\UserUpdate.sql" />
+    <Build Include="auth\Stored Procedures\UserLoginProviderCreate.sql" />
+    <Build Include="auth\Stored Procedures\UserLoginLoadByUserId.sql" />
+    <Build Include="auth\Stored Procedures\UserLoadByUserName.sql" />
+    <Build Include="auth\Stored Procedures\UserLoadByLoginProvider.sql" />
+    <Build Include="auth\Stored Procedures\UserLoadById.sql" />
+    <Build Include="auth\Stored Procedures\UserLoadByEmail.sql" />
+    <Build Include="auth\Stored Procedures\UserIsInRole.sql" />
+    <Build Include="auth\Stored Procedures\UserDelete.sql" />
+    <Build Include="auth\Stored Procedures\UserCreate.sql" />
+    <Build Include="auth\Stored Procedures\RoleUpdate.sql" />
+    <Build Include="auth\Stored Procedures\RoleLoadByUserId.sql" />
+    <Build Include="auth\Stored Procedures\RoleLoadByName.sql" />
+    <Build Include="auth\Stored Procedures\RoleLoadById.sql" />
+    <Build Include="auth\Stored Procedures\RoleCreate.sql" />
+    <Build Include="Security\auth.sql" />
   </ItemGroup>
 </Project>

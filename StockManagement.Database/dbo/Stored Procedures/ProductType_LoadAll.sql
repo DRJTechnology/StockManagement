@@ -18,6 +18,8 @@ BEGIN
 	FROM [ProductType]
 	WHERE
 		[Deleted] <> 1
+	ORDER BY
+		[ProductTypeName] ASC
 
 	SET @Err = @@Error
 
