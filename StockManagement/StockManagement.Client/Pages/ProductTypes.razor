@@ -1,0 +1,50 @@
+@page "/producttypes"
+@rendermode InteractiveWebAssembly
+@inherits ProductTypesBase
+
+<h3>Product Types</h3>
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <button class="btn btn-primary mb-2" @onclick="ShowAddForm">Add Product Type</button>
+
+    @if (ShowForm)
+    {
+        <EditForm Model="EditProductType" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="mb-2">
+                <label>Name:</label>
+                <InputText class="form-control" @bind-Value="EditProductType.ProductTypeName" />
+            </div>
+            <button class="btn btn-success" type="submit">Save</button>
+            <button class="btn btn-secondary ms-2" type="button" @onclick="CancelEdit">Cancel</button>
+        </EditForm>
+    }
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var productType in ProductTypes)
+            {
+                <tr>
+                    <td>@productType.ProductTypeName</td>
+                    <td>
+                        <button class="btn btn-sm btn-warning" @onclick="() => Edit(productType)">Edit</button>
+                        <button class="btn btn-sm btn-danger ms-2" @onclick="() => Delete(productType.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -15,5 +15,6 @@ builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().Cre
 
 builder.Services.AddScoped<IProductDataService, ProductDataService>();
 builder.Services.AddScoped<IVenueDataService, VenueDataService>();
+builder.Services.AddScoped<IProductTypeDataService, ProductTypeDataService>();
 
 await builder.Build().RunAsync();

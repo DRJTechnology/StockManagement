@@ -64,6 +64,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Client data services
 builder.Services.AddScoped<IProductDataService, ClientProductDataService>();
+builder.Services.AddScoped<IProductTypeDataService, ClientProductTypeDataService>();
 builder.Services.AddScoped<IVenueDataService, ClientVenueDataService>();
 
 // Auto Mapper Configurations
