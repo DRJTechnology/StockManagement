@@ -20,14 +20,14 @@
                             <InputDate class="form-control" @bind-Value="EditActivity.ActivityDate" />
                         </div>
                         <div class="mb-2">
-                            <label>Action:</label>
-                            <InputSelect class="form-control" @bind-Value="EditActivity.ActionId">
-                                <option value="">-- Select Action --</option>
-                                @if (Lookups?.ActionList != null)
+                            <label>Product Type:</label>
+                            <InputSelect class="form-control" @bind-Value="EditActivity.ProductTypeId">
+                                <option value="">-- Select Product Type --</option>
+                                @if (Lookups?.ProductTypeList != null)
                                 {
-                                    foreach (var action in Lookups.ActionList)
+                                    foreach (var type in Lookups.ProductTypeList)
                                     {
-                                        <option value="@action.Id">@action.ActionName</option>
+                                        <option value="@type.Id">@type.ProductTypeName</option>
                                     }
                                 }
                             </InputSelect>
@@ -46,14 +46,14 @@
                             </InputSelect>
                         </div>
                         <div class="mb-2">
-                            <label>Product Type:</label>
-                            <InputSelect class="form-control" @bind-Value="EditActivity.ProductTypeId">
-                                <option value="">-- Select Product Type --</option>
-                                @if (Lookups?.ProductTypeList != null)
+                            <label>Action:</label>
+                            <InputSelect class="form-control" @bind-Value="EditActivity.ActionId">
+                                <option value="">-- Select Action --</option>
+                                @if (Lookups?.ActionList != null)
                                 {
-                                    foreach (var type in Lookups.ProductTypeList)
+                                    foreach (var action in Lookups.ActionList)
                                     {
-                                        <option value="@type.Id">@type.ProductTypeName</option>
+                                        <option value="@action.Id">@action.ActionName</option>
                                     }
                                 }
                             </InputSelect>
