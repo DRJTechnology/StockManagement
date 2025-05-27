@@ -34,7 +34,7 @@ else
             @foreach (var activity in Activities)
             {
                 <tr>
-                    <td>@activity.ActivityDate.ToShortDateString()</td>
+                    <td>@activity.ActivityDate.ToString("dd MMM yyyy")</td>
                     <td>@activity.ActionName</td>
                     <td>@activity.ProductName</td>
                     <td>@activity.ProductTypeName</td>
