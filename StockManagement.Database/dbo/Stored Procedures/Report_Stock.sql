@@ -1,0 +1,36 @@
+﻿-- =========================================================
+-- Author:		Dave Brown
+-- Create date: 27 May 2025
+-- Description:	Get Stock levels
+-- =========================================================
+CREATE PROCEDURE [dbo].[Report_Stock]
+AS
+BEGIN
+	SET NOCOUNT ON
+	DECLARE @Err int;
+
+    WITH CombinedActivity AS (
+        SELECT a1.ActivityDate, a1.ProductId, a1.ProductTypeId, a1.VenueId, a1.Quantity * a2.Direction AS Quantity
+        FROM dbo.Activity a1
+	    INNER JOIN dbo.[Action] a2 ON a1.ActionId = a2.Id 
+        UNION ALL
+        SELECT a.ActivityDate, a.ProductId, a.ProductTypeId, 1 as VenueId, a.Quantity * act.Direction * -1 AS Quantity
+        FROM dbo.[Activity] a
+        INNER JOIN dbo.[Action] act ON a.ActionId = act.Id
+        WHERE act.AffectStockRoom = 1
+    )
+
+    -- Perform the GROUP BY on the combined results
+    SELECT v.VenueName, pt.ProductTypeName, p.ProductName, SUM(ca.Quantity) AS TotalQuantity
+    FROM CombinedActivity ca
+    INNER JOIN dbo.Product p ON ca.ProductId = p.Id
+    INNER JOIN dbo.ProductType pt ON ca.ProductTypeId = pt.Id
+    INNER JOIN dbo.Venue v ON ca.VenueId = v.Id
+    GROUP BY v.VenueName, pt.ProductTypeName, p.ProductName
+    ORDER BY v.VenueName, pt.ProductTypeName, p.ProductName
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END
+

@@ -1,0 +1,40 @@
+@page "/stock-report"
+
+<h3>Stock Report</h3>
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else if (StockReportItems == null || !StockReportItems.Any())
+{
+    <p>No stock data available.</p>
+}
+else
+{
+    @foreach (var venueGroup in GroupedStockReport)
+    {
+        <h4>@venueGroup.Key</h4>
+        @foreach (var productTypeGroup in venueGroup.Value)
+        {
+            <h5>@productTypeGroup.Key</h5>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in productTypeGroup.Value)
+                    {
+                        <tr>
+                            <td>@item.ProductName</td>
+                            <td>@item.TotalQuantity</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+}
