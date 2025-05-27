@@ -17,35 +17,36 @@ else
                        Lookups="Lookups"
                        OnCancel="CancelEdit"
                        OnValidSubmit="HandleValidSubmit" />
-
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Product Type</th>
-                <th>Product</th>
-                <th>Action</th>
-                <th>Venue</th>
-                <th>Quantity</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var activity in Activities)
-            {
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>@activity.ActivityDate.ToString("dd MMM yyyy")</td>
-                    <td>@activity.ProductTypeName</td>
-                    <td>@activity.ProductName</td>
-                    <td>@activity.ActionName</td>
-                    <td>@activity.VenueName</td>
-                    <td>@activity.Quantity</td>
-                    <td>
-                        <button class="btn btn-sm btn-warning" @onclick="() => Edit(activity)">Edit</button>
-                        <button class="btn btn-sm btn-danger ms-2" @onclick="() => Delete(activity.Id)">Delete</button>
-                    </td>
+                    <th>Date</th>
+                    <th>Product Type</th>
+                    <th>Product</th>
+                    <th>Action</th>
+                    <th>Venue</th>
+                    <th>Quantity</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var activity in Activities)
+                {
+                    <tr>
+                        <td>@activity.ActivityDate.ToString("dd MMM yyyy")</td>
+                        <td>@activity.ProductTypeName</td>
+                        <td>@activity.ProductName</td>
+                        <td>@activity.ActionName</td>
+                        <td>@activity.VenueName</td>
+                        <td>@activity.Quantity</td>
+                        <td>
+                            <button class="btn btn-sm btn-warning" @onclick="() => Edit(activity)">Edit</button>
+                            <button class="btn btn-sm btn-danger ms-2" @onclick="() => Delete(activity.Id)">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }

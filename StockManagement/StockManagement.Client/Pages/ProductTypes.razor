@@ -17,24 +17,26 @@ else
                           OnCancel="CancelEdit"
                           OnValidSubmit="HandleValidSubmit" />
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var productType in ProductTypes)
-            {
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>@productType.ProductTypeName</td>
-                    <td>
-                        <button class="btn btn-sm btn-warning" @onclick="() => Edit(productType)">Edit</button>
-                        <button class="btn btn-sm btn-danger ms-2" @onclick="() => Delete(productType.Id)">Delete</button>
-                    </td>
+                    <th>Name</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var productType in ProductTypes)
+                {
+                    <tr>
+                        <td>@productType.ProductTypeName</td>
+                        <td>
+                            <button class="btn btn-sm btn-warning" @onclick="() => Edit(productType)">Edit</button>
+                            <button class="btn btn-sm btn-danger ms-2" @onclick="() => Delete(productType.Id)">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
