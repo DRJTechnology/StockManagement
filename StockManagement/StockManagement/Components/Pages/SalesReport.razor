@@ -14,12 +14,23 @@ else
         foreach (var productType in venue.Value)
         {
             <h5>@productType.Key</h5>
-            <ul>
-                @foreach (var item in productType.Value)
-                {
-                    <li>@item.ProductName: @item.TotalSales sales</li>
-                }
-            </ul>
+            <table class="table table-striped auto-width-table">
+@*                 <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Sales</th>
+                    </tr>
+                </thead>
+ *@                <tbody>
+                    @foreach (var item in productType.Value)
+                    {
+                        <tr>
+                            <td>@item.ProductName</td>
+                            <td>@item.TotalSales</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         }
     }
 }
