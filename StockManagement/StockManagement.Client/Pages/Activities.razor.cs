@@ -73,20 +73,21 @@ public partial class ActivitiesBase : ComponentBase
         if (EditActivity.Id == 0)
         {
             var newId = await ActivityService.CreateAsync(EditActivity);
-            Activities.Add(
+            Activities.Insert(
+                0,
                 new ActivityResponseModel()
                 {
                     Id = newId,
                     ActionId = EditActivity.ActionId,
-                    ActionName = "",
+                    ActionName = Lookups.ActionList.Where(a => a.Id == EditActivity.ActionId).FirstOrDefault()!.ActionName,
                     ActivityDate = EditActivity.ActivityDate,
                     ProductId = EditActivity.ProductId,
                     ProductTypeId = EditActivity.ProductTypeId,
                     VenueId = EditActivity.VenueId,
                     Quantity = EditActivity.Quantity,
-                    ProductName = "",
-                    ProductTypeName = "",
-                    VenueName = "",
+                    ProductName = Lookups.ProductList.Where(p => p.Id == EditActivity.ProductId).FirstOrDefault()!.ProductName,
+                    ProductTypeName = Lookups.ProductTypeList.Where(pt => pt.Id == EditActivity.ProductTypeId).FirstOrDefault()!.ProductTypeName,
+                    VenueName = Lookups.VenueList.Where(v => v.Id == EditActivity.VenueId).FirstOrDefault()!.VenueName,
                     Deleted = false
                 });
         }
@@ -100,15 +101,15 @@ public partial class ActivitiesBase : ComponentBase
                 {
                     Id = EditActivity.Id,
                     ActionId = EditActivity.ActionId,
-                    ActionName = "",
+                    ActionName = Lookups.ActionList.Where(a => a.Id == EditActivity.ActionId).FirstOrDefault()!.ActionName,
                     ActivityDate = EditActivity.ActivityDate,
                     ProductId = EditActivity.ProductId,
                     ProductTypeId = EditActivity.ProductTypeId,
                     VenueId = EditActivity.VenueId,
                     Quantity = EditActivity.Quantity,
-                    ProductName = "",
-                    ProductTypeName = "",
-                    VenueName = "",
+                    ProductName = Lookups.ProductList.Where(p => p.Id == EditActivity.ProductId).FirstOrDefault()!.ProductName,
+                    ProductTypeName = Lookups.ProductTypeList.Where(pt => pt.Id == EditActivity.ProductTypeId).FirstOrDefault()!.ProductTypeName,
+                    VenueName = Lookups.VenueList.Where(v => v.Id == EditActivity.VenueId).FirstOrDefault()!.VenueName,
                     Deleted = false
                 };
             }
