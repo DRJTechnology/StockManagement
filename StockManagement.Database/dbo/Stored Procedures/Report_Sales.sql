@@ -4,6 +4,9 @@
 -- Description:	Get Sales
 -- =========================================================
 CREATE PROCEDURE [dbo].[Report_Sales]
+	@VenueId int = 0,
+	@ProductId int = 0,
+	@ProductTypeId int = 0
 AS
 BEGIN
 	SET NOCOUNT ON
@@ -16,6 +19,9 @@ BEGIN
 	INNER JOIN dbo.Venue v ON a.VenueId = v.Id
 	WHERE	a.Deleted = 0
 		AND	a.ActionId = 5 -- Sale
+		AND (@VenueId IS NULL OR a.VenueId = @VenueId)
+		AND (@ProductId IS NULL OR a.ProductId = @ProductId)
+		AND (@ProductTypeId IS NULL OR a.ProductTypeId = @ProductTypeId)
 	GROUP BY v.VenueName, pt.ProductTypeName, p.ProductName
 	ORDER BY v.VenueName, pt.ProductTypeName, p.ProductName
 

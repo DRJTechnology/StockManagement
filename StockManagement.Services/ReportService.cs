@@ -7,15 +7,15 @@ namespace StockManagement.Services
 {
     public class ReportService(IMapper mapper, IReportRepository reportRepository) : IReportService
     {
-        public async Task<List<SalesReportItemDto>> GetSalesReportAsync()
+        public async Task<List<SalesReportItemDto>> GetSalesReportAsync(int venueId, int productTypeId, int productId)
         {
-            var reportItems = mapper.Map<List<SalesReportItemDto>>(await reportRepository.GetSalesReportAsync());
+            var reportItems = mapper.Map<List<SalesReportItemDto>>(await reportRepository.GetSalesReportAsync(venueId, productTypeId, productId));
             return reportItems;
         }
 
-        public async Task<List<StockReportItemDto>> GetStockReportAsync()
+        public async Task<List<StockReportItemDto>> GetStockReportAsync(int venueId, int productTypeId, int productId)
         {
-            var reportItems = mapper.Map<List<StockReportItemDto>>(await reportRepository.GetStockReportAsync());
+            var reportItems = mapper.Map<List<StockReportItemDto>>(await reportRepository.GetStockReportAsync(venueId, productTypeId, productId));
             return reportItems;
         }
     }

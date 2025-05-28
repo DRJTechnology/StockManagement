@@ -1,0 +1,82 @@
+@page "/stock-report"
+@inherits StockReportBase
+@rendermode InteractiveWebAssembly
+
+<h3>Stock Report</h3>
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else if (StockReportItems == null || !StockReportItems.Any())
+{
+    <p>No stock data available.</p>
+}
+else
+{
+    <div class="filters">
+        <label for="venueFilter">Venue:</label>
+        <InputSelect id="venueFilter" @bind-Value="VenueId">
+            <option value="0">All Venues</option>
+            @foreach (var venue in Lookups.VenueList)
+            {
+                <option value="@venue.Id">@venue.VenueName</option>
+            }
+        </InputSelect>
+
+        <label for="productTypeFilter">Product Type:</label>
+        <InputSelect id="productTypeFilter" @bind-Value="ProductTypeId">
+            <option value="0">All Product Types</option>
+            @foreach (var productType in Lookups.ProductTypeList)
+            {
+                <option value="@productType.Id">@productType.ProductTypeName</option>
+            }
+        </InputSelect>
+
+        <label for="productFilter">Product:</label>
+        <InputSelect id="productFilter" @bind-Value="ProductId">
+            <option value="0">All Products</option>
+            @foreach (var product in Lookups.ProductList)
+            {
+                <option value="@product.Id">@product.ProductName</option>
+            }
+        </InputSelect>
+    </div>
+
+    @foreach (var venueGroup in GroupedStockReport)
+    {
+        <h4>@venueGroup.Key</h4>
+        @foreach (var productTypeGroup in venueGroup.Value)
+        {
+            <h5>@productTypeGroup.Key</h5>
+            <table class="table table-striped auto-width-table">
+                <tbody>
+                    @foreach (var item in productTypeGroup.Value)
+                    {
+                        <tr>
+                            <td>@item.ProductName</td>
+                            <td>@item.TotalQuantity</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+}
+
+<style>
+    .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .filters label {
+        margin-right: 0.5rem;
+    }
+
+    .filters select {
+        min-width: 150px;
+    }
+</style>

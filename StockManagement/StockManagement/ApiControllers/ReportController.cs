@@ -10,11 +10,11 @@ namespace StockManagement.ApiControllers
     public class ReportController(ILogger<ReportController> logger, IReportService reportService) : ControllerBase
     {
         [HttpGet("sales")]
-        public async Task<IActionResult> GetSalesReport()
+        public async Task<IActionResult> GetSalesReport(int venueId, int productTypeId, int productId)
         {
             try
             {
-                var reportItems = await reportService.GetSalesReportAsync();
+                var reportItems = await reportService.GetSalesReportAsync(venueId, productTypeId, productId);
                 return this.Ok(reportItems);
             }
             catch (Exception ex)
@@ -25,11 +25,11 @@ namespace StockManagement.ApiControllers
         }
 
         [HttpGet("stock")]
-        public async Task<IActionResult> GetStockReport()
+        public async Task<IActionResult> GetStockReport(int venueId, int productTypeId, int productId)
         {
             try
             {
-                var reportItems = await reportService.GetStockReportAsync();
+                var reportItems = await reportService.GetStockReportAsync(venueId, productTypeId, productId);
                 return this.Ok(reportItems);
             }
             catch (Exception ex)

@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using StockManagement.Client.Interfaces;
+using StockManagement.Client.Services;
 using StockManagement.ClientDataServices;
 using StockManagement.Components;
 using StockManagement.Components.Account;
@@ -54,6 +55,7 @@ builder.Services.AddScoped<IVenueService, VenueService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<ILookupsService, LookupsService>();
 builder.Services.AddScoped<IActionRepository, ActionRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IProductProductTypeRepository, ProductProductTypeRepository>();
@@ -70,6 +72,7 @@ builder.Services.AddScoped<IProductTypeDataService, ClientProductTypeDataService
 builder.Services.AddScoped<IVenueDataService, ClientVenueDataService>();
 builder.Services.AddScoped<IActivityDataService, ClientActivityDataService>();
 builder.Services.AddScoped<ILookupsDataService, ClientLookupsDataService>();
+builder.Services.AddScoped<IReportDataService, ClientReportDataService>();
 
 // Auto Mapper Configurations
 var mappingConfig = new MapperConfiguration(mc =>

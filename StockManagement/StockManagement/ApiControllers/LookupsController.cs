@@ -9,34 +9,29 @@ namespace StockManagement.ApiControllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class LookupsController(ILogger<LookupsController> logger,
-                                    IActionService actionService,
-                                    IProductService productService,
-                                    IProductTypeService productTypeService,
-                                    IVenueService venueService
-                                    ) : ControllerBase
+    public class LookupsController : ControllerBase
     {
-        // GET: api/<ActivityController>
+        private readonly ILogger<LookupsController> _logger;
+        private readonly ILookupsService _lookupsService;
+
+        public LookupsController(ILogger<LookupsController> logger, ILookupsService lookupsService)
+        {
+            _logger = logger;
+            _lookupsService = lookupsService;
+        }
+
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             try
             {
-                List<LookupsModel> lookups = new List<LookupsModel> ()
-                {
-                    new LookupsModel {
-                    ActionList = await actionService.GetAllAsync(),
-                    ProductList = await productService.GetAllAsync(),
-                    ProductTypeList = await productTypeService.GetAllAsync(),
-                    VenueList = await venueService.GetAllAsync()
-                    }
-                };
-                return this.Ok(lookups);
+                var lookups = await _lookupsService.GetLookupsAsync();
+                return Ok(lookups);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Get");
-                return this.BadRequest();
+                _logger.LogError(ex, "Error fetching lookups");
+                return BadRequest();
             }
         }
     }
