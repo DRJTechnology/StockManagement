@@ -8,10 +8,6 @@
 {
     <p>Loading...</p>
 }
-else if (StockReportItems == null || !StockReportItems.Any())
-{
-    <p>No stock data available.</p>
-}
 else
 {
     <div class="filters">
@@ -43,23 +39,30 @@ else
         </InputSelect>
     </div>
 
-    @foreach (var venueGroup in GroupedStockReport)
+    if (StockReportItems == null || !StockReportItems.Any())
     {
-        <h4 class="venue-group">@venueGroup.Key</h4>
-        @foreach (var productTypeGroup in venueGroup.Value)
+        <p>No stock data available.</p>
+    }
+    else
+    {
+        @foreach (var venueGroup in GroupedStockReport)
         {
-            <h5 class="product-group">@productTypeGroup.Key</h5>
-            <table class="table table-striped auto-width-table indented-table">
-                <tbody>
-                    @foreach (var item in productTypeGroup.Value)
-                    {
-                        <tr>
-                            <td>@item.ProductName</td>
-                            <td>@item.TotalQuantity</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        }
+            <h4 class="venue-group">@venueGroup.Key</h4>
+            @foreach (var productTypeGroup in venueGroup.Value)
+            {
+                <h5 class="product-group">@productTypeGroup.Key</h5>
+                <table class="table table-striped auto-width-table indented-table">
+                    <tbody>
+                        @foreach (var item in productTypeGroup.Value)
+                        {
+                            <tr>
+                                <td>@item.ProductName</td>
+                                <td>@item.TotalQuantity</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        }     
     }
 }
