@@ -19,9 +19,9 @@ BEGIN
 	INNER JOIN dbo.Venue v ON a.VenueId = v.Id
 	WHERE	a.Deleted = 0
 		AND	a.ActionId = 5 -- Sale
-		AND (@VenueId IS NULL OR a.VenueId = @VenueId)
-		AND (@ProductId IS NULL OR a.ProductId = @ProductId)
-		AND (@ProductTypeId IS NULL OR a.ProductTypeId = @ProductTypeId)
+		AND (@VenueId = 0 OR a.VenueId = @VenueId)
+		AND (@ProductId = 0 OR a.ProductId = @ProductId)
+		AND (@ProductTypeId = 0 OR a.ProductTypeId = @ProductTypeId)
 	GROUP BY v.VenueName, pt.ProductTypeName, p.ProductName
 	ORDER BY v.VenueName, pt.ProductTypeName, p.ProductName
 
