@@ -70,3 +70,31 @@ h1:focus {
     .auto-width-table tr td:last-child {
         border-right: none; /* Remove the border for the last row */
     }
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.filters label {
+    margin-right: 0.5rem;
+}
+
+.filters select {
+    min-width: 150px;
+}
+
+.venue-group {
+    margin-left: 1rem;
+}
+
+.product-group {
+    margin-left: 2rem;
+}
+
+.indented-table {
+    margin-left: 3rem;
+}
+

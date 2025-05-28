@@ -45,11 +45,11 @@ else
 
     @foreach (var venueGroup in GroupedStockReport)
     {
-        <h4>@venueGroup.Key</h4>
+        <h4 class="venue-group">@venueGroup.Key</h4>
         @foreach (var productTypeGroup in venueGroup.Value)
         {
-            <h5>@productTypeGroup.Key</h5>
-            <table class="table table-striped auto-width-table">
+            <h5 class="product-group">@productTypeGroup.Key</h5>
+            <table class="table table-striped auto-width-table indented-table">
                 <tbody>
                     @foreach (var item in productTypeGroup.Value)
                     {
@@ -63,20 +63,3 @@ else
         }
     }
 }
-
-<style>
-    .filters {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 1rem;
-        margin-bottom: 1rem;
-    }
-
-    .filters label {
-        margin-right: 0.5rem;
-    }
-
-    .filters select {
-        min-width: 150px;
-    }
-</style>

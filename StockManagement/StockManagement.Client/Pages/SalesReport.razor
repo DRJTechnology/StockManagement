@@ -45,11 +45,11 @@ else
 
     foreach (var venue in GroupedSalesReport)
     {
-        <h4>@venue.Key</h4>
+        <h4 class="venue-group">@venue.Key</h4>
         foreach (var productType in venue.Value)
         {
-            <h5>@productType.Key</h5>
-            <table class="table table-striped auto-width-table">
+            <h5 class="product-group">@productType.Key</h5>
+            <table class="table table-striped auto-width-table indented-table">
                 <tbody>
                     @foreach (var item in productType.Value)
                     {
