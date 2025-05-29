@@ -101,4 +101,5 @@ public partial class StockReportBase : ComponentBase
         var lookupsList = await LookupsService.GetAllAsync();
         Lookups = lookupsList.FirstOrDefault() ?? new LookupsModel();
     }
+
 }

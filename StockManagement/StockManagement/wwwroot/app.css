@@ -71,21 +71,6 @@ h1:focus {
         border-right: none; /* Remove the border for the last row */
     }
 
-.filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
-.filters label {
-    margin-right: 0.5rem;
-}
-
-.filters select {
-    min-width: 150px;
-}
-
 .venue-group {
     margin-left: 1rem;
 }
@@ -98,3 +83,8 @@ h1:focus {
     margin-left: 3rem;
 }
 
+div.filters {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px 0px;
+}

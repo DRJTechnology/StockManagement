@@ -1,0 +1,65 @@
+@using StockManagement.Models
+@using Microsoft.AspNetCore.Components.Forms
+@inherits ReportFilterBase
+
+<div class="card mb-3">
+    <div class="card-header" style="cursor:pointer"
+         @onclick="ToggleFilters">
+        <strong>Filters</strong>
+        <span class="float-end">
+            <i class="bi @(filtersExpanded ? "bi-chevron-down" : "bi-chevron-right")"></i>
+        </span>
+    </div>
+    @if (filtersExpanded)
+    {
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="form-floating">
+                        <InputSelect id="venueFilter" @bind-Value="VenueId" TValue="int" class="form-control">
+                            <option value="0">All Venues</option>
+                            @if (Lookups?.VenueList != null)
+                            {
+                                @foreach (var venue in Lookups.VenueList)
+                                {
+                                    <option value="@venue.Id">@venue.VenueName</option>
+                                }
+                            }
+                        </InputSelect>
+                        <label for="venueFilter">Venue:</label>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-floating">
+                        <InputSelect id="productTypeFilter" @bind-Value="ProductTypeId" TValue="int" class="form-control">
+                            <option value="0">All Product Types</option>
+                            @if (Lookups?.ProductTypeList != null)
+                            {
+                                @foreach (var productType in Lookups.ProductTypeList)
+                                {
+                                    <option value="@productType.Id">@productType.ProductTypeName</option>
+                                }
+                            }
+                        </InputSelect>
+                        <label for="productTypeFilter">Product Type:</label>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-floating">
+                        <InputSelect id="productFilter" @bind-Value="ProductId" TValue="int" class="form-control">
+                            <option value="0">All Products</option>
+                            @if (Lookups?.ProductList != null)
+                            {
+                                @foreach (var product in Lookups.ProductList)
+                                {
+                                    <option value="@product.Id">@product.ProductName</option>
+                                }
+                            }
+                        </InputSelect>
+                        <label for="productFilter">Product:</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
