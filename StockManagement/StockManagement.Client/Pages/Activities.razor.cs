@@ -22,19 +22,20 @@ public partial class ActivitiesBase : ComponentBase
     protected bool IsLoading { get; set; }
     public LookupsModel Lookups { get; private set; }
 
-    // Filter properties
-    protected DateTime? FilterDate { get; set; }
-    protected int? FilterProductTypeId { get; set; }
-    protected int? FilterProductId { get; set; }
-    protected int? FilterVenueId { get; set; }
-    protected int? FilterActionId { get; set; }
-    protected int? FilterQuantity { get; set; } // Added for quantity filter
+    //// Filter properties
+    //protected DateTime? FilterDate { get; set; }
+    //protected int? FilterProductTypeId { get; set; }
+    //protected int? FilterProductId { get; set; }
+    //protected int? FilterVenueId { get; set; }
+    //protected int? FilterActionId { get; set; }
+    //protected int? FilterQuantity { get; set; }
 
-    // Pagination properties
-    protected int CurrentPage { get; set; } = 1;
-    protected int PageSize { get; set; } = 25;
+    //// Pagination properties
+    //protected int CurrentPage { get; set; } = 1;
+    //protected int PageSize { get; set; } = 20;
+    protected ActivityFilterModel activityFilterModel = new ActivityFilterModel();
+
     protected int TotalPages { get; set; }
-    protected List<ActivityResponseModel> PagedActivities { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -49,46 +50,33 @@ public partial class ActivitiesBase : ComponentBase
 
     protected async Task LoadActivities()
     {
-        var allActivities = (await ActivityService.GetAllAsync())?.ToList() ?? new();
+        //var allActivities = (await ActivityService.GetAllAsync())?.ToList() ?? new();
+        var filteredActivities = await ActivityService.GetFilteredAsync(activityFilterModel);
 
-        Activities = allActivities
-            .Where(a =>
-                (!FilterDate.HasValue || a.ActivityDate.Date == FilterDate.Value.Date) &&
-                (!FilterProductTypeId.HasValue || FilterProductTypeId == 0 || a.ProductTypeId == FilterProductTypeId) &&
-                (!FilterProductId.HasValue || FilterProductId == 0 || a.ProductId == FilterProductId) &&
-                (!FilterVenueId.HasValue || FilterVenueId == 0 || a.VenueId == FilterVenueId) &&
-                (!FilterActionId.HasValue || FilterActionId == 0 || a.ActionId == FilterActionId) &&
-                (!FilterQuantity.HasValue || a.Quantity == FilterQuantity)
-            )
-            .ToList();
+        Activities = filteredActivities.Activity ?? new List<ActivityResponseModel>();
 
-        TotalPages = (int)Math.Ceiling(Activities.Count / (double)PageSize);
-        if (CurrentPage > TotalPages && TotalPages > 0)
-            CurrentPage = TotalPages;
-        if (CurrentPage < 1)
-            CurrentPage = 1;
-
-        PagedActivities = Activities
-            .Skip((CurrentPage - 1) * PageSize)
-            .Take(PageSize)
-            .ToList();
+        TotalPages = filteredActivities.TotalPages;
+        if (activityFilterModel.CurrentPage > TotalPages && TotalPages > 0)
+            activityFilterModel.CurrentPage = TotalPages;
+        if (activityFilterModel.CurrentPage < 1)
+            activityFilterModel.CurrentPage = 1;
     }
 
     protected async Task OnFilter()
     {
-        CurrentPage = 1;
+        activityFilterModel.CurrentPage = 1;
         await LoadActivities();
     }
 
     protected async Task OnReset()
     {
-        FilterDate = null;
-        FilterProductTypeId = null;
-        FilterProductId = null;
-        FilterVenueId = null;
-        FilterActionId = null;
-        FilterQuantity = null; // Reset quantity filter
-        CurrentPage = 1;
+        activityFilterModel.Date = null;
+        activityFilterModel.ProductTypeId = null;
+        activityFilterModel.ProductId = null;
+        activityFilterModel.VenueId = null;
+        activityFilterModel.ActionId = null;
+        activityFilterModel.Quantity = null; // Reset quantity filter
+        activityFilterModel.CurrentPage = 1;
         await LoadActivities();
     }
 
@@ -184,24 +172,24 @@ public partial class ActivitiesBase : ComponentBase
     {
         if (page < 1 || page > TotalPages)
             return;
-        CurrentPage = page;
+        activityFilterModel.CurrentPage = page;
         await LoadActivities();
     }
 
     protected async Task PreviousPage()
     {
-        if (CurrentPage > 1)
+        if (activityFilterModel.CurrentPage > 1)
         {
-            CurrentPage--;
+            activityFilterModel.CurrentPage--;
             await LoadActivities();
         }
     }
 
     protected async Task NextPage()
     {
-        if (CurrentPage < TotalPages)
+        if (activityFilterModel.CurrentPage < TotalPages)
         {
-            CurrentPage++;
+            activityFilterModel.CurrentPage++;
             await LoadActivities();
         }
     }

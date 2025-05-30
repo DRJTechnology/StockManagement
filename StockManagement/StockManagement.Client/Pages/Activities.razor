@@ -31,10 +31,10 @@ else
                 </tr>
                 <tr>
                     <th>
-                        <InputDate @bind-Value="FilterDate" class="form-control" />
+                        <InputDate @bind-Value="activityFilterModel.Date" class="form-control" />
                     </th>
                     <th>
-                        <InputSelect @bind-Value="FilterProductTypeId" class="form-select">
+                        <InputSelect @bind-Value="activityFilterModel.ProductTypeId" class="form-select">
                             <option value="">All</option>
                             @if (Lookups?.ProductTypeList != null)
                             {
@@ -46,7 +46,7 @@ else
                         </InputSelect>
                     </th>
                     <th>
-                        <InputSelect @bind-Value="FilterProductId" class="form-select">
+                        <InputSelect @bind-Value="activityFilterModel.ProductId" class="form-select">
                             <option value="">All</option>
                             @if (Lookups?.ProductList != null)
                             {
@@ -58,7 +58,7 @@ else
                         </InputSelect>
                     </th>
                     <th>
-                        <InputSelect @bind-Value="FilterActionId" class="form-select">
+                        <InputSelect @bind-Value="activityFilterModel.ActionId" class="form-select">
                             <option value="">All</option>
                             @if (Lookups?.ActionList != null)
                             {
@@ -70,7 +70,7 @@ else
                         </InputSelect>
                     </th>
                     <th>
-                        <InputSelect @bind-Value="FilterVenueId" class="form-select">
+                        <InputSelect @bind-Value="activityFilterModel.VenueId" class="form-select">
                             <option value="">All</option>
                             @if (Lookups?.VenueList != null)
                             {
@@ -82,7 +82,7 @@ else
                         </InputSelect>
                     </th>
                     <th>
-                        <InputNumber @bind-Value="FilterQuantity" class="form-control" placeholder="Qty" />
+                        <InputNumber @bind-Value="activityFilterModel.Quantity" class="form-control" placeholder="Qty" />
                     </th>
                     <th>
                         <button class="btn btn-sm btn-primary me-1" @onclick="OnFilter">Filter</button>
@@ -91,7 +91,7 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var activity in PagedActivities)
+                @foreach (var activity in Activities)
                 {
                     <tr>
                         <td>@activity.ActivityDate.ToString("dd MMM yyyy")</td>
@@ -110,17 +110,17 @@ else
         </table>
         <nav>
             <ul class="pagination justify-content-center">
-                <li class="page-item @(CurrentPage == 1 ? "disabled" : "")">
+                <li class="page-item @(activityFilterModel.CurrentPage == 1 ? "disabled" : "")">
                     <button class="page-link" @onclick="PreviousPage" aria-label="Previous">&laquo;</button>
                 </li>
                 @for (int i = 1; i <= TotalPages; i++)
                 {
                     var pageNumber = i;
-                    <li class="page-item @(CurrentPage == pageNumber ? "active" : "")">
+                    <li class="page-item @(activityFilterModel.CurrentPage == pageNumber ? "active" : "")">
                         <button class="page-link" @onclick="() => GoToPage(pageNumber)">@pageNumber</button>
                     </li>
                 }
-                <li class="page-item @(CurrentPage == TotalPages || TotalPages == 0 ? "disabled" : "")">
+                <li class="page-item @(activityFilterModel.CurrentPage == TotalPages || TotalPages == 0 ? "disabled" : "")">
                     <button class="page-link" @onclick="NextPage" aria-label="Next">&raquo;</button>
                 </li>
             </ul>

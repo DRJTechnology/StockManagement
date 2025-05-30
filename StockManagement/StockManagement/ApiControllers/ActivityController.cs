@@ -28,6 +28,21 @@ namespace StockManagement.ApiControllers
             }
         }
 
+        [HttpGet("GetFiltered")]
+        public async Task<IActionResult> GetFiltered([FromQuery] ActivityFilterModel activityFilterModel)
+        {
+            try
+            {
+                var filteredActivity = await activityService.GetFilteredAsync(activityFilterModel);
+                return this.Ok(filteredActivity);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "GetFiltered");
+                return this.BadRequest();
+            }
+        }
+
         // POST api/<ActivityController>
         [HttpPost]
         public async Task<ApiResponse> Post(ActivityEditModel activity)

@@ -25,6 +25,11 @@ namespace StockManagement.ClientDataServices
             throw new NotImplementedException();
         }
 
+        public Task<ActivityFilteredResponseModel> GetFilteredAsync(ActivityFilterModel activityFilterModel)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<bool> UpdateAsync(ActivityEditModel entity)
         {
             throw new NotImplementedException();

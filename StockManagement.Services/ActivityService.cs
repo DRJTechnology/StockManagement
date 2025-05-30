@@ -25,6 +25,12 @@ namespace StockManagement.Services
             return activities;
         }
 
+        public async Task<ActivityFilteredResponseModel> GetFilteredAsync(ActivityFilterModel activityFilterModel)
+        {
+            var filteredActivities = mapper.Map<ActivityFilteredResponseModel>(await activityRepository.GetFilteredAsync(activityFilterModel));
+            return filteredActivities;
+        }
+
         public async Task<bool> UpdateAsync(int currentUserId, ActivityEditModel activity)
         {
             var activityDto = mapper.Map<ActivityDto>(activity);
