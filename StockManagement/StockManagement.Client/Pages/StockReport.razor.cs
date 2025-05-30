@@ -21,7 +21,7 @@ public partial class StockReportBase : ComponentBase
     public LookupsModel Lookups { get; private set; } = new LookupsModel();
 
     protected bool IsLoading = true;
-    private int _venueId;
+    private int _venueId = 1;
     private int _productTypeId;
     private int _productId;
 

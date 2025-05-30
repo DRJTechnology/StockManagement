@@ -15,6 +15,8 @@ public partial class ReportFilterBase : ComponentBase
     private int _productTypeId;
     private int _productd;
 
+    protected bool filtersExpanded = true;
+
     [Parameter]
     public int VenueId
     {
@@ -57,8 +59,6 @@ public partial class ReportFilterBase : ComponentBase
             }
         }
     }
-
-    protected bool filtersExpanded = false;
 
     protected void ToggleFilters()
     {
