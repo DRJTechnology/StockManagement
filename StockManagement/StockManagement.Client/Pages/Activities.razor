@@ -29,9 +29,69 @@ else
                     <th>Quantity</th>
                     <th></th>
                 </tr>
+                <tr>
+                    <th>
+                        <InputDate @bind-Value="FilterDate" class="form-control" />
+                    </th>
+                    <th>
+                        <InputSelect @bind-Value="FilterProductTypeId" class="form-select">
+                            <option value="">All</option>
+                            @if (Lookups?.ProductTypeList != null)
+                            {
+                                foreach (var pt in Lookups.ProductTypeList)
+                                {
+                                    <option value="@pt.Id">@pt.ProductTypeName</option>
+                                }
+                            }
+                        </InputSelect>
+                    </th>
+                    <th>
+                        <InputSelect @bind-Value="FilterProductId" class="form-select">
+                            <option value="">All</option>
+                            @if (Lookups?.ProductList != null)
+                            {
+                                foreach (var p in Lookups.ProductList)
+                                {
+                                    <option value="@p.Id">@p.ProductName</option>
+                                }
+                            }
+                        </InputSelect>
+                    </th>
+                    <th>
+                        <InputSelect @bind-Value="FilterActionId" class="form-select">
+                            <option value="">All</option>
+                            @if (Lookups?.ActionList != null)
+                            {
+                                foreach (var a in Lookups.ActionList)
+                                {
+                                    <option value="@a.Id">@a.ActionName</option>
+                                }
+                            }
+                        </InputSelect>
+                    </th>
+                    <th>
+                        <InputSelect @bind-Value="FilterVenueId" class="form-select">
+                            <option value="">All</option>
+                            @if (Lookups?.VenueList != null)
+                            {
+                                foreach (var v in Lookups.VenueList)
+                                {
+                                    <option value="@v.Id">@v.VenueName</option>
+                                }
+                            }
+                        </InputSelect>
+                    </th>
+                    <th>
+                        <InputNumber @bind-Value="FilterQuantity" class="form-control" placeholder="Qty" />
+                    </th>
+                    <th>
+                        <button class="btn btn-sm btn-primary me-1" @onclick="OnFilter">Filter</button>
+                        <button class="btn btn-sm btn-secondary" @onclick="OnReset" type="button">Reset</button>
+                    </th>
+                </tr>
             </thead>
             <tbody>
-                @foreach (var activity in Activities)
+                @foreach (var activity in PagedActivities)
                 {
                     <tr>
                         <td>@activity.ActivityDate.ToString("dd MMM yyyy")</td>
@@ -48,5 +108,22 @@ else
                 }
             </tbody>
         </table>
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(CurrentPage == 1 ? "disabled" : "")">
+                    <button class="page-link" @onclick="PreviousPage" aria-label="Previous">&laquo;</button>
+                </li>
+                @for (int i = 1; i <= TotalPages; i++)
+                {
+                    var pageNumber = i;
+                    <li class="page-item @(CurrentPage == pageNumber ? "active" : "")">
+                        <button class="page-link" @onclick="() => GoToPage(pageNumber)">@pageNumber</button>
+                    </li>
+                }
+                <li class="page-item @(CurrentPage == TotalPages || TotalPages == 0 ? "disabled" : "")">
+                    <button class="page-link" @onclick="NextPage" aria-label="Next">&raquo;</button>
+                </li>
+            </ul>
+        </nav>
     </div>
 }
