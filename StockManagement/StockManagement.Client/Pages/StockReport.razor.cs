@@ -2,12 +2,15 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
+using StockManagement.Client.Pages;
 using StockManagement.Models;
 using StockManagement.Models.Dto.Reports;
 
 [Authorize]
 public partial class StockReportBase : ComponentBase
 {
+    [Inject]
+    protected IActivityDataService ActivityService { get; set; } = default!;
 
     [Inject]
     protected IReportDataService ReportDataService { get; set; } = default!;
@@ -24,6 +27,8 @@ public partial class StockReportBase : ComponentBase
     private int _venueId = 1;
     private int _productTypeId;
     private int _productId;
+    protected bool ShowEditForm { get; set; } = false;
+    protected ActivityEditModel NewActivity { get; set; } = new();
 
     protected int VenueId
     {
@@ -100,6 +105,28 @@ public partial class StockReportBase : ComponentBase
     {
         var lookupsList = await LookupsService.GetAllAsync();
         Lookups = lookupsList.FirstOrDefault() ?? new LookupsModel();
+    }
+    protected void ShowActivityForm(StockReportItemDto item)
+    {
+        NewActivity = new ActivityEditModel()
+        {
+            ActivityDate = DateTime.Today,
+            ProductId = item.ProductId,
+            ProductTypeId = item.ProductTypeId,
+            VenueId = item.VenueId,
+        };
+        ShowEditForm = true;
+    }
+
+    protected void CancelEdit()
+    {
+        ShowEditForm = false;
+    }
+    protected async Task HandleValidSubmit()
+    {
+        var newId = await ActivityService.CreateAsync(NewActivity);
+        ShowEditForm = false;
+        await PopulateReport();
     }
 
 }

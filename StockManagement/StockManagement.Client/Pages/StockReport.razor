@@ -5,6 +5,12 @@
 
 <h3>Stock Report</h3>
 
+<ActivityEditModal Show="ShowEditForm"
+                   EditActivity="NewActivity"
+                   Lookups="Lookups"
+                   OnCancel="CancelEdit"
+                   OnValidSubmit="HandleValidSubmit" />
+
 @if (IsLoading)
 {
     <p>Loading...</p>
@@ -29,15 +35,24 @@ else
             @foreach (var productTypeGroup in venueGroup.Value)
             {
                 <h5 class="product-group">@productTypeGroup.Key</h5>
+                var totalQuantity = productTypeGroup.Value.Sum(item => item.TotalQuantity);
                 <table class="table table-striped auto-width-table indented-table">
                     <tbody>
                         @foreach (var item in productTypeGroup.Value)
                         {
                             <tr>
-                                <td>@item.ProductName</td>
+                                <td>
+                                    <a href="#" class="" @onclick="() => ShowActivityForm(item)">
+                                        @item.ProductName
+                                    </a>
+                                </td>
                                 <td>@item.TotalQuantity</td>
                             </tr>
                         }
+                        <tr style="font-weight:600;">
+                            <td>Total</td>
+                            <td>@totalQuantity</td>
+                        </tr>
                     </tbody>
                 </table>
             }

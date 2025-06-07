@@ -22,17 +22,6 @@ public partial class ActivitiesBase : ComponentBase
     protected bool IsLoading { get; set; }
     public LookupsModel Lookups { get; private set; }
 
-    //// Filter properties
-    //protected DateTime? FilterDate { get; set; }
-    //protected int? FilterProductTypeId { get; set; }
-    //protected int? FilterProductId { get; set; }
-    //protected int? FilterVenueId { get; set; }
-    //protected int? FilterActionId { get; set; }
-    //protected int? FilterQuantity { get; set; }
-
-    //// Pagination properties
-    //protected int CurrentPage { get; set; } = 1;
-    //protected int PageSize { get; set; } = 20;
     protected ActivityFilterModel activityFilterModel = new ActivityFilterModel();
 
     protected int TotalPages { get; set; }

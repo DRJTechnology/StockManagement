@@ -34,12 +34,12 @@ BEGIN
         )
 
         -- Perform the GROUP BY on the combined results
-        SELECT v.VenueName, pt.ProductTypeName, p.ProductName, SUM(ca.Quantity) AS TotalQuantity
+        SELECT v.Id AS VenueId, v.VenueName, pt.Id AS ProductTypeId, pt.ProductTypeName, p.Id AS ProductId, p.ProductName, SUM(ca.Quantity) AS TotalQuantity
         FROM CombinedActivity ca
         INNER JOIN dbo.Product p ON ca.ProductId = p.Id
         INNER JOIN dbo.ProductType pt ON ca.ProductTypeId = pt.Id
         INNER JOIN dbo.Venue v ON ca.VenueId = v.Id
-        GROUP BY v.VenueName, pt.ProductTypeName, p.ProductName
+        GROUP BY v.Id, v.VenueName, pt.Id, pt.ProductTypeName, p.Id, p.ProductName
         ORDER BY v.VenueName, pt.ProductTypeName, p.ProductName
     END
     ELSE IF @VenueId = 1 -- Stockroom
@@ -63,12 +63,12 @@ BEGIN
         )
 
         -- Perform the GROUP BY on the combined results
-        SELECT v.VenueName, pt.ProductTypeName, p.ProductName, SUM(ca.Quantity) AS TotalQuantity
+        SELECT v.Id AS VenueId, v.VenueName, pt.Id AS ProductTypeId, pt.ProductTypeName, p.Id AS ProductId, p.ProductName, SUM(ca.Quantity) AS TotalQuantity
         FROM CombinedActivity ca
         INNER JOIN dbo.Product p ON ca.ProductId = p.Id
         INNER JOIN dbo.ProductType pt ON ca.ProductTypeId = pt.Id
         INNER JOIN dbo.Venue v ON ca.VenueId = v.Id
-        GROUP BY v.VenueName, pt.ProductTypeName, p.ProductName
+        GROUP BY v.Id, v.VenueName, pt.Id, pt.ProductTypeName, p.Id, p.ProductName
         ORDER BY v.VenueName, pt.ProductTypeName, p.ProductName
     END
     ELSE
@@ -84,12 +84,12 @@ BEGIN
         )
 
         -- Perform the GROUP BY on the combined results
-        SELECT v.VenueName, pt.ProductTypeName, p.ProductName, SUM(ca.Quantity) AS TotalQuantity
+        SELECT v.Id AS VenueId, v.VenueName, pt.Id AS ProductTypeId, pt.ProductTypeName, p.Id AS ProductId, p.ProductName, SUM(ca.Quantity) AS TotalQuantity
         FROM CombinedActivity ca
         INNER JOIN dbo.Product p ON ca.ProductId = p.Id
         INNER JOIN dbo.ProductType pt ON ca.ProductTypeId = pt.Id
         INNER JOIN dbo.Venue v ON ca.VenueId = v.Id
-        GROUP BY v.VenueName, pt.ProductTypeName, p.ProductName
+        GROUP BY v.Id, v.VenueName, pt.Id, pt.ProductTypeName, p.Id, p.ProductName
         ORDER BY v.VenueName, pt.ProductTypeName, p.ProductName
     END
 
