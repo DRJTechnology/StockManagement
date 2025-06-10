@@ -27,6 +27,7 @@ else
             foreach (var productType in venue.Value)
             {
                 <h5 class="product-group">@productType.Key</h5>
+                var totalSalesQuantity = productType.Value.Sum(item => item.TotalSales);
                 <table class="table table-striped auto-width-table indented-table">
                     <tbody>
                         @foreach (var item in productType.Value)
@@ -36,6 +37,10 @@ else
                                 <td>@item.TotalSales</td>
                             </tr>
                         }
+                        <tr style="font-weight:600;">
+                            <td>Total</td>
+                            <td>@totalSalesQuantity</td>
+                        </tr>
                     </tbody>
                 </table>
             }

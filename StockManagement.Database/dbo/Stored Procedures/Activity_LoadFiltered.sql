@@ -12,26 +12,32 @@ AS
 BEGIN
     SET NOCOUNT ON;
     DECLARE @Err int;
+    DECLARE @TotalCount int;
 
-    -- Use a table variable to store filtered results
-    DECLARE @FilteredActivity TABLE (
-        [Id] int,
-        [ActivityDate] datetime,
-        [ActionId] int,
-        [ActionName] nvarchar(100),
-        [ProductId] int,
-        [ProductName] nvarchar(100),
-        [ProductTypeId] int,
-        [ProductTypeName] nvarchar(100),
-        [VenueId] int,
-        [VenueName] nvarchar(100),
-        [Quantity] int,
-        [Deleted] bit,
-        [AmendUserID] int,
-        [AmendDate] datetime
-    );
+    -- Calculate total count
+    SELECT @TotalCount = COUNT(*)
+    FROM [Activity] a
+    --INNER JOIN [Product] p ON a.[ProductId] = p.Id
+    --INNER JOIN [ProductType] pt ON a.[ProductTypeId] = pt.Id
+    --INNER JOIN [Venue] v ON a.[VenueId] = v.Id
+    --INNER JOIN [Action] act ON a.[ActionId] = act.Id
+    WHERE
+        a.[Deleted] <> 1
+        AND (@ActivityDate IS NULL OR CAST(a.[ActivityDate] AS DATE) = CAST(@ActivityDate AS DATE))
+        AND (@ActionId IS NULL OR a.[ActionId] = @ActionId)
+        AND (@ProductId IS NULL OR a.[ProductId] = @ProductId)
+        AND (@ProductTypeId IS NULL OR a.[ProductTypeId] = @ProductTypeId)
+        AND (@VenueId IS NULL OR a.[VenueId] = @VenueId)
+        AND (@Quantity IS NULL OR a.[Quantity] = @Quantity);
 
-    INSERT INTO @FilteredActivity
+    -- Calculate total pages
+    SELECT @TotalPages = 
+        CASE 
+            WHEN @TotalCount = 0 THEN 1
+            ELSE CEILING(CAST(@TotalCount AS float) / @PageSize)
+        END;
+
+    -- Return paged result set directly
     SELECT
         a.[Id],
         a.[ActivityDate],
@@ -59,26 +65,12 @@ BEGIN
         AND (@ProductId IS NULL OR a.[ProductId] = @ProductId)
         AND (@ProductTypeId IS NULL OR a.[ProductTypeId] = @ProductTypeId)
         AND (@VenueId IS NULL OR a.[VenueId] = @VenueId)
-        AND (@Quantity IS NULL OR a.[Quantity] = @Quantity);
-
-    -- Get total count and calculate total pages
-    DECLARE @TotalCount int;
-    SELECT @TotalCount = COUNT(*) FROM @FilteredActivity;
-
-    SELECT @TotalPages = 
-        CASE 
-            WHEN @TotalCount = 0 THEN 1
-            ELSE CEILING(CAST(@TotalCount AS float) / @PageSize)
-        END;
-
-    -- Return paged result set
-    SELECT *
-    FROM @FilteredActivity
+        AND (@Quantity IS NULL OR a.[Quantity] = @Quantity)
     ORDER BY
-        [ActivityDate] DESC,
-        [ProductName] ASC,
-        [ProductTypeName] ASC,
-        [VenueName] ASC
+        a.[ActivityDate] DESC,
+        p.[ProductName] ASC,
+        pt.[ProductTypeName] ASC,
+        v.[VenueName] ASC
     OFFSET (@CurrentPage - 1) * @PageSize ROWS
     FETCH NEXT @PageSize ROWS ONLY;
 
