@@ -28,13 +28,13 @@ else
                 @foreach (var venue in Venues)
                 {
                     <tr>
-                        <td>@venue.VenueName</td>
-                        <td>
+                        <td style="width:1%;">@venue.VenueName</td>
+                                <td style="width:1%;">
                             @if (venue.Id > 1)
                             {
-                                <button class="btn btn-sm btn-info" @onclick="() => ShowNotes(venue)" disabled="@string.IsNullOrEmpty(venue.Notes)">Show Notes</button>
-                                <button class="btn btn-sm btn-warning ms-2" @onclick="() => Edit(venue)">Edit</button>
-                                <button class="btn btn-sm btn-danger ms-2" @onclick="() => Delete(venue.Id)">Delete</button>
+                                <button class="btn btn-sm btn-secondary my-1" @onclick="() => ShowNotes(venue)" disabled="@string.IsNullOrEmpty(venue.Notes)">Show Notes</button>
+                                <button class="btn btn-sm btn-warning my-1" @onclick="() => Edit(venue)">Edit</button>
+                                <button class="btn btn-sm btn-danger my-1" @onclick="() => Delete(venue.Id)">Delete</button>
                             }
                         </td>
                     </tr>
