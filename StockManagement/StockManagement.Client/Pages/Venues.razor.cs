@@ -17,6 +17,8 @@ public partial class VenuesBase : ComponentBase
     protected VenueEditModel EditVenue { get; set; } = new();
     protected bool ShowForm { get; set; }
     protected bool IsLoading { get; set; }
+    protected bool ShowNotesPanel { get; set; } = false;
+    protected VenueResponseModel? SelectedVenue { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -44,7 +46,8 @@ public partial class VenuesBase : ComponentBase
         EditVenue = new VenueEditModel
         {
             Id = venue.Id,
-            VenueName = venue.VenueName
+            VenueName = venue.VenueName,
+            Notes = venue.Notes
         };
         ShowForm = true;
     }
@@ -59,6 +62,7 @@ public partial class VenuesBase : ComponentBase
                 {
                     Id = newId,
                     VenueName = EditVenue.VenueName,
+                    Notes = EditVenue.Notes,
                     Deleted = false
                 });
         }
@@ -72,6 +76,7 @@ public partial class VenuesBase : ComponentBase
                 {
                     Id = EditVenue.Id,
                     VenueName = EditVenue.VenueName,
+                    Notes = EditVenue.Notes,
                     Deleted = false
                 };
             }
@@ -88,5 +93,17 @@ public partial class VenuesBase : ComponentBase
     {
         await VenueService.DeleteAsync(id);
         Venues.RemoveAll(v => v.Id == id);
+    }
+
+    protected void ShowNotes(VenueResponseModel venue)
+    {
+        SelectedVenue = venue;
+        ShowNotesPanel = true;
+    }
+
+    protected void CloseNotesPanel()
+    {
+        ShowNotesPanel = false;
+        SelectedVenue = null;
     }
 }

@@ -19,6 +19,10 @@
                             <label>Name:</label>
                             <InputText class="form-control" @bind-Value="EditVenue.VenueName" autocomplete="off" />
                         </div>
+                        <div class="mb-2">
+                            <label>Notes:</label>
+                            <InputTextArea class="form-control" @bind-Value="EditVenue.Notes" autocomplete="off" rows="5" />
+                        </div>                        
                         <div class="d-flex justify-content-end">
                             <button class="btn btn-success" type="submit">Save</button>
                             <button class="btn btn-secondary ms-2" type="button" @onclick="OnCancel">Cancel</button>

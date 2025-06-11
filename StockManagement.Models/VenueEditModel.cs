@@ -8,6 +8,7 @@ namespace StockManagement.Models
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "A venue name is required.")]
         public string VenueName { get; set; } = string.Empty;
+        public string Notes { get; set; } = string.Empty;
 
         public bool Deleted { get; set; }
     }

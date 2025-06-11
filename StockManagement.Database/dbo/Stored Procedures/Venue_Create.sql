@@ -3,11 +3,13 @@
 -- Create date: 23 May 2024
 -- Description:	Create Venue
 -- =========================================================
+-- 11 Jun 2025 - DB Updated to include Notes field
 CREATE PROCEDURE [dbo].[Venue_Create]
 (
 	@Success bit output,
 	@Id int output,
 	@VenueName nvarchar(50),
+	@Notes nvarchar(4000),
 	@Deleted bit,
 	@CurrentUserId int
 )
@@ -20,8 +22,8 @@ BEGIN
 	DECLARE @UpdateDate DATETIME
 	SET @UpdateDate = GetDate()
 
-	INSERT INTO dbo.[Venue] ([VenueName],[Deleted],[AmendUserID],[AmendDate])
-	VALUES (@VenueName, @Deleted, @CurrentUserId, @UpdateDate)
+	INSERT INTO dbo.[Venue] ([VenueName],[Notes],[Deleted],[AmendUserID],[AmendDate])
+	VALUES (@VenueName, @Notes, @Deleted, @CurrentUserId, @UpdateDate)
 
 	SELECT @ID = SCOPE_IDENTITY()
 
