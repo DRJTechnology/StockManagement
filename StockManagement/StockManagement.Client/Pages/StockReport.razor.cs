@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
-using StockManagement.Client.Pages;
 using StockManagement.Models;
 using StockManagement.Models.Dto.Reports;
 
@@ -29,6 +28,9 @@ public partial class StockReportBase : ComponentBase
     private int _productId;
     protected bool ShowEditForm { get; set; } = false;
     protected ActivityEditModel NewActivity { get; set; } = new();
+    protected bool ShowNotesPanel { get; set; } = false;
+    protected string SelectedVenueNotes { get; set; } = string.Empty;
+    protected string SelectedVenueTitle { get; set; } = string.Empty;
 
     protected int VenueId
     {
@@ -117,11 +119,24 @@ public partial class StockReportBase : ComponentBase
         };
         ShowEditForm = true;
     }
-
     protected void CancelEdit()
     {
         ShowEditForm = false;
     }
+
+    protected void ShowVenueNotes(string venuName)
+    {
+        ShowNotesPanel = true;
+        var selectedVenue = Lookups.VenueList
+            .FirstOrDefault(v => v.VenueName.Equals(venuName, StringComparison.OrdinalIgnoreCase));
+        SelectedVenueNotes = string.IsNullOrEmpty(selectedVenue?.Notes) ? "NO NOTES" : selectedVenue.Notes;
+        SelectedVenueTitle = selectedVenue.VenueName;
+    }
+    protected void CloseNotesPanel()
+    {
+        ShowNotesPanel = false;
+    }
+
     protected async Task HandleValidSubmit()
     {
         var newId = await ActivityService.CreateAsync(NewActivity);
