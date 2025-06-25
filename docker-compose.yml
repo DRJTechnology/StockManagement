@@ -1,0 +1,32 @@
+networks:
+  stockmanagement:
+services:
+  sql-stockmanagement:
+    container_name: stockmanagement-db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - 8002:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=SA-P455w0rd#
+    networks:
+      - stockmanagement
+    volumes:
+      - C:\docker-volumes\sql-data:/var/opt/mssql/data
+      - C:\docker-volumes\sql-logs:/var/opt/mssql/log
+      - C:\docker-volumes\sql-secrets:/var/opt/mssql/secrets
+      - C:\docker-volumes\sql-backups:/var/backups 
+  stockmanagement:
+    container_name: stockmanagement-website
+    image: ${DOCKER_REGISTRY-}stockmanagement
+    build:
+      context: .
+      dockerfile: StockManagement/StockManagement/Dockerfile
+    ports:
+      - 8001:80
+    depends_on:
+      - sql-stockmanagement
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=sql-stockmanagement;User=sa;Password=SA-P455w0rd#;Database=StockManagement;Encrypt=False;
+    networks:
+      - stockmanagement
