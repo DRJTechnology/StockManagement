@@ -3,6 +3,7 @@
 -- Create date: 27 May 2025
 -- Description:	Get Stock levels
 -- =========================================================
+-- 25 JUN 2025 - Dave Brown - Do not display zero TotalQuantity
 CREATE PROCEDURE [dbo].[Report_Stock]
 	@VenueId int = 0,
 	@ProductId int = 0,
@@ -40,6 +41,7 @@ BEGIN
         INNER JOIN dbo.ProductType pt ON ca.ProductTypeId = pt.Id
         INNER JOIN dbo.Venue v ON ca.VenueId = v.Id
         GROUP BY v.Id, v.VenueName, pt.Id, pt.ProductTypeName, p.Id, p.ProductName
+        HAVING SUM(ca.Quantity) > 0
         ORDER BY v.VenueName, pt.ProductTypeName, p.ProductName
     END
     ELSE IF @VenueId = 1 -- Stockroom
@@ -69,6 +71,7 @@ BEGIN
         INNER JOIN dbo.ProductType pt ON ca.ProductTypeId = pt.Id
         INNER JOIN dbo.Venue v ON ca.VenueId = v.Id
         GROUP BY v.Id, v.VenueName, pt.Id, pt.ProductTypeName, p.Id, p.ProductName
+        HAVING SUM(ca.Quantity) > 0
         ORDER BY v.VenueName, pt.ProductTypeName, p.ProductName
     END
     ELSE
@@ -90,6 +93,7 @@ BEGIN
         INNER JOIN dbo.ProductType pt ON ca.ProductTypeId = pt.Id
         INNER JOIN dbo.Venue v ON ca.VenueId = v.Id
         GROUP BY v.Id, v.VenueName, pt.Id, pt.ProductTypeName, p.Id, p.ProductName
+        HAVING SUM(ca.Quantity) > 0
         ORDER BY v.VenueName, pt.ProductTypeName, p.ProductName
     END
 

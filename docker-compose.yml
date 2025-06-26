@@ -9,6 +9,8 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=SA-P455w0rd#
+      - ASPNETCORE_ENVIRONMENT=Development
+      - BlazorWebAssemblyEnableDebugging=true
     networks:
       - stockmanagement
     volumes:

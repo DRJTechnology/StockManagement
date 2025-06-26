@@ -73,6 +73,7 @@ builder.Services.AddScoped<IVenueDataService, ClientVenueDataService>();
 builder.Services.AddScoped<IActivityDataService, ClientActivityDataService>();
 builder.Services.AddScoped<ILookupsDataService, ClientLookupsDataService>();
 builder.Services.AddScoped<IReportDataService, ClientReportDataService>();
+builder.Services.AddScoped<IJavascriptMethodsService, JavascriptMethodsService>();
 
 // Auto Mapper Configurations
 var mappingConfig = new MapperConfiguration(mc =>

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
+using StockManagement.Client.Services;
 using StockManagement.Models;
 
 [Authorize]
@@ -15,6 +16,9 @@ public partial class ActivitiesBase : ComponentBase
 
     [Inject]
     public IJSRuntime JSRuntime { get; set; } = default!;
+
+    [Inject]
+    protected IJavascriptMethodsService JavascriptMethodsService { get; set; } = default!;
 
     protected List<ActivityResponseModel> Activities { get; set; } = new();
     protected ActivityEditModel EditActivity { get; set; } = new();
@@ -35,6 +39,8 @@ public partial class ActivitiesBase : ComponentBase
             await LoadLookups();
             IsLoading = false;
         }
+        System.Diagnostics.Debug.WriteLine("Loaded!");
+
     }
 
     protected async Task LoadActivities()
@@ -75,10 +81,18 @@ public partial class ActivitiesBase : ComponentBase
         Lookups = lookupsList.FirstOrDefault();
     }
 
-    protected void ShowAddForm()
+    protected async Task ShowAddForm()
     {
-        EditActivity = new ActivityEditModel() { ActivityDate = DateTime.Today };
+        var localNow = await JavascriptMethodsService.GetLocalDateTimeAsync();
+        EditActivity = new ActivityEditModel() { ActivityDate = localNow };
         ShowForm = true;
+    }
+
+    public async Task<DateTime> GetLocalDateTimeAsync()
+    {
+        var isoString = await JSRuntime.InvokeAsync<string>("getLocalDateTime");
+        // Parse as local time
+        return DateTime.Parse(isoString);
     }
 
     protected void Edit(ActivityResponseModel activity)

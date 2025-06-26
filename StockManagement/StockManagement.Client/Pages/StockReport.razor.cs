@@ -20,6 +20,9 @@ public partial class StockReportBase : ComponentBase
     [Inject]
     public IJSRuntime JSRuntime { get; set; } = default!;
 
+    [Inject]
+    protected IJavascriptMethodsService JavascriptMethodsService { get; set; } = default!;
+
     public LookupsModel Lookups { get; private set; } = new LookupsModel();
 
     protected bool IsLoading = true;
@@ -108,11 +111,12 @@ public partial class StockReportBase : ComponentBase
         var lookupsList = await LookupsService.GetAllAsync();
         Lookups = lookupsList.FirstOrDefault() ?? new LookupsModel();
     }
-    protected void ShowActivityForm(StockReportItemDto item)
+    protected async Task ShowActivityForm(StockReportItemDto item)
     {
+        var localNow = await JavascriptMethodsService.GetLocalDateTimeAsync();
         NewActivity = new ActivityEditModel()
         {
-            ActivityDate = DateTime.Today,
+            ActivityDate = localNow,
             ProductId = item.ProductId,
             ProductTypeId = item.ProductTypeId,
             VenueId = item.VenueId,

@@ -19,5 +19,6 @@ builder.Services.AddScoped<IProductTypeDataService, ProductTypeDataService>();
 builder.Services.AddScoped<IActivityDataService, ActivityDataService>();
 builder.Services.AddScoped<ILookupsDataService, LookupsDataService>();
 builder.Services.AddScoped<IReportDataService, ReportDataService>();
+builder.Services.AddScoped<IJavascriptMethodsService, JavascriptMethodsService>();
 
 await builder.Build().RunAsync();
