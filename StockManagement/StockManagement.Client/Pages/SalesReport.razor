@@ -23,7 +23,16 @@ else
     {
         foreach (var venue in GroupedSalesReport)
         {
-            <h4 class="venue-group">@venue.Key</h4>
+            <h4 class="venue-group">
+                @venue.Key
+                @if (venue.Key != "Totals")
+                {
+                    <button class="btn btn-link ms-2" title="Show Notes" @onclick="() => ShowVenueNotes(venue.Key)">
+                        <i class="bi bi-journal-text"></i>
+                    </button>
+                }
+            </h4>
+
             foreach (var productType in venue.Value)
             {
                 <h5 class="product-group">@productType.Key</h5>
@@ -46,4 +55,24 @@ else
             }
         }      
     }
+}
+
+@if (ShowNotesPanel)
+{
+    <div class="modal show d-block" tabindex="-1" style="background:rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Notes for @SelectedVenueTitle</h5>
+                    <button type="button" class="btn-close" @onclick="CloseNotesPanel"></button>
+                </div>
+                <div class="modal-body">
+                    @((MarkupString)SelectedVenueNotes.Replace("\n", "<br />"))
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="CloseNotesPanel">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 }

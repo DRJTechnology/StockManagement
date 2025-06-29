@@ -22,7 +22,6 @@ BEGIN
             FROM dbo.Activity a1
 	        INNER JOIN dbo.[Action] a2 ON a1.ActionId = a2.Id 
             WHERE a1.Deleted = 0
-                --AND (@VenueId = 0 OR a1.VenueId = @VenueId)
                 AND (@ProductId = 0 OR a1.ProductId = @ProductId)
                 AND (@ProductTypeId = 0 OR a1.ProductTypeId = @ProductTypeId)
             UNION ALL
@@ -31,7 +30,6 @@ BEGIN
             INNER JOIN dbo.[Action] act ON a.ActionId = act.Id
             WHERE act.AffectStockRoom = 1
                 AND a.Deleted = 0
-                --AND (@VenueId = 0 OR a.VenueId = @VenueId)
                 AND (@ProductId = 0 OR a.ProductId = @ProductId)
                 AND (@ProductTypeId = 0 OR a.ProductTypeId = @ProductTypeId)
         )
@@ -41,7 +39,6 @@ BEGIN
         FROM CombinedActivity ca
         INNER JOIN dbo.Product p ON ca.ProductId = p.Id
         INNER JOIN dbo.ProductType pt ON ca.ProductTypeId = pt.Id
-        --INNER JOIN dbo.Venue v ON ca.VenueId = v.Id
         GROUP BY pt.Id, pt.ProductTypeName, p.Id, p.ProductName
         HAVING SUM(ca.Quantity) > 0
         ORDER BY pt.ProductTypeName, p.ProductName

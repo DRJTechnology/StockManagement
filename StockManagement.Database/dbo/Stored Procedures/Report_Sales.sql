@@ -16,14 +16,13 @@ BEGIN
 
 	IF @VenueId = -1 -- Totals
 	BEGIN
-		SELECT 'Totals', pt.ProductTypeName, p.ProductName, SUM(a.Quantity) AS TotalSales
+		SELECT 'Totals' AS VenueName, pt.ProductTypeName, p.ProductName, SUM(a.Quantity) AS TotalSales
 		FROM dbo.Activity a
 		INNER JOIN dbo.Product p ON a.ProductId = p.Id
 		INNER JOIN dbo.ProductType pt ON a.ProductTypeId = pt.Id
 		INNER JOIN dbo.Venue v ON a.VenueId = v.Id
 		WHERE	a.Deleted = 0
 			AND	a.ActionId = 5 -- Sale
-			--AND (@VenueId = 0 OR a.VenueId = @VenueId)
 			AND (@ProductId = 0 OR a.ProductId = @ProductId)
 			AND (@ProductTypeId = 0 OR a.ProductTypeId = @ProductTypeId)
 		GROUP BY pt.ProductTypeName, p.ProductName

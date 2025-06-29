@@ -33,9 +33,12 @@ else
         {
             <h4 class="venue-group">
                 @venueGroup.Key
-                <button class="btn btn-link ms-2" title="Show Notes" @onclick="() => ShowVenueNotes(venueGroup.Key)">
-                    <i class="bi bi-journal-text"></i>
-                </button>
+                @if (venueGroup.Key != "Totals")
+                {
+                    <button class="btn btn-link ms-2" title="Show Notes" @onclick="() => ShowVenueNotes(venueGroup.Key)">
+                        <i class="bi bi-journal-text"></i>
+                    </button>
+                }
             </h4>
             @foreach (var productTypeGroup in venueGroup.Value)
             {

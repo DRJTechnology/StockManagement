@@ -23,6 +23,9 @@ public partial class SalesReportBase : ComponentBase
     private int _venueId;
     private int _productTypeId;
     private int _productId;
+        protected bool ShowNotesPanel { get; set; } = false;
+    protected string SelectedVenueNotes { get; set; } = string.Empty;
+    protected string SelectedVenueTitle { get; set; } = string.Empty;
 
     protected int VenueId
     {
@@ -98,6 +101,18 @@ public partial class SalesReportBase : ComponentBase
     {
         var lookupsList = await LookupsService.GetAllAsync();
         Lookups = lookupsList.FirstOrDefault() ?? new LookupsModel();
+    }
+    protected void ShowVenueNotes(string venuName)
+    {
+        ShowNotesPanel = true;
+        var selectedVenue = Lookups.VenueList
+            .FirstOrDefault(v => v.VenueName.Equals(venuName, StringComparison.OrdinalIgnoreCase));
+        SelectedVenueNotes = string.IsNullOrEmpty(selectedVenue?.Notes) ? "NO NOTES" : selectedVenue.Notes;
+        SelectedVenueTitle = selectedVenue.VenueName;
+    }
+    protected void CloseNotesPanel()
+    {
+        ShowNotesPanel = false;
     }
 
 }
