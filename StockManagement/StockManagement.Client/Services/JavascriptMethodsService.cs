@@ -5,7 +5,7 @@ namespace StockManagement.Client.Services
 {
     public class JavascriptMethodsService : IJavascriptMethodsService
     {
-        IJSRuntime JSRuntime;
+        private readonly IJSRuntime JSRuntime;
 
         public JavascriptMethodsService(IJSRuntime jsRuntime)
         {

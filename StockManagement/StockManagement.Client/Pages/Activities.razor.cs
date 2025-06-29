@@ -88,13 +88,6 @@ public partial class ActivitiesBase : ComponentBase
         ShowForm = true;
     }
 
-    public async Task<DateTime> GetLocalDateTimeAsync()
-    {
-        var isoString = await JSRuntime.InvokeAsync<string>("getLocalDateTime");
-        // Parse as local time
-        return DateTime.Parse(isoString);
-    }
-
     protected void Edit(ActivityResponseModel activity)
     {
         EditActivity = new ActivityEditModel
