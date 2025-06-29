@@ -20,7 +20,7 @@ services:
       - C:\docker-volumes\sql-backups:/var/backups 
   stockmanagement:
     container_name: stockmanagement-website
-    image: ${DOCKER_REGISTRY-}stockmanagement
+    image: ${DOCKER_REGISTRY-}stockmanagement:latest
     build:
       context: .
       dockerfile: StockManagement/StockManagement/Dockerfile

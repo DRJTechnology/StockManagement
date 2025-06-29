@@ -17,6 +17,7 @@
                 <div class="col-lg-4">
                     <div class="form-floating">
                         <InputSelect id="venueFilter" @bind-Value="VenueId" TValue="int" class="form-control">
+                            <option value="-1">-- Totals --</option>
                             <option value="0">All Venues</option>
                             @if (Lookups?.VenueList != null)
                             {
