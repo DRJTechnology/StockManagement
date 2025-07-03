@@ -10,28 +10,85 @@
 }
 else
 {
-    <EditForm Model="EditDeliveryNote" OnValidSubmit="HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <div class="mb-2">
-            <label>Date:</label>
-            <InputDate class="form-control" @bind-Value="EditDeliveryNote.Date" />
+    <div class="row">
+        <div class="col-md-6">
+            <EditForm EditContext="editContext" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <div class="mb-2">
+                    <label>Date:</label>
+                    <InputDate class="form-control" @bind-Value="EditDeliveryNote.Date" />
+                </div>
+                <div class="mb-2">
+                    <label>Venue:</label>
+                    <InputSelect class="form-control" @bind-Value="EditDeliveryNote.VenueId">
+                        <option value="">-- Select Venue --</option>
+                        @if (Lookups?.VenueList != null)
+                        {
+                            foreach (var venue in Lookups.VenueList)
+                            {
+                                <option value="@venue.Id">@venue.VenueName</option>
+                            }
+                        }
+                    </InputSelect>
+                </div>
+                <div class="mb-2">
+                    <label>Direct Sale:</label>
+                    <div>
+                        <InputRadioGroup @bind-Value="EditDeliveryNote.DirectSale">
+                            <InputRadio class="btn-check" id="directSaleYes" Value="true" />
+                            <label class="btn btn-outline-success me-2" for="directSaleYes">Yes</label>
+                            <InputRadio class="btn-check" id="directSaleNo" Value="false" />
+                            <label class="btn btn-outline-secondary" for="directSaleNo">No</label>
+                        </InputRadioGroup>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-success" type="submit" disabled="@( !IsFormValid )">Save</button>
+                </div>
+            </EditForm>
         </div>
-        <div class="mb-2">
-            <label>Venue:</label>
-            <InputSelect class="form-control" @bind-Value="EditDeliveryNote.VenueId">
-                <option value="">-- Select Venue --</option>
-                @if (Lookups?.VenueList != null)
-                {
-                    foreach (var venue in Lookups.VenueList)
+        <div class="col-md-6 d-none d-md-block border rounded p-2">
+            <p>Products saved on a delivery note will be moved from stock to the selected venue.</p>
+            <p>Selecting 'Direct Sale' will mark the stock as sold by the selected venue.</p>
+            <p>Corresponding 'Activity' records will be created.</p>
+        </div>
+    </div>
+    @if (EditDeliveryNote.Id > 0)
+    {
+        <button class="btn btn-primary mb-2" @onclick="ShowAddDetailForm">Add Product</button>
+
+        <DeliveryNoteDetailEditModal Show="ShowEditDetailForm"
+                           EditDeliveryNoteDetail="EditDeliveryNoteDetail"
+                           Lookups="Lookups"
+                           OnCancel="CancelDetailEdit"
+                           OnValidSubmit="HandleValidDetailSubmit" />
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Product Type</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var deliveryNoteDetail in EditDeliveryNote.DetailList)
                     {
-                        <option value="@venue.Id">@venue.VenueName</option>
+                        <tr>
+                            <td>@deliveryNoteDetail.ProductTypeName</td>
+                            <td>@deliveryNoteDetail.ProductName</td>
+                            <td>@deliveryNoteDetail.Quantity</td>
+                            <td>
+                                <button class="btn btn-sm btn-warning" @onclick="() => EditDetail(deliveryNoteDetail)">Edit</button>
+                                <button class="btn btn-sm btn-danger ms-2" @onclick="() => DeleteDetail(deliveryNoteDetail.Id)">Delete</button>
+                            </td>
+                        </tr>
                     }
-                }
-            </InputSelect>
+                </tbody>
+            </table>
         </div>
-        <div class="d-flex justify-content-end">
-            <button class="btn btn-success" type="submit">Save</button>
-        </div>
-    </EditForm>
+    }
+
 }

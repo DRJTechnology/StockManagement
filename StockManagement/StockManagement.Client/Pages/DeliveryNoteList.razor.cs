@@ -39,7 +39,7 @@ public partial class DeliveryNoteListBase : ComponentBase
         Navigation.NavigateTo("/delivery-note/0");
     }
 
-    protected void View(DeliveryNoteResponseModel note)
+    protected void ViewDetails(DeliveryNoteResponseModel note)
     {
         Navigation.NavigateTo($"/delivery-note/{note.Id}");
     }

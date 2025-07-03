@@ -12,6 +12,8 @@ namespace StockManagement.Models
         [Required(ErrorMessage = "Venue is required.")]
         public int VenueId { get; set; }
 
+        public bool DirectSale { get; set; }
+
         public bool Deleted { get; set; }
     }
 }

@@ -3,6 +3,8 @@
 -- Create date: 29 Jun 2025
 -- Description:	Get Delivery Notes
 -- =========================================================
+-- 02 JUL 2025 - Dave Brown - include DirectSale column
+-- =========================================================
 CREATE PROCEDURE [dbo].[DeliveryNote_LoadAll]
 AS
 BEGIN
@@ -14,6 +16,7 @@ BEGIN
 		dn.[Date],
 		dn.[VenueId],
 		v.[VenueName],
+		dn.DirectSale,
 		dn.[Deleted],
 		dn.[AmendUserID],
 		dn.[AmendDate]

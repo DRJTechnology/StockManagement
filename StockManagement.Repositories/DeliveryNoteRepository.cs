@@ -15,6 +15,7 @@ namespace StockManagement.Repositories
             parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
             parameters.Add("@Date", deliveryNoteDto.Date);
             parameters.Add("@VenueId", deliveryNoteDto.VenueId);
+            parameters.Add("@DirectSale", deliveryNoteDto.DirectSale);
             parameters.Add("@Deleted", deliveryNoteDto.Deleted);
             parameters.Add("@CurrentUserId", currentUserId);
 
@@ -61,8 +62,17 @@ namespace StockManagement.Repositories
             var parameters = new DynamicParameters();
             parameters.Add("@Id", deliveryNoteId);
 
-            var deliveryNote = await dbConnection.QueryFirstOrDefaultAsync<DeliveryNoteDto>("dbo.DeliveryNote_LoadById", parameters, commandType: CommandType.StoredProcedure);
-            return deliveryNote!;
+            var deliveryNote = new DeliveryNoteDto();
+            using (var multipleResults = await dbConnection.QueryMultipleAsync("dbo.DeliveryNote_LoadById", parameters, commandType: CommandType.StoredProcedure))
+            {
+                deliveryNote = multipleResults.Read<DeliveryNoteDto>().FirstOrDefault();
+
+                if (deliveryNote != null)
+                {
+                    deliveryNote.DetailList = multipleResults.Read<DeliveryNoteDetailDto>().ToList();
+                }
+                return deliveryNote!;
+            }
         }
 
         public async Task<bool> UpdateAsync(int currentUserId, DeliveryNoteDto deliveryNoteDto)
@@ -72,6 +82,7 @@ namespace StockManagement.Repositories
             parameters.Add("@Id", deliveryNoteDto.Id);
             parameters.Add("@Date", deliveryNoteDto.Date);
             parameters.Add("@VenueId", deliveryNoteDto.VenueId);
+            parameters.Add("@DirectSale", deliveryNoteDto.DirectSale);
             parameters.Add("@Deleted", deliveryNoteDto.Deleted);
             parameters.Add("@CurrentUserId", currentUserId);
 

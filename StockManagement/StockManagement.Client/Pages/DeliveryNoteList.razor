@@ -16,6 +16,7 @@ else
             <tr>
                 <th>Date</th>
                 <th>Venue</th>
+                <th>Direct Sale</th>
                 <th></th>
             </tr>
         </thead>
@@ -25,8 +26,9 @@ else
                 <tr>
                     <td>@note.Date.ToShortDateString()</td>
                     <td>@note.VenueName</td>
+                    <td>@(note.DirectSale ? "Yes" : "No")</td>
                     <td>
-                        <button class="btn btn-sm btn-secondary" @onclick="() => View(note)">View</button>
+                        <button class="btn btn-sm btn-secondary" @onclick="() => ViewDetails(note)">Details</button>
                     </td>
                 </tr>
             }

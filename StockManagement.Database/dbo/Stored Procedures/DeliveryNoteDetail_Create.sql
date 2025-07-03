@@ -1,14 +1,16 @@
 ﻿-- =========================================================
 -- Author:		Dave Brown
--- Create date: 23 May 2025
--- Description:	Create ProductProductType
+-- Create date: 03 Jul 2025
+-- Description:	Create Delivery Note Detail
 -- =========================================================
-CREATE PROCEDURE [dbo].[ProductProductType_Create]
+CREATE PROCEDURE [dbo].[DeliveryNoteDetail_Create]
 (
 	@Success bit output,
 	@Id int output,
+	@DeliveryNoteId int,
 	@ProductId int,
 	@ProductTypeId int,
+	@Quantity int,
 	@Deleted bit,
 	@CurrentUserId int
 )
@@ -21,8 +23,8 @@ BEGIN
 	DECLARE @UpdateDate DATETIME
 	SET @UpdateDate = GetDate()
 
-	INSERT INTO dbo.[ProductProductType] ([ProductId],[ProductTypeId],[Deleted],[AmendUserID],[AmendDate])
-	VALUES (@ProductId, @ProductTypeId, @Deleted, @CurrentUserId, @UpdateDate)
+	INSERT INTO dbo.[DeliveryNoteDetail] ([DeliveryNoteId],[ProductId],[ProductTypeId],[Quantity],[Deleted],[AmendUserID],[AmendDate])
+	VALUES (@DeliveryNoteId, @ProductId, @ProductTypeId, @Quantity, @Deleted, @CurrentUserId, @UpdateDate)
 
 	SELECT @ID = SCOPE_IDENTITY()
 

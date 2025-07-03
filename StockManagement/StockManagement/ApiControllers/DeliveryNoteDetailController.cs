@@ -10,45 +10,15 @@ namespace StockManagement.ApiControllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class DeliveryNoteController(ILogger<DeliveryNoteController> logger, IdentityUserAccessor userAccessor, IDeliveryNoteService deliveryNoteService) : ControllerBase
+    public class DeliveryNoteDetailController(ILogger<DeliveryNoteDetailController> logger, IdentityUserAccessor userAccessor, IDeliveryNoteDetailService deliveryNoteDetailService) : ControllerBase
     {
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            try
-            {
-                var deliveryNote = await deliveryNoteService.GetByIdAsync(id);
-                return this.Ok(deliveryNote);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "GetById");
-                return this.BadRequest();
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            try
-            {
-                var deliveryNoteList = await deliveryNoteService.GetAllAsync();
-                return Ok(deliveryNoteList);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Get");
-                return BadRequest();
-            }
-        }
-
         [HttpPost]
-        public async Task<ApiResponse> Post(DeliveryNoteEditModel model)
+        public async Task<ApiResponse> Post(DeliveryNoteDetailEditModel model)
         {
             try
             {
                 var appUser = await userAccessor.GetRequiredUserAsync(HttpContext);
-                var newId = await deliveryNoteService.CreateAsync(appUser.Id, model);
+                var newId = await deliveryNoteDetailService.CreateAsync(appUser.Id, model);
 
                 return new ApiResponse()
                 {
@@ -68,12 +38,12 @@ namespace StockManagement.ApiControllers
         }
 
         [HttpPut]
-        public async Task<ApiResponse> Put(DeliveryNoteEditModel model)
+        public async Task<ApiResponse> Put(DeliveryNoteDetailEditModel model)
         {
             try
             {
                 var appUser = await userAccessor.GetRequiredUserAsync(HttpContext);
-                if (await deliveryNoteService.UpdateAsync(appUser.Id, model))
+                if (await deliveryNoteDetailService.UpdateAsync(appUser.Id, model))
                 {
                     return new ApiResponse()
                     {
@@ -107,7 +77,7 @@ namespace StockManagement.ApiControllers
             try
             {
                 var appUser = await userAccessor.GetRequiredUserAsync(HttpContext);
-                var result = await deliveryNoteService.DeleteAsync(appUser.Id, id);
+                var result = await deliveryNoteDetailService.DeleteAsync(appUser.Id, id);
 
                 return new ApiResponse()
                 {
