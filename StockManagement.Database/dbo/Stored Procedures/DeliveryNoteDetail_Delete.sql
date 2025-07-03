@@ -16,17 +16,39 @@ BEGIN
 	DECLARE @Err int
 	SET @Success = 0
 
-	UPDATE [DeliveryNoteDetail]
-	SET
-		[Deleted] = 1,
-		[AmendUserID] = @CurrentUserId,
-		[AmendDate] = GetDate()
-	WHERE
-		[Id] = @DeliveryNoteDetailId
+	DECLARE @UpdateDate		DATETIME
+	SET @UpdateDate = GetDate()
 
-	SET @Success = 1
+	BEGIN TRY
+		BEGIN TRANSACTION
 
-	SET @Err = @@Error
+		UPDATE [DeliveryNoteDetail]
+		SET
+			[Deleted] = 1,
+			[AmendUserID] = @CurrentUserId,
+			[AmendDate] = @UpdateDate
+		WHERE
+			[Id] = @DeliveryNoteDetailId
+
+		UPDATE [Activity]
+		SET
+			[Deleted] = 1,
+			[AmendUserID] = @CurrentUserId,
+			[AmendDate] = @UpdateDate
+		WHERE
+			[DeliveryNoteDetailId] = @DeliveryNoteDetailId
+
+		COMMIT TRANSACTION
+		SET @Success = 1
+		SET @Err = 0
+	END TRY
+	BEGIN CATCH
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRANSACTION
+
+		SET @Success = 0
+		SET @Err = ERROR_NUMBER()
+	END CATCH
 
 	RETURN @Err
 END

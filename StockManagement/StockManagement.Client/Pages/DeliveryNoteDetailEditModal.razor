@@ -16,19 +16,6 @@
                         <DataAnnotationsValidator />
                         <ValidationSummary />
                         <div class="mb-2">
-                            <label>Product:</label>
-                            <InputSelect class="form-control" @bind-Value="EditDeliveryNoteDetail.ProductId">
-                                <option value="">-- Select Product --</option>
-                                @if (Lookups?.ProductList != null)
-                                {
-                                    foreach (var product in Lookups.ProductList)
-                                    {
-                                        <option value="@product.Id">@product.ProductName</option>
-                                    }
-                                }
-                            </InputSelect>
-                        </div>
-                        <div class="mb-2">
                             <label>Product Type:</label>
                             <InputSelect class="form-control" @bind-Value="EditDeliveryNoteDetail.ProductTypeId">
                                 <option value="">-- Select Product Type --</option>
@@ -37,6 +24,19 @@
                                     foreach (var type in Lookups.ProductTypeList)
                                     {
                                         <option value="@type.Id">@type.ProductTypeName</option>
+                                    }
+                                }
+                            </InputSelect>
+                        </div>
+                        <div class="mb-2">
+                            <label>Product:</label>
+                            <InputSelect class="form-control" @bind-Value="EditDeliveryNoteDetail.ProductId">
+                                <option value="">-- Select Product --</option>
+                                @if (Lookups?.ProductList != null)
+                                {
+                                    foreach (var product in Lookups.ProductList)
+                                    {
+                                        <option value="@product.Id">@product.ProductName</option>
                                     }
                                 }
                             </InputSelect>
