@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using QuestPDF.Fluent;
-using StockManagement.Components.Account;
 using StockManagement.Services.Interfaces;
 
 namespace StockManagement.ApiControllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class PdfController(ILogger<DeliveryNoteController> logger, IDeliveryNoteService deliveryNoteService) : ControllerBase
@@ -24,7 +24,8 @@ namespace StockManagement.ApiControllers
                 //var logoImage = await deliveryNoteService.GetLogoImageAsync(); // Assuming this method exists
                 var document = new DeliveryNoteDocument(deliveryNote, logoImage);
                 var pdfBytes = document.GeneratePdf(); // Assuming GeneratePdf is a method that creates the PDF
-                return File(pdfBytes, "application/pdf", $"DeliveryNote_{id}.pdf");
+                return File(pdfBytes, "application/pdf");
+                //return File(pdfBytes, "application/pdf", $"DeliveryNote_{id}.pdf");
             }
             catch (Exception ex)
             {

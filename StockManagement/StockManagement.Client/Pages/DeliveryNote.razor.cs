@@ -9,6 +9,9 @@ public partial class DeliveryNoteBase : ComponentBase
     [Parameter] public int DeliveryNoteId { get; set; }
 
     [Inject]
+    IJSRuntime JS { get; set; }
+
+    [Inject]
     protected NavigationManager Navigation { get; set; } = default!;
 
     [Inject]
@@ -192,12 +195,9 @@ public partial class DeliveryNoteBase : ComponentBase
         EditDeliveryNote.DetailList.RemoveAll(dnd => dnd.Id == id);
     }
 
-    [Inject] IJSRuntime JS { get; set; }
-
     protected async Task DownloadPdf()
     {
-        var url = "/api/pdf/delivery-note/1";
-        await JS.InvokeVoidAsync("downloadFile", url);
+        var url = $"/api/pdf/delivery-note/{EditDeliveryNote.Id}";
+        await JS.InvokeVoidAsync("open", url, "_blank");
     }
-
 }
