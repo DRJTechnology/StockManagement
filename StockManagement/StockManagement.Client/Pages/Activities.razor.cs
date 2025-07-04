@@ -2,12 +2,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
-using StockManagement.Client.Services;
 using StockManagement.Models;
 
 [Authorize]
 public partial class ActivitiesBase : ComponentBase
 {
+    [Inject]
+    protected NavigationManager Navigation { get; set; } = default!;
+
     [Inject]
     protected IActivityDataService ActivityService { get; set; } = default!;
 
@@ -88,13 +90,6 @@ public partial class ActivitiesBase : ComponentBase
         ShowForm = true;
     }
 
-    public async Task<DateTime> GetLocalDateTimeAsync()
-    {
-        var isoString = await JSRuntime.InvokeAsync<string>("getLocalDateTime");
-        // Parse as local time
-        return DateTime.Parse(isoString);
-    }
-
     protected void Edit(ActivityResponseModel activity)
     {
         EditActivity = new ActivityEditModel
@@ -109,6 +104,11 @@ public partial class ActivitiesBase : ComponentBase
             Deleted = activity.Deleted
         };
         ShowForm = true;
+    }
+
+    protected void OpenDeliveryNote(int deliveryNoteId)
+    {
+        Navigation.NavigateTo($"/delivery-note/{deliveryNoteId}");
     }
 
     protected async Task HandleValidSubmit()

@@ -14,6 +14,12 @@ namespace StockManagement.Models.Automapper
             CreateMap<ActivityDto, ActivityResponseModel>();
             CreateMap<ActivityEditModel, ActivityDto>();
 
+            CreateMap<DeliveryNoteDetailDto, DeliveryNoteDetailResponseModel>();
+            CreateMap<DeliveryNoteDetailEditModel, DeliveryNoteDetailDto>();
+
+            CreateMap<DeliveryNoteDto, DeliveryNoteResponseModel>();
+            CreateMap<DeliveryNoteEditModel, DeliveryNoteDto>();
+
             CreateMap<ProductDto, ProductResponseModel>();
             CreateMap<ProductEditModel, ProductDto>();
 

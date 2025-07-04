@@ -101,8 +101,17 @@ else
                         <td>@activity.VenueName</td>
                         <td>@activity.Quantity</td>
                         <td>
-                            <button class="btn btn-sm btn-warning" @onclick="() => Edit(activity)">Edit</button>
-                            <button class="btn btn-sm btn-danger ms-2" @onclick="() => Delete(activity.Id)">Delete</button>
+                            @if (activity.DeliveryNoteId > 0)
+                            {
+                                <button class="btn btn-link ms-2" title="Show Delivery Note" @onclick="() => OpenDeliveryNote(activity.DeliveryNoteId)">
+                                    <i class="bi bi-clipboard"></i>
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-sm btn-warning" @onclick="() => Edit(activity)">Edit</button>
+                                <button class="btn btn-sm btn-danger ms-2" @onclick="() => Delete(activity.Id)">Delete</button>
+                            }
                         </td>
                     </tr>
                 }

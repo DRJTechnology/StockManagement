@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
+using QuestPDF.Infrastructure;
 using StockManagement.Client.Interfaces;
 using StockManagement.Client.Services;
 using StockManagement.ClientDataServices;
@@ -48,32 +49,38 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 
 builder.Services.AddScoped<IActionService, ActionService>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
+builder.Services.AddScoped<IDeliveryNoteDetailService, DeliveryNoteDetailService>();
+builder.Services.AddScoped<IDeliveryNoteService, DeliveryNoteService>();
+builder.Services.AddScoped<ILookupsService, LookupsService>();
 builder.Services.AddScoped<IProductProductTypeService, ProductProductTypeService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
-builder.Services.AddScoped<IVenueService, VenueService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IReportService, ReportService>();
-builder.Services.AddScoped<ILookupsService, LookupsService>();
+builder.Services.AddScoped<IVenueService, VenueService>();
 builder.Services.AddScoped<IActionRepository, ActionRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+builder.Services.AddScoped<IDeliveryNoteDetailRepository, DeliveryNoteDetailRepository>();
+builder.Services.AddScoped<IDeliveryNoteRepository, DeliveryNoteRepository>();
 builder.Services.AddScoped<IProductProductTypeRepository, ProductProductTypeRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
-builder.Services.AddScoped<IVenueRepository, VenueRepository>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IReportRepository, ReportRepository>();
+builder.Services.AddScoped<IVenueRepository, VenueRepository>();
 
 // Client data services
+builder.Services.AddScoped<IActivityDataService, ClientActivityDataService>();
+builder.Services.AddScoped<IDeliveryNoteDetailDataService, ClientDeliveryNoteDetailDataService>();
+builder.Services.AddScoped<IDeliveryNoteDataService, ClientDeliveryNoteDataService>();
+builder.Services.AddScoped<IJavascriptMethodsService, JavascriptMethodsService>();
+builder.Services.AddScoped<ILookupsDataService, ClientLookupsDataService>();
 builder.Services.AddScoped<IProductDataService, ClientProductDataService>();
 builder.Services.AddScoped<IProductTypeDataService, ClientProductTypeDataService>();
-builder.Services.AddScoped<IVenueDataService, ClientVenueDataService>();
-builder.Services.AddScoped<IActivityDataService, ClientActivityDataService>();
-builder.Services.AddScoped<ILookupsDataService, ClientLookupsDataService>();
 builder.Services.AddScoped<IReportDataService, ClientReportDataService>();
-builder.Services.AddScoped<IJavascriptMethodsService, JavascriptMethodsService>();
+builder.Services.AddScoped<IVenueDataService, ClientVenueDataService>();
 
 // Auto Mapper Configurations
 var mappingConfig = new MapperConfiguration(mc =>
@@ -114,5 +121,7 @@ app.MapRazorComponents<App>()
 app.MapAdditionalIdentityEndpoints();
 
 app.MapControllers();
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 app.Run();
