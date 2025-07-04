@@ -132,5 +132,6 @@
     <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Update.sql" />
     <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Delete.sql" />
     <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Create.sql" />
+    <Build Include="dbo\Stored Procedures\DeliveryNote_Delete.sql" />
   </ItemGroup>
 </Project>

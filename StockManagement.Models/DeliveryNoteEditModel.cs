@@ -9,7 +9,7 @@ namespace StockManagement.Models
         [Required(ErrorMessage = "Date is required.")]
         public DateTime Date { get; set; }
 
-        [Required(ErrorMessage = "Venue is required.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Venue must be selected.")]
         public int VenueId { get; set; }
 
         public bool DirectSale { get; set; }

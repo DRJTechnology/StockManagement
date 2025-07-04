@@ -24,6 +24,8 @@ namespace StockManagement.Models
         [Required]
         public int Quantity { get; set; }
 
+        public int DeliveryNoteId { get; set; }
+
         public bool Deleted { get; set; }
     }
 }
