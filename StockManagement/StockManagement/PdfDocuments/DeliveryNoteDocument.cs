@@ -1,10 +1,9 @@
-﻿using QuestPDF.Fluent;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
-using QuestPDF.Drawing;
-using StockManagement.Client.Pages;
-using System.Drawing;
 using StockManagement.Models;
+using System.Net;
 
 public class DeliveryNoteDocument : IDocument
 {
@@ -23,8 +22,8 @@ public class DeliveryNoteDocument : IDocument
     {
         container.Page(page =>
         {
-            page.Margin(40);
-            page.Size(PageSizes.A4);
+            page.Margin(20);
+            page.Size(PageSizes.A5);
             page.PageColor(Colors.White);
             page.DefaultTextStyle(x => x.FontSize(12));
 
@@ -38,24 +37,69 @@ public class DeliveryNoteDocument : IDocument
     {
         container.Row(row =>
         {
-            row.RelativeItem().Column(col =>
-            {
-                //col.Item().Image(_logoImage).Height(60);
-
-                col.Item().PaddingTop(5).Text("Delivery Note")
-                    .FontSize(20).SemiBold().FontColor(Colors.Black);
-            });
+            row.RelativeItem().AlignLeft().Column(column =>
+                {
+                    column.Item().PaddingTop(5).Text("Delivery Note")
+                                                .FontSize(20).SemiBold().FontColor(Colors.Black);
+                    column.Item().Text($"Date: {_deliveryNote.Date:dd/MM/yyyy}");
+                });
+            row.RelativeItem().AlignRight().Height(60).Image(_logoImage);
         });
+
     }
 
     void ComposeContent(IContainer container)
     {
-        container.PaddingVertical(10).Column(column =>
+        container.PaddingVertical(15).Column(column =>
         {
-            column.Item().Text($"Date: {_deliveryNote.Date:dd/MM/yyyy}");
-            column.Item().Text($"Venue: {_deliveryNote.VenueName}");
-            column.Item().PaddingTop(15).Element(ComposeTable);
+            column.Item().PaddingTop(25).Element(ComposeToFromSection);
+            column.Item().PaddingTop(25).Element(ComposeTable);
         });
+    }
+    void ComposeToFromSection(IContainer container)
+    {
+        container.Column(column =>
+        {
+            column.Item().Row(row =>
+            {
+                row.RelativeItem().Column(column =>
+                {
+                    //column.Spacing(2);
+                    column.Item().BorderBottom(1).PaddingBottom(2).Text("To:").SemiBold();
+                    column.Item().Text(_deliveryNote.VenueName);
+                    //column.Item().Text(Address.Street);
+                    //column.Item().Text($"{Address.City}, {Address.State}");
+                    //column.Item().Text(Address.Email);
+                    //column.Item().Text(Address.Phone);
+                });
+                row.ConstantItem(50);
+                row.RelativeItem().Column(column =>
+                {
+                    //column.Spacing(2);
+                    column.Item().BorderBottom(1).PaddingBottom(2).Text("From:").SemiBold();
+                    column.Item().Text("Joei B Brown Art");
+                    //column.Item().Text(Address.Street);
+                    //column.Item().Text($"{Address.City}, {Address.State}");
+                    //column.Item().Text(Address.Email);
+                    //column.Item().Text(Address.Phone);
+                });
+            });
+
+
+
+        });
+        //container.Column(column =>
+        //{
+        //    column.Spacing(2);
+
+        //    column.Item().BorderBottom(1).PaddingBottom(5).Text("To:").SemiBold();
+
+        //    column.Item().Text(_deliveryNote.VenueName);
+        //    //column.Item().Text(Address.Street);
+        //    //column.Item().Text($"{Address.City}, {Address.State}");
+        //    //column.Item().Text(Address.Email);
+        //    //column.Item().Text(Address.Phone);
+        //});
     }
 
     void ComposeTable(IContainer container)
@@ -65,7 +109,7 @@ public class DeliveryNoteDocument : IDocument
             table.ColumnsDefinition(columns =>
             {
                 columns.RelativeColumn(3); // Product Type  
-                columns.RelativeColumn(4); // Product Name  
+                columns.RelativeColumn(8); // Product Name  
                 columns.RelativeColumn(2); // Quantity  
             });
 
@@ -76,8 +120,7 @@ public class DeliveryNoteDocument : IDocument
                 header.Cell().Element(CellStyle).AlignRight().Text("Quantity").SemiBold();
 
                 IContainer CellStyle(IContainer container) =>
-                    container.DefaultTextStyle(x => x.FontSize(12).SemiBold())
-                        .PaddingVertical(5).BorderBottom(1).BorderColor(Colors.Grey.Medium);
+                    container.DefaultTextStyle(x => x.FontSize(12).SemiBold());
             });
 
             foreach (var item in _deliveryNote.DetailList)
@@ -87,7 +130,8 @@ public class DeliveryNoteDocument : IDocument
                 table.Cell().Element(CellStyle).AlignRight().Text(item.Quantity.ToString());
 
                 IContainer CellStyle(IContainer container) =>
-                    container.DefaultTextStyle(x => x.FontSize(11)).PaddingVertical(4);
+                    container.DefaultTextStyle(x => x.FontSize(11))
+                                .Border(1).Padding(2);
             }
         });
     }
@@ -96,8 +140,8 @@ public class DeliveryNoteDocument : IDocument
     {
         container.Row(row =>
         {
-            row.RelativeItem().AlignLeft().Text($"Generated on {_deliveryNote.Date:dd/MM/yyyy}").FontSize(10);
-            row.RelativeItem().AlignRight().Text("https://joeibbrown.art/")
+            //row.RelativeItem().AlignLeft().Text($"Generated on {_deliveryNote.Date:dd/MM/yyyy}").FontSize(10);
+            row.RelativeItem().AlignCenter().Text("https://joeibbrown.art/")
                 .FontSize(10)
                 .FontColor(Colors.Blue.Medium);
             //.Hyperlink("https://joeibbrown.art/");  
