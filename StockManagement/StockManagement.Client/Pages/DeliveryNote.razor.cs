@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
 using StockManagement.Models;
-using System.ComponentModel.DataAnnotations;
 
 public partial class DeliveryNoteBase : ComponentBase
 {
     [Parameter] public int DeliveryNoteId { get; set; }
+
+    [Inject]
+    protected NavigationManager Navigation { get; set; } = default!;
 
     [Inject]
     protected IDeliveryNoteDataService DeliveryNoteService { get; set; } = default!;
@@ -34,6 +36,8 @@ public partial class DeliveryNoteBase : ComponentBase
 
     protected EditContext editContext;
     protected bool IsFormValid = false;
+    protected bool IsDirty = false;
+    private bool _postInitActionDone = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -42,17 +46,20 @@ public partial class DeliveryNoteBase : ComponentBase
         {
             await LoadLookups();
             await LoadDeliveryNote();
-
-            editContext = new EditContext(EditDeliveryNote);
+        }
+        // Initialization done, trigger re-render
+        StateHasChanged();
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        // Only run after initialization and only once
+        if (!_postInitActionDone && editContext != null)
+        {
             IsFormValid = editContext.Validate();
-            editContext.OnFieldChanged += (_, __) =>
-            {
-                IsFormValid = editContext.Validate();
-                InvokeAsync(StateHasChanged);
-            };
+            _postInitActionDone = true;
+            StateHasChanged();
         }
     }
-
     protected async Task HandleValidSubmit()
     {
         if (EditDeliveryNote.Id == 0)
@@ -64,22 +71,39 @@ public partial class DeliveryNoteBase : ComponentBase
         {
             await DeliveryNoteService.UpdateAsync(EditDeliveryNote);
         }
+        IsDirty = false;
     }
 
     protected async Task LoadDeliveryNote()
     {
-        if (DeliveryNoteId == 0) {
+        if (DeliveryNoteId == 0)
+        {
             var localNow = await JavascriptMethodsService.GetLocalDateTimeAsync();
-            EditDeliveryNote = new DeliveryNoteResponseModel() { Date = localNow };
-        } else
+            EditDeliveryNote = new DeliveryNoteResponseModel() { Date = localNow, VenueId = 0, DetailList = new List<DeliveryNoteDetailResponseModel>() };
+        }
+        else
         {
             EditDeliveryNote = await DeliveryNoteService.GetByIdAsync(DeliveryNoteId);
             if (EditDeliveryNote == null)
             {
-                EditDeliveryNote = new DeliveryNoteResponseModel();
+                throw new Exception("Invalid Delivery Note");
             }
         }
+        CreateValidationContext();
+
         IsLoading = false;
+    }
+
+    private void CreateValidationContext()
+    {
+        editContext = new EditContext(EditDeliveryNote);
+        IsFormValid = editContext.Validate();
+        editContext.OnFieldChanged += (_, __) =>
+        {
+            IsFormValid = editContext.Validate();
+            IsDirty = true;
+            InvokeAsync(StateHasChanged);
+        };
     }
 
     private async Task LoadLookups()
@@ -139,6 +163,14 @@ public partial class DeliveryNoteBase : ComponentBase
         ShowEditDetailForm = false;
     }
 
+    protected void DeleteDeliveryNote()
+    {
+        if (EditDeliveryNote.Id > 0)
+        {
+            DeliveryNoteService.DeleteAsync(EditDeliveryNote.Id);
+            Navigation.NavigateTo("/delivery-note-list");
+        }
+    }
 
     protected void EditDetail(DeliveryNoteDetailResponseModel activity)
     {

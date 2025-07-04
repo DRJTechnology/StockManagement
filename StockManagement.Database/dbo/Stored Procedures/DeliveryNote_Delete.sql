@@ -1,12 +1,12 @@
 ﻿-- =========================================================
 -- Author:		Dave Brown
 -- Create date: 03 Jul 2025
--- Description:	Delete Delivery Note Detail
+-- Description:	Delete Delivery Note
 -- =========================================================
-CREATE PROCEDURE [dbo].[DeliveryNoteDetail_Delete]
+CREATE PROCEDURE [dbo].[DeliveryNote_Delete]
 (
 	@Success bit output,
-	@DeliveryNoteDetailId int,
+	@DeliveryNoteId int,
 	@CurrentUserId int
 )
 AS
@@ -22,21 +22,35 @@ BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
 
+		-- Soft delete the delivery note
+		UPDATE [DeliveryNote]
+		SET
+			[Deleted] = 1,
+			[AmendUserID] = @CurrentUserId,
+			[AmendDate] = @UpdateDate
+		WHERE
+			[Id] = @DeliveryNoteId
+
+		-- Soft delete the delivery note details
 		UPDATE [DeliveryNoteDetail]
 		SET
 			[Deleted] = 1,
 			[AmendUserID] = @CurrentUserId,
 			[AmendDate] = @UpdateDate
-		WHERE
-			[Id] = @DeliveryNoteDetailId
+		WHERE	[DeliveryNoteId] = @DeliveryNoteId
+			AND [Deleted] = 0
 
-		UPDATE [Activity]
+		-- Soft delete the activities associated with the delivery note details
+		UPDATE a
 		SET
 			[Deleted] = 1,
 			[AmendUserID] = @CurrentUserId,
 			[AmendDate] = @UpdateDate
-		WHERE
-			[DeliveryNoteDetailId] = @DeliveryNoteDetailId
+		FROM
+			[Activity] a
+			INNER JOIN [DeliveryNoteDetail] dnd ON a.[DeliveryNoteDetailId] = dnd.[Id]
+		WHERE	dnd.[DeliveryNoteId] = @DeliveryNoteId
+			AND a.[Deleted] = 0
 
 		COMMIT TRANSACTION
 		SET @Success = 1

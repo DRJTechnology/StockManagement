@@ -22,7 +22,7 @@ else
                 <div class="mb-2">
                     <label>Venue:</label>
                     <InputSelect class="form-control" @bind-Value="EditDeliveryNote.VenueId">
-                        <option value="">-- Select Venue --</option>
+                        <option value="0">-- Select Venue --</option>
                         @if (Lookups?.VenueList != null)
                         {
                             foreach (var venue in Lookups.VenueList)
@@ -44,7 +44,11 @@ else
                     </div>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <button class="btn btn-success" type="submit" disabled="@( !IsFormValid )">Save</button>
+                    <button class="btn btn-success" type="submit" disabled="@( !IsFormValid || !IsDirty )">Save</button>
+                    @if (EditDeliveryNote.Id > 0)
+                    {
+                        <button class="btn btn-danger ms-2" type="button" @onclick="DeleteDeliveryNote">Delete</button>
+                    }
                 </div>
             </EditForm>
         </div>

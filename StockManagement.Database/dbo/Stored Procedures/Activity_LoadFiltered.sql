@@ -1,4 +1,11 @@
-﻿CREATE PROCEDURE [dbo].[Activity_LoadFiltered]
+﻿-- =========================================================
+-- Author:		Dave Brown
+-- Create date: May 2025
+-- Description:	Get Activity
+-- =========================================================
+-- 04 Jul 2025 - Dave Brown - DeliveryNoteId added
+-- =========================================================
+CREATE PROCEDURE [dbo].[Activity_LoadFiltered]
     @ActivityDate datetime = NULL,
     @ActionId int = NULL,
     @ProductId int = NULL,
@@ -17,10 +24,6 @@ BEGIN
     -- Calculate total count
     SELECT @TotalCount = COUNT(*)
     FROM [Activity] a
-    --INNER JOIN [Product] p ON a.[ProductId] = p.Id
-    --INNER JOIN [ProductType] pt ON a.[ProductTypeId] = pt.Id
-    --INNER JOIN [Venue] v ON a.[VenueId] = v.Id
-    --INNER JOIN [Action] act ON a.[ActionId] = act.Id
     WHERE
         a.[Deleted] <> 1
         AND (@ActivityDate IS NULL OR CAST(a.[ActivityDate] AS DATE) = CAST(@ActivityDate AS DATE))
@@ -50,6 +53,7 @@ BEGIN
         a.[VenueId],
         v.[VenueName],
         a.[Quantity],
+        dnd.DeliveryNoteId,
         a.[Deleted],
         a.[AmendUserID],
         a.[AmendDate]
@@ -58,6 +62,7 @@ BEGIN
     INNER JOIN [ProductType] pt ON a.[ProductTypeId] = pt.Id
     INNER JOIN [Venue] v ON a.[VenueId] = v.Id
     INNER JOIN [Action] act ON a.[ActionId] = act.Id
+    LEFT OUTER JOIN [DeliveryNoteDetail] dnd ON a.DeliveryNoteDetailId = dnd.Id
     WHERE
         a.[Deleted] <> 1
         AND (@ActivityDate IS NULL OR CAST(a.[ActivityDate] AS DATE) = CAST(@ActivityDate AS DATE))
