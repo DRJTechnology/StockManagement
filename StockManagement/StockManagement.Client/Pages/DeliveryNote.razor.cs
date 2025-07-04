@@ -160,4 +160,12 @@ public partial class DeliveryNoteBase : ComponentBase
         EditDeliveryNote.DetailList.RemoveAll(dnd => dnd.Id == id);
     }
 
+    [Inject] IJSRuntime JS { get; set; }
+
+    protected async Task DownloadPdf()
+    {
+        var url = "/api/pdf/delivery-note/1";
+        await JS.InvokeVoidAsync("downloadFile", url);
+    }
+
 }

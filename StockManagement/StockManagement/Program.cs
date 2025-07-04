@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
+using QuestPDF.Infrastructure;
 using StockManagement.Client.Interfaces;
 using StockManagement.Client.Services;
 using StockManagement.ClientDataServices;
@@ -120,5 +121,7 @@ app.MapRazorComponents<App>()
 app.MapAdditionalIdentityEndpoints();
 
 app.MapControllers();
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 app.Run();
