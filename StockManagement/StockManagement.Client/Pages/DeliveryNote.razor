@@ -63,8 +63,8 @@ else
     {
         <div class="row">
             <div class="col d-flex justify-content-between pt-2">
-                <button class="btn btn-primary mb-2" @onclick="ShowAddDetailForm">Add Product</button>
-                <button class="btn btn-primary" @onclick="DownloadPdf">Print</button>
+                <button class="btn btn-primary mb-2" @onclick="ShowAddDetailForm" disabled="@( IsDirty )">Add Product</button>
+                <button class="btn btn-primary" @onclick="DownloadPdf" disabled="@( IsDirty )">Print</button>
             </div>
         </div>
 
