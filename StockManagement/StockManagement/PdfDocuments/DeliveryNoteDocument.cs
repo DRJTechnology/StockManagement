@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using QuestPDF.Fluent;
+﻿using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using StockManagement.Models;
-using System.Net;
+using System.Reflection.PortableExecutable;
 
 public class DeliveryNoteDocument : IDocument
 {
@@ -35,12 +34,18 @@ public class DeliveryNoteDocument : IDocument
 
     void ComposeHeader(IContainer container)
     {
+        var title = _deliveryNote.DirectSale ? "Invoice" : "Delivery Note";
+
         container.Row(row =>
         {
             row.RelativeItem().AlignLeft().Column(column =>
                 {
-                    column.Item().PaddingTop(5).Text("Delivery Note")
+                    column.Item().PaddingTop(5).Text(title)
                                                 .FontSize(20).SemiBold().FontColor(Colors.Black);
+                    if (_deliveryNote.DirectSale)
+                    {
+                        column.Item().Text($"Invoice Num: {_deliveryNote.Id:D5}");
+                    }
                     column.Item().Text($"Date: {_deliveryNote.Date:dd/MM/yyyy}");
                 });
             row.RelativeItem().AlignRight().Height(60).Image(_logoImage);
@@ -64,42 +69,19 @@ public class DeliveryNoteDocument : IDocument
             {
                 row.RelativeItem().Column(column =>
                 {
-                    //column.Spacing(2);
+                    column.Spacing(2);
                     column.Item().BorderBottom(1).PaddingBottom(2).Text("To:").SemiBold();
                     column.Item().Text(_deliveryNote.VenueName);
-                    //column.Item().Text(Address.Street);
-                    //column.Item().Text($"{Address.City}, {Address.State}");
-                    //column.Item().Text(Address.Email);
-                    //column.Item().Text(Address.Phone);
                 });
                 row.ConstantItem(50);
                 row.RelativeItem().Column(column =>
                 {
-                    //column.Spacing(2);
+                    column.Spacing(2);
                     column.Item().BorderBottom(1).PaddingBottom(2).Text("From:").SemiBold();
                     column.Item().Text("Joei B Brown Art");
-                    //column.Item().Text(Address.Street);
-                    //column.Item().Text($"{Address.City}, {Address.State}");
-                    //column.Item().Text(Address.Email);
-                    //column.Item().Text(Address.Phone);
                 });
             });
-
-
-
         });
-        //container.Column(column =>
-        //{
-        //    column.Spacing(2);
-
-        //    column.Item().BorderBottom(1).PaddingBottom(5).Text("To:").SemiBold();
-
-        //    column.Item().Text(_deliveryNote.VenueName);
-        //    //column.Item().Text(Address.Street);
-        //    //column.Item().Text($"{Address.City}, {Address.State}");
-        //    //column.Item().Text(Address.Email);
-        //    //column.Item().Text(Address.Phone);
-        //});
     }
 
     void ComposeTable(IContainer container)
@@ -110,14 +92,24 @@ public class DeliveryNoteDocument : IDocument
             {
                 columns.RelativeColumn(3); // Product Type  
                 columns.RelativeColumn(8); // Product Name  
-                columns.RelativeColumn(2); // Quantity  
+                columns.RelativeColumn(1); // Quantity  
+                if (_deliveryNote.DirectSale)
+                {
+                    columns.RelativeColumn(2); // Unit Price  
+                    columns.RelativeColumn(2); // Total
+                }
             });
 
             table.Header(header =>
             {
-                header.Cell().Element(CellStyle).Text("Product Type").SemiBold();
+                header.Cell().Element(CellStyle).Text("Type").SemiBold();
                 header.Cell().Element(CellStyle).Text("Product Name").SemiBold();
-                header.Cell().Element(CellStyle).AlignRight().Text("Quantity").SemiBold();
+                header.Cell().Element(CellStyle).AlignRight().Text("Qty").SemiBold();
+                if (_deliveryNote.DirectSale)
+                {
+                    header.Cell().Element(CellStyle).AlignRight().Text("Unit").SemiBold();
+                    header.Cell().Element(CellStyle).AlignRight().Text("Total").SemiBold();
+                }
 
                 IContainer CellStyle(IContainer container) =>
                     container.DefaultTextStyle(x => x.FontSize(12).SemiBold());
@@ -128,6 +120,11 @@ public class DeliveryNoteDocument : IDocument
                 table.Cell().Element(CellStyle).Text(item.ProductTypeName);
                 table.Cell().Element(CellStyle).Text(item.ProductName);
                 table.Cell().Element(CellStyle).AlignRight().Text(item.Quantity.ToString());
+                if (_deliveryNote.DirectSale)
+                {
+                    table.Cell().Element(CellStyle);
+                    table.Cell().Element(CellStyle);
+                }
 
                 IContainer CellStyle(IContainer container) =>
                     container.DefaultTextStyle(x => x.FontSize(11))
@@ -140,11 +137,9 @@ public class DeliveryNoteDocument : IDocument
     {
         container.Row(row =>
         {
-            //row.RelativeItem().AlignLeft().Text($"Generated on {_deliveryNote.Date:dd/MM/yyyy}").FontSize(10);
             row.RelativeItem().AlignCenter().Text("https://joeibbrown.art/")
                 .FontSize(10)
                 .FontColor(Colors.Blue.Medium);
-            //.Hyperlink("https://joeibbrown.art/");  
         });
     }
 }
