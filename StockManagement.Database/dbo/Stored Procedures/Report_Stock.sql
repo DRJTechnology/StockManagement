@@ -1,10 +1,18 @@
-﻿-- =========================================================
+﻿USE [StockManagement]
+GO
+/****** Object:  StoredProcedure [dbo].[Report_Stock]    Script Date: 06/07/2025 15:08:03 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =========================================================
 -- Author:		Dave Brown
 -- Create date: 27 May 2025
 -- Description:	Get Stock levels
 -- =========================================================
 -- 25 JUN 2025 - Dave Brown - Do not display zero TotalQuantity
 -- 29 JUN 2025 - Dave Brown - Include 'Totals' option
+-- 06 JUL 2025 - Dave Brown - Show 0 stock for stockroom and cards
 -- =========================================================
 CREATE PROCEDURE [dbo].[Report_Stock]
 	@VenueId int = 0,
@@ -101,7 +109,7 @@ BEGIN
         INNER JOIN dbo.ProductType pt ON ca.ProductTypeId = pt.Id
         INNER JOIN dbo.Venue v ON ca.VenueId = v.Id
         GROUP BY v.Id, v.VenueName, pt.Id, pt.ProductTypeName, p.Id, p.ProductName
-        HAVING SUM(ca.Quantity) > 0
+        HAVING SUM(ca.Quantity) > 0 OR (v.Id = 1 AND pt.Id = 2) -- Show Zero if Stockroom and Card
         ORDER BY v.VenueName, pt.ProductTypeName, p.ProductName
     END
     ELSE
@@ -131,4 +139,3 @@ BEGIN
 
 	RETURN @Err
 END
-
