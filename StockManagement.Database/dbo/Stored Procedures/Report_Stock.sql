@@ -1,11 +1,4 @@
-﻿USE [StockManagement]
-GO
-/****** Object:  StoredProcedure [dbo].[Report_Stock]    Script Date: 06/07/2025 15:08:03 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
--- =========================================================
+﻿-- =========================================================
 -- Author:		Dave Brown
 -- Create date: 27 May 2025
 -- Description:	Get Stock levels

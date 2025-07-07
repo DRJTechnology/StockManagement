@@ -26,11 +26,15 @@ public partial class ActivitiesBase : ComponentBase
     protected ActivityEditModel EditActivity { get; set; } = new();
     protected bool ShowForm { get; set; }
     protected bool IsLoading { get; set; }
+    protected bool filtersExpanded = true;
+
     public LookupsModel Lookups { get; private set; }
 
     protected ActivityFilterModel activityFilterModel = new ActivityFilterModel();
 
     protected int TotalPages { get; set; }
+    protected int StartPage { get; set; }
+    protected int EndPage { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -57,6 +61,13 @@ public partial class ActivitiesBase : ComponentBase
             activityFilterModel.CurrentPage = TotalPages;
         if (activityFilterModel.CurrentPage < 1)
             activityFilterModel.CurrentPage = 1;
+
+        int maxButtons = 5;
+        StartPage = Math.Max(1, activityFilterModel.CurrentPage - 2);
+        EndPage = Math.Min(TotalPages, StartPage + maxButtons - 1);
+        if (EndPage - StartPage < maxButtons - 1)
+            StartPage = Math.Max(1, EndPage - maxButtons + 1);
+
     }
 
     protected async Task OnFilter()
@@ -195,5 +206,10 @@ public partial class ActivitiesBase : ComponentBase
             activityFilterModel.CurrentPage++;
             await LoadActivities();
         }
+    }
+
+    protected void ToggleFilters()
+    {
+        filtersExpanded = !filtersExpanded;
     }
 }

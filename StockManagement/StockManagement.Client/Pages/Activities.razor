@@ -17,122 +17,209 @@ else
                        Lookups="Lookups"
                        OnCancel="CancelEdit"
                        OnValidSubmit="HandleValidSubmit" />
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Product Type</th>
-                    <th>Product</th>
-                    <th>Action</th>
-                    <th>Venue</th>
-                    <th>Quantity</th>
-                    <th></th>
-                </tr>
-                <tr>
-                    <th>
-                        <InputDate @bind-Value="activityFilterModel.Date" class="form-control" />
-                    </th>
-                    <th>
-                        <InputSelect @bind-Value="activityFilterModel.ProductTypeId" class="form-select">
-                            <option value="">All</option>
-                            @if (Lookups?.ProductTypeList != null)
-                            {
-                                foreach (var pt in Lookups.ProductTypeList)
+
+
+    <div class="card mb-3">
+        <div class="card-header" style="cursor:pointer"
+             @onclick="ToggleFilters">
+            <strong>Filters</strong>
+            <span class="float-end">
+                <i class="bi @(filtersExpanded ? "bi-chevron-down" : "bi-chevron-right")"></i>
+            </span>
+        </div>
+        @if (filtersExpanded)
+        {
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="form-floating">
+                            <InputDate @bind-Value="activityFilterModel.Date" class="form-control" />
+                            <label for="dateFilter">Date:</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="form-floating">
+                            <InputSelect @bind-Value="activityFilterModel.ProductTypeId" class="form-select">
+                                <option value="">All</option>
+                                @if (Lookups?.ProductTypeList != null)
                                 {
-                                    <option value="@pt.Id">@pt.ProductTypeName</option>
+                                    foreach (var pt in Lookups.ProductTypeList)
+                                    {
+                                        <option value="@pt.Id">@pt.ProductTypeName</option>
+                                    }
                                 }
-                            }
-                        </InputSelect>
-                    </th>
-                    <th>
-                        <InputSelect @bind-Value="activityFilterModel.ProductId" class="form-select">
-                            <option value="">All</option>
-                            @if (Lookups?.ProductList != null)
-                            {
-                                foreach (var p in Lookups.ProductList)
+                            </InputSelect>
+                            <label for="productTypeFilter">Product Type:</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="form-floating">
+                            <InputSelect @bind-Value="activityFilterModel.ProductId" class="form-select">
+                                <option value="">All</option>
+                                @if (Lookups?.ProductList != null)
                                 {
-                                    <option value="@p.Id">@p.ProductName</option>
+                                    foreach (var p in Lookups.ProductList)
+                                    {
+                                        <option value="@p.Id">@p.ProductName</option>
+                                    }
                                 }
-                            }
-                        </InputSelect>
-                    </th>
-                    <th>
-                        <InputSelect @bind-Value="activityFilterModel.ActionId" class="form-select">
-                            <option value="">All</option>
-                            @if (Lookups?.ActionList != null)
-                            {
-                                foreach (var a in Lookups.ActionList)
+                            </InputSelect>
+                            <label for="productFilter">Product:</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="form-floating">
+                            <InputSelect @bind-Value="activityFilterModel.ActionId" class="form-select">
+                                <option value="">All</option>
+                                @if (Lookups?.ActionList != null)
                                 {
-                                    <option value="@a.Id">@a.ActionName</option>
+                                    foreach (var a in Lookups.ActionList)
+                                    {
+                                        <option value="@a.Id">@a.ActionName</option>
+                                    }
                                 }
-                            }
-                        </InputSelect>
-                    </th>
-                    <th>
-                        <InputSelect @bind-Value="activityFilterModel.VenueId" class="form-select">
-                            <option value="">All</option>
-                            @if (Lookups?.VenueList != null)
-                            {
-                                foreach (var v in Lookups.VenueList)
+                            </InputSelect>
+                            <label for="actionFilter">Action:</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="form-floating">
+                            <InputSelect @bind-Value="activityFilterModel.VenueId" class="form-select">
+                                <option value="">All</option>
+                                @if (Lookups?.VenueList != null)
                                 {
-                                    <option value="@v.Id">@v.VenueName</option>
+                                    foreach (var v in Lookups.VenueList)
+                                    {
+                                        <option value="@v.Id">@v.VenueName</option>
+                                    }
                                 }
-                            }
-                        </InputSelect>
-                    </th>
-                    <th>
-                        <InputNumber @bind-Value="activityFilterModel.Quantity" class="form-control" placeholder="Qty" />
-                    </th>
-                    <th>
+                            </InputSelect>
+                            <label for="venueFilter">Venue:</label>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="form-floating">
+                            <InputNumber @bind-Value="activityFilterModel.Quantity" class="form-control" />
+                            <label for="productFilter">Quantity:</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col pt-2 text-end">
                         <button class="btn btn-sm btn-primary me-1" @onclick="OnFilter">Filter</button>
                         <button class="btn btn-sm btn-secondary" @onclick="OnReset" type="button">Reset</button>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var activity in Activities)
-                {
-                    <tr>
-                        <td>@activity.ActivityDate.ToString("dd MMM yyyy")</td>
-                        <td>@activity.ProductTypeName</td>
-                        <td>@activity.ProductName</td>
-                        <td>@activity.ActionName</td>
-                        <td>@activity.VenueName</td>
-                        <td>@activity.Quantity</td>
-                        <td>
-                            @if (activity.DeliveryNoteId > 0)
-                            {
-                                <button class="btn btn-link ms-2" title="Show Delivery Note" @onclick="() => OpenDeliveryNote(activity.DeliveryNoteId)">
-                                    <i class="bi bi-clipboard"></i>
-                                </button>
-                            }
-                            else
-                            {
-                                <button class="btn btn-sm btn-warning" @onclick="() => Edit(activity)">Edit</button>
-                                <button class="btn btn-sm btn-danger ms-2" @onclick="() => Delete(activity.Id)">Delete</button>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-        <nav>
-            <ul class="pagination justify-content-center">
-                <li class="page-item @(activityFilterModel.CurrentPage == 1 ? "disabled" : "")">
-                    <button class="page-link" @onclick="PreviousPage" aria-label="Previous">&laquo;</button>
-                </li>
-                @for (int i = 1; i <= TotalPages; i++)
-                {
-                    var pageNumber = i;
-                    <li class="page-item @(activityFilterModel.CurrentPage == pageNumber ? "active" : "")">
-                        <button class="page-link" @onclick="() => GoToPage(pageNumber)">@pageNumber</button>
-                    </li>
-                }
-                <li class="page-item @(activityFilterModel.CurrentPage == TotalPages || TotalPages == 0 ? "disabled" : "")">
-                    <button class="page-link" @onclick="NextPage" aria-label="Next">&raquo;</button>
-                </li>
-            </ul>
-        </nav>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
+
+    @foreach (var activity in Activities)
+    {
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <div class="row">
+                            <div class="col-12 col-md-2">
+                                <div class="">
+                                    @activity.ActivityDate.ToString("dd MMM yy")
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-5">
+                                <div class="">
+                                    @activity.ActionName
+                                </div>
+                            </div>
+                            <div class="col-11 offset-1 col-sm-6 offset-sm-0 col-md-5">
+                                <div class="">
+                                    @activity.VenueName
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-2 col-md-2">
+                                <div class="fw-bold">
+                                    Qty: @activity.Quantity
+                                </div>
+                            </div>
+                            <div class="col-10 col-md-2">
+                                <div class="fw-bold">
+                                    @activity.ProductTypeName
+                                </div>
+                            </div>
+                            <div class="col-10 offset-2 col-md-8 offset-md-0">
+                                <div class="fw-bold">
+                                    @activity.ProductName
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                        @if (activity.DeliveryNoteId > 0)
+                        {
+                            <button class="btn btn-link" title="Show Delivery Note" @onclick="() => OpenDeliveryNote(activity.DeliveryNoteId)">
+                                <i class="bi bi-clipboard"></i>
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-sm btn-warning me-1 mt-1" @onclick="() => Edit(activity)">Edit</button>
+                            <button class="btn btn-sm btn-danger mt-1" @onclick="() => Delete(activity.Id)">Delete</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+@*     <nav>
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(activityFilterModel.CurrentPage == 1 ? "disabled" : "")">
+                <button class="page-link" @onclick="PreviousPage" aria-label="Previous">&laquo;</button>
+            </li>
+            @for (int i = 1; i <= TotalPages; i++)
+            {
+                var pageNumber = i;
+                <li class="page-item @(activityFilterModel.CurrentPage == pageNumber ? "active" : "")">
+                    <button class="page-link" @onclick="() => GoToPage(pageNumber)">@pageNumber</button>
+                </li>
+            }
+            <li class="page-item @(activityFilterModel.CurrentPage == TotalPages || TotalPages == 0 ? "disabled" : "")">
+                <button class="page-link" @onclick="NextPage" aria-label="Next">&raquo;</button>
+            </li>
+        </ul>
+    </nav>
+ *@
+    <nav>
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(activityFilterModel.CurrentPage == 1 ? "disabled" : "")">
+                <button class="page-link" @onclick="PreviousPage">&laquo;</button>
+            </li>
+            @if (StartPage > 1)
+            {
+                <li class="page-item">
+                    <button class="page-link" @onclick="() => GoToPage(1)">1</button>
+                </li>
+                <li class="page-item disabled"><span class="page-link">...</span></li>
+            }
+            @for (int i = StartPage; i <= EndPage; i++)
+            {
+                var pageNumber = i; // Capture the current value of i
+                <li class="page-item @(activityFilterModel.CurrentPage == pageNumber ? "active" : "")">
+                    <button class="page-link" @onclick="() => GoToPage(pageNumber)">@pageNumber</button>
+                </li>
+            }
+            @if (EndPage < TotalPages)
+            {
+                <li class="page-item disabled"><span class="page-link">...</span></li>
+                <li class="page-item">
+                    <button class="page-link" @onclick="() => GoToPage(TotalPages)">@TotalPages</button>
+                </li>
+            }
+            <li class="page-item @(activityFilterModel.CurrentPage == TotalPages ? "disabled" : "")">
+                <button class="page-link" @onclick="NextPage">&raquo;</button>
+            </li>
+        </ul>
+    </nav>
 }
