@@ -205,8 +205,9 @@ else
             }
             @for (int i = StartPage; i <= EndPage; i++)
             {
-                <li class="page-item @(activityFilterModel.CurrentPage == i ? "active" : "")">
-                    <button class="page-link" @onclick="() => GoToPage(i)">@i</button>
+                var pageNumber = i; // Capture the current value of i
+                <li class="page-item @(activityFilterModel.CurrentPage == pageNumber ? "active" : "")">
+                    <button class="page-link" @onclick="() => GoToPage(pageNumber)">@pageNumber</button>
                 </li>
             }
             @if (EndPage < TotalPages)

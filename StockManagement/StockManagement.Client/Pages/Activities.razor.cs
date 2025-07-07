@@ -33,7 +33,6 @@ public partial class ActivitiesBase : ComponentBase
     protected ActivityFilterModel activityFilterModel = new ActivityFilterModel();
 
     protected int TotalPages { get; set; }
-    protected int MaxButtons { get; set; }
     protected int StartPage { get; set; }
     protected int EndPage { get; set; }
 
@@ -63,10 +62,11 @@ public partial class ActivitiesBase : ComponentBase
         if (activityFilterModel.CurrentPage < 1)
             activityFilterModel.CurrentPage = 1;
 
+        int maxButtons = 5;
         StartPage = Math.Max(1, activityFilterModel.CurrentPage - 2);
-        EndPage = Math.Min(TotalPages, StartPage + MaxButtons - 1);
-        if (EndPage - StartPage < MaxButtons - 1)
-            StartPage = Math.Max(1, EndPage - MaxButtons + 1);
+        EndPage = Math.Min(TotalPages, StartPage + maxButtons - 1);
+        if (EndPage - StartPage < maxButtons - 1)
+            StartPage = Math.Max(1, EndPage - maxButtons + 1);
 
     }
 
