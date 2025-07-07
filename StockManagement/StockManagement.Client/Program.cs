@@ -13,14 +13,15 @@ builder.Services.AddHttpClient("WebAPI", client => client.BaseAddress = new Uri(
 // Supply HttpClient instances that include access tokens when making requests to the server project
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("WebAPI"));
 
-builder.Services.AddScoped<IProductDataService, ProductDataService>();
-builder.Services.AddScoped<IVenueDataService, VenueDataService>();
-builder.Services.AddScoped<IProductTypeDataService, ProductTypeDataService>();
 builder.Services.AddScoped<IActivityDataService, ActivityDataService>();
-builder.Services.AddScoped<ILookupsDataService, LookupsDataService>();
-builder.Services.AddScoped<IReportDataService, ReportDataService>();
-builder.Services.AddScoped<IJavascriptMethodsService, JavascriptMethodsService>();
-builder.Services.AddScoped<IDeliveryNoteDataService, DeliveryNoteDataService>();
 builder.Services.AddScoped<IDeliveryNoteDetailDataService, DeliveryNoteDetailDataService>();
+builder.Services.AddScoped<IDeliveryNoteDataService, DeliveryNoteDataService>();
+builder.Services.AddScoped<IJavascriptMethodsService, JavascriptMethodsService>();
+builder.Services.AddScoped<ILookupsDataService, LookupsDataService>();
+builder.Services.AddScoped<IProductDataService, ProductDataService>();
+builder.Services.AddScoped<IProductTypeDataService, ProductTypeDataService>();
+builder.Services.AddScoped<IReportDataService, ReportDataService>();
+builder.Services.AddScoped<ISupplierDataService, SupplierDataService>();
+builder.Services.AddScoped<IVenueDataService, VenueDataService>();
 
 await builder.Build().RunAsync();

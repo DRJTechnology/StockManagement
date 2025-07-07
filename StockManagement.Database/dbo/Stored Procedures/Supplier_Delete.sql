@@ -1,12 +1,12 @@
-﻿-- =========================================================
--- Author:		Dave Brown
--- Create date: 23 May 2025
--- Description:	Delete ProductProductType
 -- =========================================================
-CREATE PROCEDURE [dbo].[ProductProductType_Delete]
+-- Author:		Dave Brown
+-- Create date: 07 JUL 2025
+-- Description:	Delete Supplier
+-- =========================================================
+CREATE PROCEDURE [dbo].[Supplier_Delete]
 (
 	@Success bit output,
-	@ProductProductTypeID int,
+	@SupplierID int,
 	@CurrentUserId int
 )
 AS
@@ -16,13 +16,13 @@ BEGIN
 	DECLARE @Err int
 	SET @Success = 0
 
-	UPDATE [ProductProductType]
+	UPDATE [Supplier]
 	SET
 		[Deleted] = 1,
 		[AmendUserID] = @CurrentUserId,
 		[AmendDate] = GetDate()
 	WHERE
-		[Id] = @ProductProductTypeID
+		[Id] = @SupplierID
 
 	SET @Success = 1
 
