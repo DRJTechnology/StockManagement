@@ -1,14 +1,13 @@
-﻿-- =========================================================
--- Author:		Dave Brown
--- Create date: 23 May 2025
--- Description:	Update ProductProductType
 -- =========================================================
-CREATE PROCEDURE [dbo].[ProductProductType_Update]
+-- Author:		Dave Brown
+-- Create date: 07 JUL 2025
+-- Description:	Update Supplier
+-- =========================================================
+CREATE PROCEDURE [dbo].[Supplier_Update]
 (
 	@Success bit output,
 	@Id int,
-	@ProductId int,
-	@ProductTypeId int,
+	@SupplierName nvarchar(50),
 	@Deleted bit,
 	@CurrentUserId int
 )
@@ -19,10 +18,9 @@ BEGIN
 	DECLARE @Err int
 	SET @Success = 0
 
-	UPDATE [ProductProductType]
+	UPDATE [Supplier]
 	SET
-		[ProductId] = @ProductId,
-		[ProductTypeId] = @ProductTypeId,
+		[SupplierName] = @SupplierName,
 		[Deleted] = @Deleted,
 		[AmendUserID] = @CurrentUserId,
 		[AmendDate] = GetDate()

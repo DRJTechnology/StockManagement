@@ -76,9 +76,6 @@
     <Build Include="dbo\Stored Procedures\ProductType_Update.sql" />
     <Build Include="dbo\Stored Procedures\ProductType_Delete.sql" />
     <Build Include="dbo\Stored Procedures\ProductType_Create.sql" />
-    <Build Include="dbo\Stored Procedures\ProductProductType_Update.sql" />
-    <Build Include="dbo\Stored Procedures\ProductProductType_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\ProductProductType_Create.sql" />
     <Build Include="dbo\Stored Procedures\Product_Update.sql" />
     <Build Include="dbo\Stored Procedures\Product_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Product_Create.sql" />
@@ -88,7 +85,6 @@
     <Build Include="dbo\Stored Procedures\Action_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Action_Create.sql" />
     <Build Include="dbo\Stored Procedures\Venue_LoadAll.sql" />
-    <Build Include="dbo\Stored Procedures\ProductType_LoadByProductId.sql" />
     <Build Include="dbo\Stored Procedures\ProductType_LoadAll.sql" />
     <Build Include="dbo\Stored Procedures\Product_LoadAll.sql" />
     <Build Include="dbo\Stored Procedures\Action_LoadAll.sql" />
@@ -133,5 +129,9 @@
     <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Delete.sql" />
     <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Create.sql" />
     <Build Include="dbo\Stored Procedures\DeliveryNote_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Supplier_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Supplier_Create.sql" />
+    <Build Include="dbo\Stored Procedures\Supplier_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Supplier_LoadAll.sql" />
   </ItemGroup>
 </Project>

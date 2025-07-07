@@ -23,11 +23,11 @@ namespace StockManagement.Models.Automapper
             CreateMap<ProductDto, ProductResponseModel>();
             CreateMap<ProductEditModel, ProductDto>();
 
-            CreateMap<ProductProductTypeDto, ProductProductTypeResponseModel>();
-            CreateMap<ProductProductTypeEditModel, ProductProductTypeDto>();
-
             CreateMap<ProductTypeDto, ProductTypeResponseModel>();
             CreateMap<ProductTypeEditModel, ProductTypeDto>();
+
+            CreateMap<SupplierDto, SupplierResponseModel>();
+            CreateMap<SupplierEditModel, SupplierDto>();
 
             CreateMap<VenueDto, VenueResponseModel>();
             CreateMap<VenueEditModel, VenueDto>();
