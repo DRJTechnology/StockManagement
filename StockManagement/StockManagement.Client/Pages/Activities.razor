@@ -114,48 +114,87 @@ else
         }
     </div>
 
+    <div class="card d-none d-lg-block">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-11">
+                    <div class="row">
+                        <div class="col-1">
+                            <div class="fw-bold">
+                                Date
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            <div class="fw-bold">
+                                Type
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="fw-bold">
+                                Product
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="fw-bold">
+                                Action
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="fw-bold">
+                                Venue
+                            </div>
+                        </div>
+                        <div class="col-1">
+                            <div class="fw-bold">
+                                Quantity
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @foreach (var activity in Activities)
     {
-        <div class="card mb-3">
+        <div class="card mb-3 mb-lg-0">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-lg-10">
+                    <div class="col-lg-11">
                         <div class="row">
-                            <div class="col-12 col-md-2">
+                            <div class="col-12 col-md-3 col-lg-1">
                                 <div class="">
                                     @activity.ActivityDate.ToString("dd MMM yy")
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-6 col-md-5">
+                            <div class="col-5 col-md-2 col-lg-1">
+                                <div class="">
+                                    @activity.ProductTypeName
+                                </div>
+                            </div>
+                            <div class="col-7 col-md-7 col-lg-3">
+                                <div class="">
+                                    @activity.ProductName
+                                </div>
+                            </div>
+                            <div class="col-5 col-md-5 col-lg-3">
                                 <div class="">
                                     @activity.ActionName
                                 </div>
                             </div>
-                            <div class="col-11 offset-1 col-sm-6 offset-sm-0 col-md-5">
+                            <div class="col-5 col-md-5 col-lg-3">
                                 <div class="">
                                     @activity.VenueName
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-3 col-md-2">
-                                <div class="fw-bold">
-                                    Qty: @activity.Quantity
-                                </div>
-                            </div>
-                            <div class="col-9 col-md-2">
-                                <div class="fw-bold">
-                                    @activity.ProductTypeName
-                                </div>
-                            </div>
-                            <div class="col-11 offset-1 col-md-8 offset-md-0">
-                                <div class="fw-bold">
-                                    @activity.ProductName
+                            <div class="col-2 col-md-2 col-lg-1">
+                                <div class="">
+                                    @activity.Quantity
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-1">
                         @if (activity.DeliveryNoteId > 0)
                         {
                             <button class="btn btn-link" title="Show Delivery Note" @onclick="() => OpenDeliveryNote(activity.DeliveryNoteId)">
@@ -173,7 +212,7 @@ else
         </div>
     }
 
-    <nav>
+    <nav class="mt-lg-3">
         <ul class="pagination justify-content-center">
             <li class="page-item @(activityFilterModel.CurrentPage == 1 ? "disabled" : "")">
                 <button class="page-link" @onclick="PreviousPage">&laquo;</button>
