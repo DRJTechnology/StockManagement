@@ -138,17 +138,17 @@ else
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-2 col-md-2">
+                            <div class="col-3 col-md-2">
                                 <div class="fw-bold">
                                     Qty: @activity.Quantity
                                 </div>
                             </div>
-                            <div class="col-10 col-md-2">
+                            <div class="col-9 col-md-2">
                                 <div class="fw-bold">
                                     @activity.ProductTypeName
                                 </div>
                             </div>
-                            <div class="col-10 offset-2 col-md-8 offset-md-0">
+                            <div class="col-11 offset-1 col-md-8 offset-md-0">
                                 <div class="fw-bold">
                                     @activity.ProductName
                                 </div>
@@ -173,24 +173,6 @@ else
         </div>
     }
 
-@*     <nav>
-        <ul class="pagination justify-content-center">
-            <li class="page-item @(activityFilterModel.CurrentPage == 1 ? "disabled" : "")">
-                <button class="page-link" @onclick="PreviousPage" aria-label="Previous">&laquo;</button>
-            </li>
-            @for (int i = 1; i <= TotalPages; i++)
-            {
-                var pageNumber = i;
-                <li class="page-item @(activityFilterModel.CurrentPage == pageNumber ? "active" : "")">
-                    <button class="page-link" @onclick="() => GoToPage(pageNumber)">@pageNumber</button>
-                </li>
-            }
-            <li class="page-item @(activityFilterModel.CurrentPage == TotalPages || TotalPages == 0 ? "disabled" : "")">
-                <button class="page-link" @onclick="NextPage" aria-label="Next">&raquo;</button>
-            </li>
-        </ul>
-    </nav>
- *@
     <nav>
         <ul class="pagination justify-content-center">
             <li class="page-item @(activityFilterModel.CurrentPage == 1 ? "disabled" : "")">
