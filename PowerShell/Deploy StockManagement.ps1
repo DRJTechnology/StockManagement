@@ -6,7 +6,7 @@ $tarFile = "stockmanagement-$timestamp.tar"
 $logFile = "deploy-log-$timestamp.txt"
 $logFolder = "$projectPath\deploy-logs"
 $remoteUser = "daveb"
-$remoteHost = "your-server-ip"
+$remoteHost = "192.168.1.91"
 $remotePath = "/home/daveb"
 $remoteDeployPath = "/opt/stockmanagement"
 
