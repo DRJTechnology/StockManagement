@@ -26,6 +26,12 @@ namespace StockManagement.Models.Automapper
             CreateMap<ProductTypeDto, ProductTypeResponseModel>();
             CreateMap<ProductTypeEditModel, ProductTypeDto>();
 
+            CreateMap<StockReceiptDetailDto, StockReceiptDetailResponseModel>();
+            CreateMap<StockReceiptDetailEditModel, StockReceiptDetailDto>();
+
+            CreateMap<StockReceiptDto, StockReceiptResponseModel>();
+            CreateMap<StockReceiptEditModel, StockReceiptDto>();
+
             CreateMap<SupplierDto, SupplierResponseModel>();
             CreateMap<SupplierEditModel, SupplierDto>();
 

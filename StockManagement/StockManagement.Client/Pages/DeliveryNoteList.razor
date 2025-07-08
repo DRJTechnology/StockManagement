@@ -11,27 +11,67 @@
 else
 {
     <button class="btn btn-primary mb-2" @onclick="AddDeliveryNote">Add Delivery Note</button>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Venue</th>
-                <th>Direct Sale</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var note in DeliveryNotes)
-            {
-                <tr>
-                    <td>@note.Date.ToShortDateString()</td>
-                    <td>@note.VenueName</td>
-                    <td>@(note.DirectSale ? "Yes" : "No")</td>
-                    <td>
-                        <button class="btn btn-sm btn-secondary" @onclick="() => ViewDetails(note)">Details</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+
+    <div class="d-none d-md-block">
+        <div class="px-3 py-2">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-md-4 col-lg-3">
+                            <div class="fw-bold">
+                                Date
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-lg-4">
+                            <div class="fw-bold">
+                                Venue
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-lg-5">
+                            <div class="fw-bold">
+                                Direct Sale
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    int rowIndex = 0;
+    @foreach (var note in DeliveryNotes)
+    {
+        var rowClass = rowIndex % 2 == 0 ? "alt-row" : "";
+        <div class="card mb-3 mb-lg-0 @rowClass">
+            <div class="card-body py-2">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-4 d-md-none">
+                                Date:
+                            </div>
+                            <div class="col-8 col-md-4 col-lg-3">
+                                @note.Date.ToString("dd MMM yyyy")
+                            </div>
+                            <div class="col-4 d-md-none">
+                                Venue:
+                            </div>
+                            <div class="col-8 col-md-5 col-lg-4">
+                                @note.VenueName
+                            </div>
+                            <div class="col-4 d-md-none">
+                                Direct Sale:
+                            </div>
+                            <div class="col-8 col-md-3 col-lg-2">
+                                @(note.DirectSale ? "Yes" : "No")
+                            </div>
+                            <div class="col-12 col-lg-3">
+                                <button class="btn btn-sm btn-secondary" @onclick="() => ViewDetails(note)">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        rowIndex++;
+    }
 }

@@ -133,5 +133,7 @@
     <Build Include="dbo\Stored Procedures\Supplier_Create.sql" />
     <Build Include="dbo\Stored Procedures\Supplier_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Supplier_LoadAll.sql" />
+    <Build Include="dbo\Tables\StockReceipt.sql" />
+    <Build Include="dbo\Tables\StockReceiptDetail.sql" />
   </ItemGroup>
 </Project>

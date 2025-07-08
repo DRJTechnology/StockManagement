@@ -57,6 +57,8 @@ builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
+builder.Services.AddScoped<IStockReceiptDetailService, StockReceiptDetailService>();
+builder.Services.AddScoped<IStockReceiptService, StockReceiptService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IVenueService, VenueService>();
 builder.Services.AddScoped<IActionRepository, ActionRepository>();
@@ -68,6 +70,8 @@ builder.Services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+builder.Services.AddScoped<IStockReceiptDetailRepository, StockReceiptDetailRepository>();
+builder.Services.AddScoped<IStockReceiptRepository, StockReceiptRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVenueRepository, VenueRepository>();
 
@@ -80,6 +84,8 @@ builder.Services.AddScoped<ILookupsDataService, ClientLookupsDataService>();
 builder.Services.AddScoped<IProductDataService, ClientProductDataService>();
 builder.Services.AddScoped<IProductTypeDataService, ClientProductTypeDataService>();
 builder.Services.AddScoped<ISupplierDataService, ClientSupplierDataService>();
+builder.Services.AddScoped<IStockReceiptDetailDataService, ClientStockReceiptDetailDataService>();
+builder.Services.AddScoped<IStockReceiptDataService, ClientStockReceiptDataService>();
 builder.Services.AddScoped<IReportDataService, ClientReportDataService>();
 builder.Services.AddScoped<IVenueDataService, ClientVenueDataService>();
 
