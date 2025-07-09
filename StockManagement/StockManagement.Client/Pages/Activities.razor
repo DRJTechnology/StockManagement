@@ -114,10 +114,10 @@ else
         }
     </div>
 
-    <div class="card d-none d-lg-block">
-        <div class="card-body">
+    <div class="d-none d-lg-block">
+        <div class="px-3 py-2">
             <div class="row">
-                <div class="col-11">
+                <div class="col-12">
                     <div class="row">
                         <div class="col-1">
                             <div class="fw-bold">
@@ -134,17 +134,17 @@ else
                                 Product
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <div class="fw-bold">
                                 Action
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <div class="fw-bold">
                                 Venue
                             </div>
                         </div>
-                        <div class="col-1">
+                        <div class="col-3">
                             <div class="fw-bold">
                                 Quantity
                             </div>
@@ -154,13 +154,14 @@ else
             </div>
         </div>
     </div>
-
+    int rowIndex = 0;
     @foreach (var activity in Activities)
     {
-        <div class="card mb-3 mb-lg-0">
+        var rowClass = rowIndex % 2 == 0 ? "alt-row" : "";
+        <div class="card mb-3 mb-lg-0 @rowClass">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-lg-11">
+                    <div class="col-lg-12">
                         <div class="row">
                             <div class="col-12 col-md-3 col-lg-1">
                                 <div class="">
@@ -177,12 +178,12 @@ else
                                     @activity.ProductName
                                 </div>
                             </div>
-                            <div class="col-5 col-md-5 col-lg-3">
+                            <div class="col-5 col-md-5 col-lg-2">
                                 <div class="">
                                     @activity.ActionName
                                 </div>
                             </div>
-                            <div class="col-5 col-md-5 col-lg-3">
+                            <div class="col-5 col-md-5 col-lg-2">
                                 <div class="">
                                     @activity.VenueName
                                 </div>
@@ -192,24 +193,31 @@ else
                                     @activity.Quantity
                                 </div>
                             </div>
+                            <div class="col-lg-2">
+                                @if (activity.DeliveryNoteId > 0)
+                                {
+                                    <button class="btn btn-link" title="Show Delivery Note" @onclick="() => OpenDeliveryNote(activity.DeliveryNoteId)">
+                                        <i class="bi bi-clipboard"></i>
+                                    </button>
+                                }
+                                else if (activity.StockReceiptId > 0)
+                                {
+                                    <button class="btn btn-link" title="Show Delivery Note" @onclick="() => OpenStockReceipt(activity.StockReceiptId)">
+                                        <i class="bi bi-box-seam"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-sm btn-warning me-1 mt-1" @onclick="() => Edit(activity)">Edit</button>
+                                    <button class="btn btn-sm btn-danger mt-1" @onclick="() => Delete(activity.Id)">Delete</button>
+                                }
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-1">
-                        @if (activity.DeliveryNoteId > 0)
-                        {
-                            <button class="btn btn-link" title="Show Delivery Note" @onclick="() => OpenDeliveryNote(activity.DeliveryNoteId)">
-                                <i class="bi bi-clipboard"></i>
-                            </button>
-                        }
-                        else
-                        {
-                            <button class="btn btn-sm btn-warning me-1 mt-1" @onclick="() => Edit(activity)">Edit</button>
-                            <button class="btn btn-sm btn-danger mt-1" @onclick="() => Delete(activity.Id)">Delete</button>
-                        }
                     </div>
                 </div>
             </div>
         </div>
+        rowIndex++;
     }
 
     <nav class="mt-lg-3">

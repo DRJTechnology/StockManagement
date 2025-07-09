@@ -4,6 +4,7 @@
 -- Description:	Get Activity
 -- =========================================================
 -- 04 Jul 2025 - Dave Brown - DeliveryNoteId added
+-- 09 Jul 2025 - Dave Brown - StockNoteId added
 -- =========================================================
 CREATE PROCEDURE [dbo].[Activity_LoadFiltered]
     @ActivityDate datetime = NULL,
@@ -54,6 +55,7 @@ BEGIN
         v.[VenueName],
         a.[Quantity],
         dnd.DeliveryNoteId,
+        srd.StockReceiptId,
         a.[Deleted],
         a.[AmendUserID],
         a.[AmendDate]
@@ -63,6 +65,7 @@ BEGIN
     INNER JOIN [Venue] v ON a.[VenueId] = v.Id
     INNER JOIN [Action] act ON a.[ActionId] = act.Id
     LEFT OUTER JOIN [DeliveryNoteDetail] dnd ON a.DeliveryNoteDetailId = dnd.Id
+    LEFT OUTER JOIN [StockReceiptDetail] srd ON a.StockReceiptDetailId = srd.Id
     WHERE
         a.[Deleted] <> 1
         AND (@ActivityDate IS NULL OR CAST(a.[ActivityDate] AS DATE) = CAST(@ActivityDate AS DATE))

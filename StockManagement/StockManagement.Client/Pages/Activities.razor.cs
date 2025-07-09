@@ -122,6 +122,11 @@ public partial class ActivitiesBase : ComponentBase
         Navigation.NavigateTo($"/delivery-note/{deliveryNoteId}");
     }
 
+    protected void OpenStockReceipt(int stockReceiptId)
+    {
+        Navigation.NavigateTo($"/stock-receipt/{stockReceiptId}");
+    }
+
     protected async Task HandleValidSubmit()
     {
         if (EditActivity.Id == 0)

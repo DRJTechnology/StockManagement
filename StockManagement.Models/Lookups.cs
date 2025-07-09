@@ -6,6 +6,7 @@
         public List<ProductTypeResponseModel> ProductTypeList { get; set; }
         public List<VenueResponseModel> VenueList { get; set; }
         public List<ActionResponseModel> ActionList { get; set; }
+        public List<SupplierResponseModel> SupplierList { get; set; }
 
     }
 }

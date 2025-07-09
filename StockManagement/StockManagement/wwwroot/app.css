@@ -88,3 +88,7 @@ div.filters {
     border-radius: 5px;
     padding: 10px 0px;
 }
+
+.alt-row {
+    background-color: rgba(0,0,0,0.05);
+}

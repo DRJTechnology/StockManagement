@@ -1,8 +1,8 @@
-@page "/delivery-note/{DeliveryNoteId:int}"
+@page "/stock-receipt/{StockReceiptId:int}"
 @rendermode InteractiveWebAssembly
-@inherits DeliveryNoteBase
+@inherits StockReceiptBase
 
-<h3>Delivery Note</h3>
+<h3>Stock Receipt</h3>
 
 @if (IsLoading)
 {
@@ -17,59 +17,46 @@ else
                 <ValidationSummary />
                 <div class="mb-2">
                     <label>Date:</label>
-                    <InputDate class="form-control" @bind-Value="EditDeliveryNote.Date" />
+                    <InputDate class="form-control" @bind-Value="EditStockReceipt.Date" />
                 </div>
                 <div class="mb-2">
-                    <label>Venue:</label>
-                    <InputSelect class="form-control" @bind-Value="EditDeliveryNote.VenueId">
-                        <option value="0">-- Select Venue --</option>
-                        @if (Lookups?.VenueList != null)
+                    <label>Supplier:</label>
+                    <InputSelect class="form-control" @bind-Value="EditStockReceipt.SupplierId">
+                        <option value="0">-- Select Supplier --</option>
+                        @if (Lookups?.SupplierList != null)
                         {
-                            foreach (var venue in Lookups.VenueList)
+                            foreach (var supplier in Lookups.SupplierList)
                             {
-                                <option value="@venue.Id">@venue.VenueName</option>
+                                <option value="@supplier.Id">@supplier.SupplierName</option>
                             }
                         }
                     </InputSelect>
                 </div>
-                <div class="mb-2">
-                    <label>Direct Sale:</label>
-                    <div>
-                        <InputRadioGroup @bind-Value="EditDeliveryNote.DirectSale">
-                            <InputRadio class="btn-check" id="directSaleYes" Value="true" />
-                            <label class="btn btn-outline-success me-2" for="directSaleYes">Yes</label>
-                            <InputRadio class="btn-check" id="directSaleNo" Value="false" />
-                            <label class="btn btn-outline-secondary" for="directSaleNo">No</label>
-                        </InputRadioGroup>
-                    </div>
-                </div>
                 <div class="d-flex justify-content-end">
                     <button class="btn btn-success" type="submit" disabled="@( !IsFormValid || !IsDirty )">Save</button>
-                    @if (EditDeliveryNote.Id > 0)
+                    @if (EditStockReceipt.Id > 0)
                     {
-                        <button class="btn btn-danger ms-2" type="button" @onclick="DeleteDeliveryNote">Delete</button>
+                        <button class="btn btn-danger ms-2" type="button" @onclick="DeleteStockReceipt">Delete</button>
                     }
                 </div>
             </EditForm>
         </div>
         <div class="col-md-6 d-none d-md-block border rounded p-2">
-            <p>Products saved on a delivery note will be moved from stock to the selected venue.</p>
-            <p>Selecting 'Direct Sale' will mark the stock as sold by the selected venue.</p>
+            <p>Products saved with a stock receipt will be moved into stock.</p>
             <p>Corresponding 'Activity' records will be created.</p>
         </div>
     </div>
 
-    @if (EditDeliveryNote.Id > 0)
+    @if (EditStockReceipt.Id > 0)
     {
         <div class="row">
             <div class="col d-flex justify-content-between pt-2">
                 <button class="btn btn-primary mb-2" @onclick="ShowAddDetailForm" disabled="@( IsDirty )">Add Product</button>
-                <button class="btn btn-primary" @onclick="DownloadPdf" disabled="@( IsDirty )">Print</button>
             </div>
         </div>
 
-        <DeliveryNoteDetailEditModal Show="ShowEditDetailForm"
-                           EditDeliveryNoteDetail="EditDeliveryNoteDetail"
+        <StockReceiptDetailEditModal Show="ShowEditDetailForm"
+                           EditStockReceiptDetail="EditStockReceiptDetail"
                            Lookups="Lookups"
                            OnCancel="CancelDetailEdit"
                            OnValidSubmit="HandleValidDetailSubmit" />
@@ -100,7 +87,7 @@ else
             </div>
         </div>
         int rowIndex = 0;
-        @foreach (var deliveryNoteDetail in EditDeliveryNote.DetailList)
+        @foreach (var stockReceiptDetail in EditStockReceipt.DetailList)
         {
             var rowClass = rowIndex % 2 == 0 ? "alt-row" : "";
             <div class="card mb-3 mb-lg-0 @rowClass">
@@ -112,23 +99,23 @@ else
                                     Type:
                                 </div>
                                 <div class="col-8 col-md-4 col-lg-3">
-                                    @deliveryNoteDetail.ProductTypeName
+                                    @stockReceiptDetail.ProductTypeName
                                 </div>
                                 <div class="col-4 d-md-none">
                                     Product:
                                 </div>
                                 <div class="col-8 col-md-5 col-lg-4">
-                                    @deliveryNoteDetail.ProductName
+                                    @stockReceiptDetail.ProductName
                                 </div>
                                 <div class="col-4 d-md-none">
                                     Quantity:
                                 </div>
                                 <div class="col-8 col-md-3 col-lg-2">
-                                    @deliveryNoteDetail.Quantity
+                                    @stockReceiptDetail.Quantity
                                 </div>
                                 <div class="col-12 col-lg-3">
-                                    <button class="btn btn-sm btn-warning" @onclick="() => EditDetail(deliveryNoteDetail)">Edit</button>
-                                    <button class="btn btn-sm btn-danger ms-2" @onclick="() => DeleteDetail(deliveryNoteDetail.Id)">Delete</button>
+                                    <button class="btn btn-sm btn-warning" @onclick="() => EditDetail(stockReceiptDetail)">Edit</button>
+                                    <button class="btn btn-sm btn-danger ms-2" @onclick="() => DeleteDetail(stockReceiptDetail.Id)">Delete</button>
                                 </div>
                             </div>
                         </div>

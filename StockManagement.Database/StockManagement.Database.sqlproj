@@ -133,5 +133,15 @@
     <Build Include="dbo\Stored Procedures\Supplier_Create.sql" />
     <Build Include="dbo\Stored Procedures\Supplier_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Supplier_LoadAll.sql" />
+    <Build Include="dbo\Tables\StockReceipt.sql" />
+    <Build Include="dbo\Tables\StockReceiptDetail.sql" />
+    <Build Include="dbo\Stored Procedures\StockReceipt_LoadAll.sql" />
+    <Build Include="dbo\Stored Procedures\StockReceipt_Create.sql" />
+    <Build Include="dbo\Stored Procedures\StockReceipt_LoadById.sql" />
+    <Build Include="dbo\Stored Procedures\StockReceipt_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\StockReceiptDetail_Create.sql" />
+    <Build Include="dbo\Stored Procedures\StockReceiptDetail_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\StockReceiptDetail_Update.sql" />
+    <Build Include="dbo\Stored Procedures\StockReceipt_Update.sql" />
   </ItemGroup>
 </Project>
