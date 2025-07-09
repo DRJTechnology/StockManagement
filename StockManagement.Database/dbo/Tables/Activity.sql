@@ -7,6 +7,7 @@
     [VenueId]               INT      NOT NULL,
     [Quantity]              INT      NOT NULL,
     [DeliveryNoteDetailId]  INT      NULL,
+    [StockReceiptDetailId]  INT      NULL,
     [Deleted]               BIT      CONSTRAINT [DF_Activity_Deleted] DEFAULT ((0)) NOT NULL,
     [AmendUserID]           INT      NOT NULL,
     [AmendDate]             DATETIME CONSTRAINT [DF_Activity_AmendDate] DEFAULT (sysdatetime()) NOT NULL,

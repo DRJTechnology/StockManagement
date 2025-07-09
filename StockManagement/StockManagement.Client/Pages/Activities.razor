@@ -200,6 +200,12 @@ else
                                         <i class="bi bi-clipboard"></i>
                                     </button>
                                 }
+                                else if (activity.StockReceiptId > 0)
+                                {
+                                    <button class="btn btn-link" title="Show Delivery Note" @onclick="() => OpenStockReceipt(activity.StockReceiptId)">
+                                        <i class="bi bi-box-seam"></i>
+                                    </button>
+                                }
                                 else
                                 {
                                     <button class="btn btn-sm btn-warning me-1 mt-1" @onclick="() => Edit(activity)">Edit</button>
