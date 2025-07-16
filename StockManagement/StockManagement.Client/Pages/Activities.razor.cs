@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
+using StockManagement.Client.Pages;
 using StockManagement.Models;
 
 [Authorize]
@@ -25,6 +26,7 @@ public partial class ActivitiesBase : ComponentBase
     protected List<ActivityResponseModel> Activities { get; set; } = new();
     protected ActivityEditModel EditActivity { get; set; } = new();
     protected bool ShowForm { get; set; }
+    protected bool ShowDeleteConfirm { get; set; } = false;
     protected bool IsLoading { get; set; }
     protected bool filtersExpanded = true;
 
@@ -181,10 +183,21 @@ public partial class ActivitiesBase : ComponentBase
         ShowForm = false;
     }
 
-    protected async Task Delete(int id)
+    protected void Delete(int id)
     {
-        await ActivityService.DeleteAsync(id);
-        Activities.RemoveAll(a => a.Id == id);
+        EditActivity = new ActivityEditModel { Id = id };
+        ShowDeleteConfirm = true;
+    }
+
+    protected async Task HandleDeleteConfirmation(bool confirmed)
+    {
+        ShowDeleteConfirm = false;
+        if (confirmed)
+        {
+            await ActivityService.DeleteAsync(EditActivity.Id);
+            Activities.RemoveAll(a => a.Id == EditActivity.Id);
+            EditActivity = new ActivityEditModel();
+        }
     }
 
     protected async Task GoToPage(int page)

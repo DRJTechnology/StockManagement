@@ -1,3 +1,4 @@
+@using StockManagement.Client.Components
 @page "/venues"
 @rendermode InteractiveWebAssembly
 @inherits VenuesBase
@@ -13,9 +14,14 @@ else
     <button class="btn btn-primary mb-2" @onclick="ShowAddForm">Add Venue</button>
 
     <VenueEditModal Show="ShowForm"
-    EditVenue="EditVenue"
-    OnCancel="CancelEdit"
-    OnValidSubmit="HandleValidSubmit" />
+                    EditVenue="EditVenue"
+                    OnCancel="CancelEdit"
+                    OnValidSubmit="HandleValidSubmit" />
+
+    <ConfirmDialogModal Show="ShowDeleteConfirm"
+                        ItemName="@SelectedItemName"
+                        ConfirmationResult="HandleDeleteConfirmation" />
+
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>

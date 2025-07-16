@@ -1,3 +1,4 @@
+@using StockManagement.Client.Components
 @page "/products"
 @rendermode InteractiveWebAssembly
 @inherits ProductsBase
@@ -16,6 +17,11 @@ else
                       EditProduct="EditProduct"
                       OnCancel="CancelEdit"
                       OnValidSubmit="HandleValidSubmit" />
+
+    <ConfirmDialogModal Show="ShowDeleteConfirm"
+                        ItemName="@SelectedItemName"
+                        ConfirmationResult="HandleDeleteConfirmation" />
+
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>

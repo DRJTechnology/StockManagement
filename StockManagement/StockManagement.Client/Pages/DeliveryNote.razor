@@ -1,3 +1,4 @@
+@using StockManagement.Client.Components
 @page "/delivery-note/{DeliveryNoteId:int}"
 @rendermode InteractiveWebAssembly
 @inherits DeliveryNoteBase
@@ -10,6 +11,10 @@
 }
 else
 {
+    <ConfirmDialogModal Show="@(ShowDeleteNoteConfirm || ShowDeleteDetailConfirm)"
+                        ItemName="@SelectedItemName"
+                        ConfirmationResult="HandleDeleteConfirmation" />
+
     <div class="row">
         <div class="col-md-6">
             <EditForm EditContext="editContext" OnValidSubmit="HandleValidSubmit">

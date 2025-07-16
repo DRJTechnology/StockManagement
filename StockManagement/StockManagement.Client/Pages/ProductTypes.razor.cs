@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
+using StockManagement.Client.Pages;
 using StockManagement.Models;
 
 [Authorize]
@@ -16,6 +17,8 @@ public partial class ProductTypesBase : ComponentBase
     protected List<ProductTypeResponseModel> ProductTypes { get; set; } = new();
     protected ProductTypeEditModel EditProductType { get; set; } = new();
     protected bool ShowForm { get; set; }
+    protected bool ShowDeleteConfirm { get; set; } = false;
+    protected string SelectedItemName { get; set; } = string.Empty;
     protected bool IsLoading { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -84,9 +87,22 @@ public partial class ProductTypesBase : ComponentBase
         ShowForm = false;
     }
 
-    protected async Task Delete(int id)
+    protected void Delete(int id)
     {
-        await ProductTypeService.DeleteAsync(id);
-        ProductTypes.RemoveAll(pt => pt.Id == id);
+        EditProductType = new ProductTypeEditModel { Id = id };
+        SelectedItemName = ProductTypes.Where(p => p.Id == EditProductType.Id).FirstOrDefault()?.ProductTypeName ?? string.Empty;
+        ShowDeleteConfirm = true;
     }
+
+    protected async Task HandleDeleteConfirmation(bool confirmed)
+    {
+        ShowDeleteConfirm = false;
+        if (confirmed)
+        {
+            await ProductTypeService.DeleteAsync(EditProductType.Id);
+            ProductTypes.RemoveAll(p => p.Id == EditProductType.Id);
+            EditProductType = new ProductTypeEditModel();
+        }
+    }
+
 }
