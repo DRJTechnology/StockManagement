@@ -30,6 +30,9 @@ public partial class StockReceiptBase : ComponentBase
     public IJSRuntime JSRuntime { get; set; } = default!;
 
     protected LookupsModel Lookups { get; private set; }
+    protected bool ShowDeleteReceiptConfirm { get; set; } = false;
+    protected bool ShowDeleteDetailConfirm { get; set; } = false;
+    protected string SelectedItemName { get; set; } = string.Empty;
 
     protected bool IsLoading { get; set; }
     protected StockReceiptResponseModel EditStockReceipt { get; set; } = new();
@@ -170,9 +173,29 @@ public partial class StockReceiptBase : ComponentBase
     {
         if (EditStockReceipt.Id > 0)
         {
-            StockReceiptService.DeleteAsync(EditStockReceipt.Id);
-            Navigation.NavigateTo("/stock-receipt-list");
+            SelectedItemName = "this entire Stock Receipt";
+            ShowDeleteReceiptConfirm = true;
         }
+    }
+
+    protected async Task HandleDeleteConfirmation(bool confirmed)
+    {
+        if (confirmed && ShowDeleteReceiptConfirm)
+        {
+            if (confirmed)
+            {
+                await StockReceiptService.DeleteAsync(EditStockReceipt.Id);
+                Navigation.NavigateTo("/stock-receipt-list");
+            }
+        }
+        else if (confirmed && ShowDeleteDetailConfirm)
+        {
+            await StockReceiptDetailService.DeleteAsync(EditStockReceiptDetail.Id);
+            EditStockReceipt.DetailList.RemoveAll(dnd => dnd.Id == EditStockReceiptDetail.Id);
+        }
+
+        ShowDeleteReceiptConfirm = false;
+        ShowDeleteDetailConfirm = false;
     }
 
     protected void EditDetail(StockReceiptDetailResponseModel activity)
@@ -189,9 +212,16 @@ public partial class StockReceiptBase : ComponentBase
         ShowEditDetailForm = true;
     }
 
-    protected async Task DeleteDetail(int id)
+    //protected async Task DeleteDetail(int id)
+    //{
+    //    await StockReceiptDetailService.DeleteAsync(id);
+    //    EditStockReceipt.DetailList.RemoveAll(dnd => dnd.Id == id);
+    //}
+    protected void DeleteDetail(int id)
     {
-        await StockReceiptDetailService.DeleteAsync(id);
-        EditStockReceipt.DetailList.RemoveAll(dnd => dnd.Id == id);
+        EditStockReceiptDetail = new StockReceiptDetailEditModel { Id = id };
+        SelectedItemName = EditStockReceipt.DetailList.Where(p => p.Id == id).FirstOrDefault()?.ProductName ?? string.Empty;
+        ShowDeleteDetailConfirm = true;
     }
+
 }

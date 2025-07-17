@@ -1,3 +1,4 @@
+@using StockManagement.Client.Components
 @page "/stock-receipt/{StockReceiptId:int}"
 @rendermode InteractiveWebAssembly
 @inherits StockReceiptBase
@@ -10,6 +11,10 @@
 }
 else
 {
+    <ConfirmDialogModal Show="@(ShowDeleteReceiptConfirm || ShowDeleteDetailConfirm)"
+                        ItemName="@SelectedItemName"
+                        ConfirmationResult="HandleDeleteConfirmation" />
+
     <div class="row">
         <div class="col-md-6">
             <EditForm EditContext="editContext" OnValidSubmit="HandleValidSubmit">

@@ -16,6 +16,8 @@ public partial class ProductsBase : ComponentBase
     protected List<ProductResponseModel> Products { get; set; } = new();
     protected ProductEditModel EditProduct { get; set; } = new();
     protected bool ShowForm { get; set; }
+    protected bool ShowDeleteConfirm { get; set; } = false;
+    protected string SelectedItemName { get; set; } = string.Empty;
     protected bool IsLoading { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -85,9 +87,21 @@ public partial class ProductsBase : ComponentBase
         ShowForm = false;
     }
 
-    protected async Task Delete(int id)
+    protected void Delete(int id)
     {
-        await ProductService.DeleteAsync(id);
-        Products.RemoveAll(p => p.Id == id);
+        EditProduct = new ProductEditModel { Id = id };
+        SelectedItemName = Products.Where(p => p.Id == EditProduct.Id).FirstOrDefault()?.ProductName ?? string.Empty;
+        ShowDeleteConfirm = true;
+    }
+
+    protected async Task HandleDeleteConfirmation(bool confirmed)
+    {
+        ShowDeleteConfirm = false;
+        if (confirmed)
+        {
+            await ProductService.DeleteAsync(EditProduct.Id);
+            Products.RemoveAll(p => p.Id == EditProduct.Id);
+            EditProduct = new ProductEditModel();
+        }
     }
 }
