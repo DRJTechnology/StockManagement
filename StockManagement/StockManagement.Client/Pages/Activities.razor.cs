@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
-using StockManagement.Client.Pages;
 using StockManagement.Models;
 
 [Authorize]
@@ -28,7 +27,7 @@ public partial class ActivitiesBase : ComponentBase
     protected bool ShowForm { get; set; }
     protected bool ShowDeleteConfirm { get; set; } = false;
     protected bool IsLoading { get; set; }
-    protected bool filtersExpanded = true;
+    protected bool filtersExpanded = false;
 
     public LookupsModel Lookups { get; private set; }
 
