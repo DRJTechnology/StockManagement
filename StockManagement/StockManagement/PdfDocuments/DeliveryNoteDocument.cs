@@ -115,8 +115,10 @@ public class DeliveryNoteDocument : IDocument
                     container.DefaultTextStyle(x => x.FontSize(12).SemiBold());
             });
 
+            var totalQuantity = 0;
             foreach (var item in _deliveryNote.DetailList)
             {
+                totalQuantity += item.Quantity;
                 table.Cell().Element(CellStyle).Text(item.ProductTypeName);
                 table.Cell().Element(CellStyle).Text(item.ProductName);
                 table.Cell().Element(CellStyle).AlignRight().Text(item.Quantity.ToString());
@@ -125,11 +127,24 @@ public class DeliveryNoteDocument : IDocument
                     table.Cell().Element(CellStyle);
                     table.Cell().Element(CellStyle);
                 }
-
-                IContainer CellStyle(IContainer container) =>
-                    container.DefaultTextStyle(x => x.FontSize(11))
-                                .Border(1).Padding(2);
             }
+
+            IContainer CellStyle(IContainer container) =>
+                container.DefaultTextStyle(x => x.FontSize(11))
+                            .Border(1).Padding(2);
+
+            // Add the totals column
+            table.Cell().ColumnSpan(2).Element(TotalCellStyle).Text("Total");
+            table.Cell().Element(TotalCellStyle).AlignRight().Text(totalQuantity.ToString());
+            if (_deliveryNote.DirectSale)
+            {
+                table.Cell().Element(TotalCellStyle);
+                table.Cell().Element(TotalCellStyle);
+            }
+
+            IContainer TotalCellStyle(IContainer container) =>
+                container.DefaultTextStyle(x => x.FontSize(11).Bold())
+                            .Border(1).Padding(2);
         });
     }
 
