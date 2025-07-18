@@ -1,8 +1,8 @@
 # Variables
-$projectPath = "C:\DRJ_Development\GitHub\DRJTechnology\StockManagement"
+$projectPath = ""
 $timestamp = Get-Date -Format "yyyy-MM-dd-HHmm"
-$imageTag = "stockmanagement:$timestamp"
-$tarFile = "stockmanagement-$timestamp.tar"
+$imageTag = "stockmanagement:latest" #"stockmanagement:$timestamp"
+$tarFile = "stockmanagement-latest.tar" # "stockmanagement-$timestamp.tar"
 $logFile = "deploy-log-$timestamp.txt"
 $logFolder = "$projectPath\deploy-logs"
 $remoteUser = "daveb"
@@ -13,6 +13,28 @@ $remoteDeployPath = "/opt/stockmanagement"
 # Ensure log folder exists
 if (!(Test-Path $logFolder)) {
     New-Item -ItemType Directory -Path $logFolder | Out-Null
+}
+
+# Display the options
+Write-Host "Please choose which machine you are working on:"
+Write-Host "1. Dell Laptop"
+Write-Host "2. Surface Tablet"
+
+# Get user input
+$choice = Read-Host "Enter your choice (1-2)"
+
+# Set a variable based on the choice
+switch ($choice) {
+    '1' {
+        $projectPath = "C:\DRJ_Development\GitHub\DRJTechnology\StockManagement"
+    }
+    '2' {
+        $projectPath = "C:\GitHub\DRJTechnology\StockManagement"
+    }
+    default {
+        Write-Host "Invalid selection. Exiting."
+        exit
+    }
 }
 
 # Start logging
@@ -27,7 +49,9 @@ try {
     docker save -o $tarFile $imageTag
 
     Write-Host "`n=== Copying TAR File to Server ==="
-    scp $tarFile "$remoteUser@$remoteHost:$remotePath/"
+    $remoteFullPath = "$remoteUser@$remoteHost" + ":$remotePath/"
+    scp $tarFile $remoteFullPath
+    # scp $tarFile "$remoteUser@$remoteHost:$remotePath/"
 
     Write-Host "`n=== SSHing into Server to Load and Deploy ==="
     ssh "$remoteUser@$remoteHost" @"

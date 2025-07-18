@@ -12,62 +12,66 @@
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="stock-report">
-                <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Stock Report
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="sales-report">
-                <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Sales Report
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="delivery-note-list">
-                <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Delivery Notes
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="stock-receipt-list">
-                <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Stock Receipts
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="activities">
-                <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Activities
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="products">
-                <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Products
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="suppliers">
-                <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Suppliers
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="producttypes">
-                <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Product Types
-            </NavLink>
-        </div>
-
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="venues">
-                <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Venues
-            </NavLink>
-        </div>
-
         <AuthorizeView>
             <Authorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="stock-report">
+                        <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Stock Report
+                    </NavLink>
+                </div>
+
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="sales-report">
+                        <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Sales Report
+                    </NavLink>
+                </div>
+
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="delivery-note-list">
+                        <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Delivery Notes
+                    </NavLink>
+                </div>
+
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="stock-receipt-list">
+                        <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Stock Receipts
+                    </NavLink>
+                </div>
+
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="activities">
+                        <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Activities
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="products">
+                        <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Products
+                    </NavLink>
+                </div>
+
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="suppliers">
+                        <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Suppliers
+                    </NavLink>
+                </div>
+
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="producttypes">
+                        <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Product Types
+                    </NavLink>
+                </div>
+
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="venues">
+                        <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Venues
+                    </NavLink>
+                </div>
+
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="settings">
+                        <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Settings
+                    </NavLink>
+                </div>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="Account/Manage">
                         <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> @context.User.Identity?.Name
@@ -101,6 +105,7 @@
 
 @code {
     private string? currentUrl;
+    private bool showSettingsSubMenu = false;
 
     protected override void OnInitialized()
     {

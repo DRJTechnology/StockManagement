@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
+using StockManagement.Client.Pages;
 using StockManagement.Models;
 
 [Authorize]
@@ -16,6 +17,8 @@ public partial class SuppliersBase : ComponentBase
     protected List<SupplierResponseModel> Suppliers { get; set; } = new();
     protected SupplierEditModel EditSupplier { get; set; } = new();
     protected bool ShowForm { get; set; }
+    protected bool ShowDeleteConfirm { get; set; } = false;
+    protected string SelectedItemName { get; set; } = string.Empty;
     protected bool IsLoading { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -84,9 +87,22 @@ public partial class SuppliersBase : ComponentBase
         ShowForm = false;
     }
 
-    protected async Task Delete(int id)
+    protected void Delete(int id)
     {
-        await SupplierService.DeleteAsync(id);
-        Suppliers.RemoveAll(pt => pt.Id == id);
+        EditSupplier = new SupplierEditModel { Id = id };
+        SelectedItemName = Suppliers.Where(p => p.Id == EditSupplier.Id).FirstOrDefault()?.SupplierName ?? string.Empty;
+        ShowDeleteConfirm = true;
     }
+
+    protected async Task HandleDeleteConfirmation(bool confirmed)
+    {
+        ShowDeleteConfirm = false;
+        if (confirmed)
+        {
+            await SupplierService.DeleteAsync(EditSupplier.Id);
+            Suppliers.RemoveAll(pt => pt.Id == EditSupplier.Id);
+            EditSupplier = new SupplierEditModel();
+        }
+    }
+
 }
