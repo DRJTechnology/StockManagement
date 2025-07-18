@@ -63,6 +63,10 @@
     <Folder Include="auth\" />
     <Folder Include="auth\Tables\" />
     <Folder Include="auth\Stored Procedures\" />
+    <Folder Include="finance\" />
+    <Folder Include="finance\Tables\" />
+    <Folder Include="finance\Stored Procedures\" />
+    <Folder Include="finance\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Venue.sql" />
@@ -143,5 +147,64 @@
     <Build Include="dbo\Stored Procedures\StockReceiptDetail_Delete.sql" />
     <Build Include="dbo\Stored Procedures\StockReceiptDetail_Update.sql" />
     <Build Include="dbo\Stored Procedures\StockReceipt_Update.sql" />
+    <Build Include="finance\Tables\AccountType.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Tables\Account.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Tables\TransactionDetail.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Tables\Invoice.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Tables\Transaction.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Tables\InvoiceDetail.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Tables\BankAccount.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Tables\TransactionType.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Tables\BankAccountDetail.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\Account_GetById.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\TransactionType_GetAll.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\TransactionDetail_Get.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\Account_Update.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\BankStatement_Upload.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\Account_Delete.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\Account_Create.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\AccountType_GetAll.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\Account_GetAll.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\Account_GetByType.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\User Defined Types\StatementTableType.sql" />
+    <Build Include="Security\finance.sql" />
   </ItemGroup>
 </Project>
