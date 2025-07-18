@@ -30,6 +30,9 @@ public partial class DeliveryNoteBase : ComponentBase
     public IJSRuntime JSRuntime { get; set; } = default!;
 
     protected LookupsModel Lookups { get; private set; }
+    protected bool ShowDeleteNoteConfirm { get; set; } = false;
+    protected bool ShowDeleteDetailConfirm { get; set; } = false;
+    protected string SelectedItemName { get; set; } = string.Empty;
 
     protected bool IsLoading { get; set; }
     protected DeliveryNoteResponseModel EditDeliveryNote { get; set; } = new();
@@ -170,9 +173,29 @@ public partial class DeliveryNoteBase : ComponentBase
     {
         if (EditDeliveryNote.Id > 0)
         {
-            DeliveryNoteService.DeleteAsync(EditDeliveryNote.Id);
-            Navigation.NavigateTo("/delivery-note-list");
+            SelectedItemName = "this entire Delivery Note";
+            ShowDeleteNoteConfirm = true;
         }
+    }
+
+    protected async Task HandleDeleteConfirmation(bool confirmed)
+    {
+        if (confirmed && ShowDeleteNoteConfirm)
+        {
+            if (confirmed)
+            {
+                await DeliveryNoteService.DeleteAsync(EditDeliveryNote.Id);
+                Navigation.NavigateTo("/delivery-note-list");
+            }
+        }
+        else if (confirmed && ShowDeleteDetailConfirm)
+        {
+            await DeliveryNoteDetailService.DeleteAsync(EditDeliveryNoteDetail.Id);
+            EditDeliveryNote.DetailList.RemoveAll(dnd => dnd.Id == EditDeliveryNoteDetail.Id);
+        }
+
+        ShowDeleteNoteConfirm = false;
+        ShowDeleteDetailConfirm = false;
     }
 
     protected void EditDetail(DeliveryNoteDetailResponseModel activity)
@@ -189,10 +212,16 @@ public partial class DeliveryNoteBase : ComponentBase
         ShowEditDetailForm = true;
     }
 
-    protected async Task DeleteDetail(int id)
+    //protected async Task DeleteDetail(int id)
+    //{
+    //    await DeliveryNoteDetailService.DeleteAsync(id);
+    //    EditDeliveryNote.DetailList.RemoveAll(dnd => dnd.Id == id);
+    //}
+    protected void DeleteDetail(int id)
     {
-        await DeliveryNoteDetailService.DeleteAsync(id);
-        EditDeliveryNote.DetailList.RemoveAll(dnd => dnd.Id == id);
+        EditDeliveryNoteDetail = new DeliveryNoteDetailEditModel { Id = id };
+        SelectedItemName = EditDeliveryNote.DetailList.Where(p => p.Id == id).FirstOrDefault()?.ProductName ?? string.Empty;
+        ShowDeleteDetailConfirm = true;
     }
 
     protected async Task DownloadPdf()

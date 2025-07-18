@@ -1,3 +1,4 @@
+@using StockManagement.Client.Components
 @page "/activities"
 @rendermode InteractiveWebAssembly
 @inherits ActivitiesBase
@@ -18,6 +19,8 @@ else
                        OnCancel="CancelEdit"
                        OnValidSubmit="HandleValidSubmit" />
 
+    <ConfirmDialogModal Show="ShowDeleteConfirm"
+                        ConfirmationResult="HandleDeleteConfirmation" />
 
     <div class="card mb-3">
         <div class="card-header" style="cursor:pointer"

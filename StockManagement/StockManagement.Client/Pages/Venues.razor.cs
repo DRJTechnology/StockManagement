@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
+using StockManagement.Client.Pages;
 using StockManagement.Models;
 
 [Authorize]
@@ -16,6 +17,8 @@ public partial class VenuesBase : ComponentBase
     protected List<VenueResponseModel> Venues { get; set; } = new();
     protected VenueEditModel EditVenue { get; set; } = new();
     protected bool ShowForm { get; set; }
+    protected bool ShowDeleteConfirm { get; set; } = false;
+    protected string SelectedItemName { get; set; } = string.Empty;
     protected bool IsLoading { get; set; }
     protected bool ShowNotesPanel { get; set; } = false;
     protected VenueResponseModel? SelectedVenue { get; set; }
@@ -89,10 +92,22 @@ public partial class VenuesBase : ComponentBase
         ShowForm = false;
     }
 
-    protected async Task Delete(int id)
+    protected void Delete(int id)
     {
-        await VenueService.DeleteAsync(id);
-        Venues.RemoveAll(v => v.Id == id);
+        EditVenue = new VenueEditModel { Id = id };
+        SelectedItemName = Venues.Where(p => p.Id == EditVenue.Id).FirstOrDefault()?.VenueName ?? string.Empty;
+        ShowDeleteConfirm = true;
+    }
+
+    protected async Task HandleDeleteConfirmation(bool confirmed)
+    {
+        ShowDeleteConfirm = false;
+        if (confirmed)
+        {
+            await VenueService.DeleteAsync(EditVenue.Id);
+            Venues.RemoveAll(p => p.Id == EditVenue.Id);
+            EditVenue = new VenueEditModel();
+        }
     }
 
     protected void ShowNotes(VenueResponseModel venue)
