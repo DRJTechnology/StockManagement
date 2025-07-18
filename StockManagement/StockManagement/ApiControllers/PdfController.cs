@@ -8,7 +8,7 @@ namespace StockManagement.ApiControllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class PdfController(ILogger<DeliveryNoteController> logger, IDeliveryNoteService deliveryNoteService) : ControllerBase
+    public class PdfController(ILogger<DeliveryNoteController> logger, IDeliveryNoteService deliveryNoteService, ISettingService settingService) : ControllerBase
     {
         [HttpGet("delivery-note/{id}")]
         public async Task<IActionResult> GetDeliveryNotePdf(int id)
@@ -22,7 +22,7 @@ namespace StockManagement.ApiControllers
                 }
                 byte[] logoImage = System.IO.File.ReadAllBytes("wwwroot/images/logo.jpg");
                 //var logoImage = await deliveryNoteService.GetLogoImageAsync(); // Assuming this method exists
-                var document = new DeliveryNoteDocument(deliveryNote, logoImage);
+                var document = new DeliveryNoteDocument(deliveryNote, logoImage, await settingService.GetAllAsync());
                 var pdfBytes = document.GeneratePdf(); // Assuming GeneratePdf is a method that creates the PDF
                 return File(pdfBytes, "application/pdf");
                 //return File(pdfBytes, "application/pdf", $"DeliveryNote_{id}.pdf");
