@@ -1,0 +1,43 @@
+@using StockManagement.Client.Components
+@page "/settings"
+@rendermode InteractiveWebAssembly
+@inherits SettingsBase
+
+<h3>Settings</h3>
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <SettingEditModal Show="ShowForm"
+                    EditSetting="EditSetting"
+                    OnCancel="CancelEdit"
+                    OnValidSubmit="HandleValidSubmit" />
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Setting</th>
+                    <th>Value</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var setting in Settings)
+                {
+                    <tr>
+                        <td style="width:1%;">@setting.SettingName</td>
+                        <td style="width:1%;">@setting.SettingValue</td>
+                        <td style="width:1%;">
+                            <button class="btn btn-sm btn-warning my-1" @onclick="() => Edit(setting)">Edit</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+

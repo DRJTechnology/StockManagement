@@ -21,6 +21,7 @@ builder.Services.AddScoped<ILookupsDataService, LookupsDataService>();
 builder.Services.AddScoped<IProductDataService, ProductDataService>();
 builder.Services.AddScoped<IProductTypeDataService, ProductTypeDataService>();
 builder.Services.AddScoped<IReportDataService, ReportDataService>();
+builder.Services.AddScoped<ISettingDataService, SettingDataService>();
 builder.Services.AddScoped<IStockReceiptDetailDataService, StockReceiptDetailDataService>();
 builder.Services.AddScoped<IStockReceiptDataService, StockReceiptDataService>();
 builder.Services.AddScoped<ISupplierDataService, SupplierDataService>();

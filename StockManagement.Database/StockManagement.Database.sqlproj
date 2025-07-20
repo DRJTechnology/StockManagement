@@ -147,6 +147,9 @@
     <Build Include="dbo\Stored Procedures\StockReceiptDetail_Delete.sql" />
     <Build Include="dbo\Stored Procedures\StockReceiptDetail_Update.sql" />
     <Build Include="dbo\Stored Procedures\StockReceipt_Update.sql" />
+    <Build Include="dbo\Tables\Setting.sql" />
+    <Build Include="dbo\Stored Procedures\Setting_LoadAll.sql" />
+    <Build Include="dbo\Stored Procedures\Setting_Update.sql" />
     <Build Include="finance\Tables\AccountType.sql">
       <AnsiNulls>Off</AnsiNulls>
     </Build>

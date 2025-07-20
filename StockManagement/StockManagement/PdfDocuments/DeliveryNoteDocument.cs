@@ -1,18 +1,21 @@
-﻿using QuestPDF.Fluent;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using StockManagement.Models;
-using System.Reflection.PortableExecutable;
+using StockManagement.Models.Emuns;
 
 public class DeliveryNoteDocument : IDocument
 {
     private readonly DeliveryNoteResponseModel _deliveryNote;
     private readonly byte[] _logoImage;
+    private List<SettingResponseModel> _settings = new();
 
-    public DeliveryNoteDocument(DeliveryNoteResponseModel deliveryNote, byte[] logoImage)
+    public DeliveryNoteDocument(DeliveryNoteResponseModel deliveryNote, byte[] logoImage, List<SettingResponseModel> settings)
     {
         _deliveryNote = deliveryNote;
         _logoImage = logoImage;
+        _settings = settings;
     }
 
     public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
@@ -32,7 +35,7 @@ public class DeliveryNoteDocument : IDocument
         });
     }
 
-    void ComposeHeader(IContainer container)
+    private void ComposeHeader(IContainer container)
     {
         var title = _deliveryNote.DirectSale ? "Invoice" : "Delivery Note";
 
@@ -53,7 +56,7 @@ public class DeliveryNoteDocument : IDocument
 
     }
 
-    void ComposeContent(IContainer container)
+    private void ComposeContent(IContainer container)
     {
         container.PaddingVertical(15).Column(column =>
         {
@@ -61,7 +64,7 @@ public class DeliveryNoteDocument : IDocument
             column.Item().PaddingTop(25).Element(ComposeTable);
         });
     }
-    void ComposeToFromSection(IContainer container)
+    private void ComposeToFromSection(IContainer container)
     {
         container.Column(column =>
         {
@@ -78,13 +81,13 @@ public class DeliveryNoteDocument : IDocument
                 {
                     column.Spacing(2);
                     column.Item().BorderBottom(1).PaddingBottom(2).Text("From:").SemiBold();
-                    column.Item().Text("Joei B Brown Art");
+                    column.Item().Text(GetSetting(SettingEnum.BusinessName));
                 });
             });
         });
     }
 
-    void ComposeTable(IContainer container)
+    private void ComposeTable(IContainer container)
     {
         container.Table(table =>
         {
@@ -115,8 +118,10 @@ public class DeliveryNoteDocument : IDocument
                     container.DefaultTextStyle(x => x.FontSize(12).SemiBold());
             });
 
+            var totalQuantity = 0;
             foreach (var item in _deliveryNote.DetailList)
             {
+                totalQuantity += item.Quantity;
                 table.Cell().Element(CellStyle).Text(item.ProductTypeName);
                 table.Cell().Element(CellStyle).Text(item.ProductName);
                 table.Cell().Element(CellStyle).AlignRight().Text(item.Quantity.ToString());
@@ -125,21 +130,62 @@ public class DeliveryNoteDocument : IDocument
                     table.Cell().Element(CellStyle);
                     table.Cell().Element(CellStyle);
                 }
-
-                IContainer CellStyle(IContainer container) =>
-                    container.DefaultTextStyle(x => x.FontSize(11))
-                                .Border(1).Padding(2);
             }
+
+            IContainer CellStyle(IContainer container) =>
+                container.DefaultTextStyle(x => x.FontSize(11))
+                            .Border(1).Padding(2);
+
+            // Add the totals column
+            table.Cell().ColumnSpan(2).Element(TotalCellStyle).Text("Total");
+            table.Cell().Element(TotalCellStyle).AlignRight().Text(totalQuantity.ToString());
+            if (_deliveryNote.DirectSale)
+            {
+                table.Cell().Element(TotalCellStyle);
+                table.Cell().Element(TotalCellStyle);
+            }
+
+            IContainer TotalCellStyle(IContainer container) =>
+                container.DefaultTextStyle(x => x.FontSize(11).Bold())
+                            .Border(1).Padding(2);
         });
     }
 
-    void ComposeFooter(IContainer container)
+    private void ComposeFooter(IContainer container)
     {
-        container.Row(row =>
+        if (_deliveryNote.DirectSale)
         {
-            row.RelativeItem().AlignCenter().Text("https://joeibbrown.art/")
-                .FontSize(10)
-                .FontColor(Colors.Blue.Medium);
-        });
+            container.Row(row =>
+            {
+                row.RelativeItem().Column(column =>
+                {
+                    column.Item().Text("Payment information:").FontSize(10);
+                    column.Item().Text($"Account Name: {GetSetting(SettingEnum.BankAccountName)}").FontSize(10);
+                    column.Item().Text($"Account Number: {GetSetting(SettingEnum.BankAccountNumber)}").FontSize(10);
+                    column.Item().Text($"Account Sort Code: {GetSetting(SettingEnum.BankAccountSortCode)}").FontSize(10);
+                });
+                row.RelativeItem().AlignBottom().Column(column =>
+                {
+                    column.Item().AlignRight().AlignBottom().Text(GetSetting(SettingEnum.BusinessWebsite))
+                        .FontSize(10)
+                        .FontColor(Colors.Blue.Medium);
+                });
+            });
+        }
+        else
+        {
+            container.Row(row =>
+            {
+                row.RelativeItem().AlignCenter().Text(GetSetting(SettingEnum.BusinessWebsite))
+                    .FontSize(10)
+                    .FontColor(Colors.Blue.Medium);
+            });
+        }
+    }
+
+    private string GetSetting(SettingEnum settingEnum)
+    {
+        var setting = _settings.FirstOrDefault(s => s.Id == (int)settingEnum);
+        return setting?.SettingValue ?? string.Empty;
     }
 }
