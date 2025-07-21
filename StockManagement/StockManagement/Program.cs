@@ -10,9 +10,13 @@ using StockManagement.Components.Account;
 using StockManagement.Models.Automapper;
 using StockManagement.Models.Dto.Profile;
 using StockManagement.Repositories;
+using StockManagement.Repositories.Finance;
 using StockManagement.Repositories.Interfaces;
+using StockManagement.Repositories.Interfaces.Finanace;
 using StockManagement.Services;
+using StockManagement.Services.Finanace;
 using StockManagement.Services.Interfaces;
+using StockManagement.Services.Interfaces.Finance;
 using StockManagement.UserManagement;
 using System.Data;
 
@@ -47,6 +51,8 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IAccountTypeService, AccountTypeService>();
 builder.Services.AddScoped<IActionService, ActionService>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
 builder.Services.AddScoped<IDeliveryNoteDetailService, DeliveryNoteDetailService>();
@@ -62,6 +68,8 @@ builder.Services.AddScoped<IStockReceiptDetailService, StockReceiptDetailService
 builder.Services.AddScoped<IStockReceiptService, StockReceiptService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IVenueService, VenueService>();
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IAccountTypeRepository, AccountTypeRepository>();
 builder.Services.AddScoped<IActionRepository, ActionRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IDeliveryNoteDetailRepository, DeliveryNoteDetailRepository>();
@@ -78,6 +86,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IVenueRepository, VenueRepository>();
 
 // Client data services
+builder.Services.AddScoped<IAccountDataService, ClientAccountDataService>();
+builder.Services.AddScoped<IAccountTypeDataService, ClientAccountTypeDataService>();
 builder.Services.AddScoped<IActivityDataService, ClientActivityDataService>();
 builder.Services.AddScoped<IDeliveryNoteDetailDataService, ClientDeliveryNoteDetailDataService>();
 builder.Services.AddScoped<IDeliveryNoteDataService, ClientDeliveryNoteDataService>();

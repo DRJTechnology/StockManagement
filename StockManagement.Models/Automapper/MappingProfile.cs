@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using StockManagement.Models.Dto;
+using StockManagement.Models.Dto.Finance;
+using StockManagement.Models.Finance;
 
 
 namespace StockManagement.Models.Automapper
@@ -7,7 +9,13 @@ namespace StockManagement.Models.Automapper
     public class MappingProfile : Profile
     {
         public MappingProfile()
-        {
+       {
+            CreateMap<AccountTypeDto, AccountTypeResponseModel>();
+            CreateMap<AccountTypeEditModel, AccountTypeDto>();
+
+            CreateMap<AccountDto, AccountResponseModel>();
+            CreateMap<AccountEditModel, AccountDto>();
+
             CreateMap<ActionDto, ActionResponseModel>();
             CreateMap<ActionEditModel, ActionDto>();
 

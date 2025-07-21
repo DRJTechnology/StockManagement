@@ -1,6 +1,5 @@
 using StockManagement.Models;
 using StockManagement.Services.Interfaces;
-using StockManagement.Repositories.Interfaces;
 
 namespace StockManagement.Services
 {

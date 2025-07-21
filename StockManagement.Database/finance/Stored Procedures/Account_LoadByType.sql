@@ -1,10 +1,11 @@
 ﻿-- =============================================
 -- Author:		Dave Brown
 -- Create date: 11 Jul 2025
--- Description:	Get all account records
+-- Description:	Get all account records by type
 -- =============================================
-CREATE PROCEDURE [finance].[Account_GetAll]
-	@ActiveOnly		BIT
+CREATE PROCEDURE [finance].[Account_LoadByType]
+	@AccountTypeId	INT,
+	@ActiveOnly		  BIT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -13,6 +14,7 @@ BEGIN
 	FROM	[finance].[Account] a
 	INNER JOIN [finance].[AccountType] act ON a.AccountTypeId = act.Id
 	Where	a.Deleted = 0
+    AND a.AccountTypeId = @AccountTypeId
 		AND (@ActiveOnly != 1 OR a.Active = 1)
 	ORDER BY [Name]
 

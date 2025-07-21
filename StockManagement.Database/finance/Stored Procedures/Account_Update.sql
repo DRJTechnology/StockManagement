@@ -4,6 +4,7 @@
 -- Description:	Updates an account record
 -- =============================================
 CREATE PROCEDURE [finance].[Account_Update]
+	@Success bit output,
 	@Id					INT, 
 	@AccountTypeId		INT,
 	@Name				NVARCHAR(50),
@@ -12,7 +13,10 @@ CREATE PROCEDURE [finance].[Account_Update]
 	@CurrentUserId		INT
 AS
 BEGIN
-	SET NOCOUNT ON;
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+	SET @Success = 0
 
 	UPDATE	[finance].[Account]
 	SET		AccountTypeId = @AccountTypeId,
@@ -23,4 +27,10 @@ BEGIN
 			AmendDate = SYSDATETIME()
 	WHERE	Id = @Id
 
+
+	SET @Success = 1
+
+	SET @Err = @@Error
+
+	RETURN @Err
 END

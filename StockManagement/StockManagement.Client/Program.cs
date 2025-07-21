@@ -13,6 +13,8 @@ builder.Services.AddHttpClient("WebAPI", client => client.BaseAddress = new Uri(
 // Supply HttpClient instances that include access tokens when making requests to the server project
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("WebAPI"));
 
+builder.Services.AddScoped<IAccountDataService, AccountDataService>();
+builder.Services.AddScoped<IAccountTypeDataService, AccountTypeDataService>();
 builder.Services.AddScoped<IActivityDataService, ActivityDataService>();
 builder.Services.AddScoped<IDeliveryNoteDetailDataService, DeliveryNoteDetailDataService>();
 builder.Services.AddScoped<IDeliveryNoteDataService, DeliveryNoteDataService>();
