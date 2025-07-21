@@ -1,7 +1,5 @@
 using Dapper;
-using StockManagement.Models.Dto;
 using StockManagement.Models.Dto.Finance;
-using StockManagement.Models.Dto.Profile;
 using StockManagement.Repositories.Interfaces.Finanace;
 using System.Data;
 
@@ -11,28 +9,35 @@ namespace StockManagement.Repositories.Finance
     {
         public async Task<int> CreateAsync(int currentUserId, AccountDto accountDto)
         {
-            if (accountDto == null)
+            try
             {
-                throw new ArgumentNullException(nameof(accountDto));
+                if (accountDto == null)
+                {
+                    throw new ArgumentNullException(nameof(accountDto));
+                }
+
+                var parameters = new DynamicParameters();
+                parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+                parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                parameters.Add("@Name", accountDto.Name);
+                parameters.Add("@AccountTypeId", accountDto.AccountTypeId);
+                parameters.Add("@Active", accountDto.Active);
+                parameters.Add("@CurrentUserId", currentUserId);
+
+                await dbConnection.ExecuteAsync("finance.Account_Create", parameters, commandType: CommandType.StoredProcedure);
+
+                if (parameters.Get<bool>("@Success"))
+                {
+                    return parameters.Get<int>("@Id");
+                }
+                else
+                {
+                    throw new UnauthorizedAccessException();
+                }
             }
-
-            var parameters = new DynamicParameters();
-            parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
-            parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            parameters.Add("@Name", accountDto.Name);
-            parameters.Add("@AccountTypeId", accountDto.AccountTypeId);
-            parameters.Add("@Deleted", accountDto.Deleted);
-            parameters.Add("@CurrentUserId", currentUserId);
-
-            await dbConnection.ExecuteAsync("finance.Account_Create", parameters, commandType: CommandType.StoredProcedure);
-
-            if (parameters.Get<bool>("@Success"))
+            catch (Exception ex)
             {
-                return parameters.Get<int>("@Id");
-            }
-            else
-            {
-                throw new UnauthorizedAccessException();
+                throw;
             }
         }
 

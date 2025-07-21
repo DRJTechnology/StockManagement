@@ -1,5 +1,4 @@
 using AutoMapper;
-using StockManagement.Models;
 using StockManagement.Models.Dto.Finance;
 using StockManagement.Models.Finance;
 using StockManagement.Repositories.Interfaces.Finanace;

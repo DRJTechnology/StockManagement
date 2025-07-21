@@ -17,10 +17,6 @@ else
                       OnCancel="CancelEdit"
                       OnValidSubmit="HandleValidSubmit" />
 
-    <ConfirmDialogModal Show="ShowDeleteConfirm"
-    ItemName="@SelectedItemName"
-    ConfirmationResult="HandleDeleteConfirmation" />
-
     <div class="mb-2 d-flex justify-content-between align-items-center">
         <button class="btn btn-primary" @onclick="ShowAddForm">Add Account</button>
         <div class="form-check form-switch">
@@ -91,7 +87,6 @@ else
                             }
                             <div class="col-12 col-lg-3">
                                 <button class="btn btn-sm btn-warning" @onclick="() => Edit(account)">Edit</button>
-                                <button class="btn btn-sm btn-danger ms-2" @onclick="() => Delete(account.Id)">Delete</button>
                             </div>
                         </div>
                     </div>
