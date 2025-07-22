@@ -67,6 +67,7 @@
     <Folder Include="finance\Tables\" />
     <Folder Include="finance\Stored Procedures\" />
     <Folder Include="finance\User Defined Types\" />
+    <Folder Include="Scripts" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Venue.sql" />
@@ -209,5 +210,8 @@
     </Build>
     <Build Include="finance\User Defined Types\StatementTableType.sql" />
     <Build Include="Security\finance.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\PopulateFinanceTables.sql" />
   </ItemGroup>
 </Project>
