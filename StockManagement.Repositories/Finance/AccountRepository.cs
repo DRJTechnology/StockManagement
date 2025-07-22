@@ -20,6 +20,7 @@ namespace StockManagement.Repositories.Finance
                 parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
                 parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
                 parameters.Add("@Name", accountDto.Name);
+                parameters.Add("@Notes", accountDto.Notes);
                 parameters.Add("@AccountTypeId", accountDto.AccountTypeId);
                 parameters.Add("@Active", accountDto.Active);
                 parameters.Add("@CurrentUserId", currentUserId);
@@ -92,6 +93,7 @@ namespace StockManagement.Repositories.Finance
                 parameters.Add("@Id", accountDto.Id);
                 parameters.Add("@AccountTypeId", accountDto.AccountTypeId);
                 parameters.Add("@Name", accountDto.Name);
+                parameters.Add("@Notes", accountDto.Notes);
                 parameters.Add("@Active", accountDto.Active);
                 parameters.Add("@CurrentUserId", currentUserId);
 

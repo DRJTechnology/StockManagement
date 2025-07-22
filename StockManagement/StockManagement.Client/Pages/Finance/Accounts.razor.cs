@@ -73,6 +73,7 @@ public partial class AccountsBase : ComponentBase
         {
             Id = account.Id,
             Name = account.Name,
+            Notes = account.Notes,
             AccountTypeId = account.AccountTypeId,
             Active = account.Active,
         };
@@ -89,6 +90,7 @@ public partial class AccountsBase : ComponentBase
                     { 
                     Id = newId, 
                     Name = EditAccount.Name,
+                    Notes = EditAccount.Notes,
                     AccountTypeId = EditAccount.AccountTypeId,
                     Type = AccountTypes.FirstOrDefault(at => at.Id == EditAccount.AccountTypeId)!.Type,
                     Active = EditAccount.Active,
@@ -102,14 +104,15 @@ public partial class AccountsBase : ComponentBase
             if (index >= 0)
             {
                 Accounts[index] = new AccountResponseModel()
-                    {
-                        Id = EditAccount.Id,
-                        Name = EditAccount.Name,
-                        AccountTypeId = EditAccount.AccountTypeId,
-                        Type = AccountTypes.FirstOrDefault(at => at.Id == EditAccount.AccountTypeId)!.Type,
-                        Active = EditAccount.Active,
-                        Deleted = false
-                    };
+                {
+                    Id = EditAccount.Id,
+                    Name = EditAccount.Name,
+                    Notes = EditAccount.Notes,
+                    AccountTypeId = EditAccount.AccountTypeId,
+                    Type = AccountTypes.FirstOrDefault(at => at.Id == EditAccount.AccountTypeId)!.Type,
+                    Active = EditAccount.Active,
+                    Deleted = false
+                };
             }
         }
         ShowForm = false;

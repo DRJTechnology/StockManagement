@@ -31,6 +31,10 @@
                                 }
                             </InputSelect>
                         </div>
+                        <div class="mb-2">
+                            <label>Notes:</label>
+                            <InputTextArea class="form-control" @bind-Value="EditAccount.Notes" autocomplete="off" rows="5" />
+                        </div>
                         <div class="mb-2 form-check">
                             <InputCheckbox class="form-check-input" @bind-Value="EditAccount.Active" id="activeCheckbox" />
                             <label class="form-check-label" for="activeCheckbox">Active</label>
