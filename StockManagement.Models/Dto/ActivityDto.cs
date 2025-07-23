@@ -1,8 +1,7 @@
 namespace StockManagement.Models.Dto
 {
-    public class ActivityDto
+    public class ActivityDto : BaseDto
     {
-        public int Id { get; set; }
         public DateTime ActivityDate { get; set; }
         public int ActionId { get; set; }
         public string ActionName { get; set; } = string.Empty;
@@ -15,6 +14,5 @@ namespace StockManagement.Models.Dto
         public int DeliveryNoteId { get; set; }
         public int StockReceiptId { get; set; }
         public int Quantity { get; set; }
-        public bool Deleted { get; set; }
     }
 }

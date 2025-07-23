@@ -181,10 +181,10 @@
     <Build Include="finance\Stored Procedures\Account_LoadById.sql">
       <AnsiNulls>Off</AnsiNulls>
     </Build>
-    <Build Include="finance\Stored Procedures\TransactionType_GetAll.sql">
+    <Build Include="finance\Stored Procedures\TransactionType_LoadAll.sql">
       <AnsiNulls>Off</AnsiNulls>
     </Build>
-    <Build Include="finance\Stored Procedures\TransactionDetail_Get.sql">
+    <Build Include="finance\Stored Procedures\TransactionDetail_Load.sql">
       <AnsiNulls>Off</AnsiNulls>
     </Build>
     <Build Include="finance\Stored Procedures\Account_Update.sql">
@@ -210,6 +210,9 @@
     </Build>
     <Build Include="finance\User Defined Types\StatementTableType.sql" />
     <Build Include="Security\finance.sql" />
+    <Build Include="finance\Stored Procedures\TransactionDetail_LoadByAccountType.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\PopulateFinanceTables.sql" />

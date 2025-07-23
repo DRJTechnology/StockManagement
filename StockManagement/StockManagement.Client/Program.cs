@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using StockManagement.Client.Interfaces;
+using StockManagement.Client.Interfaces.Finance;
 using StockManagement.Client.Services;
+using StockManagement.Client.Services.Finance;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -27,6 +29,7 @@ builder.Services.AddScoped<ISettingDataService, SettingDataService>();
 builder.Services.AddScoped<IStockReceiptDetailDataService, StockReceiptDetailDataService>();
 builder.Services.AddScoped<IStockReceiptDataService, StockReceiptDataService>();
 builder.Services.AddScoped<ISupplierDataService, SupplierDataService>();
+builder.Services.AddScoped<ITransactionDataService, TransactionDataService>();
 builder.Services.AddScoped<IVenueDataService, VenueDataService>();
 
 await builder.Build().RunAsync();

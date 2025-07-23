@@ -1,10 +1,8 @@
 namespace StockManagement.Models.Dto
 {
-    public class VenueDto
+    public class VenueDto : BaseDto
     {
-        public int Id { get; set; }
         public string VenueName { get; set; } = string.Empty;
         public string Notes { get; set; } = string.Empty;
-        public bool Deleted { get; set; }
     }
 }

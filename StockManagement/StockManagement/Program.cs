@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
 using QuestPDF.Infrastructure;
 using StockManagement.Client.Interfaces;
+using StockManagement.Client.Interfaces.Finance;
 using StockManagement.Client.Services;
 using StockManagement.ClientDataServices;
+using StockManagement.ClientDataServices.Finance;
 using StockManagement.Components;
 using StockManagement.Components.Account;
 using StockManagement.Models.Automapper;
@@ -67,6 +69,7 @@ builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddScoped<IStockReceiptDetailService, StockReceiptDetailService>();
 builder.Services.AddScoped<IStockReceiptService, StockReceiptService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IVenueService, VenueService>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IAccountTypeRepository, AccountTypeRepository>();
@@ -83,6 +86,7 @@ builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<IStockReceiptDetailRepository, StockReceiptDetailRepository>();
 builder.Services.AddScoped<IStockReceiptRepository, StockReceiptRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITransactionDetailRepository, TransactionDetailRepository>();
 builder.Services.AddScoped<IVenueRepository, VenueRepository>();
 
 // Client data services
@@ -100,6 +104,7 @@ builder.Services.AddScoped<ISettingDataService, ClientSettingDataService>();
 builder.Services.AddScoped<IStockReceiptDetailDataService, ClientStockReceiptDetailDataService>();
 builder.Services.AddScoped<IStockReceiptDataService, ClientStockReceiptDataService>();
 builder.Services.AddScoped<IReportDataService, ClientReportDataService>();
+builder.Services.AddScoped<ITransactionDataService, ClientTransactionDataService>();
 builder.Services.AddScoped<IVenueDataService, ClientVenueDataService>();
 
 // Auto Mapper Configurations

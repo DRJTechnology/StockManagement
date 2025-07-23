@@ -1,13 +1,12 @@
-﻿-- =========================================
+﻿-- ==========================================================
 -- Author:		Dave Brown
--- Create date: 11 Jul 2025
--- Description:	Get transaction records
--- =========================================
-CREATE PROCEDURE [finance].[TransactionDetail_Get]
+-- Create date: 22 Jul 2025
+-- Description:	Load transaction records by account type
+-- ==========================================================
+CREATE PROCEDURE [finance].[TransactionDetail_LoadByAccountType]
+	@AccountTypeId		int,
 	@FromDate			datetime = null,
-	@ToDate				datetime = null,
-	@AccountId			int = null,
-	@TransactionTypeId	int = null
+	@ToDate				datetime = null
 AS
 
 	SELECT	td.Id,
@@ -23,11 +22,10 @@ AS
 	FROM	finance.TransactionDetail td
 	INNER JOIN	finance.[Transaction] t ON td.TransactionId = t.Id
 	INNER JOIN	finance.[TransactionType] tt ON t.TransactionTypeId = tt.Id
-	INNER JOIN	finance.Account a on td.AccountId = a.Id
-	WHERE	(@FromDate IS NULL OR td.[Date] >= @FromDate)
+	INNER JOIN	finance.Account a ON td.AccountId = a.Id
+	WHERE	a.AccountTypeId = @AccountTypeId
+		AND (@FromDate IS NULL OR td.[Date] >= @FromDate)
 		AND (@ToDate IS NULL OR td.[Date] < DATEADD(DAY, 1, @ToDate))
-		AND (ISNULL(@AccountId, 0) = 0 OR td.AccountId = @AccountId)
-		AND (ISNULL(@TransactionTypeId, 0) = 0 OR t.TransactionTypeId = @TransactionTypeId)
 	ORDER BY	td.[Date] DESC, td.TransactionId, a.[Name], Credit, Debit
 
 RETURN 0

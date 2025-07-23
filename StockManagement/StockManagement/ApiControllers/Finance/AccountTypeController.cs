@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StockManagement.Services.Interfaces.Finance;
 
-namespace StockManagement.ApiControllers
+namespace StockManagement.ApiControllers.Finance
 {
     [Authorize]
     [Route("api/[controller]")]
@@ -15,12 +15,12 @@ namespace StockManagement.ApiControllers
             try
             {
                 var accountTypes = await accountTypeService.GetAllAsync();
-                return this.Ok(accountTypes);
+                return Ok(accountTypes);
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Get");
-                return this.BadRequest();
+                return BadRequest();
             }
         }
     }

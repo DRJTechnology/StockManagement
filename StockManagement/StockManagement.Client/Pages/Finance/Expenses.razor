@@ -1,0 +1,86 @@
+@using StockManagement.Client.Components.Finance
+@page "/expenses"
+@rendermode InteractiveWebAssembly
+@inherits ExpensesBase
+
+<h3>Expenses</h3>
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ExpenseEditModal Show="ShowForm"
+                      EditExpense="EditExpense"
+                      ExpenseTypes="ExpenseTypes"
+                      OnCancel="CancelEdit"
+                      OnValidSubmit="HandleValidSubmit" />
+
+    <div class="mb-2">
+        <button class="btn btn-primary" @onclick="ShowAddForm">Add Expense</button>
+    </div>
+
+    <div class="d-none d-md-block">
+        <div class="px-3 py-2">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-md-4 col-lg-3">
+                            <div class="fw-bold">
+                                Date
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-lg-4">
+                            <div class="fw-bold">
+                                Details
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-lg-5">
+                            <div class="fw-bold">
+                                Amount
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    int rowIndex = 0;
+    @foreach (var transactionDetail in TransactionDetails)
+    {
+        var rowClass = rowIndex % 2 == 0 ? "alt-row" : "";
+        <div class="card mb-3 mb-lg-0 @rowClass">
+            <div class="card-body py-2">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-4 d-md-none">
+                                Date:
+                            </div>
+                            <div class="col-8 col-md-4 col-lg-3">
+                                @transactionDetail.Date.ToString("dd MMM yyyy")
+                            </div>
+                            <div class="col-4 d-md-none">
+                                Details:
+                            </div>
+                            <div class="col-8 col-md-5 col-lg-4">
+                                @transactionDetail.Description
+                            </div>
+                            <div class="col-4 d-md-none">
+                                Amount:
+                            </div>
+                            <div class="col-8 col-md-3 col-lg-2">
+                                @transactionDetail.Amount
+                            </div>
+                            <div class="col-12 col-lg-3">
+                                <button class="btn btn-sm btn-warning" @onclick="() => Edit(transactionDetail)">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        rowIndex++;
+    }
+}

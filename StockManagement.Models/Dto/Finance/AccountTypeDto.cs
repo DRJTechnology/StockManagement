@@ -1,8 +1,7 @@
 namespace StockManagement.Models.Dto.Finance
 {
-    public class AccountTypeDto
+    public class AccountTypeDto : BaseDto
     {
-        public int Id { get; set; }
         public string Type { get; set; } = string.Empty;
     }
 }

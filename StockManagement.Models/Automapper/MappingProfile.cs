@@ -48,6 +48,9 @@ namespace StockManagement.Models.Automapper
 
             CreateMap<VenueDto, VenueResponseModel>();
             CreateMap<VenueEditModel, VenueDto>();
+
+            CreateMap<TransactionDetailDto, TransactionDetailResponseModel>();
+            CreateMap<TransactionDetailEditModel, TransactionDetailDto>();
         }
     }
 }

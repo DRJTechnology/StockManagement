@@ -5,7 +5,7 @@ using StockManagement.Models.Finance;
 using StockManagement.Models.InternalObjects;
 using StockManagement.Services.Interfaces.Finance;
 
-namespace StockManagement.ApiControllers
+namespace StockManagement.ApiControllers.Finance
 {
     [Authorize]
     [Route("api/[controller]")]
@@ -19,12 +19,12 @@ namespace StockManagement.ApiControllers
             try
             {
                 var accounts = await accountService.GetAllAsync(includeInactive);
-                return this.Ok(accounts);
+                return Ok(accounts);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Get");
-                return this.BadRequest();
+                logger.LogError(ex, "GetAll");
+                return BadRequest();
             }
         }
 
@@ -35,12 +35,12 @@ namespace StockManagement.ApiControllers
             try
             {
                 var account = await accountService.GetByIdAsync(id);
-                return this.Ok(account);
+                return Ok(account);
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, $"GetById{id}");
-                return this.BadRequest();
+                return BadRequest();
             }
         }
 
