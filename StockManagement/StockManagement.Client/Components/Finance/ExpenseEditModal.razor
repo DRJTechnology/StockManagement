@@ -1,0 +1,53 @@
+﻿@inherits ExpenseEditModalBase
+
+@if (Show)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.2)">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@((EditTransactionDetail?.Id ?? 0) == 0 ? "Add Expense" : "Edit Expense")</h5>
+                    <button type="button" class="btn-close" aria-label="Close" @onclick="OnCancel"></button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="EditTransactionDetail" OnValidSubmit="HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <div class="mb-2">
+                            <label>Date:</label>
+                            <InputDate class="form-control" @bind-Value="EditTransactionDetail.Date" />
+                        </div>
+                        <div class="mb-2">
+                            <label>Type:</label>
+                            <InputSelect class="form-control" @bind-Value="EditTransactionDetail.AccountId">
+                                <option value="">-- Select Category --</option>
+                                @if (ExpenseAccounts != null)
+                                {
+                                    foreach (var expenseType in ExpenseAccounts)
+                                    {
+                                        <option value="@expenseType.Id">@expenseType.Type</option>
+                                    }
+                                }
+                            </InputSelect>
+                        </div>
+                        <div class="mb-2">
+                            <label>Description:</label>
+                            <InputText class="form-control" @bind-Value="EditTransactionDetail.Description" autocomplete="off" rows="5" />
+                        </div>
+                        <div class="mb-2">
+                            <label>Amount:</label>
+                            <InputText class="form-control" @bind-Value="EditTransactionDetail.Amount" autocomplete="off" rows="5" />
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-success" type="submit">Save</button>
+                            <button class="btn btn-secondary ms-2" type="button" @onclick="OnCancel">Cancel</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+

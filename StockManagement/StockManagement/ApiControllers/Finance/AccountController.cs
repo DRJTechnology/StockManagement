@@ -28,6 +28,21 @@ namespace StockManagement.ApiControllers.Finance
             }
         }
 
+        [HttpGet("GetByType/{accountTypeId}")]
+        public async Task<IActionResult> GetByType(int accountTypeId)
+        {
+            try
+            {
+                var accounts = await accountService.GetByTypeAsync(accountTypeId);
+                return Ok(accounts);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "GetByType");
+                return BadRequest();
+            }
+        }
+
         // GET api/<AccountController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)

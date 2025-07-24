@@ -1,7 +1,7 @@
-﻿using StockManagement.Client.Interfaces;
+﻿using StockManagement.Client.Interfaces.Finance;
 using StockManagement.Models.Finance;
 
-namespace StockManagement.ClientDataServices
+namespace StockManagement.ClientDataServices.Finance
 {
     public class ClientAccountDataService : IAccountDataService
     {
@@ -26,6 +26,11 @@ namespace StockManagement.ClientDataServices
         }
 
         public Task<AccountResponseModel> GetByIdAsync(int entityId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<AccountResponseModel>> GetByTypeAsync(int accountTypeId)
         {
             throw new NotImplementedException();
         }

@@ -1,8 +1,8 @@
-using StockManagement.Client.Interfaces;
+using StockManagement.Client.Interfaces.Finance;
 using StockManagement.Models.Finance;
 using System.Net.Http.Json;
 
-namespace StockManagement.Client.Services
+namespace StockManagement.Client.Services.Finance
 {
     public class AccountDataService : GenericDataService<AccountEditModel, AccountResponseModel>, IAccountDataService
     {
@@ -17,6 +17,19 @@ namespace StockManagement.Client.Services
             try
             {
                 var returnVal = await httpClient.GetFromJsonAsync<IEnumerable<AccountResponseModel>>($"api/{ApiControllerName}/GetAll/{includeInactive}");
+                return returnVal;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<AccountResponseModel>> GetByTypeAsync(int accountTypeId)
+        {
+            try
+            {
+                var returnVal = await httpClient.GetFromJsonAsync<IEnumerable<AccountResponseModel>>($"api/{ApiControllerName}/GetByType/{accountTypeId}");
                 return returnVal;
             }
             catch (Exception)

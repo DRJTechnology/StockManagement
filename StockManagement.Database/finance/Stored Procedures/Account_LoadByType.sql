@@ -5,7 +5,7 @@
 -- =============================================
 CREATE PROCEDURE [finance].[Account_LoadByType]
 	@AccountTypeId	INT,
-	@ActiveOnly		  BIT
+	@ActiveOnly		BIT = 1
 AS
 BEGIN
 	SET NOCOUNT ON;

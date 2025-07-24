@@ -1,7 +1,7 @@
-using StockManagement.Client.Interfaces;
+using StockManagement.Client.Interfaces.Finance;
 using StockManagement.Models.Finance;
 
-namespace StockManagement.Client.Services
+namespace StockManagement.Client.Services.Finance
 {
     public class AccountTypeDataService : GenericDataService<AccountTypeEditModel, AccountTypeResponseModel>, IAccountTypeDataService
     {

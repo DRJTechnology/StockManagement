@@ -24,7 +24,7 @@ namespace StockManagement.Repositories.Finance
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Error in GetFilteredAsync: {ex.Message}");
+                Debug.WriteLine($"Error in GetByAccountTypeAsync: {ex.Message}");
                 throw;
             }
         }

@@ -25,6 +25,12 @@ namespace StockManagement.Services.Finanace
             return accounts;
         }
 
+        public async Task<List<AccountResponseModel>> GetByTypeAsync(int accountTypeId)
+        {
+            var accounts = mapper.Map<List<AccountResponseModel>>(await accountRepository.GetByTypeAsync(accountTypeId));
+            return accounts;
+        }
+
         public async Task<AccountResponseModel> GetByIdAsync(int accountId)
         {
             var account = await accountRepository.GetByIdAsync(accountId);

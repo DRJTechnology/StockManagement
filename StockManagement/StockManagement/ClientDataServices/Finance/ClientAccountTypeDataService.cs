@@ -1,7 +1,7 @@
-﻿using StockManagement.Client.Interfaces;
+﻿using StockManagement.Client.Interfaces.Finance;
 using StockManagement.Models.Finance;
 
-namespace StockManagement.ClientDataServices
+namespace StockManagement.ClientDataServices.Finance
 {
     public class ClientAccountTypeDataService : IAccountTypeDataService
     {

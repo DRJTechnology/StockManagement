@@ -70,6 +70,15 @@ namespace StockManagement.Repositories.Finance
             return accountList.Cast<AccountDto>().ToList();
         }
 
+        public async Task<List<AccountDto>> GetByTypeAsync(int accountTypeId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@AccountTypeId", accountTypeId);
+
+            var accountList = await dbConnection.QueryAsync<AccountDto>("finance.Account_LoadByType", parameters, commandType: CommandType.StoredProcedure);
+            return accountList.Cast<AccountDto>().ToList();
+        }
+
         public async Task<AccountDto> GetByIdAsync(int accountId)
         {
             var parameters = new DynamicParameters();

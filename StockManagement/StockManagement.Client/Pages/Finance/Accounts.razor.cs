@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using StockManagement.Client.Interfaces;
+using StockManagement.Client.Interfaces.Finance;
 using StockManagement.Models.Finance;
 
 [Authorize]

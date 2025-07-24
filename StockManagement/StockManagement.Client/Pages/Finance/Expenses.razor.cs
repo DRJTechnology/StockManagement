@@ -7,8 +7,8 @@ using StockManagement.Models.Finance;
 [Authorize]
 public partial class ExpensesBase : ComponentBase
 {
-    //[Inject]
-    //protected ITransactionTypeDataService TransactionTypeService { get; set; } = default!;
+    [Inject]
+    protected IAccountDataService AccountService { get; set; } = default!;
 
     [Inject]
     protected ITransactionDataService TransactionService { get; set; } = default!;
@@ -16,7 +16,7 @@ public partial class ExpensesBase : ComponentBase
     [Inject]
     public IJSRuntime JSRuntime { get; set; } = default!;
 
-    //protected List<ExpenseTypeResponseModel> ExpenseTypes { get; set; } = new();
+    protected List<AccountResponseModel> ExpenseAccounts { get; set; } = new();
     protected List<TransactionDetailResponseModel> TransactionDetails { get; set; } = new();
     protected TransactionDetailEditModel EditTransactionDetail { get; set; } = new();
     protected bool ShowForm { get; set; }
@@ -32,16 +32,16 @@ public partial class ExpensesBase : ComponentBase
         // Only execute on the client (browser)
         if (JSRuntime is IJSInProcessRuntime)
         {
-            //await LoadExpenseTypes();
+            await LoadExpenseAccounts();
             await LoadTransactionDetails();
         }
     }
 
-    //protected async Task LoadExpenseTypes()
-    //{
-    //    ExpenseTypes = (await ExpenseTypeService.GetAllAsync())?.ToList() ?? new();
-    //    IsLoading = false;
-    //}
+    protected async Task LoadExpenseAccounts()
+    {
+        ExpenseAccounts = (await AccountService.GetByTypeAsync(ExpenseAccountTypeId))?.ToList() ?? new();
+        IsLoading = false;
+    }
     protected async Task LoadTransactionDetails()
     {
         TransactionDetails = (await TransactionService.GetDetailByAccountTypeAsync(ExpenseAccountTypeId))?.ToList() ?? new();
