@@ -11,7 +11,7 @@ CREATE PROCEDURE [dbo].[Activity_Update]
 	@ActionId int,
 	@ProductId int,
 	@ProductTypeId int,
-	@VenueId int,
+	@LocationId int,
 	@Quantity int,
 	@Deleted bit,
 	@CurrentUserId int
@@ -29,7 +29,7 @@ BEGIN
 		[ActionId] = @ActionId,
 		[ProductId] = @ProductId,
 		[ProductTypeId] = @ProductTypeId,
-		[VenueId] = @VenueId,
+		[LocationId] = @LocationId,
 		[Quantity] = @Quantity,
 		[Deleted] = @Deleted,
 		[AmendUserID] = @CurrentUserId,

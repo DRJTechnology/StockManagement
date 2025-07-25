@@ -1,6 +1,6 @@
 using StockManagement.Models;
+using StockManagement.Models.Emuns;
 using StockManagement.Services.Interfaces;
-using StockManagement.Repositories.Interfaces;
 
 namespace StockManagement.Services
 {
@@ -9,21 +9,21 @@ namespace StockManagement.Services
         private readonly IActionService _actionService;
         private readonly IProductService _productService;
         private readonly IProductTypeService _productTypeService;
-        private readonly IVenueService _venueService;
-        private readonly ISupplierService _supplierService;
+        private readonly IContactService _contactService;
+        private readonly ILocationService _locationService;
 
         public LookupsService(
             IActionService actionService,
             IProductService productService,
             IProductTypeService productTypeService,
-            IVenueService venueService,
-            ISupplierService supplierService)
+            IContactService contactService,
+            ILocationService locationService)
         {
             _actionService = actionService;
             _productService = productService;
             _productTypeService = productTypeService;
-            _venueService = venueService;
-            _supplierService = supplierService;
+            _contactService = contactService;
+            _locationService = locationService;
         }
 
         public async Task<List<LookupsModel>> GetLookupsAsync()
@@ -35,8 +35,8 @@ namespace StockManagement.Services
                     ActionList = await _actionService.GetAllAsync(),
                     ProductList = await _productService.GetAllAsync(),
                     ProductTypeList = await _productTypeService.GetAllAsync(),
-                    VenueList = await _venueService.GetAllAsync(),
-                    SupplierList = await _supplierService.GetAllAsync(),
+                    LocationList = await _locationService.GetAllAsync(),
+                    SupplierList = await _contactService.GetByTypeAsync(ContactTypeEnum.Supplier),
                 }
             };
         }

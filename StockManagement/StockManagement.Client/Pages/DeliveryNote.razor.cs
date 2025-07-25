@@ -85,7 +85,7 @@ public partial class DeliveryNoteBase : ComponentBase
         if (DeliveryNoteId == 0)
         {
             var localNow = await JavascriptMethodsService.GetLocalDateTimeAsync();
-            EditDeliveryNote = new DeliveryNoteResponseModel() { Date = localNow, VenueId = 0, DetailList = new List<DeliveryNoteDetailResponseModel>() };
+            EditDeliveryNote = new DeliveryNoteResponseModel() { Date = localNow, LocationId = 0, DetailList = new List<DeliveryNoteDetailResponseModel>() };
         }
         else
         {

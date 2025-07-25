@@ -14,14 +14,14 @@ BEGIN
 	SELECT
 		dn.[Id],
 		dn.[Date],
-		dn.[VenueId],
-		v.[VenueName],
+		dn.[LocationId],
+		l.[Name] AS LocationName,
 		dn.DirectSale,
 		dn.[Deleted],
 		dn.[AmendUserID],
 		dn.[AmendDate]
 	FROM [DeliveryNote] dn
-	INNER JOIN [Venue] v ON dn.VenueId = v.Id
+	INNER JOIN [Location] l ON dn.LocationId = l.Id
 	WHERE
 		dn.[Deleted] <> 1
 	ORDER BY

@@ -87,17 +87,17 @@ else
                     </div>
                     <div class="col-lg-4 col-md-6">
                         <div class="form-floating">
-                            <InputSelect @bind-Value="activityFilterModel.VenueId" class="form-select">
+                            <InputSelect @bind-Value="activityFilterModel.LocationId" class="form-select">
                                 <option value="">All</option>
-                                @if (Lookups?.VenueList != null)
+                                @if (Lookups?.LocationList != null)
                                 {
-                                    foreach (var v in Lookups.VenueList)
+                                    foreach (var v in Lookups.LocationList)
                                     {
-                                        <option value="@v.Id">@v.VenueName</option>
+                                        <option value="@v.Id">@v.Name</option>
                                     }
                                 }
                             </InputSelect>
-                            <label for="venueFilter">Venue:</label>
+                            <label for="locationFilter">Location:</label>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6">
@@ -144,7 +144,7 @@ else
                         </div>
                         <div class="col-2">
                             <div class="fw-bold">
-                                Venue
+                                Location
                             </div>
                         </div>
                         <div class="col-3">
@@ -188,7 +188,7 @@ else
                             </div>
                             <div class="col-5 col-md-5 col-lg-2">
                                 <div class="">
-                                    @activity.VenueName
+                                    @activity.LocationName
                                 </div>
                             </div>
                             <div class="col-2 col-md-2 col-lg-1">

@@ -49,6 +49,7 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 
 builder.Services.AddScoped<IActionService, ActionService>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
+builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IDeliveryNoteDetailService, DeliveryNoteDetailService>();
 builder.Services.AddScoped<IDeliveryNoteService, DeliveryNoteService>();
 builder.Services.AddScoped<ILookupsService, LookupsService>();
@@ -57,13 +58,13 @@ builder.Services.AddScoped<IProductTypeService, ProductTypeService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<ISettingService, SettingService>();
-builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddScoped<IStockReceiptDetailService, StockReceiptDetailService>();
 builder.Services.AddScoped<IStockReceiptService, StockReceiptService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IVenueService, VenueService>();
+builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<IActionRepository, ActionRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<IDeliveryNoteDetailRepository, DeliveryNoteDetailRepository>();
 builder.Services.AddScoped<IDeliveryNoteRepository, DeliveryNoteRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -71,26 +72,25 @@ builder.Services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<ISettingRepository, SettingRepository>();
-builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<IStockReceiptDetailRepository, StockReceiptDetailRepository>();
 builder.Services.AddScoped<IStockReceiptRepository, StockReceiptRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IVenueRepository, VenueRepository>();
+builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 
 // Client data services
 builder.Services.AddScoped<IActivityDataService, ClientActivityDataService>();
+builder.Services.AddScoped<IContactDataService, ClientContactDataService>();
 builder.Services.AddScoped<IDeliveryNoteDetailDataService, ClientDeliveryNoteDetailDataService>();
 builder.Services.AddScoped<IDeliveryNoteDataService, ClientDeliveryNoteDataService>();
 builder.Services.AddScoped<IJavascriptMethodsService, JavascriptMethodsService>();
 builder.Services.AddScoped<ILookupsDataService, ClientLookupsDataService>();
 builder.Services.AddScoped<IProductDataService, ClientProductDataService>();
 builder.Services.AddScoped<IProductTypeDataService, ClientProductTypeDataService>();
-builder.Services.AddScoped<ISupplierDataService, ClientSupplierDataService>();
+builder.Services.AddScoped<IReportDataService, ClientReportDataService>();
 builder.Services.AddScoped<ISettingDataService, ClientSettingDataService>();
 builder.Services.AddScoped<IStockReceiptDetailDataService, ClientStockReceiptDetailDataService>();
 builder.Services.AddScoped<IStockReceiptDataService, ClientStockReceiptDataService>();
-builder.Services.AddScoped<IReportDataService, ClientReportDataService>();
-builder.Services.AddScoped<IVenueDataService, ClientVenueDataService>();
+builder.Services.AddScoped<ILocationDataService, ClientLocationDataService>();
 
 // Auto Mapper Configurations
 var mappingConfig = new MapperConfiguration(mc =>

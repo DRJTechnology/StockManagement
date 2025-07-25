@@ -14,6 +14,7 @@ builder.Services.AddHttpClient("WebAPI", client => client.BaseAddress = new Uri(
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("WebAPI"));
 
 builder.Services.AddScoped<IActivityDataService, ActivityDataService>();
+builder.Services.AddScoped<IContactDataService, ContactDataService>();
 builder.Services.AddScoped<IDeliveryNoteDetailDataService, DeliveryNoteDetailDataService>();
 builder.Services.AddScoped<IDeliveryNoteDataService, DeliveryNoteDataService>();
 builder.Services.AddScoped<IJavascriptMethodsService, JavascriptMethodsService>();
@@ -24,7 +25,6 @@ builder.Services.AddScoped<IReportDataService, ReportDataService>();
 builder.Services.AddScoped<ISettingDataService, SettingDataService>();
 builder.Services.AddScoped<IStockReceiptDetailDataService, StockReceiptDetailDataService>();
 builder.Services.AddScoped<IStockReceiptDataService, StockReceiptDataService>();
-builder.Services.AddScoped<ISupplierDataService, SupplierDataService>();
-builder.Services.AddScoped<IVenueDataService, VenueDataService>();
+builder.Services.AddScoped<ILocationDataService, LocationDataService>();
 
 await builder.Build().RunAsync();

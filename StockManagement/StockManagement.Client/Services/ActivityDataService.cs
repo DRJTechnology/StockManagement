@@ -24,8 +24,8 @@ namespace StockManagement.Client.Services
                     query.Add($"ProductTypeId={activityFilterModel.ProductTypeId}");
                 if (activityFilterModel.ProductId.HasValue)
                     query.Add($"ProductId={activityFilterModel.ProductId}");
-                if (activityFilterModel.VenueId.HasValue)
-                    query.Add($"VenueId={activityFilterModel.VenueId}");
+                if (activityFilterModel.LocationId.HasValue)
+                    query.Add($"LocationId={activityFilterModel.LocationId}");
                 if (activityFilterModel.ActionId.HasValue)
                     query.Add($"ActionId={activityFilterModel.ActionId}");
                 if (activityFilterModel.Quantity.HasValue)

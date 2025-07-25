@@ -8,7 +8,7 @@ CREATE PROCEDURE [dbo].[StockReceipt_Create]
 	@Success bit output,
 	@Id int output,
 	@Date datetime,
-	@SupplierId int,
+	@ContactId int,
 	@Deleted bit,
 	@CurrentUserId int
 )
@@ -21,8 +21,8 @@ BEGIN
 	DECLARE @UpdateDate DATETIME
 	SET @UpdateDate = GetDate()
 
-	INSERT INTO dbo.[StockReceipt] ([Date],[SupplierId],[Deleted],[AmendUserID],[AmendDate])
-	VALUES (@Date, @SupplierId, @Deleted, @CurrentUserId, @UpdateDate)
+	INSERT INTO dbo.[StockReceipt] ([Date],[ContactId],[Deleted],[AmendUserID],[AmendDate])
+	VALUES (@Date, @ContactId, @Deleted, @CurrentUserId, @UpdateDate)
 
 	SELECT @ID = SCOPE_IDENTITY()
 
