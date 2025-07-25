@@ -35,8 +35,8 @@ BEGIN
 			[Deleted] = 1,
 			[AmendUserID] = @CurrentUserId,
 			[AmendDate] = @UpdateDate
-		WHERE
-			[StockReceiptDetailId] = @StockReceiptDetailId
+		WHERE	[StockReceiptDetailId] = @StockReceiptDetailId
+				AND Deleted = 0
 
 		COMMIT TRANSACTION
 		SET @Success = 1
