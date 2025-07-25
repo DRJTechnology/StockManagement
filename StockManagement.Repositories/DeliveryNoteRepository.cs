@@ -14,7 +14,7 @@ namespace StockManagement.Repositories
             parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
             parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
             parameters.Add("@Date", deliveryNoteDto.Date);
-            parameters.Add("@VenueId", deliveryNoteDto.VenueId);
+            parameters.Add("@LocationId", deliveryNoteDto.LocationId);
             parameters.Add("@DirectSale", deliveryNoteDto.DirectSale);
             parameters.Add("@Deleted", deliveryNoteDto.Deleted);
             parameters.Add("@CurrentUserId", currentUserId);
@@ -81,7 +81,7 @@ namespace StockManagement.Repositories
             parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
             parameters.Add("@Id", deliveryNoteDto.Id);
             parameters.Add("@Date", deliveryNoteDto.Date);
-            parameters.Add("@VenueId", deliveryNoteDto.VenueId);
+            parameters.Add("@LocationId", deliveryNoteDto.LocationId);
             parameters.Add("@DirectSale", deliveryNoteDto.DirectSale);
             parameters.Add("@Deleted", deliveryNoteDto.Deleted);
             parameters.Add("@CurrentUserId", currentUserId);

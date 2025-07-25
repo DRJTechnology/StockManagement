@@ -10,7 +10,7 @@ namespace StockManagement.Models
         public DateTime Date { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "Supplier must be selected.")]
-        public int SupplierId { get; set; }
+        public int ContactId { get; set; }
 
         public bool Deleted { get; set; }
     }

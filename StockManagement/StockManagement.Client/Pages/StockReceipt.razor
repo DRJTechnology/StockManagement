@@ -26,13 +26,13 @@ else
                 </div>
                 <div class="mb-2">
                     <label>Supplier:</label>
-                    <InputSelect class="form-control" @bind-Value="EditStockReceipt.SupplierId">
+                    <InputSelect class="form-control" @bind-Value="EditStockReceipt.ContactId">
                         <option value="0">-- Select Supplier --</option>
                         @if (Lookups?.SupplierList != null)
                         {
                             foreach (var supplier in Lookups.SupplierList)
                             {
-                                <option value="@supplier.Id">@supplier.SupplierName</option>
+                                <option value="@supplier.Id">@supplier.Name</option>
                             }
                         }
                     </InputSelect>

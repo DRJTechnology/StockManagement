@@ -16,18 +16,18 @@
             <div class="row">
                 <div class="col-lg-4">
                     <div class="form-floating">
-                        <InputSelect id="venueFilter" @bind-Value="VenueId" TValue="int" class="form-control">
+                        <InputSelect id="locationFilter" @bind-Value="LocationId" TValue="int" class="form-control">
                             <option value="-1">-- Totals --</option>
-                            <option value="0">All Venues</option>
-                            @if (Lookups?.VenueList != null)
+                            <option value="0">All Locations</option>
+                            @if (Lookups?.LocationList != null)
                             {
-                                @foreach (var venue in Lookups.VenueList)
+                                @foreach (var location in Lookups.LocationList)
                                 {
-                                    <option value="@venue.Id">@venue.VenueName</option>
+                                    <option value="@location.Id">@location.Name</option>
                                 }
                             }
                         </InputSelect>
-                        <label for="venueFilter">Venue:</label>
+                        <label for="locationFilter">Location:</label>
                     </div>
                 </div>
                 <div class="col-lg-4">

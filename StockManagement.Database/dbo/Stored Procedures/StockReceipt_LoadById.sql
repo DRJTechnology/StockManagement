@@ -13,13 +13,13 @@ BEGIN
 	SELECT
 		sr.[Id],
 		sr.[Date],
-		sr.[SupplierId],
-		s.[SupplierName],
+		sr.[ContactId],
+		c.[Name] AS ContactName,
 		sr.[Deleted],
 		sr.[AmendUserID],
 		sr.[AmendDate]
 	FROM [StockReceipt] sr
-	INNER JOIN [Supplier] s ON sr.SupplierId = s.Id
+	INNER JOIN [Contact] c ON sr.ContactId = c.Id
 	WHERE
 		sr.[Deleted] <> 1
 		AND sr.[Id] = @Id

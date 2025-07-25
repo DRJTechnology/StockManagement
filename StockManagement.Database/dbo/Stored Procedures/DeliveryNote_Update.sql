@@ -8,7 +8,7 @@ CREATE PROCEDURE [dbo].[DeliveryNote_Update]
 	@Success bit output,
 	@Id int,
 	@Date datetime,
-	@VenueId int,
+	@LocationId int,
 	@DirectSale bit,
 	@Deleted bit,
 	@CurrentUserId int
@@ -35,7 +35,7 @@ BEGIN
 		UPDATE [DeliveryNote]
 		SET
 			[Date] = @Date,
-			[VenueId] = @VenueId,
+			[LocationId] = @LocationId,
 			[DirectSale] = @DirectSale,
 			[Deleted] = @Deleted,
 			[AmendUserID] = @CurrentUserId,
@@ -48,7 +48,7 @@ BEGIN
 		UPDATE a
 		SET
 			[ActivityDate] = @Date,
-			[VenueId] = @VenueId,
+			[LocationId] = @LocationId,
 			[AmendUserID] = @CurrentUserId,
 			[AmendDate] = @UpdateDate
 		FROM [Activity] a
@@ -59,12 +59,12 @@ BEGIN
 
 		IF @InitialDirectSale = 0 AND @DirectSale = 1
 		BEGIN -- If the direct sale is being set to true, we need to add 'sell from' activity records
-			INSERT INTO dbo.[Activity] ([ActivityDate],[ActionId],[ProductId],[ProductTypeId],[VenueId],[Quantity],[DeliveryNoteDetailId],[Deleted],[AmendUserID],[AmendDate])
-			SELECT	@Date, 5, a.ProductId, a.ProductTypeId, @VenueId, a.Quantity, dnd.Id, 0, @CurrentUserId, @UpdateDate
+			INSERT INTO dbo.[Activity] ([ActivityDate],[ActionId],[ProductId],[ProductTypeId],[LocationId],[Quantity],[DeliveryNoteDetailId],[Deleted],[AmendUserID],[AmendDate])
+			SELECT	@Date, 5, a.ProductId, a.ProductTypeId, @LocationId, a.Quantity, dnd.Id, 0, @CurrentUserId, @UpdateDate
 			FROM	dbo.[Activity] a
 			INNER JOIN [DeliveryNoteDetail] dnd ON a.DeliveryNoteDetailId = dnd.Id
 			WHERE	a.Deleted = 0
-				AND a.ActionId = 2 -- Move from stock room to venue
+				AND a.ActionId = 2 -- Move from stock room to location
 				AND dnd.DeliveryNoteId = @Id
 		END
 		ELSE IF @InitialDirectSale = 1 AND @DirectSale = 0
@@ -77,7 +77,7 @@ BEGIN
 			FROM [Activity] a
 			INNER JOIN [DeliveryNoteDetail] dnd ON a.DeliveryNoteDetailId = dnd.Id
 			WHERE	a.Deleted = 0
-				AND a.ActionId = 5 -- Sell from venue
+				AND a.ActionId = 5 -- Sell from location
 				AND dnd.DeliveryNoteId = @Id
 		END
 

@@ -25,14 +25,14 @@ else
                     <InputDate class="form-control" @bind-Value="EditDeliveryNote.Date" />
                 </div>
                 <div class="mb-2">
-                    <label>Venue:</label>
-                    <InputSelect class="form-control" @bind-Value="EditDeliveryNote.VenueId">
-                        <option value="0">-- Select Venue --</option>
-                        @if (Lookups?.VenueList != null)
+                    <label>Location:</label>
+                    <InputSelect class="form-control" @bind-Value="EditDeliveryNote.LocationId">
+                        <option value="0">-- Select Location --</option>
+                        @if (Lookups?.LocationList != null)
                         {
-                            foreach (var venue in Lookups.VenueList)
+                            foreach (var location in Lookups.LocationList)
                             {
-                                <option value="@venue.Id">@venue.VenueName</option>
+                                <option value="@location.Id">@location.Name</option>
                             }
                         }
                     </InputSelect>
@@ -58,8 +58,8 @@ else
             </EditForm>
         </div>
         <div class="col-md-6 d-none d-md-block border rounded p-2">
-            <p>Products saved on a delivery note will be moved from stock to the selected venue.</p>
-            <p>Selecting 'Direct Sale' will mark the stock as sold by the selected venue.</p>
+            <p>Products saved on a delivery note will be moved from stock to the selected location.</p>
+            <p>Selecting 'Direct Sale' will mark the stock as sold by the selected location.</p>
             <p>Corresponding 'Activity' records will be created.</p>
         </div>
     </div>
