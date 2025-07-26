@@ -19,7 +19,7 @@ namespace StockManagement.Models
         public int ProductTypeId { get; set; }
 
         [Required]
-        public int VenueId { get; set; }
+        public int LocationId { get; set; }
 
         [Required]
         public int Quantity { get; set; }

@@ -85,7 +85,7 @@ public partial class StockReceiptBase : ComponentBase
         if (StockReceiptId == 0)
         {
             var localNow = await JavascriptMethodsService.GetLocalDateTimeAsync();
-            EditStockReceipt = new StockReceiptResponseModel() { Date = localNow, SupplierId = 0, DetailList = new List<StockReceiptDetailResponseModel>() };
+            EditStockReceipt = new StockReceiptResponseModel() { Date = localNow, ContactId = 0, DetailList = new List<StockReceiptDetailResponseModel>() };
         }
         else
         {

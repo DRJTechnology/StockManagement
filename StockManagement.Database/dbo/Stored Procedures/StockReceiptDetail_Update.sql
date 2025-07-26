@@ -42,8 +42,8 @@ BEGIN
 		[Deleted] = @Deleted,
 		[AmendUserID] = @CurrentUserId,
 		[AmendDate] = @UpdateDate
-	WHERE
-		[StockReceiptDetailId] = @Id
+	WHERE	[StockReceiptDetailId] = @Id
+			AND Deleted = 0
 
 	SET @Success = 1
 

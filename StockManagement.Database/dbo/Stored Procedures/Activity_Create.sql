@@ -11,7 +11,7 @@ CREATE PROCEDURE [dbo].[Activity_Create]
 	@ActionId int,
 	@ProductId int,
 	@ProductTypeId int,
-	@VenueId int,
+	@LocationId int,
 	@Quantity int,
 	@Deleted bit,
 	@CurrentUserId int
@@ -25,8 +25,8 @@ BEGIN
 	DECLARE @UpdateDate DATETIME
 	SET @UpdateDate = GetDate()
 
-	INSERT INTO dbo.[Activity] ([ActivityDate],[ActionId],[ProductId],[ProductTypeId],[VenueId],[Quantity],[Deleted],[AmendUserID],[AmendDate])
-	VALUES (@ActivityDate, @ActionId,@ProductId, @ProductTypeId,@VenueId, @Quantity, @Deleted, @CurrentUserId, @UpdateDate)
+	INSERT INTO dbo.[Activity] ([ActivityDate],[ActionId],[ProductId],[ProductTypeId],[LocationId],[Quantity],[Deleted],[AmendUserID],[AmendDate])
+	VALUES (@ActivityDate, @ActionId,@ProductId, @ProductTypeId,@LocationId, @Quantity, @Deleted, @CurrentUserId, @UpdateDate)
 
 	SELECT @ID = SCOPE_IDENTITY()
 

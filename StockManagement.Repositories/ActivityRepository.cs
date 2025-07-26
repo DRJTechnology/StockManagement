@@ -23,7 +23,7 @@ namespace StockManagement.Repositories
             parameters.Add("@ActionId", activityDto.ActionId);
             parameters.Add("@ProductId", activityDto.ProductId);
             parameters.Add("@ProductTypeId", activityDto.ProductTypeId);
-            parameters.Add("@VenueId", activityDto.VenueId);
+            parameters.Add("@LocationId", activityDto.LocationId);
             parameters.Add("@Quantity", activityDto.Quantity);
             parameters.Add("@Deleted", activityDto.Deleted);
             parameters.Add("@CurrentUserId", currentUserId);
@@ -76,7 +76,7 @@ namespace StockManagement.Repositories
                 parameters.Add("@ActionId", activityFilterModel.ActionId);
                 parameters.Add("@ProductId", activityFilterModel.ProductId);
                 parameters.Add("@ProductTypeId", activityFilterModel.ProductTypeId);
-                parameters.Add("@VenueId", activityFilterModel.VenueId);
+                parameters.Add("@LocationId", activityFilterModel.LocationId);
                 parameters.Add("@Quantity", activityFilterModel.Quantity);
                 parameters.Add("@CurrentPage", activityFilterModel.CurrentPage);
                 parameters.Add("@PageSize", activityFilterModel.PageSize);
@@ -111,7 +111,7 @@ namespace StockManagement.Repositories
             parameters.Add("@ActionId", activityDto.ActionId);
             parameters.Add("@ProductId", activityDto.ProductId);
             parameters.Add("@ProductTypeId", activityDto.ProductTypeId);
-            parameters.Add("@VenueId", activityDto.VenueId);
+            parameters.Add("@LocationId", activityDto.LocationId);
             parameters.Add("@Quantity", activityDto.Quantity);
             parameters.Add("@Deleted", activityDto.Deleted);
             parameters.Add("@CurrentUserId", currentUserId);

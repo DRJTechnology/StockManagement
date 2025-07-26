@@ -8,7 +8,7 @@ CREATE PROCEDURE [dbo].[StockReceipt_Update]
 	@Success bit output,
 	@Id int,
 	@Date datetime,
-	@SupplierId int,
+	@ContactId int,
 	@DirectSale bit,
 	@Deleted bit,
 	@CurrentUserId int
@@ -30,7 +30,7 @@ BEGIN
 		UPDATE [StockReceipt]
 		SET
 			[Date] = @Date,
-			[SupplierId] = @SupplierId,
+			[ContactId] = @ContactId,
 			[Deleted] = @Deleted,
 			[AmendUserID] = @CurrentUserId,
 			[AmendDate] = @UpdateDate
@@ -42,7 +42,7 @@ BEGIN
 		UPDATE a
 		SET
 			[ActivityDate] = @Date,
-			--[VenueId] = venue will be stock room
+			--[LocationId] = location will be stock room
 			[AmendUserID] = @CurrentUserId,
 			[AmendDate] = @UpdateDate
 		FROM [Activity] a

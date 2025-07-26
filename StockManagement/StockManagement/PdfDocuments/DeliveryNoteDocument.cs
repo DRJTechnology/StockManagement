@@ -74,7 +74,7 @@ public class DeliveryNoteDocument : IDocument
                 {
                     column.Spacing(2);
                     column.Item().BorderBottom(1).PaddingBottom(2).Text("To:").SemiBold();
-                    column.Item().Text(_deliveryNote.VenueName);
+                    column.Item().Text(_deliveryNote.LocationName);
                 });
                 row.ConstantItem(50);
                 row.RelativeItem().Column(column =>

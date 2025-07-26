@@ -59,14 +59,14 @@
                             </InputSelect>
                         </div>
                         <div class="mb-2">
-                            <label>Venue:</label>
-                            <InputSelect class="form-control" @bind-Value="EditActivity.VenueId">
-                                <option value="">-- Select Venue --</option>
-                                @if (Lookups?.VenueList != null)
+                            <label>Location:</label>
+                            <InputSelect class="form-control" @bind-Value="EditActivity.LocationId">
+                                <option value="">-- Select Location --</option>
+                                @if (Lookups?.LocationList != null)
                                 {
-                                    foreach (var venue in Lookups.VenueList)
+                                    foreach (var location in Lookups.LocationList)
                                     {
-                                        <option value="@venue.Id">@venue.VenueName</option>
+                                        <option value="@location.Id">@location.Name</option>
                                     }
                                 }
                             </InputSelect>

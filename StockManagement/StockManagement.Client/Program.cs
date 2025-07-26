@@ -18,6 +18,7 @@ builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().Cre
 builder.Services.AddScoped<IAccountDataService, AccountDataService>();
 builder.Services.AddScoped<IAccountTypeDataService, AccountTypeDataService>();
 builder.Services.AddScoped<IActivityDataService, ActivityDataService>();
+builder.Services.AddScoped<IContactDataService, ContactDataService>();
 builder.Services.AddScoped<IDeliveryNoteDetailDataService, DeliveryNoteDetailDataService>();
 builder.Services.AddScoped<IDeliveryNoteDataService, DeliveryNoteDataService>();
 builder.Services.AddScoped<IJavascriptMethodsService, JavascriptMethodsService>();
@@ -28,8 +29,7 @@ builder.Services.AddScoped<IReportDataService, ReportDataService>();
 builder.Services.AddScoped<ISettingDataService, SettingDataService>();
 builder.Services.AddScoped<IStockReceiptDetailDataService, StockReceiptDetailDataService>();
 builder.Services.AddScoped<IStockReceiptDataService, StockReceiptDataService>();
-builder.Services.AddScoped<ISupplierDataService, SupplierDataService>();
+builder.Services.AddScoped<ILocationDataService, LocationDataService>();
 builder.Services.AddScoped<ITransactionDataService, TransactionDataService>();
-builder.Services.AddScoped<IVenueDataService, VenueDataService>();
 
 await builder.Build().RunAsync();

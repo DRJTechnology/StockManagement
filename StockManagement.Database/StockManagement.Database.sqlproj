@@ -70,14 +70,13 @@
     <Folder Include="Scripts" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="dbo\Tables\Venue.sql" />
     <Build Include="dbo\Tables\ProductType.sql" />
     <Build Include="dbo\Tables\Product.sql" />
     <Build Include="dbo\Tables\Activity.sql" />
     <Build Include="dbo\Tables\Action.sql" />
-    <Build Include="dbo\Stored Procedures\Venue_Update.sql" />
-    <Build Include="dbo\Stored Procedures\Venue_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\Venue_Create.sql" />
+    <Build Include="dbo\Stored Procedures\Contact_Update.sql" />
+    <Build Include="dbo\Stored Procedures\Contact_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Contact_Create.sql" />
     <Build Include="dbo\Stored Procedures\ProductType_Update.sql" />
     <Build Include="dbo\Stored Procedures\ProductType_Delete.sql" />
     <Build Include="dbo\Stored Procedures\ProductType_Create.sql" />
@@ -89,7 +88,7 @@
     <Build Include="dbo\Stored Procedures\Action_Update.sql" />
     <Build Include="dbo\Stored Procedures\Action_Delete.sql" />
     <Build Include="dbo\Stored Procedures\Action_Create.sql" />
-    <Build Include="dbo\Stored Procedures\Venue_LoadAll.sql" />
+    <Build Include="dbo\Stored Procedures\Contact_LoadAll.sql" />
     <Build Include="dbo\Stored Procedures\ProductType_LoadAll.sql" />
     <Build Include="dbo\Stored Procedures\Product_LoadAll.sql" />
     <Build Include="dbo\Stored Procedures\Action_LoadAll.sql" />
@@ -125,7 +124,6 @@
     <Build Include="dbo\Stored Procedures\Activity_LoadFiltered.sql" />
     <Build Include="dbo\Tables\DeliveryNoteDetail.sql" />
     <Build Include="dbo\Tables\DeliveryNote.sql" />
-    <Build Include="dbo\Tables\Supplier.sql" />
     <Build Include="dbo\Stored Procedures\DeliveryNote_LoadAll.sql" />
     <Build Include="dbo\Stored Procedures\DeliveryNote_LoadById.sql" />
     <Build Include="dbo\Stored Procedures\DeliveryNote_Create.sql" />
@@ -134,10 +132,6 @@
     <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Delete.sql" />
     <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Create.sql" />
     <Build Include="dbo\Stored Procedures\DeliveryNote_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\Supplier_Update.sql" />
-    <Build Include="dbo\Stored Procedures\Supplier_Create.sql" />
-    <Build Include="dbo\Stored Procedures\Supplier_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\Supplier_LoadAll.sql" />
     <Build Include="dbo\Tables\StockReceipt.sql" />
     <Build Include="dbo\Tables\StockReceiptDetail.sql" />
     <Build Include="dbo\Stored Procedures\StockReceipt_LoadAll.sql" />
@@ -216,5 +210,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\PopulateFinanceTables.sql" />
+    <Build Include="dbo\Tables\ContactType.sql" />
+    <Build Include="dbo\Tables\Contact.sql" />
+    <Build Include="dbo\Stored Procedures\Contact_LoadByType.sql" />
+    <Build Include="dbo\Stored Procedures\Location_Create.sql" />
+    <Build Include="dbo\Stored Procedures\Location_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\Location_LoadAll.sql" />
+    <Build Include="dbo\Stored Procedures\Location_Update.sql" />
+    <Build Include="dbo\Tables\Location.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\Migrate Contact Data.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="StockManagement.Database.refactorlog" />
   </ItemGroup>
 </Project>

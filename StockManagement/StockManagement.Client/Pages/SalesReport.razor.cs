@@ -20,21 +20,21 @@ public partial class SalesReportBase : ComponentBase
     public LookupsModel Lookups { get; private set; } = new LookupsModel();
 
     protected bool IsLoading = true;
-    private int _venueId;
+    private int _locationId;
     private int _productTypeId;
     private int _productId;
         protected bool ShowNotesPanel { get; set; } = false;
-    protected string SelectedVenueNotes { get; set; } = string.Empty;
-    protected string SelectedVenueTitle { get; set; } = string.Empty;
+    protected string SelectedLocationNotes { get; set; } = string.Empty;
+    protected string SelectedLocationTitle { get; set; } = string.Empty;
 
-    protected int VenueId
+    protected int LocationId
     {
-        get => _venueId;
+        get => _locationId;
         set
         {
-            if (_venueId != value)
+            if (_locationId != value)
             {
-                _venueId = value;
+                _locationId = value;
                 _ = PopulateReport();
             }
         }
@@ -81,12 +81,12 @@ public partial class SalesReportBase : ComponentBase
     {
         IsLoading = true;
 
-        SalesReportItems = await ReportDataService.GetSalesReportAsync(VenueId, ProductTypeId, ProductId);
+        SalesReportItems = await ReportDataService.GetSalesReportAsync(LocationId, ProductTypeId, ProductId);
         GroupedSalesReport = SalesReportItems
-            .GroupBy(item => item.VenueName)
+            .GroupBy(item => item.LocationName)
             .ToDictionary(
-                venueGroup => venueGroup.Key,
-                venueGroup => venueGroup
+                locationGroup => locationGroup.Key,
+                locationGroup => locationGroup
                     .GroupBy(item => item.ProductTypeName)
                     .ToDictionary(
                         productTypeGroup => productTypeGroup.Key,
@@ -102,13 +102,13 @@ public partial class SalesReportBase : ComponentBase
         var lookupsList = await LookupsService.GetAllAsync();
         Lookups = lookupsList.FirstOrDefault() ?? new LookupsModel();
     }
-    protected void ShowVenueNotes(string venuName)
+    protected void ShowLocationNotes(string venuName)
     {
         ShowNotesPanel = true;
-        var selectedVenue = Lookups.VenueList
-            .FirstOrDefault(v => v.VenueName.Equals(venuName, StringComparison.OrdinalIgnoreCase));
-        SelectedVenueNotes = string.IsNullOrEmpty(selectedVenue?.Notes) ? "NO NOTES" : selectedVenue.Notes;
-        SelectedVenueTitle = selectedVenue.VenueName;
+        var selectedLocation = Lookups.LocationList
+            .FirstOrDefault(v => v.Name.Equals(venuName, StringComparison.OrdinalIgnoreCase));
+        SelectedLocationNotes = string.IsNullOrEmpty(selectedLocation?.Notes) ? "NO NOTES" : selectedLocation.Notes;
+        SelectedLocationTitle = selectedLocation.Name;
     }
     protected void CloseNotesPanel()
     {

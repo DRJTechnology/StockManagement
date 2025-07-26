@@ -14,11 +14,11 @@ namespace StockManagement.Client.Services
             this.httpClient = httpClient;
         }
 
-        public async Task<List<SalesReportItemDto>> GetSalesReportAsync(int venueId, int productTypeId, int productId)
+        public async Task<List<SalesReportItemDto>> GetSalesReportAsync(int locationId, int productTypeId, int productId)
         {
             try
             {
-                var returnVal = await httpClient.GetFromJsonAsync<List<SalesReportItemDto>>($"api/{ApiControllerName}/sales?venueId={venueId}&productTypeId={productTypeId}&productId={productId}");
+                var returnVal = await httpClient.GetFromJsonAsync<List<SalesReportItemDto>>($"api/{ApiControllerName}/sales?locationId={locationId}&productTypeId={productTypeId}&productId={productId}");
                 return returnVal;
             }
             catch (Exception)
@@ -27,9 +27,9 @@ namespace StockManagement.Client.Services
             }
         }
 
-        public async Task<List<StockReportItemDto>> GetStockReportAsync(int venueId, int productTypeId, int productId)
+        public async Task<List<StockReportItemDto>> GetStockReportAsync(int locationId, int productTypeId, int productId)
         {
-            var returnVal = await httpClient.GetFromJsonAsync<List<StockReportItemDto>>($"api/{ApiControllerName}/stock?venueId={venueId}&productTypeId={productTypeId}&productId={productId}");
+            var returnVal = await httpClient.GetFromJsonAsync<List<StockReportItemDto>>($"api/{ApiControllerName}/stock?locationId={locationId}&productTypeId={productTypeId}&productId={productId}");
             return returnVal;
         }
     }

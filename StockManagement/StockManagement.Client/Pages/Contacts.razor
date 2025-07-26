@@ -1,0 +1,70 @@
+@using StockManagement.Client.Components
+@page "/contacts"
+@rendermode InteractiveWebAssembly
+@inherits ContactsBase
+
+<h3>Contacts</h3>
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <button class="btn btn-primary mb-2" @onclick="ShowAddForm">Add Contact</button>
+
+    <ContactEditModal Show="ShowForm"
+                    EditContact="EditContact"
+                    OnCancel="CancelEdit"
+                    OnValidSubmit="HandleValidSubmit" />
+
+    <ConfirmDialogModal Show="ShowDeleteConfirm"
+                        ItemName="@SelectedItemName"
+                        ConfirmationResult="HandleDeleteConfirmation" />
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var contact in Contacts)
+                {
+                    <tr>
+                        <td style="width:1%;">@contact.Name</td>
+                        <td style="width:1%;">@contact.Type</td>
+                        <td style="width:1%;">
+                            <button class="btn btn-sm btn-secondary my-1" @onclick="() => ShowNotes(contact)" disabled="@string.IsNullOrEmpty(contact.Notes)">Show Notes</button>
+                            <button class="btn btn-sm btn-warning my-1" @onclick="() => Edit(contact)">Edit</button>
+                            <button class="btn btn-sm btn-danger my-1" @onclick="() => Delete(contact.Id)">Delete</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@if (ShowNotesPanel && SelectedContact is not null)
+{
+    <div class="modal show d-block" tabindex="-1" style="background:rgba(0,0,0,0.5);">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Notes for @SelectedContact.Name</h5>
+                    <button type="button" class="btn-close" @onclick="CloseNotesPanel"></button>
+                </div>
+                <div class="modal-body">
+                    @((MarkupString)SelectedContact.Notes?.Replace("\n", "<br />"))
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" @onclick="CloseNotesPanel">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

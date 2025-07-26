@@ -5,28 +5,28 @@ public partial class ReportFilterBase : ComponentBase
 {
     [Parameter] public LookupsModel Lookups { get; set; } = new LookupsModel();
 
-    [Parameter] public EventCallback<int> VenueIdChanged { get; set; }
+    [Parameter] public EventCallback<int> LocationIdChanged { get; set; }
 
     [Parameter] public EventCallback<int> ProductTypeIdChanged { get; set; }
 
     [Parameter] public EventCallback<int> ProductIdChanged { get; set; }
 
-    private int _venueId;
+    private int _locationId;
     private int _productTypeId;
     private int _productd;
 
     protected bool filtersExpanded = true;
 
     [Parameter]
-    public int VenueId
+    public int LocationId
     {
-        get => _venueId;
+        get => _locationId;
         set
         {
-            if (_venueId != value)
+            if (_locationId != value)
             {
-                _venueId = value;
-                _ = VenueIdChanged.InvokeAsync(_venueId);
+                _locationId = value;
+                _ = LocationIdChanged.InvokeAsync(_locationId);
             }
         }
     }

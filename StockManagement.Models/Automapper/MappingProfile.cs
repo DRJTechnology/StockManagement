@@ -3,7 +3,6 @@ using StockManagement.Models.Dto;
 using StockManagement.Models.Dto.Finance;
 using StockManagement.Models.Finance;
 
-
 namespace StockManagement.Models.Automapper
 {
     public class MappingProfile : Profile
@@ -22,11 +21,17 @@ namespace StockManagement.Models.Automapper
             CreateMap<ActivityDto, ActivityResponseModel>();
             CreateMap<ActivityEditModel, ActivityDto>();
 
+            CreateMap<ContactDto, ContactResponseModel>();
+            CreateMap<ContactEditModel, ContactDto>();
+
             CreateMap<DeliveryNoteDetailDto, DeliveryNoteDetailResponseModel>();
             CreateMap<DeliveryNoteDetailEditModel, DeliveryNoteDetailDto>();
 
             CreateMap<DeliveryNoteDto, DeliveryNoteResponseModel>();
             CreateMap<DeliveryNoteEditModel, DeliveryNoteDto>();
+
+            CreateMap<LocationDto, LocationResponseModel>();
+            CreateMap<LocationEditModel, LocationDto>();
 
             CreateMap<ProductDto, ProductResponseModel>();
             CreateMap<ProductEditModel, ProductDto>();
@@ -42,12 +47,6 @@ namespace StockManagement.Models.Automapper
 
             CreateMap<StockReceiptDto, StockReceiptResponseModel>();
             CreateMap<StockReceiptEditModel, StockReceiptDto>();
-
-            CreateMap<SupplierDto, SupplierResponseModel>();
-            CreateMap<SupplierEditModel, SupplierDto>();
-
-            CreateMap<VenueDto, VenueResponseModel>();
-            CreateMap<VenueEditModel, VenueDto>();
 
             CreateMap<TransactionDetailDto, TransactionDetailResponseModel>();
             CreateMap<TransactionDetailEditModel, TransactionDetailDto>();
