@@ -28,6 +28,7 @@ AS
 		AND (@ToDate IS NULL OR td.[Date] < DATEADD(DAY, 1, @ToDate))
 		AND (ISNULL(@AccountId, 0) = 0 OR td.AccountId = @AccountId)
 		AND (ISNULL(@TransactionTypeId, 0) = 0 OR t.TransactionTypeId = @TransactionTypeId)
+		AND td.Deleted = 0
 	ORDER BY	td.[Date] DESC, td.TransactionId, a.[Name], Credit, Debit
 
 RETURN 0

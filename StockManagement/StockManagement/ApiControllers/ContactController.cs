@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StockManagement.Components.Account;
 using StockManagement.Models;
+using StockManagement.Models.Emuns;
 using StockManagement.Models.InternalObjects;
+using StockManagement.Services.Finanace;
 using StockManagement.Services.Interfaces;
 
 namespace StockManagement.ApiControllers
@@ -24,6 +26,21 @@ namespace StockManagement.ApiControllers
             {
                 logger.LogError(ex, "Get");
                 return this.BadRequest();
+            }
+        }
+
+        [HttpGet("GetByType/{contactTypeId}")]
+        public async Task<IActionResult> GetByType(int contactTypeId)
+        {
+            try
+            {
+                var contacts = await ContactService.GetByTypeAsync((ContactTypeEnum)contactTypeId);
+                return Ok(contacts);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "GetByType");
+                return BadRequest();
             }
         }
 

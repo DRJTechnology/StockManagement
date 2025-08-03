@@ -87,7 +87,7 @@ builder.Services.AddScoped<IStockReceiptDetailRepository, StockReceiptDetailRepo
 builder.Services.AddScoped<IStockReceiptRepository, StockReceiptRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILocationRepository, LocationRepository>();
-builder.Services.AddScoped<ITransactionDetailRepository, TransactionDetailRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
 // Client data services
 builder.Services.AddScoped<IAccountDataService, ClientAccountDataService>();

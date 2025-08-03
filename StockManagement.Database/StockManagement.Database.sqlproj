@@ -68,6 +68,7 @@
     <Folder Include="finance\Stored Procedures\" />
     <Folder Include="finance\User Defined Types\" />
     <Folder Include="Scripts" />
+    <Folder Include="Scripts\V1.8.0" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\ProductType.sql" />
@@ -207,6 +208,10 @@
     <Build Include="finance\Stored Procedures\TransactionDetail_LoadByAccountType.sql">
       <AnsiNulls>Off</AnsiNulls>
     </Build>
+    <None Include="Scripts\V1.8.0\Migrate Contact Data.sql" />
+    <Build Include="finance\Stored Procedures\Transaction_CreateExpense.sql" />
+    <Build Include="finance\Stored Procedures\Transaction_UpdateExpense.sql" />
+    <Build Include="finance\Stored Procedures\Transaction_DeleteByDetailId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\PopulateFinanceTables.sql" />
@@ -218,9 +223,6 @@
     <Build Include="dbo\Stored Procedures\Location_LoadAll.sql" />
     <Build Include="dbo\Stored Procedures\Location_Update.sql" />
     <Build Include="dbo\Tables\Location.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Scripts\Migrate Contact Data.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="StockManagement.Database.refactorlog" />

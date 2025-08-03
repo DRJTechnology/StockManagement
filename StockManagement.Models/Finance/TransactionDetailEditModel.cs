@@ -22,5 +22,7 @@ namespace StockManagement.Models.Finance
         public decimal Credit { get; set; }
 
         public decimal Debit { get; set; }
+
+        public int? ContactId { get; set; }
     }
 }

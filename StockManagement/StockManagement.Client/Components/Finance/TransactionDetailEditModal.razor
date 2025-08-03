@@ -1,0 +1,70 @@
+﻿@inherits TransactionDetailEditModalBase
+
+@if (Show)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.2)">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@((EditTransactionDetail?.Id ?? 0) == 0 ? "Add" : "Edit") @TransactionType.ToString()</h5>
+                    <button type="button" class="btn-close" aria-label="Close" @onclick="OnCancel"></button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="EditTransactionDetail" OnValidSubmit="HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                         <div class="mb-2">
+                            <label>Date:</label>
+                            <InputDate class="form-control" @bind-Value="EditTransactionDetail.Date" />
+                        </div>
+                        <div class="mb-2">
+                            <label>Category:</label>
+                            <InputSelect class="form-control" @bind-Value="EditTransactionDetail.AccountId">
+                                <option value="0">-- Select Category --</option>
+                                @if (Accounts != null)
+                                {
+                                    foreach (var expenseType in Accounts)
+                                    {
+                                        <option value="@expenseType.Id">@expenseType.Name</option>
+                                    }
+                                }
+                            </InputSelect>
+                        </div>
+                        <div class="mb-2">
+                            <label>Supplier:</label>
+                            <InputSelect class="form-control" @bind-Value="EditTransactionDetail.ContactId">
+                                <option value="0">-- Select @ContactType --</option>
+                                @if (Contacts != null)
+                                {
+                                    foreach (var contact in Contacts)
+                                    {
+                                        <option value="@contact.Id">@contact.Name</option>
+                                    }
+                                }
+                            </InputSelect>
+                        </div>
+                        <div class="mb-2">
+                            <label>Description:</label>
+                            <InputTextArea class="form-control" @bind-Value="EditTransactionDetail.Description" autocomplete="off" rows="5" />
+                        </div>
+                       <div class="mb-2">
+                            <label>Amount:</label>
+                            <InputNumber class="form-control"
+                                         @bind-Value="EditTransactionDetail.Amount"
+                                         autocomplete="off"
+                                         step="0.01"
+                                         min="0" />
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-success" type="submit">Save</button>
+                            <button class="btn btn-secondary ms-2" type="button" @onclick="OnCancel">Cancel</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+

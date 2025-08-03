@@ -1,5 +1,6 @@
 ﻿using StockManagement.Client.Interfaces.Finance;
 using StockManagement.Models.Finance;
+using StockManagement.Models.InternalObjects;
 using System.Net.Http.Json;
 
 namespace StockManagement.Client.Services.Finance
@@ -28,5 +29,64 @@ namespace StockManagement.Client.Services.Finance
             }
         }
 
+        public async Task<int> CreateExpenseAsync(TransactionDetailEditModel editTransactionDetail)
+        {
+            try
+            {
+                var response = await httpClient.PostAsJsonAsync<TransactionDetailEditModel>($"api/{ApiControllerName}/CreateExpense", editTransactionDetail);
+                if (response == null || !response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"Failed to create expense.");
+                }
+
+                var returnValue = await response.Content.ReadFromJsonAsync<ApiResponse>();
+
+                return returnValue.CreatedId;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateExpenseAsync(TransactionDetailEditModel editTransactionDetail)
+        {
+            try
+            {
+                var response = await httpClient.PutAsJsonAsync<TransactionDetailEditModel>($"api/{ApiControllerName}/UpdateExpense", editTransactionDetail);
+                if (response == null || !response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"Failed to update expense.");
+                }
+
+                var returnValue = await response.Content.ReadFromJsonAsync<ApiResponse>();
+
+                return returnValue.CreatedId > 0;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> DeleteByDetailIdAsync(int transactionDetailId)
+        {
+            try
+            {
+                var response = await httpClient.DeleteAsync($"api/{ApiControllerName}/DeleteByDetailId/{transactionDetailId}");
+                if (response == null || !response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"Failed to delete {ApiControllerName}.");
+                }
+
+                var returnValue = await response.Content.ReadFromJsonAsync<ApiResponse>();
+
+                return returnValue.Success;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

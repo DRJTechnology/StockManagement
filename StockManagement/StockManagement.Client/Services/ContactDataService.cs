@@ -1,5 +1,6 @@
 using StockManagement.Client.Interfaces;
 using StockManagement.Models;
+using System.Net.Http.Json;
 
 namespace StockManagement.Client.Services
 {
@@ -9,6 +10,18 @@ namespace StockManagement.Client.Services
             : base(httpClient)
         {
             ApiControllerName = "Contact";
+        }
+        public async Task<IEnumerable<ContactResponseModel>> GetByTypeAsync(int contactTypeId)
+        {
+            try
+            {
+                var returnVal = await httpClient.GetFromJsonAsync<IEnumerable<ContactResponseModel>>($"api/{ApiControllerName}/GetByType/{contactTypeId}");
+                return returnVal;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

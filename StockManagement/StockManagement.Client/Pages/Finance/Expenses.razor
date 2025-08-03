@@ -1,4 +1,6 @@
+@using StockManagement.Client.Components
 @using StockManagement.Client.Components.Finance
+@using StockManagement.Models.Emuns
 @page "/expenses"
 @rendermode InteractiveWebAssembly
 @inherits ExpensesBase
@@ -11,11 +13,17 @@
 }
 else
 {
-    <ExpenseEditModal Show="ShowForm"
+    <TransactionDetailEditModal Show="ShowForm"
                       EditTransactionDetail="EditTransactionDetail"
-                      ExpenseAccounts="ExpenseAccounts"
+                      Accounts="ExpenseAccounts"
+                      Contacts="Suppliers"
+                      TransactionType="TransactionTypeEnum.Expense"
                       OnCancel="CancelEdit"
                       OnValidSubmit="HandleValidSubmit" />
+
+    <ConfirmDialogModal Show="ShowDeleteConfirm"
+                        ItemName="@SelectedItemName"
+                        ConfirmationResult="HandleDeleteConfirmation" />
 
     <div class="mb-2">
         <button class="btn btn-primary" @onclick="ShowAddForm">Add Expense</button>
@@ -26,17 +34,22 @@ else
             <div class="row">
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-md-4 col-lg-3">
+                        <div class="col-md-2 col-lg-2">
                             <div class="fw-bold">
                                 Date
                             </div>
                         </div>
-                        <div class="col-md-5 col-lg-4">
+                        <div class="col-md-5 col-lg-3">
                             <div class="fw-bold">
                                 Details
                             </div>
                         </div>
-                        <div class="col-md-3 col-lg-5">
+                        <div class="col-md-3 col-lg-3">
+                            <div class="fw-bold">
+                                Supplier
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-lg-4">
                             <div class="fw-bold">
                                 Amount
                             </div>
@@ -58,23 +71,31 @@ else
                             <div class="col-4 d-md-none">
                                 Date:
                             </div>
-                            <div class="col-8 col-md-4 col-lg-3">
-                                @transactionDetail.Date.ToString("dd MMM yyyy")
+                            <div class="col-8 col-md-2 col-lg-2">
+                                <span class="d-none d-md-block d-lg-none">@transactionDetail.Date.ToString("dd MMM yy")</span>
+                                <span class="d-md-none d-lg-block">@transactionDetail.Date.ToString("dd MMM yyyy")</span>
                             </div>
                             <div class="col-4 d-md-none">
                                 Details:
                             </div>
-                            <div class="col-8 col-md-5 col-lg-4">
+                            <div class="col-8 col-md-5 col-lg-3">
                                 @transactionDetail.Description
+                            </div>
+                            <div class="col-4 d-md-none">
+                                Supplier:
+                            </div>
+                            <div class="col-8 col-md-3 col-lg-3">
+                                @transactionDetail.ContactName
                             </div>
                             <div class="col-4 d-md-none">
                                 Amount:
                             </div>
-                            <div class="col-8 col-md-3 col-lg-2">
-                                @transactionDetail.Amount
+                            <div class="col-8 col-md-2 col-lg-2">
+                                @transactionDetail.Amount.ToString("C")
                             </div>
-                            <div class="col-12 col-lg-3">
+                            <div class="col-12 col-lg-2">
                                 <button class="btn btn-sm btn-warning" @onclick="() => Edit(transactionDetail)">Edit</button>
+                                <button class="btn btn-sm btn-danger mt-1" @onclick="() => Delete(transactionDetail.Id)">Delete</button>
                             </div>
                         </div>
                     </div>
