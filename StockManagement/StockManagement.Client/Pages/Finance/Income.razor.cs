@@ -8,7 +8,7 @@ using StockManagement.Models.Emuns;
 using StockManagement.Models.Finance;
 
 [Authorize]
-public partial class ExpensesBase : ComponentBase
+public partial class IncomesBase : ComponentBase
 {
     [Inject]
     protected IAccountDataService AccountService { get; set; } = default!;
@@ -22,8 +22,8 @@ public partial class ExpensesBase : ComponentBase
     [Inject]
     public IJSRuntime JSRuntime { get; set; } = default!;
 
-    protected List<AccountResponseModel> ExpenseAccounts { get; set; } = new();
-    protected List<ContactResponseModel> Suppliers { get; set; } = new();
+    protected List<AccountResponseModel> IncomeAccounts { get; set; } = new();
+    protected List<ContactResponseModel> Customers { get; set; } = new();
     protected List<TransactionDetailResponseModel> TransactionDetails { get; set; } = new();
     protected TransactionDetailEditModel EditTransactionDetail { get; set; } = new();
     protected bool ShowForm { get; set; }
@@ -31,7 +31,7 @@ public partial class ExpensesBase : ComponentBase
     protected string SelectedItemName { get; set; } = string.Empty;
     protected bool IsLoading { get; set; }
 
-    const int ExpenseAccountTypeId = 4; //  4 is the ID for Expense Account Type
+    const int IncomeAccountTypeId = 3; //  3 is the ID for Revenue (Income) Account Type
 
     protected override async Task OnInitializedAsync()
     {
@@ -39,31 +39,31 @@ public partial class ExpensesBase : ComponentBase
         // Only execute on the client (browser)
         if (JSRuntime is IJSInProcessRuntime)
         {
-            await LoadExpenseAccounts();
-            await LoadSuppliers();
+            await LoadIncomeAccounts();
+            await LoadCustomers();
             await LoadTransactionDetails();
         }
     }
 
-    protected async Task LoadExpenseAccounts()
+    protected async Task LoadIncomeAccounts()
     {
-        ExpenseAccounts = (await AccountService.GetByTypeAsync(ExpenseAccountTypeId))?.ToList() ?? new();
+        IncomeAccounts = (await AccountService.GetByTypeAsync(IncomeAccountTypeId))?.ToList() ?? new();
     }
 
-    protected async Task LoadSuppliers()
+    protected async Task LoadCustomers()
     {
-        Suppliers = (await ContactService.GetByTypeAsync((int)ContactTypeEnum.Supplier))?.ToList() ?? new();
+        Customers = (await ContactService.GetByTypeAsync((int)ContactTypeEnum.Customer))?.ToList() ?? new();
     }
     protected async Task LoadTransactionDetails()
     {
-        TransactionDetails = (await TransactionService.GetDetailByAccountTypeAsync(ExpenseAccountTypeId))?.ToList() ?? new();
+        TransactionDetails = (await TransactionService.GetDetailByAccountTypeAsync(IncomeAccountTypeId))?.ToList() ?? new();
         IsLoading = false;
         await InvokeAsync(StateHasChanged);
     }
 
     protected void ShowAddForm()
     {
-        EditTransactionDetail = new TransactionDetailEditModel() { AccountId = 0, Date = DateTime.Now, TransactionType = TransactionTypeEnum.Expense };
+        EditTransactionDetail = new TransactionDetailEditModel() { AccountId = 0, Date = DateTime.Now, TransactionType = TransactionTypeEnum.Income };
         ShowForm = true;
     }
 
@@ -77,7 +77,6 @@ public partial class ExpensesBase : ComponentBase
             AccountId = transactionDetail.AccountId,
             Date = transactionDetail.Date,
             Description = transactionDetail.Description,
-            //Amount = transactionDetail.Amount,
             Amount = Math.Round(transactionDetail.Amount, 2),
             Direction = transactionDetail.Direction,
             Credit = transactionDetail.Credit,
@@ -106,7 +105,7 @@ public partial class ExpensesBase : ComponentBase
                     //Credit = EditTransactionDetail.Credit,
                     //Debit = EditTransactionDetail.Debit,
                     ContactId = EditTransactionDetail.ContactId,
-                    ContactName = Suppliers.Where(s => s.Id == EditTransactionDetail.ContactId).FirstOrDefault()!.Name,
+                    ContactName = Customers.Where(s => s.Id == EditTransactionDetail.ContactId).FirstOrDefault()!.Name,
                 });
         }
         else
@@ -128,7 +127,7 @@ public partial class ExpensesBase : ComponentBase
                     //Credit = EditTransactionDetail.Credit,
                     //Debit = EditTransactionDetail.Debit,
                     ContactId = EditTransactionDetail.ContactId,
-                    ContactName = Suppliers.Where(s => s.Id == EditTransactionDetail.ContactId).FirstOrDefault()!.Name,
+                    ContactName = Customers.Where(s => s.Id == EditTransactionDetail.ContactId).FirstOrDefault()!.Name,
                 };
             }
         }

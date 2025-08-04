@@ -5,7 +5,7 @@ namespace StockManagement.ClientDataServices.Finance
 {
     public class ClientTransactionDataService : ITransactionDataService
     {
-        public Task<int> CreateExpenseAsync(TransactionDetailEditModel editTransactionDetail)
+        public Task<int> CreateExpenseIncomeAsync(TransactionDetailEditModel editTransactionDetail)
         {
             throw new NotImplementedException();
         }
@@ -20,9 +20,10 @@ namespace StockManagement.ClientDataServices.Finance
             throw new NotImplementedException();
         }
 
-        public Task<bool> UpdateExpenseAsync(TransactionDetailEditModel editTransactionDetail)
+        public Task<bool> UpdateExpenseIncomeAsync(TransactionDetailEditModel editTransactionDetail)
         {
             throw new NotImplementedException();
         }
+
     }
 }

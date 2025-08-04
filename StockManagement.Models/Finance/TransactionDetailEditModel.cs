@@ -1,3 +1,4 @@
+using StockManagement.Models.Emuns;
 using System.ComponentModel.DataAnnotations;
 
 namespace StockManagement.Models.Finance
@@ -5,6 +6,8 @@ namespace StockManagement.Models.Finance
     public class TransactionDetailEditModel
     {
         public int Id { get; set; }
+
+        public TransactionTypeEnum TransactionType { get; set; }
 
         public int TransactionId { get; set; }
 

@@ -8,10 +8,10 @@ namespace StockManagement.Services.Finanace
 {
     public class TransactionService(IMapper mapper, ITransactionRepository transactionRepository) : ITransactionService
     {
-        public async Task<int> CreateExpenseAsync(int currentUserId, TransactionDetailEditModel transactionDetail)
+        public async Task<int> CreateExpenseIncomeAsync(int currentUserId, TransactionDetailEditModel transactionDetail)
         {
             var transactionDetailDto = mapper.Map<TransactionDetailDto>(transactionDetail);
-            return await transactionRepository.CreateExpenseAsync(currentUserId, transactionDetailDto);
+            return await transactionRepository.CreateExpenseIncomeAsync(currentUserId, transactionDetailDto);
         }
 
         public async Task<bool> DeleteByDetailIdAsync(int currentUserId, int transactionDetailId)
@@ -25,10 +25,10 @@ namespace StockManagement.Services.Finanace
             return accounts;
         }
 
-        public async Task<bool> UpdateExpenseAsync(int currentUserId, TransactionDetailEditModel transactionDetail)
+        public async Task<bool> UpdateExpenseIncomeAsync(int currentUserId, TransactionDetailEditModel transactionDetail)
         {
             var transactionDetailDto = mapper.Map<TransactionDetailDto>(transactionDetail);
-            return await transactionRepository.UpdateExpenseAsync(currentUserId, transactionDetailDto);
+            return await transactionRepository.UpdateExpenseIncomeAsync(currentUserId, transactionDetailDto);
         }
     }
 }

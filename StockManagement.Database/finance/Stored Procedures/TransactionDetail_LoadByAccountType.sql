@@ -11,6 +11,7 @@ AS
 
 	SELECT	td.Id,
 			td.TransactionId,
+			t.TransactionTypeId,
 			tt.[Type],
 			td.[Date], 
 			t.Reference,

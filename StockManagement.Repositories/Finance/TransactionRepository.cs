@@ -8,7 +8,7 @@ namespace StockManagement.Repositories.Finance
 {
     public class TransactionRepository(IDbConnection dbConnection) : ITransactionRepository
     {
-        public async Task<int> CreateExpenseAsync(int currentUserId, TransactionDetailDto transactionDetailDto)
+        public async Task<int> CreateExpenseIncomeAsync(int currentUserId, TransactionDetailDto transactionDetailDto)
         {
             try
             {
@@ -20,6 +20,7 @@ namespace StockManagement.Repositories.Finance
                 var parameters = new DynamicParameters();
                 parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
                 parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                parameters.Add("@TransactionTypeId", transactionDetailDto.TransactionTypeId);
                 parameters.Add("@AccountId", transactionDetailDto.AccountId);
                 parameters.Add("@Date", transactionDetailDto.Date);
                 parameters.Add("@Description", transactionDetailDto.Description);
@@ -27,7 +28,7 @@ namespace StockManagement.Repositories.Finance
                 parameters.Add("@ContactId", transactionDetailDto.ContactId);
                 parameters.Add("@CurrentUserId", currentUserId);
 
-                await dbConnection.ExecuteAsync("finance.Transaction_CreateExpense", parameters, commandType: CommandType.StoredProcedure);
+                await dbConnection.ExecuteAsync("finance.Transaction_CreateExpenseIncome", parameters, commandType: CommandType.StoredProcedure);
 
                 if (parameters.Get<bool>("@Success"))
                 {
@@ -91,7 +92,7 @@ namespace StockManagement.Repositories.Finance
             }
         }
 
-        public async Task<bool> UpdateExpenseAsync(int currentUserId, TransactionDetailDto transactionDetailDto)
+        public async Task<bool> UpdateExpenseIncomeAsync(int currentUserId, TransactionDetailDto transactionDetailDto)
         {
             try
             {
@@ -102,6 +103,7 @@ namespace StockManagement.Repositories.Finance
 
                 var parameters = new DynamicParameters();
                 parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+                parameters.Add("@TransactionTypeId", transactionDetailDto.TransactionTypeId);
                 parameters.Add("@Id", transactionDetailDto.Id);
                 parameters.Add("@AccountId", transactionDetailDto.AccountId);
                 parameters.Add("@Date", transactionDetailDto.Date);
@@ -110,7 +112,7 @@ namespace StockManagement.Repositories.Finance
                 parameters.Add("@ContactId", transactionDetailDto.ContactId);
                 parameters.Add("@CurrentUserId", currentUserId);
 
-                await dbConnection.ExecuteAsync("finance.Transaction_UpdateExpense", parameters, commandType: CommandType.StoredProcedure);
+                await dbConnection.ExecuteAsync("finance.Transaction_UpdateExpenseIncome", parameters, commandType: CommandType.StoredProcedure);
 
                 if (parameters.Get<bool>("@Success"))
                 {

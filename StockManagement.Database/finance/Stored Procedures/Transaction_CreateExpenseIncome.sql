@@ -3,9 +3,12 @@
 -- Create date: 30 Jul 2025
 -- Description:	Creates a expense transactiona nd transaction detail records
 -- =========================================================================
-CREATE PROCEDURE [finance].[Transaction_CreateExpense]
+-- 04 Aug 2025 - Updated Expense procedure to handle Income too
+-- =========================================================================
+CREATE PROCEDURE [finance].[Transaction_CreateExpenseIncome]
 	@Success			BIT OUTPUT,
 	@Id					INT OUTPUT, 
+	@TransactionTypeId	INT, -- Expense = 2, Income = 3
 	@AccountId			INT,
 	@Date				DATETIME,
 	@Description		NVARCHAR(512) = NULL,
@@ -22,16 +25,27 @@ BEGIN
 	SET @UpdateDate = GetDate()
 
 	DECLARE @TransactionId			INT,
-			@TransactionTypeId		INT = 2, -- Expense
-			@Direction				SMALLINT = 1,
+			@Direction				SMALLINT,
 			@AssociatedAccountId	INT = 3, -- Owner’s Investment/Drawings account
-			@SupplierName			NVARCHAR(100)
+			@ContactName			NVARCHAR(100),
+			@ReferencePrefix		NVARCHAR(3)
 
-	SELECT	@SupplierName = [Name]
+	SELECT	@ContactName = [Name]
 	FROM	dbo.Contact
 	WHERE	Id = @ContactId
 	
-	DECLARE @Reference NVARCHAR(256) = 'EXP-' + '-' + CONVERT(NVARCHAR(20), @Date, 112) + @SupplierName
+	IF (@TransactionTypeId = 2) -- Expense
+	BEGIN
+		SET @Direction = 1 -- Debit for Expense
+		SET @ReferencePrefix = 'EXP' -- Prefix for Expense transactions
+	END
+	ELSE IF (@TransactionTypeId = 3) -- Income
+	BEGIN
+		SET @Direction = -1 -- Credit for Income
+		SET @ReferencePrefix = 'INC' -- Prefix for Income transactions
+	END
+
+	DECLARE @Reference NVARCHAR(256) = @ReferencePrefix + '-' + CONVERT(NVARCHAR(20), @Date, 112) + @ContactName
 
     INSERT INTO [finance].[Transaction] (TransactionTypeId, [Date], Reference, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
 	VALUES (@TransactionTypeId, @Date, @Reference, 0, @CurrentUserId, SYSDATETIME(), @CurrentUserId, SYSDATETIME())

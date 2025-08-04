@@ -2,7 +2,6 @@
 using StockManagement.Components.Account;
 using StockManagement.Models.Finance;
 using StockManagement.Models.InternalObjects;
-using StockManagement.Services;
 using StockManagement.Services.Interfaces.Finance;
 
 namespace StockManagement.ApiControllers.Finance
@@ -26,14 +25,14 @@ namespace StockManagement.ApiControllers.Finance
             }
         }
 
-        [HttpPost("CreateExpense")]
-        public async Task<ApiResponse> CreateExpense(TransactionDetailEditModel transactionDetail)
+        [HttpPost("CreateExpenseIncome")]
+        public async Task<ApiResponse> CreateExpenseIncome(TransactionDetailEditModel transactionDetail)
         {
             try
             {
                 var appUser = await UserAccessor.GetRequiredUserAsync(HttpContext);
 
-                var newAccountId = await transactionService.CreateExpenseAsync(appUser.Id, transactionDetail);
+                var newAccountId = await transactionService.CreateExpenseIncomeAsync(appUser.Id, transactionDetail);
 
                 return new ApiResponse()
                 {
@@ -43,7 +42,7 @@ namespace StockManagement.ApiControllers.Finance
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"CreateExpense");
+                logger.LogError(ex, $"CreateExpenseIncome");
                 return new ApiResponse()
                 {
                     Success = false,
@@ -52,14 +51,14 @@ namespace StockManagement.ApiControllers.Finance
             }
         }
 
-        [HttpPut("UpdateExpense")]
-        public async Task<ApiResponse> UpdateExpense(TransactionDetailEditModel transactionDetail)
+        [HttpPut("UpdateExpenseIncome")]
+        public async Task<ApiResponse> UpdateExpenseIncome(TransactionDetailEditModel transactionDetail)
         {
             try
             {
                 var appUser = await UserAccessor.GetRequiredUserAsync(HttpContext);
 
-                if (await transactionService.UpdateExpenseAsync(appUser.Id, transactionDetail))
+                if (await transactionService.UpdateExpenseIncomeAsync(appUser.Id, transactionDetail))
                 {
                     return new ApiResponse()
                     {
@@ -72,7 +71,7 @@ namespace StockManagement.ApiControllers.Finance
                     return new ApiResponse()
                     {
                         Success = false,
-                        ErrorMessage = $"AccountController: Failed to update expense. Id: {transactionDetail.Id}"
+                        ErrorMessage = $"AccountController: Failed to update expense/income. Id: {transactionDetail.Id}"
                     };
                 }
             }
@@ -112,7 +111,5 @@ namespace StockManagement.ApiControllers.Finance
                 };
             }
         }
-
     }
-
 }

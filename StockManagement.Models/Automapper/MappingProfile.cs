@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using StockManagement.Models.Dto;
 using StockManagement.Models.Dto.Finance;
+using StockManagement.Models.Emuns;
 using StockManagement.Models.Finance;
 
 namespace StockManagement.Models.Automapper
@@ -48,8 +49,10 @@ namespace StockManagement.Models.Automapper
             CreateMap<StockReceiptDto, StockReceiptResponseModel>();
             CreateMap<StockReceiptEditModel, StockReceiptDto>();
 
-            CreateMap<TransactionDetailDto, TransactionDetailResponseModel>();
-            CreateMap<TransactionDetailEditModel, TransactionDetailDto>();
+            CreateMap<TransactionDetailDto, TransactionDetailResponseModel>()
+                .ForMember(dest => dest.TransactionType, opt => opt.MapFrom(src => (TransactionTypeEnum)src.TransactionTypeId));
+            CreateMap<TransactionDetailEditModel, TransactionDetailDto>()
+                .ForMember(dest => dest.TransactionTypeId, opt => opt.MapFrom(src => (int)src.TransactionType));
         }
     }
 }

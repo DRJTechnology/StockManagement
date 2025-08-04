@@ -29,14 +29,14 @@ namespace StockManagement.Client.Services.Finance
             }
         }
 
-        public async Task<int> CreateExpenseAsync(TransactionDetailEditModel editTransactionDetail)
+        public async Task<int> CreateExpenseIncomeAsync(TransactionDetailEditModel editTransactionDetail)
         {
             try
             {
-                var response = await httpClient.PostAsJsonAsync<TransactionDetailEditModel>($"api/{ApiControllerName}/CreateExpense", editTransactionDetail);
+                var response = await httpClient.PostAsJsonAsync<TransactionDetailEditModel>($"api/{ApiControllerName}/CreateExpenseIncome", editTransactionDetail);
                 if (response == null || !response.IsSuccessStatusCode)
                 {
-                    throw new Exception($"Failed to create expense.");
+                    throw new Exception($"Failed to create expense/income.");
                 }
 
                 var returnValue = await response.Content.ReadFromJsonAsync<ApiResponse>();
@@ -49,14 +49,14 @@ namespace StockManagement.Client.Services.Finance
             }
         }
 
-        public async Task<bool> UpdateExpenseAsync(TransactionDetailEditModel editTransactionDetail)
+        public async Task<bool> UpdateExpenseIncomeAsync(TransactionDetailEditModel editTransactionDetail)
         {
             try
             {
-                var response = await httpClient.PutAsJsonAsync<TransactionDetailEditModel>($"api/{ApiControllerName}/UpdateExpense", editTransactionDetail);
+                var response = await httpClient.PutAsJsonAsync<TransactionDetailEditModel>($"api/{ApiControllerName}/UpdateExpenseIncome", editTransactionDetail);
                 if (response == null || !response.IsSuccessStatusCode)
                 {
-                    throw new Exception($"Failed to update expense.");
+                    throw new Exception($"Failed to update expense/income.");
                 }
 
                 var returnValue = await response.Content.ReadFromJsonAsync<ApiResponse>();

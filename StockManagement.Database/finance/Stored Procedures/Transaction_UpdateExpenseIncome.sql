@@ -3,8 +3,11 @@
 -- Create date: 03 Aug 2025
 -- Description:	Updates an expense transaction and transaction detail records
 -- ==========================================================================
-CREATE PROCEDURE [finance].[Transaction_UpdateExpense]
+-- 04 Aug 2025 - Updated Expense procedure to handle Income too
+-- ==========================================================================
+CREATE PROCEDURE [finance].[Transaction_UpdateExpenseIncome]
 	@Success			BIT OUTPUT,
+	@TransactionTypeId	INT, -- Expense = 2, Income = 3
 	@Id					INT, 
 	@AccountId			INT,
 	@Date				DATETIME,
@@ -22,7 +25,6 @@ BEGIN
 	SET @UpdateDate = GetDate()
 
 	DECLARE @TransactionId			INT,
-			@TransactionTypeId		INT = 2, -- Expense
 			@AssociatedAccountId	INT = 3 -- Owner’s Investment/Drawings account
 	
 	SELECT	@TransactionId = td.TransactionId

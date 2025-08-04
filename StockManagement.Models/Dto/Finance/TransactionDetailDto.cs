@@ -4,6 +4,8 @@
     {
         public int TransactionId { get; set; }
 
+        public int TransactionTypeId { get; set; }
+
         public string Type { get; set; } = string.Empty;
 
         public int AccountId { get; set; }
