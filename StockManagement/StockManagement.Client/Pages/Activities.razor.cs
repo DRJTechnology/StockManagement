@@ -34,8 +34,6 @@ public partial class ActivitiesBase : ComponentBase
     protected ActivityFilterModel activityFilterModel = new ActivityFilterModel();
 
     protected int TotalPages { get; set; }
-    //protected int StartPage { get; set; }
-    //protected int EndPage { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -61,13 +59,6 @@ public partial class ActivitiesBase : ComponentBase
             activityFilterModel.CurrentPage = TotalPages;
         if (activityFilterModel.CurrentPage < 1)
             activityFilterModel.CurrentPage = 1;
-
-        //int maxButtons = 5;
-        //StartPage = Math.Max(1, activityFilterModel.CurrentPage - 2);
-        //EndPage = Math.Min(TotalPages, StartPage + maxButtons - 1);
-        //if (EndPage - StartPage < maxButtons - 1)
-        //    StartPage = Math.Max(1, EndPage - maxButtons + 1);
-
     }
 
     protected async Task OnFilter()
@@ -206,32 +197,26 @@ public partial class ActivitiesBase : ComponentBase
         await LoadActivities();
     }
 
-    protected async Task PreviousPage()
-    {
-        if (activityFilterModel.CurrentPage > 1)
-        {
-            activityFilterModel.CurrentPage--;
-            await LoadActivities();
-        }
-    }
+    //protected async Task PreviousPage()
+    //{
+    //    if (activityFilterModel.CurrentPage > 1)
+    //    {
+    //        activityFilterModel.CurrentPage--;
+    //        await LoadActivities();
+    //    }
+    //}
 
-    protected async Task NextPage()
-    {
-        if (activityFilterModel.CurrentPage < TotalPages)
-        {
-            activityFilterModel.CurrentPage++;
-            await LoadActivities();
-        }
-    }
+    //protected async Task NextPage()
+    //{
+    //    if (activityFilterModel.CurrentPage < TotalPages)
+    //    {
+    //        activityFilterModel.CurrentPage++;
+    //        await LoadActivities();
+    //    }
+    //}
 
     protected void ToggleFilters()
     {
         filtersExpanded = !filtersExpanded;
     }
-
-    //protected async Task HandlePageChanged(int page)
-    //{
-    //    activityFilterModel.CurrentPage = page;
-    //    await OnFilter();
-    //}
 }

@@ -4,6 +4,7 @@ using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
 using StockManagement.Client.Interfaces.Finance;
 using StockManagement.Client.Pages.Finance;
+using StockManagement.Models;
 using StockManagement.Models.Finance;
 
 [Authorize]
@@ -25,6 +26,8 @@ public partial class TransactionsBase : ComponentBase
     protected List<AccountResponseModel> AccountList { get; set; } = new();
 
     protected bool IsLoading { get; set; }
+    protected int TotalPages { get; set; }
+
     protected bool filtersExpanded = false;
 
     protected TransactionFilterModel transactionFilterModel = new TransactionFilterModel();
@@ -44,6 +47,7 @@ public partial class TransactionsBase : ComponentBase
     {
         var transactionFilteredResponseModel = await TransactionService.GetFilteredAsync(transactionFilterModel);
         TransactionDetails = transactionFilteredResponseModel.TransactionDetailList;
+        TotalPages = transactionFilteredResponseModel.TotalPages;
         IsLoading = false;
         await InvokeAsync(StateHasChanged);
     }
@@ -64,6 +68,20 @@ public partial class TransactionsBase : ComponentBase
         transactionFilterModel.AccountId = null;
         transactionFilterModel.TransactionTypeId = null;
         transactionFilterModel.CurrentPage = 1;
+        await LoadTransactionDetailsAsync();
+    }
+
+    protected async Task OnFilter()
+    {
+        transactionFilterModel.CurrentPage = 1;
+        await LoadTransactionDetailsAsync();
+    }
+
+    protected async Task GoToPage(int page)
+    {
+        if (page < 1 || page > TotalPages)
+            return;
+        transactionFilterModel.CurrentPage = page;
         await LoadTransactionDetailsAsync();
     }
 

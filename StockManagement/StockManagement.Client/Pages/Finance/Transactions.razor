@@ -67,7 +67,7 @@ else
                 </div>
                 <div class="row">
                     <div class="col pt-2 text-end">
-                        <button class="btn btn-sm btn-primary me-1" @onclick="() => LoadTransactionDetailsAsync()">Filter</button>
+                        <button class="btn btn-sm btn-primary me-1" @onclick="() => OnFilter()">Filter</button>
                         <button class="btn btn-sm btn-secondary" @onclick="OnReset" type="button">Reset</button>
                     </div>
                 </div>
@@ -191,4 +191,9 @@ else
         </div>
         rowIndex++;
     }
+
+
+    <Pagination CurrentPage="@transactionFilterModel.CurrentPage"
+                TotalPages="@TotalPages"
+                OnPageChanged="GoToPage" />
 }
