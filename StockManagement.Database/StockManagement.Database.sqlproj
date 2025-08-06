@@ -213,6 +213,7 @@
     <Build Include="finance\Stored Procedures\Transaction_UpdateExpenseIncome.sql" />
     <Build Include="finance\Stored Procedures\Transaction_DeleteByDetailId.sql" />
     <Build Include="finance\Stored Procedures\TransactionDetail_LoadFiltered.sql" />
+    <Build Include="finance\Tables\InventoryBatch.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\PopulateFinanceTables.sql" />

@@ -1,0 +1,19 @@
+﻿CREATE TABLE [finance].[InventoryBatch]
+(
+	[Id]            INT IDENTITY (1, 1) NOT NULL,
+    [ProductId]     INT         NOT NULL, 
+    [ProductTypeId] INT         NOT NULL, 
+    [QuantityPurchased] INT     NOT NULL, 
+    [QuantityRemaining] INT     NOT NULL, 
+    [UnitCost]      MONEY       NOT NULL, 
+    [PurchaseDate]  DATETIME    NOT NULL,
+    [Deleted]       BIT         DEFAULT ((0)) NOT NULL,
+    [CreateUserId]  INT         NOT NULL,
+    [CreateDate]    DATETIME    CONSTRAINT [DF_InventoryBatch_CreateDate] DEFAULT (getdate()) NOT NULL,
+    [AmendUserId]   INT         NOT NULL,
+    [AmendDate]     DATETIME    CONSTRAINT [DF_InventoryBatch_AmendDate] DEFAULT (getdate()) NOT NULL,
+    CONSTRAINT [PK_InventoryBatch] PRIMARY KEY CLUSTERED ([Id] ASC), 
+    CONSTRAINT [FK_InventoryBatch_Product] FOREIGN KEY ([ProductId]) REFERENCES [Product]([Id]), 
+    CONSTRAINT [FK_InventoryBatch_ProductType] FOREIGN KEY ([ProductTypeId]) REFERENCES [ProductType]([Id])
+);
+
