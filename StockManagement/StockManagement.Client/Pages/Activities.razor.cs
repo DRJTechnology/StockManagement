@@ -34,8 +34,8 @@ public partial class ActivitiesBase : ComponentBase
     protected ActivityFilterModel activityFilterModel = new ActivityFilterModel();
 
     protected int TotalPages { get; set; }
-    protected int StartPage { get; set; }
-    protected int EndPage { get; set; }
+    //protected int StartPage { get; set; }
+    //protected int EndPage { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -52,7 +52,6 @@ public partial class ActivitiesBase : ComponentBase
 
     protected async Task LoadActivities()
     {
-        //var allActivities = (await ActivityService.GetAllAsync())?.ToList() ?? new();
         var filteredActivities = await ActivityService.GetFilteredAsync(activityFilterModel);
 
         Activities = filteredActivities.Activity ?? new List<ActivityResponseModel>();
@@ -63,11 +62,11 @@ public partial class ActivitiesBase : ComponentBase
         if (activityFilterModel.CurrentPage < 1)
             activityFilterModel.CurrentPage = 1;
 
-        int maxButtons = 5;
-        StartPage = Math.Max(1, activityFilterModel.CurrentPage - 2);
-        EndPage = Math.Min(TotalPages, StartPage + maxButtons - 1);
-        if (EndPage - StartPage < maxButtons - 1)
-            StartPage = Math.Max(1, EndPage - maxButtons + 1);
+        //int maxButtons = 5;
+        //StartPage = Math.Max(1, activityFilterModel.CurrentPage - 2);
+        //EndPage = Math.Min(TotalPages, StartPage + maxButtons - 1);
+        //if (EndPage - StartPage < maxButtons - 1)
+        //    StartPage = Math.Max(1, EndPage - maxButtons + 1);
 
     }
 
@@ -229,4 +228,10 @@ public partial class ActivitiesBase : ComponentBase
     {
         filtersExpanded = !filtersExpanded;
     }
+
+    //protected async Task HandlePageChanged(int page)
+    //{
+    //    activityFilterModel.CurrentPage = page;
+    //    await OnFilter();
+    //}
 }

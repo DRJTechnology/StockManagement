@@ -241,35 +241,7 @@ else
         rowIndex++;
     }
 
-    <nav class="mt-lg-3">
-        <ul class="pagination justify-content-center">
-            <li class="page-item @(activityFilterModel.CurrentPage == 1 ? "disabled" : "")">
-                <button class="page-link" @onclick="PreviousPage">&laquo;</button>
-            </li>
-            @if (StartPage > 1)
-            {
-                <li class="page-item">
-                    <button class="page-link" @onclick="() => GoToPage(1)">1</button>
-                </li>
-                <li class="page-item disabled"><span class="page-link">...</span></li>
-            }
-            @for (int i = StartPage; i <= EndPage; i++)
-            {
-                var pageNumber = i; // Capture the current value of i
-                <li class="page-item @(activityFilterModel.CurrentPage == pageNumber ? "active" : "")">
-                    <button class="page-link" @onclick="() => GoToPage(pageNumber)">@pageNumber</button>
-                </li>
-            }
-            @if (EndPage < TotalPages)
-            {
-                <li class="page-item disabled"><span class="page-link">...</span></li>
-                <li class="page-item">
-                    <button class="page-link" @onclick="() => GoToPage(TotalPages)">@TotalPages</button>
-                </li>
-            }
-            <li class="page-item @(activityFilterModel.CurrentPage == TotalPages ? "disabled" : "")">
-                <button class="page-link" @onclick="NextPage">&raquo;</button>
-            </li>
-        </ul>
-    </nav>
+    <Pagination CurrentPage="@activityFilterModel.CurrentPage"
+                TotalPages="@TotalPages"
+                OnPageChanged="GoToPage" />
 }
