@@ -4,5 +4,7 @@ namespace StockManagement.Models.Finance
     {
         public string Account { get; set; } = string.Empty;
         public string ContactName { get; set; } = string.Empty;
+        public string Reference { get; set; } = string.Empty;
+        public string Type { get; set; } = string.Empty;
     }
 }

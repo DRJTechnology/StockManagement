@@ -1,4 +1,4 @@
-﻿namespace StockManagement.Models.Emuns
+﻿namespace StockManagement.Models.Enums
 {
     public enum TransactionTypeEnum
     {

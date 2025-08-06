@@ -3,7 +3,7 @@ using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using StockManagement.Models;
-using StockManagement.Models.Emuns;
+using StockManagement.Models.Enums;
 
 public class DeliveryNoteDocument : IDocument
 {

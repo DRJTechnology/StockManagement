@@ -1,4 +1,4 @@
-using StockManagement.Models.Emuns;
+using StockManagement.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
 namespace StockManagement.Models.Finance

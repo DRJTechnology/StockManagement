@@ -25,6 +25,11 @@ namespace StockManagement.Services.Finanace
             return accounts;
         }
 
+        public async Task<TransactionFilteredResponseModel> GetFilteredAsync(TransactionFilterModel transactionFilterModel)
+        {
+            return await transactionRepository.GetFilteredAsync(transactionFilterModel);
+        }
+
         public async Task<bool> UpdateExpenseIncomeAsync(int currentUserId, TransactionDetailEditModel transactionDetail)
         {
             var transactionDetailDto = mapper.Map<TransactionDetailDto>(transactionDetail);

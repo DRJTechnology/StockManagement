@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using StockManagement.Models;
-using StockManagement.Models.Emuns;
+using StockManagement.Models.Enums;
 using StockManagement.Models.Finance;
 
 public partial class TransactionDetailEditModalBase : ComponentBase

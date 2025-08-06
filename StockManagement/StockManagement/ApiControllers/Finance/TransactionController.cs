@@ -25,6 +25,21 @@ namespace StockManagement.ApiControllers.Finance
             }
         }
 
+        [HttpGet("GetFiltered")]
+        public async Task<IActionResult> GetFiltered([FromQuery] TransactionFilterModel transactionFilterModel)
+        {
+            try
+            {
+                var filteredTransactions = await transactionService.GetFilteredAsync(transactionFilterModel);
+                return this.Ok(filteredTransactions);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "GetFiltered");
+                return this.BadRequest();
+            }
+        }
+
         [HttpPost("CreateExpenseIncome")]
         public async Task<ApiResponse> CreateExpenseIncome(TransactionDetailEditModel transactionDetail)
         {

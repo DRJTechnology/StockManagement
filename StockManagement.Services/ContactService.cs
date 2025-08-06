@@ -1,7 +1,7 @@
 using AutoMapper;
 using StockManagement.Models;
 using StockManagement.Models.Dto;
-using StockManagement.Models.Emuns;
+using StockManagement.Models.Enums;
 using StockManagement.Repositories.Interfaces;
 using StockManagement.Services.Interfaces;
 

@@ -2,9 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StockManagement.Components.Account;
 using StockManagement.Models;
-using StockManagement.Models.Emuns;
+using StockManagement.Models.Enums;
 using StockManagement.Models.InternalObjects;
-using StockManagement.Services.Finanace;
 using StockManagement.Services.Interfaces;
 
 namespace StockManagement.ApiControllers

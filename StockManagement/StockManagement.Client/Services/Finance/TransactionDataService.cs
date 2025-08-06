@@ -1,4 +1,5 @@
 ﻿using StockManagement.Client.Interfaces.Finance;
+using StockManagement.Models;
 using StockManagement.Models.Finance;
 using StockManagement.Models.InternalObjects;
 using System.Net.Http.Json;
@@ -24,6 +25,35 @@ namespace StockManagement.Client.Services.Finance
                 return returnVal != null ? returnVal.ToList() : new List<TransactionDetailResponseModel>();
             }
             catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<TransactionFilteredResponseModel> GetFilteredAsync(TransactionFilterModel transactionFilterModel)
+        {
+            try
+            {
+                var query = new List<string>();
+
+                if (transactionFilterModel.ToDate.HasValue)
+                    query.Add($"ToDate={transactionFilterModel.ToDate.Value:yyyy-MM-dd}");
+                if (transactionFilterModel.FromDate.HasValue)
+                    query.Add($"FromDate={transactionFilterModel.FromDate.Value:yyyy-MM-dd}");
+                if (transactionFilterModel.AccountId.HasValue)
+                    query.Add($"AccountId={transactionFilterModel.AccountId}");
+                if (transactionFilterModel.TransactionTypeId.HasValue)
+                    query.Add($"TransactionTypeId={transactionFilterModel.TransactionTypeId}");
+                query.Add($"CurrentPage={transactionFilterModel.CurrentPage}");
+                query.Add($"PageSize={transactionFilterModel.PageSize}");
+
+                var queryString = string.Join("&", query);
+
+                var url = $"api/{ApiControllerName}/GetFiltered?{queryString}";
+
+                return await httpClient.GetFromJsonAsync<TransactionFilteredResponseModel>(url);
+            }
+            catch (Exception ex)
             {
                 throw;
             }

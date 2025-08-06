@@ -20,6 +20,11 @@ namespace StockManagement.ClientDataServices.Finance
             throw new NotImplementedException();
         }
 
+        public Task<TransactionFilteredResponseModel> GetFilteredAsync(TransactionFilterModel transactionFilterModel)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<bool> UpdateExpenseIncomeAsync(TransactionDetailEditModel editTransactionDetail)
         {
             throw new NotImplementedException();

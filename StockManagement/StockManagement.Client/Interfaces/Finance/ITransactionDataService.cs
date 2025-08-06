@@ -8,5 +8,6 @@ namespace StockManagement.Client.Interfaces.Finance
         Task<List<TransactionDetailResponseModel>> GetDetailByAccountTypeAsync(int accountTypeId);
         Task<bool> UpdateExpenseIncomeAsync(TransactionDetailEditModel editTransactionDetail);
         Task<bool> DeleteByDetailIdAsync(int transactionDetailId);
+        Task<TransactionFilteredResponseModel> GetFilteredAsync(TransactionFilterModel transactionFilterModel);
     }
 }

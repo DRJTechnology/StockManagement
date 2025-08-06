@@ -4,7 +4,7 @@ using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
 using StockManagement.Client.Interfaces.Finance;
 using StockManagement.Models;
-using StockManagement.Models.Emuns;
+using StockManagement.Models.Enums;
 using StockManagement.Models.Finance;
 
 [Authorize]

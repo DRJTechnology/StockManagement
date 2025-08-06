@@ -29,10 +29,6 @@ BEGIN
 			@AssociatedAccountId	INT = 3, -- Owner’s Investment/Drawings account
 			@ContactName			NVARCHAR(100),
 			@ReferencePrefix		NVARCHAR(3)
-
-	SELECT	@ContactName = [Name]
-	FROM	dbo.Contact
-	WHERE	Id = @ContactId
 	
 	IF (@TransactionTypeId = 2) -- Expense
 	BEGIN
@@ -45,7 +41,7 @@ BEGIN
 		SET @ReferencePrefix = 'INC' -- Prefix for Income transactions
 	END
 
-	DECLARE @Reference NVARCHAR(256) = @ReferencePrefix + '-' + CONVERT(NVARCHAR(20), @Date, 112) + @ContactName
+	DECLARE @Reference NVARCHAR(256) = @ReferencePrefix + '-' + CONVERT(NVARCHAR(20), @Date, 112) + '-' + CONVERT(VARCHAR(10), @ContactId)
 
     INSERT INTO [finance].[Transaction] (TransactionTypeId, [Date], Reference, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
 	VALUES (@TransactionTypeId, @Date, @Reference, 0, @CurrentUserId, SYSDATETIME(), @CurrentUserId, SYSDATETIME())
@@ -57,7 +53,7 @@ BEGIN
 	SELECT @Id = SCOPE_IDENTITY()
 
     INSERT INTO [finance].[TransactionDetail] (TransactionId, AccountId, [Date], [Description], Amount, Direction, ContactId, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
-	VALUES (@TransactionId, @AssociatedAccountId, @Date, @Description, @Amount, @Direction * -1, null, 0, @CurrentUserId, SYSDATETIME(), @CurrentUserId, SYSDATETIME())
+	VALUES (@TransactionId, @AssociatedAccountId, @Date, @Description, @Amount, @Direction * -1, @ContactId, 0, @CurrentUserId, SYSDATETIME(), @CurrentUserId, SYSDATETIME())
 
 	SET @Success = 1
 

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using StockManagement.Models.Dto;
 using StockManagement.Models.Dto.Finance;
-using StockManagement.Models.Emuns;
+using StockManagement.Models.Enums;
 using StockManagement.Models.Finance;
 
 namespace StockManagement.Models.Automapper

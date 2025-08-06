@@ -1,5 +1,5 @@
 using StockManagement.Models;
-using StockManagement.Models.Emuns;
+using StockManagement.Models.Enums;
 using StockManagement.Services.Interfaces;
 
 namespace StockManagement.Services

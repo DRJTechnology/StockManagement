@@ -166,37 +166,55 @@ else
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="row">
-                            <div class="col-12 col-md-3 col-lg-1">
+                            <div class="col-4 d-lg-none">
+                                Date:
+                            </div>
+                            <div class="col-8 col-lg-1">
                                 <div class="">
                                     @activity.ActivityDate.ToString("dd MMM yy")
                                 </div>
                             </div>
-                            <div class="col-5 col-md-2 col-lg-1">
+                            <div class="col-4 d-lg-none">
+                                Type:
+                            </div>
+                            <div class="col-8 col-lg-1">
                                 <div class="">
                                     @activity.ProductTypeName
                                 </div>
                             </div>
-                            <div class="col-7 col-md-7 col-lg-3">
+                            <div class="col-4 d-lg-none">
+                                Product:
+                            </div>
+                            <div class="col-8 col-lg-3">
                                 <div class="">
                                     @activity.ProductName
                                 </div>
                             </div>
-                            <div class="col-5 col-md-5 col-lg-2">
+                            <div class="col-4 d-lg-none">
+                                Action:
+                            </div>
+                            <div class="col-8 col-lg-2">
                                 <div class="">
                                     @activity.ActionName
                                 </div>
                             </div>
-                            <div class="col-5 col-md-5 col-lg-2">
+                            <div class="col-4 d-lg-none">
+                                Location:
+                            </div>
+                            <div class="col-8 col-lg-2">
                                 <div class="">
                                     @activity.LocationName
                                 </div>
                             </div>
-                            <div class="col-2 col-md-2 col-lg-1">
+                            <div class="col-4 d-lg-none">
+                                Quantity:
+                            </div>
+                            <div class="col-8 col-lg-1">
                                 <div class="">
                                     @activity.Quantity
                                 </div>
                             </div>
-                            <div class="col-lg-2">
+                            <div class="col-12 col-lg-2">
                                 @if (activity.DeliveryNoteId > 0)
                                 {
                                     <button class="btn btn-link" title="Show Delivery Note" @onclick="() => OpenDeliveryNote(activity.DeliveryNoteId)">

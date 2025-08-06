@@ -1,12 +1,16 @@
+using AutoMapper;
 using Dapper;
+using StockManagement.Models;
 using StockManagement.Models.Dto.Finance;
+using StockManagement.Models.Finance;
 using StockManagement.Repositories.Interfaces.Finanace;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 
 namespace StockManagement.Repositories.Finance
 {
-    public class TransactionRepository(IDbConnection dbConnection) : ITransactionRepository
+    public class TransactionRepository(IDbConnection dbConnection, IMapper mapper) : ITransactionRepository
     {
         public async Task<int> CreateExpenseIncomeAsync(int currentUserId, TransactionDetailDto transactionDetailDto)
         {
@@ -88,6 +92,34 @@ namespace StockManagement.Repositories.Finance
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error in GetByAccountTypeAsync: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<TransactionFilteredResponseModel> GetFilteredAsync(TransactionFilterModel transactionFilterModel)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@AccountId", transactionFilterModel.AccountId);
+                parameters.Add("@TransactionTypeId", transactionFilterModel.TransactionTypeId);
+                parameters.Add("@FromDate", transactionFilterModel.FromDate);
+                parameters.Add("@ToDate", transactionFilterModel.ToDate);
+                parameters.Add("@PageSize", transactionFilterModel.PageSize);
+                parameters.Add("@CurrentPage", transactionFilterModel.CurrentPage);
+                parameters.Add("@TotalPages", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                var filteredTransactionDetails = await dbConnection.QueryAsync<TransactionDetailDto>("finance.TransactionDetail_LoadFiltered", parameters, commandType: CommandType.StoredProcedure);
+
+                return new TransactionFilteredResponseModel()
+                {
+                    TransactionDetailList = mapper.Map<List<TransactionDetailResponseModel>>(filteredTransactionDetails.ToList()),
+                    TotalPages = parameters.Get<int>("@TotalPages"),
+                };
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in GetFilteredAsync: {ex.Message}");
                 throw;
             }
         }

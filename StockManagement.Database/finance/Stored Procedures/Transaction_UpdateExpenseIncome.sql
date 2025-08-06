@@ -58,6 +58,7 @@ BEGIN
 		SET		[Date] = @Date,
 				[Description] = @Description,
 				Amount = @Amount,
+				ContactId = @ContactId,
 				AmendUserId = @CurrentUserId,
 				AmendDate = SYSDATETIME()
 		WHERE	TransactionId = @TransactionId

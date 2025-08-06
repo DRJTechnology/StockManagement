@@ -7,6 +7,7 @@ namespace StockManagement.Services.Interfaces.Finance
         Task<int> CreateExpenseIncomeAsync(int currentUserId, TransactionDetailEditModel transactionDetail);
         Task<bool> DeleteByDetailIdAsync(int currentUserId, int transactionDetailId);
         Task<List<TransactionDetailResponseModel>> GetDetailByAccountTypeAsync(int accountTypeId);
+        Task<TransactionFilteredResponseModel> GetFilteredAsync(TransactionFilterModel transactionFilterModel);
         Task<bool> UpdateExpenseIncomeAsync(int currentUserId, TransactionDetailEditModel transactionDetail);
 
         //Task<int> CreateAsync(int currentUserId, TransactionDetailEditModel transactionDetail);

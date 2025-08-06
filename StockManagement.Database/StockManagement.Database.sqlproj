@@ -212,6 +212,7 @@
     <Build Include="finance\Stored Procedures\Transaction_CreateExpenseIncome.sql" />
     <Build Include="finance\Stored Procedures\Transaction_UpdateExpenseIncome.sql" />
     <Build Include="finance\Stored Procedures\Transaction_DeleteByDetailId.sql" />
+    <Build Include="finance\Stored Procedures\TransactionDetail_LoadFiltered.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\PopulateFinanceTables.sql" />
