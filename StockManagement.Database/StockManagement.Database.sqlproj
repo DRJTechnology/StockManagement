@@ -214,6 +214,7 @@
     <Build Include="finance\Stored Procedures\Transaction_DeleteByDetailId.sql" />
     <Build Include="finance\Stored Procedures\TransactionDetail_LoadFiltered.sql" />
     <Build Include="finance\Tables\InventoryBatch.sql" />
+    <Build Include="finance\Tables\InventoryBatchAction.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\PopulateFinanceTables.sql" />
@@ -226,6 +227,7 @@
     <Build Include="dbo\Stored Procedures\Location_Update.sql" />
     <Build Include="dbo\Tables\Location.sql" />
     <None Include="Scripts\Report-sql.sql" />
+    <None Include="Scripts\Populate InventoryBatch Data.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="StockManagement.Database.refactorlog" />
