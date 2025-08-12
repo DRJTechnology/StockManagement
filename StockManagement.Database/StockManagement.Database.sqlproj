@@ -214,7 +214,9 @@
     <Build Include="finance\Stored Procedures\Transaction_DeleteByDetailId.sql" />
     <Build Include="finance\Stored Procedures\TransactionDetail_LoadFiltered.sql" />
     <Build Include="finance\Tables\InventoryBatch.sql" />
-    <Build Include="finance\Tables\InventoryBatchAction.sql" />
+    <Build Include="finance\Tables\InventoryBatchActivity.sql" />
+    <Build Include="finance\Stored Procedures\InventoryBatch_ReduceQuantity.sql" />
+    <Build Include="finance\Stored Procedures\InventoryBatch_Create.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\PopulateFinanceTables.sql" />
