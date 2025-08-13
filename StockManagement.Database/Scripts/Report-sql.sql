@@ -25,3 +25,10 @@ INNER JOIN finance.AccountType act on a.AccountTypeId = act.Id
 WHERE td.Date < @ToDate
 group by	act.Id, a.Id, act.[Type], a.[Name]
 order by	act.[Type], a.[Name]
+
+-- Total credit/debit for owner's investment/drawings:
+select SUM(td.Amount * td.Direction * act.CreditDebit) AS TotalBalance
+from finance.TransactionDetail td
+inner join finance.Account a ON td.AccountId = a.Id
+inner join finance.AccountType act on a.AccountTypeId = act.Id
+where td.AccountId = 3

@@ -6,6 +6,7 @@ FROM Activity
 WHERE Deleted = 0
 AND ActionId = 1 -- Only include adding new stock
 --AND ActionId != 1 -- Include all except adding new stock
+AND ProductTypeId != 1 -- Exclude Originals
 ORDER BY ActivityDate, ActionId
 
 DECLARE @Id INT,
@@ -30,6 +31,7 @@ BEGIN
 		@ProductTypeId = @ProductTypeId,
 		@LocationId = @LocationId,
 		@Quantity = @Quantity,
+        @UnitCost = 0,
 		@ActivityDate = @ActivityDate,
 		@ActivityId = @Id,
 		@UserId = 1
@@ -42,6 +44,7 @@ BEGIN
 		@ProductTypeId = @ProductTypeId,
 		@LocationId = @LocationId,
 		@Quantity = @Quantity,
+        @UnitCost = 0,
 		@ActivityDate = @ActivityDate,
 		@ActivityId = @Id,
 		@UserId = 1
@@ -72,6 +75,7 @@ BEGIN
         @ProductTypeId = @ProductTypeId,
         @LocationId = 1, -- stock room
         @Quantity = @Quantity,
+        @UnitCost = 0,
         @ActivityDate = @ActivityDate,
         @ActivityId = @Id,
         @UserId = 1
@@ -126,6 +130,20 @@ END
 
 CLOSE activity_cursor
 DEALLOCATE activity_cursor
+GO
+
+
+--Update unit price based on each order
+UPDATE finance.InventoryBatch SET UnitCost = 31.55/20 WHERE PurchaseDate = '14 Apr 2025' AND ProductTypeId = 2 -- Card
+UPDATE finance.InventoryBatch SET UnitCost = 63.15/80 WHERE PurchaseDate = '23 Apr 2025' AND ProductTypeId = 2 -- Card
+UPDATE finance.InventoryBatch SET UnitCost = 81.95/100 WHERE PurchaseDate = '23 May 2025' AND ProductTypeId = 2 -- Card
+UPDATE finance.InventoryBatch SET UnitCost = ??/100 WHERE PurchaseDate = '30 May 2025' AND ProductTypeId = 2 -- Card
+UPDATE finance.InventoryBatch SET UnitCost = 126.95/200 WHERE PurchaseDate = '10 Jun 2025' AND ProductTypeId = 2 -- Card
+UPDATE finance.InventoryBatch SET UnitCost = 227.95/500 WHERE PurchaseDate = '14 Jul 2025' AND ProductTypeId = 2 -- Card
+
+UPDATE finance.InventoryBatch SET UnitCost = 62.80/12 WHERE PurchaseDate = '23 May 2025' AND ProductTypeId = 5 -- Print A4
+UPDATE finance.InventoryBatch SET UnitCost = 39.60/12 WHERE PurchaseDate = '23 May 2025' AND ProductTypeId = 3 -- Print A6
+
 
 -- Optionally, show results
 SELECT * FROM finance.InventoryBatch

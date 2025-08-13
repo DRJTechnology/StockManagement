@@ -8,7 +8,7 @@ using StockManagement.Models.Enums;
 using StockManagement.Models.Finance;
 
 [Authorize]
-public partial class IncomesBase : ComponentBase
+public partial class IncomeBase : ComponentBase
 {
     [Inject]
     protected IAccountDataService AccountService { get; set; } = default!;

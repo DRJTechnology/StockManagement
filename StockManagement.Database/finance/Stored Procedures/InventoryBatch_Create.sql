@@ -8,6 +8,7 @@ CREATE PROCEDURE [finance].[InventoryBatch_Create]
     @ProductTypeId INT,
     @LocationId INT,
     @Quantity INT,
+    @UnitCost MONEY,
     @ActivityDate DATETIME,
     @ActivityId INT,
     @UserId INT
@@ -23,7 +24,7 @@ AS
         @LocationId,
         @Quantity,
         @Quantity,
-        0.34, -- Set UnitCost, adjustment needed
+        @UnitCost,
         @ActivityDate,
         0, -- Deleted
         @UserId, -- CreateUserId
