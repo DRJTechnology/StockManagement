@@ -92,3 +92,16 @@ div.filters {
 .alt-row {
     background-color: rgba(0,0,0,0.05);
 }
+
+.menu-toggle {
+    color: #d7d7d7;
+    cursor: pointer;
+}
+.menu-toggle ~ .menu-section {
+    display: none;
+}
+
+.menu-toggle:checked ~ .menu-section {
+    display: block;
+}
+
