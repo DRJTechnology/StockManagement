@@ -25,6 +25,21 @@ namespace StockManagement.ApiControllers.Finance
             }
         }
 
+        [HttpGet("GetTransactionsByAccount/{accountId}")]
+        public async Task<IActionResult> GetTransactionsByAccount(int accountId)
+        {
+            try
+            {
+                var accounts = await transactionService.GetDetailByAccountAsync(accountId);
+                return this.Ok(accounts);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "GetTransactionsByAccount");
+                return this.BadRequest();
+            }
+        }
+
         [HttpGet("GetFiltered")]
         public async Task<IActionResult> GetFiltered([FromQuery] TransactionFilterModel transactionFilterModel)
         {
@@ -32,6 +47,21 @@ namespace StockManagement.ApiControllers.Finance
             {
                 var filteredTransactions = await transactionService.GetFilteredAsync(transactionFilterModel);
                 return this.Ok(filteredTransactions);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "GetFiltered");
+                return this.BadRequest();
+            }
+        }
+
+        [HttpGet("GetTotalAmountFiltered")]
+        public async Task<IActionResult> GetTotalAmountFiltered([FromQuery] TransactionFilterModel transactionFilterModel)
+        {
+            try
+            {
+                var totalAmount = await transactionService.GetTotalAmountFilteredAsync(transactionFilterModel);
+                return this.Ok(totalAmount);
             }
             catch (Exception ex)
             {

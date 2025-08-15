@@ -3,16 +3,13 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
 using StockManagement.Client.Interfaces.Finance;
-using StockManagement.Client.Pages.Finance;
 using StockManagement.Models;
+using StockManagement.Models.Enums;
 using StockManagement.Models.Finance;
 
 [Authorize]
-public partial class TransactionsBase : ComponentBase
+public partial class OwnersAccountBase : ComponentBase
 {
-    [Inject]
-    protected IAccountDataService AccountService { get; set; } = default!;
-
     [Inject]
     protected IContactDataService ContactService { get; set; } = default!;
 
@@ -23,14 +20,15 @@ public partial class TransactionsBase : ComponentBase
     public IJSRuntime JSRuntime { get; set; } = default!;
 
     protected List<TransactionDetailResponseModel> TransactionDetails { get; set; } = new();
-    protected List<AccountResponseModel> AccountList { get; set; } = new();
+    protected List<ContactResponseModel> ContactList { get; set; } = new();
 
-    protected bool IsLoading { get; set; }
     protected int TotalPages { get; set; }
-
+    protected decimal TotalAmount { get; set; }
+    protected bool IsLoading { get; set; }
     protected bool FiltersExpanded { get; set; } = false;
 
-    protected TransactionFilterModel transactionFilterModel = new TransactionFilterModel();
+    const int OwnersAccountId = 3; // 3 is the ID for Owners Account
+    protected TransactionFilterModel transactionFilterModel = new TransactionFilterModel() { AccountId = OwnersAccountId };
 
     protected override async Task OnInitializedAsync()
     {
@@ -38,7 +36,7 @@ public partial class TransactionsBase : ComponentBase
         // Only execute on the client (browser)
         if (JSRuntime is IJSInProcessRuntime)
         {
-            await LoadAccounts();
+            await LoadContacts();
             await LoadTransactionDetailsAsync();
         }
     }
@@ -48,17 +46,15 @@ public partial class TransactionsBase : ComponentBase
         var transactionFilteredResponseModel = await TransactionService.GetFilteredAsync(transactionFilterModel);
         TransactionDetails = transactionFilteredResponseModel.TransactionDetailList;
         TotalPages = transactionFilteredResponseModel.TotalPages;
+
+        TotalAmount = await TransactionService.GetTotalAmountFilteredAsync(transactionFilterModel);
+        TotalAmount *= -1;
         IsLoading = false;
         await InvokeAsync(StateHasChanged);
     }
-    protected async Task LoadAccounts()
+    protected async Task LoadContacts()
     {
-        AccountList = (await AccountService.GetAllAsync(false))?.ToList() ?? new();
-    }
-
-    protected void ToggleFilters()
-    {
-        FiltersExpanded = !FiltersExpanded;
+        ContactList = (await ContactService.GetAllAsync())?.ToList() ?? new();
     }
 
     protected async Task OnReset()
@@ -77,6 +73,10 @@ public partial class TransactionsBase : ComponentBase
         await LoadTransactionDetailsAsync();
     }
 
+    protected void ToggleFilters()
+    {
+        FiltersExpanded = !FiltersExpanded;
+    }
     protected async Task GoToPage(int page)
     {
         if (page < 1 || page > TotalPages)

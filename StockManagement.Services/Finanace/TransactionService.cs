@@ -19,6 +19,12 @@ namespace StockManagement.Services.Finanace
             return await transactionRepository.DeleteByDetailIdAsync(currentUserId, transactionDetailId);
         }
 
+        public async Task<List<TransactionDetailResponseModel>> GetDetailByAccountAsync(int accountId)
+        {
+            var accounts = mapper.Map<List<TransactionDetailResponseModel>>(await transactionRepository.GetDetailByAccountAsync(accountId));
+            return accounts;
+        }
+
         public async Task<List<TransactionDetailResponseModel>> GetDetailByAccountTypeAsync(int accountTypeId)
         {
             var accounts = mapper.Map<List<TransactionDetailResponseModel>>(await transactionRepository.GetDetailByAccountTypeAsync(accountTypeId));
@@ -28,6 +34,11 @@ namespace StockManagement.Services.Finanace
         public async Task<TransactionFilteredResponseModel> GetFilteredAsync(TransactionFilterModel transactionFilterModel)
         {
             return await transactionRepository.GetFilteredAsync(transactionFilterModel);
+        }
+
+        public async Task<decimal> GetTotalAmountFilteredAsync(TransactionFilterModel transactionFilterModel)
+        {
+            return await transactionRepository.GetTotalAmountFilteredAsync(transactionFilterModel);
         }
 
         public async Task<bool> UpdateExpenseIncomeAsync(int currentUserId, TransactionDetailEditModel transactionDetail)

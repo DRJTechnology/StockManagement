@@ -217,6 +217,10 @@
     <Build Include="finance\Tables\InventoryBatchActivity.sql" />
     <Build Include="finance\Stored Procedures\InventoryBatch_ReduceQuantity.sql" />
     <Build Include="finance\Stored Procedures\InventoryBatch_Create.sql" />
+    <Build Include="finance\Stored Procedures\TransactionDetail_LoadByAccount.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\TransactionDetail_LoadTotalFiltered.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\PopulateFinanceTables.sql" />

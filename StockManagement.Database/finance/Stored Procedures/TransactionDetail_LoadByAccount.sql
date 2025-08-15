@@ -1,12 +1,12 @@
 ﻿-- ==========================================================
 -- Author:		Dave Brown
--- Create date: 22 Jul 2025
+-- Create date: 14 Aug 2025
 -- Description:	Load transaction records by account type
 -- ==========================================================
-CREATE PROCEDURE [finance].[TransactionDetail_LoadByAccountType]
-	@AccountTypeId		int,
-	@FromDate			datetime = null,
-	@ToDate				datetime = null
+CREATE PROCEDURE [finance].[TransactionDetail_LoadByAccount]
+	@AccountId		int,
+	@FromDate		datetime = null,
+	@ToDate			datetime = null
 AS
 
 	SELECT	td.Id,
@@ -29,7 +29,7 @@ AS
 	INNER JOIN	finance.[TransactionType] tt ON t.TransactionTypeId = tt.Id
 	INNER JOIN	finance.Account a ON td.AccountId = a.Id
 	LEFT OUTER JOIN dbo.Contact c on td.ContactId = c.Id
-	WHERE	a.AccountTypeId = @AccountTypeId
+	WHERE	a.Id = @AccountId
 		AND (@FromDate IS NULL OR td.[Date] >= @FromDate)
 		AND (@ToDate IS NULL OR td.[Date] < DATEADD(DAY, 1, @ToDate))
 		AND td.Deleted = 0

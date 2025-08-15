@@ -18,10 +18,10 @@ else
              @onclick="ToggleFilters">
             <strong>Filters</strong>
             <span class="float-end">
-                <i class="bi @(filtersExpanded ? "bi-chevron-down" : "bi-chevron-right")"></i>
+                <i class="bi @(FiltersExpanded ? "bi-chevron-down" : "bi-chevron-right")"></i>
             </span>
         </div>
-        @if (filtersExpanded)
+        @if (FiltersExpanded)
         {
             <div class="card-body">
                 <div class="row">

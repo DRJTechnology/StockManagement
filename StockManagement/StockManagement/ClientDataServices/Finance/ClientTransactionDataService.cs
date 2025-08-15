@@ -15,12 +15,22 @@ namespace StockManagement.ClientDataServices.Finance
             throw new NotImplementedException();
         }
 
+        public Task<List<TransactionDetailResponseModel>> GetDetailByAccountAsync(int accountId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<List<TransactionDetailResponseModel>> GetDetailByAccountTypeAsync(int accountTypeId)
         {
             throw new NotImplementedException();
         }
 
         public Task<TransactionFilteredResponseModel> GetFilteredAsync(TransactionFilterModel transactionFilterModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<decimal> GetTotalAmountFilteredAsync(TransactionFilterModel transactionFilterModel)
         {
             throw new NotImplementedException();
         }

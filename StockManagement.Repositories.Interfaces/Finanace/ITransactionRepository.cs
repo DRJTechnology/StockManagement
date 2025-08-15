@@ -7,12 +7,10 @@ namespace StockManagement.Repositories.Interfaces.Finanace
     {
         Task<int> CreateExpenseIncomeAsync(int currentUserId, TransactionDetailDto transactionDetailDto);
         Task<bool> DeleteByDetailIdAsync(int currentUserId, int transactionDetailId);
+        Task<List<TransactionDetailDto>> GetDetailByAccountAsync(int accountId);
         Task<List<TransactionDetailDto>> GetDetailByAccountTypeAsync(int accountTypeId);
         Task<TransactionFilteredResponseModel> GetFilteredAsync(TransactionFilterModel transactionFilterModel);
+        Task<decimal> GetTotalAmountFilteredAsync(TransactionFilterModel transactionFilterModel);
         Task<bool> UpdateExpenseIncomeAsync(int currentUserId, TransactionDetailDto transactionDetailDto);
-
-        //Task<int> CreateAsync(int currentUserId, TransactionDetailDto transactionDetailDto);
-        //Task<bool> DeleteAsync(int currentUserId, int transactionDetailId);
-        //Task<bool> UpdateAsync(int currentUserId, TransactionDetailDto transactionDetailDto);
     }
 }

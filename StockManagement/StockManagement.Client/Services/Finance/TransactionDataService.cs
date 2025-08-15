@@ -42,6 +42,8 @@ namespace StockManagement.Client.Services.Finance
                     query.Add($"FromDate={transactionFilterModel.FromDate.Value:yyyy-MM-dd}");
                 if (transactionFilterModel.AccountId.HasValue)
                     query.Add($"AccountId={transactionFilterModel.AccountId}");
+                if (transactionFilterModel.ContactId.HasValue)
+                    query.Add($"ContactId={transactionFilterModel.ContactId}");
                 if (transactionFilterModel.TransactionTypeId.HasValue)
                     query.Add($"TransactionTypeId={transactionFilterModel.TransactionTypeId}");
                 query.Add($"CurrentPage={transactionFilterModel.CurrentPage}");
@@ -52,6 +54,35 @@ namespace StockManagement.Client.Services.Finance
                 var url = $"api/{ApiControllerName}/GetFiltered?{queryString}";
 
                 return await httpClient.GetFromJsonAsync<TransactionFilteredResponseModel>(url);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<decimal> GetTotalAmountFilteredAsync(TransactionFilterModel transactionFilterModel)
+        {
+            try
+            {
+                var query = new List<string>();
+
+                if (transactionFilterModel.ToDate.HasValue)
+                    query.Add($"ToDate={transactionFilterModel.ToDate.Value:yyyy-MM-dd}");
+                if (transactionFilterModel.FromDate.HasValue)
+                    query.Add($"FromDate={transactionFilterModel.FromDate.Value:yyyy-MM-dd}");
+                if (transactionFilterModel.AccountId.HasValue)
+                    query.Add($"AccountId={transactionFilterModel.AccountId}");
+                if (transactionFilterModel.ContactId.HasValue)
+                    query.Add($"ContactId={transactionFilterModel.ContactId}");
+                if (transactionFilterModel.TransactionTypeId.HasValue)
+                    query.Add($"TransactionTypeId={transactionFilterModel.TransactionTypeId}");
+
+                var queryString = string.Join("&", query);
+
+                var url = $"api/{ApiControllerName}/GetTotalAmountFiltered?{queryString}";
+
+                return await httpClient.GetFromJsonAsync<decimal>(url);
             }
             catch (Exception ex)
             {
@@ -112,6 +143,19 @@ namespace StockManagement.Client.Services.Finance
                 var returnValue = await response.Content.ReadFromJsonAsync<ApiResponse>();
 
                 return returnValue.Success;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<TransactionDetailResponseModel>> GetDetailByAccountAsync(int accountId)
+        {
+            try
+            {
+                var returnVal = await httpClient.GetFromJsonAsync<IEnumerable<TransactionDetailResponseModel>>($"api/{ApiControllerName}/GetTransactionsByAccount/{accountId}");
+                return returnVal != null ? returnVal.ToList() : new List<TransactionDetailResponseModel>();
             }
             catch (Exception)
             {

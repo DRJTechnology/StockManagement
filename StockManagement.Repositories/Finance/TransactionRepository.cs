@@ -75,6 +75,27 @@ namespace StockManagement.Repositories.Finance
             }
         }
 
+        public async Task<List<TransactionDetailDto>> GetDetailByAccountAsync(int accountId)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@AccountId", accountId);
+                //parameters.Add("@CurrentPage", activityFilterModel.CurrentPage);
+                //parameters.Add("@PageSize", activityFilterModel.PageSize);
+                //parameters.Add("@TotalPages", dbType: DbType.Int32, direction: ParameterDirection.Output);
+
+                var transactions = await dbConnection.QueryAsync<TransactionDetailDto>("finance.TransactionDetail_LoadByAccount", parameters, commandType: CommandType.StoredProcedure);
+
+                return transactions.Cast<TransactionDetailDto>().ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in GetByAccountTypeAsync: {ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<List<TransactionDetailDto>> GetDetailByAccountTypeAsync(int accountTypeId)
         {
             try
@@ -102,6 +123,7 @@ namespace StockManagement.Repositories.Finance
             {
                 var parameters = new DynamicParameters();
                 parameters.Add("@AccountId", transactionFilterModel.AccountId);
+                parameters.Add("@ContactId", transactionFilterModel.ContactId);
                 parameters.Add("@TransactionTypeId", transactionFilterModel.TransactionTypeId);
                 parameters.Add("@FromDate", transactionFilterModel.FromDate);
                 parameters.Add("@ToDate", transactionFilterModel.ToDate);
@@ -120,6 +142,29 @@ namespace StockManagement.Repositories.Finance
             catch (Exception ex)
             {
                 Debug.WriteLine($"Error in GetFilteredAsync: {ex.Message}");
+                throw;
+            }
+        }
+
+        public async Task<decimal> GetTotalAmountFilteredAsync(TransactionFilterModel transactionFilterModel)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@AccountId", transactionFilterModel.AccountId);
+                parameters.Add("@ContactId", transactionFilterModel.ContactId);
+                parameters.Add("@TransactionTypeId", transactionFilterModel.TransactionTypeId);
+                parameters.Add("@FromDate", transactionFilterModel.FromDate);
+                parameters.Add("@ToDate", transactionFilterModel.ToDate);
+                parameters.Add("@TotalAmount", dbType: DbType.Currency, direction: ParameterDirection.Output);
+
+                var response = await dbConnection.QueryAsync("finance.TransactionDetail_LoadTotalFiltered", parameters, commandType: CommandType.StoredProcedure);
+
+                return parameters.Get<decimal>("@TotalAmount");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in GetTotalAmountFilteredAsync: {ex.Message}");
                 throw;
             }
         }

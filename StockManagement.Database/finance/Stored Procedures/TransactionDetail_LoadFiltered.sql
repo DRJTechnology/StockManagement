@@ -3,10 +3,13 @@
 -- Create date: 05 Aug 2025
 -- Description:	Load transaction records
 -- ==========================================================
+-- 04 Aug 2025 - Dave Brown - ContactId filter added
+-- ==========================================================
 CREATE PROCEDURE [finance].[TransactionDetail_LoadFiltered]
 	@FromDate			datetime = null,
 	@ToDate				datetime = null,
 	@AccountId			int = null,
+	@ContactId			int = null,
 	@TransactionTypeId	int = null,
 	@PageSize			INT = 20,
 	@CurrentPage		INT = 1,
@@ -24,6 +27,7 @@ BEGIN
     WHERE	(@FromDate IS NULL OR td.[Date] >= @FromDate)
 		AND (@ToDate IS NULL OR td.[Date] < DATEADD(DAY, 1, @ToDate))
 		AND (ISNULL(@AccountId, 0) = 0 OR td.AccountId = @AccountId)
+		AND (ISNULL(@ContactId, 0) = 0 OR td.ContactId = @ContactId)
 		AND (ISNULL(@TransactionTypeId, 0) = 0 OR t.TransactionTypeId = @TransactionTypeId)
 		AND td.Deleted = 0
 
@@ -44,6 +48,8 @@ BEGIN
 			td.AccountId, 
 			a.[Name] AS Account, 
 			td.[Description],
+			td.Amount,
+			td.Direction,
 			td.ContactId,
 			COALESCE(c.[Name], '') AS ContactName,
 			CASE WHEN Direction = 1 THEN Amount ELSE 0 END AS Debit, 
@@ -56,6 +62,7 @@ BEGIN
 	WHERE	(@FromDate IS NULL OR td.[Date] >= @FromDate)
 		AND (@ToDate IS NULL OR td.[Date] < DATEADD(DAY, 1, @ToDate))
 		AND (ISNULL(@AccountId, 0) = 0 OR td.AccountId = @AccountId)
+		AND (ISNULL(@ContactId, 0) = 0 OR td.ContactId = @ContactId)
 		AND (ISNULL(@TransactionTypeId, 0) = 0 OR t.TransactionTypeId = @TransactionTypeId)
 		AND td.Deleted = 0
 	ORDER BY	td.[Date] DESC, td.TransactionId, a.[Name], Credit, Debit
