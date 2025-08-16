@@ -147,3 +147,32 @@ UPDATE finance.InventoryBatch SET UnitCost = 39.60/12 WHERE PurchaseDate = '23 M
 -- Optionally, show results
 SELECT * FROM finance.InventoryBatch
 SELECT * FROM finance.InventoryBatchActivity
+
+
+-- DEBUGGING --
+
+SELECT * FROM [StockManagement].[finance].[InventoryBatch] where ProductTypeId = 2
+SELECT * FROM [StockManagement].[finance].[InventoryBatchActivity]
+where InventoryBatchId = 1002
+
+--delete from [finance].[InventoryBatchActivity]
+--delete from [finance].[InventoryBatch]
+
+select * from Activity
+
+
+SELECT top 5 p.ProductName, ib.* FROM [finance].[InventoryBatch] ib
+INNER JOIN Product p on ib.ProductId = p.Id
+where ProductTypeId = 2
+
+SELECT a.ActivityDate, a.Quantity AS QuantityRequired, iba.Quantity AS QuantityAffected, a.ActionId, act.ActionName, a.LocationId, l.[Name] AS LocationName, iba.*
+FROM [finance].[InventoryBatchActivity] iba
+INNER JOIN Activity a ON iba.ActivityId = a.Id
+INNER JOIN [Action] act on a.ActionId = act.Id
+INNER JOIN [Location] l on a.LocationId = l.Id
+where InventoryBatchId = 1003
+	AND a.Deleted = 0
+
+select * from finance.InventoryBatch
+Where ProductId = 5 AND ProductTypeId = 2
+

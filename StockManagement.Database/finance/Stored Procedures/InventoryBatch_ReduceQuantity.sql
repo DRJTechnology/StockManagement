@@ -44,8 +44,8 @@ BEGIN
         WHERE Id = @BatchId;
 
         -- Record activity
-        INSERT INTO finance.InventoryBatchActivity (InventoryBatchId, ActivityId, CreateUserId, AmendUserId)
-        VALUES (@BatchId, @ActivityId, @UserId, @UserId);
+        INSERT INTO finance.InventoryBatchActivity (InventoryBatchId, ActivityId, Quantity, CreateUserId, AmendUserId)
+        VALUES (@BatchId, @ActivityId, @DeductNow, @UserId, @UserId);
 
         SET @QtyToDeduct = @QtyToDeduct - @DeductNow;
 

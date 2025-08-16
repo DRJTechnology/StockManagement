@@ -3,6 +3,7 @@
 	[Id]                INT IDENTITY (1, 1) NOT NULL,
     [InventoryBatchId]  INT         NOT NULL, 
     [ActivityId]        INT         NOT NULL, 
+    [Quantity]          INT         NOT NULL, 
     [Deleted]           BIT         DEFAULT ((0)) NOT NULL,
     [CreateUserId]      INT         NOT NULL,
     [CreateDate]        DATETIME    CONSTRAINT [DF_InventoryBatchAction_CreateDate] DEFAULT (getdate()) NOT NULL,
