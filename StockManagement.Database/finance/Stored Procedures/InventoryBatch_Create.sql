@@ -37,10 +37,11 @@ AS
     SET @NewInventoryBatchId = SCOPE_IDENTITY()
 
     -- Insert into InventoryBatchActivity
-    INSERT INTO finance.InventoryBatchActivity (InventoryBatchId,ActivityId,Deleted,CreateUserId,CreateDate,AmendUserId,AmendDate)
+    INSERT INTO finance.InventoryBatchActivity (InventoryBatchId,ActivityId,Quantity,Deleted,CreateUserId,CreateDate,AmendUserId,AmendDate)
     VALUES (
         @NewInventoryBatchId,
         @ActivityId,
+        @Quantity,
         0, -- Deleted
         1, -- CreateUserId
         GETDATE(),

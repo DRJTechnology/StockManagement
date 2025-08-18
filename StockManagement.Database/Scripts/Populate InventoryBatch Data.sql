@@ -143,6 +143,8 @@ UPDATE finance.InventoryBatch SET UnitCost = 227.95/500 WHERE PurchaseDate = '14
 UPDATE finance.InventoryBatch SET UnitCost = 62.80/12 WHERE PurchaseDate = '23 May 2025' AND ProductTypeId = 5 -- Print A4
 UPDATE finance.InventoryBatch SET UnitCost = 39.60/12 WHERE PurchaseDate = '23 May 2025' AND ProductTypeId = 3 -- Print A6
 
+UPDATE finance.InventoryBatch SET UnitCost = 11.00/1 WHERE PurchaseDate = '14 Jun 2025' AND ProductTypeId = 6 -- Print 30x30cm
+
 
 -- Optionally, show results
 SELECT * FROM finance.InventoryBatch
