@@ -32,3 +32,14 @@ from finance.TransactionDetail td
 inner join finance.Account a ON td.AccountId = a.Id
 inner join finance.AccountType act on a.AccountTypeId = act.Id
 where td.AccountId = 3
+
+
+-- Quantity of stock remaining at each location
+select l.[Name] AS LocationName, pt.ProductTypeName, p.ProductName, SUM(ib.QuantityRemaining) AS QuantityRemaining
+from finance.InventoryBatch ib
+INNER JOIN Product p ON ib.ProductId = p.Id
+INNER JOIN ProductType pt ON ib.ProductTypeId = pt.Id
+INNER JOIN Location l ON ib.LocationId = l.Id
+WHERE ib.Deleted = 0 AND ib.QuantityRemaining > 0
+GROUP BY l.[Name], pt.ProductTypeName, p.ProductName
+
