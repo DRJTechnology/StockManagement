@@ -4,7 +4,7 @@
     [ProductId]     INT         NOT NULL, 
     [ProductTypeId] INT         NOT NULL, 
     [LocationId]    INT         NOT NULL, 
-    [QuantityPurchased] INT     NOT NULL, 
+    [InitialQuantity]   INT     NOT NULL, 
     [QuantityRemaining] INT     NOT NULL, 
     [UnitCost]      MONEY       NOT NULL, 
     [PurchaseDate]  DATETIME    NOT NULL,

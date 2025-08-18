@@ -17,7 +17,7 @@ AS
     DECLARE @NewInventoryBatchId INT,
             @AmendDate DATETIME = GETDATE()
 
-    INSERT INTO finance.InventoryBatch (ProductId,ProductTypeId,LocationId,QuantityPurchased,QuantityRemaining,UnitCost,PurchaseDate,Deleted,CreateUserId,CreateDate,AmendUserId,AmendDate)
+    INSERT INTO finance.InventoryBatch (ProductId,ProductTypeId,LocationId,InitialQuantity,QuantityRemaining,UnitCost,PurchaseDate,Deleted,CreateUserId,CreateDate,AmendUserId,AmendDate)
     VALUES (
         @ProductId,
         @ProductTypeId,

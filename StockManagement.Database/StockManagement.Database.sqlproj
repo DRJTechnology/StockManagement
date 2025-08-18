@@ -234,6 +234,7 @@
     <Build Include="dbo\Tables\Location.sql" />
     <None Include="Scripts\Report-sql.sql" />
     <None Include="Scripts\Populate InventoryBatch Data.sql" />
+    <None Include="Scripts\Populate Transactions.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="StockManagement.Database.refactorlog" />

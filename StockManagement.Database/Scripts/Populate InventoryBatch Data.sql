@@ -201,7 +201,7 @@ WHERE a.Id in (1187,1188,1194,1198,1201,3359) -- ActivityIds where there is insu
 
 
 -- InventoryBatch records with zero unit cost       
-SELECT ib.Id, ib.PurchaseDate, ib.ProductId, p.ProductName, ib.ProductTypeId, pt.ProductTypeName, l.Name AS LocationName, ib.QuantityPurchased, ib.QuantityRemaining, iba.ActivityId, atn.ActionName
+SELECT ib.Id, ib.PurchaseDate, ib.ProductId, p.ProductName, ib.ProductTypeId, pt.ProductTypeName, l.Name AS LocationName, ib.InitialQuantity, ib.QuantityRemaining, iba.ActivityId, atn.ActionName
 from finance.InventoryBatch ib
 INNER JOIN finance.InventoryBatchActivity iba on ib.Id = iba.InventoryBatchId
 INNER JOIN Product p ON ib.ProductId = p.Id
