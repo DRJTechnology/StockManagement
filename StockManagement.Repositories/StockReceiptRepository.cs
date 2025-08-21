@@ -28,10 +28,6 @@ namespace StockManagement.Repositories
                     throw new UnauthorizedAccessException();
                 }
             }
-            catch (Exception ex)
-            {
-                throw;
-            }
         }
 
         public async Task<bool> DeleteAsync(int currentUserId, int StockReceiptId)
