@@ -1,9 +1,10 @@
 ﻿-- =========================================================================
 -- Author:		Dave Brown
 -- Create date: 30 Jul 2025
--- Description:	Creates a expense transactiona nd transaction detail records
+-- Description:	Creates a expense transaction and transaction detail records
 -- =========================================================================
 -- 04 Aug 2025 - Updated Expense procedure to handle Income too
+-- 20 Aug 2025 - Split the Owner’s Capital/Investment and Drawings accounts
 -- =========================================================================
 CREATE PROCEDURE [finance].[Transaction_CreateExpenseIncome]
 	@Success			BIT OUTPUT,
@@ -24,21 +25,23 @@ BEGIN
 	DECLARE @UpdateDate DATETIME
 	SET @UpdateDate = GetDate()
 
-	DECLARE @TransactionId			INT,
-			@Direction				SMALLINT,
-			@AssociatedAccountId	INT = 3, -- Owner’s Investment/Drawings account
-			@ContactName			NVARCHAR(100),
-			@ReferencePrefix		NVARCHAR(3)
+	DECLARE @TransactionId				INT,
+			@Direction					SMALLINT,
+			@AssociatedAccountId		INT, -- Owner’s Capital/Investment or Drawings account
+			@ContactName				NVARCHAR(100),
+			@ReferencePrefix			NVARCHAR(3)
 	
 	IF (@TransactionTypeId = 2) -- Expense
 	BEGIN
 		SET @Direction = 1 -- Debit for Expense
 		SET @ReferencePrefix = 'EXP' -- Prefix for Expense transactions
+		SET @AssociatedAccountId = 3 -- Owner’s Capital/Investment account
 	END
 	ELSE IF (@TransactionTypeId = 3) -- Income
 	BEGIN
 		SET @Direction = -1 -- Credit for Income
 		SET @ReferencePrefix = 'INC' -- Prefix for Income transactions
+		SET @AssociatedAccountId = 4 -- Owner’s Drawings account
 	END
 
 	DECLARE @Reference NVARCHAR(256) = @ReferencePrefix + '-' + CONVERT(NVARCHAR(20), @Date, 112) + '-' + CONVERT(VARCHAR(10), @ContactId)

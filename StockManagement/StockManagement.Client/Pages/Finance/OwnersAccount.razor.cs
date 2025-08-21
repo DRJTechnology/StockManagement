@@ -27,7 +27,7 @@ public partial class OwnersAccountBase : ComponentBase
     protected bool IsLoading { get; set; }
     protected bool FiltersExpanded { get; set; } = false;
 
-    const int OwnersAccountId = 3; // 3 is the ID for Owners Account
+    const int OwnersAccountId = -1; // -1 is used by stored procedure to incude both Owner’s Capital/Investment and Drawings
     protected TransactionFilterModel transactionFilterModel = new TransactionFilterModel() { AccountId = OwnersAccountId };
 
     protected override async Task OnInitializedAsync()

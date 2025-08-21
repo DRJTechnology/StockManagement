@@ -4,6 +4,8 @@
 -- Description:	Load transaction records
 -- ==========================================================
 -- 04 Aug 2025 - Dave Brown - ContactId filter added
+-- 21 Aug 2025 - Dave Brown - When AccountId = -1
+--							  return both Owner’s Capital/Investment and Owner’s Drawings
 -- ==========================================================
 CREATE PROCEDURE [finance].[TransactionDetail_LoadFiltered]
 	@FromDate			datetime = null,
@@ -26,7 +28,9 @@ BEGIN
 	INNER JOIN	finance.[Transaction] t ON td.TransactionId = t.Id
     WHERE	(@FromDate IS NULL OR td.[Date] >= @FromDate)
 		AND (@ToDate IS NULL OR td.[Date] < DATEADD(DAY, 1, @ToDate))
-		AND (ISNULL(@AccountId, 0) = 0 OR td.AccountId = @AccountId)
+		AND (ISNULL(@AccountId, 0) = 0 OR td.AccountId = @AccountId 
+			OR 
+			(@AccountId = -1 AND td.AccountId in (3,4))) -- Owner’s Capital/Investment and Owner’s Drawings
 		AND (ISNULL(@ContactId, 0) = 0 OR td.ContactId = @ContactId)
 		AND (ISNULL(@TransactionTypeId, 0) = 0 OR t.TransactionTypeId = @TransactionTypeId)
 		AND td.Deleted = 0
@@ -61,7 +65,9 @@ BEGIN
 	LEFT OUTER JOIN dbo.Contact c on td.ContactId = c.Id
 	WHERE	(@FromDate IS NULL OR td.[Date] >= @FromDate)
 		AND (@ToDate IS NULL OR td.[Date] < DATEADD(DAY, 1, @ToDate))
-		AND (ISNULL(@AccountId, 0) = 0 OR td.AccountId = @AccountId)
+		AND (ISNULL(@AccountId, 0) = 0 OR td.AccountId = @AccountId 
+			OR 
+			(@AccountId = -1 AND td.AccountId in (3,4))) -- Owner’s Capital/Investment and Owner’s Drawings
 		AND (ISNULL(@ContactId, 0) = 0 OR td.ContactId = @ContactId)
 		AND (ISNULL(@TransactionTypeId, 0) = 0 OR t.TransactionTypeId = @TransactionTypeId)
 		AND td.Deleted = 0

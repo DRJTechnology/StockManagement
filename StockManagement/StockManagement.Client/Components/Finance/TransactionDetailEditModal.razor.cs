@@ -33,6 +33,9 @@ public partial class TransactionDetailEditModalBase : ComponentBase
                 case TransactionTypeEnum.Income:
                     ContactType = "Customer";
                     break;
+                case TransactionTypeEnum.Sales:
+                    ContactType = "Supplier/Customer";
+                    break;
                 default:
                     break;
             }

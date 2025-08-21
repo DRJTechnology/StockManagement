@@ -3,6 +3,9 @@
 -- Create date: 14 Aug 2025
 -- Description:	Load transaction records by account type
 -- ==========================================================
+-- 21 Aug 2025 - Dave Brown - When AccountId = -1
+--							  return both Owner’s Capital/Investment and Owner’s Drawings
+-- ==========================================================
 CREATE PROCEDURE [finance].[TransactionDetail_LoadByAccount]
 	@AccountId		int,
 	@FromDate		datetime = null,
@@ -29,7 +32,9 @@ AS
 	INNER JOIN	finance.[TransactionType] tt ON t.TransactionTypeId = tt.Id
 	INNER JOIN	finance.Account a ON td.AccountId = a.Id
 	LEFT OUTER JOIN dbo.Contact c on td.ContactId = c.Id
-	WHERE	a.Id = @AccountId
+	WHERE	(a.Id = @AccountId 
+			OR 
+			(@AccountId = -1 AND a.Id in (3,4)))
 		AND (@FromDate IS NULL OR td.[Date] >= @FromDate)
 		AND (@ToDate IS NULL OR td.[Date] < DATEADD(DAY, 1, @ToDate))
 		AND td.Deleted = 0

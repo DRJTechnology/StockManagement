@@ -221,9 +221,10 @@
       <AnsiNulls>Off</AnsiNulls>
     </Build>
     <Build Include="finance\Stored Procedures\TransactionDetail_LoadTotalFiltered.sql" />
+    <Build Include="finance\Stored Procedures\Inventory_SaleOfStock.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Scripts\PopulateFinanceTables.sql" />
+    <None Include="Scripts\1. PopulateFinanceTables.sql" />
     <Build Include="dbo\Tables\ContactType.sql" />
     <Build Include="dbo\Tables\Contact.sql" />
     <Build Include="dbo\Stored Procedures\Contact_LoadByType.sql" />
@@ -233,8 +234,8 @@
     <Build Include="dbo\Stored Procedures\Location_Update.sql" />
     <Build Include="dbo\Tables\Location.sql" />
     <None Include="Scripts\Report-sql.sql" />
-    <None Include="Scripts\Populate InventoryBatch Data.sql" />
-    <None Include="Scripts\Populate Transactions.sql" />
+    <None Include="Scripts\2. Populate InventoryBatch Data.sql" />
+    <None Include="Scripts\3. Populate Transactions.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="StockManagement.Database.refactorlog" />
