@@ -19,6 +19,22 @@
                             <label>Name:</label>
                             <InputText class="form-control" @bind-Value="EditProductType.ProductTypeName" autocomplete="off" />
                         </div>
+                        <div class="mb-2">
+                            <label>Default Cost Price:</label>
+                            <InputNumber class="form-control"
+                                         @bind-Value="EditProductType.DefaultCostPrice"
+                                         autocomplete="off"
+                                         step="0.01"
+                                         min="0" />
+                        </div>
+                        <div class="mb-2">
+                            <label>Default sale Price:</label>
+                            <InputNumber class="form-control"
+                                         @bind-Value="EditProductType.DefaultSalePrice"
+                                         autocomplete="off"
+                                         step="0.01"
+                                         min="0" />
+                        </div>
                         <div class="d-flex justify-content-end">
                             <button class="btn btn-success" type="submit">Save</button>
                             <button class="btn btn-secondary ms-2" type="button" @onclick="OnCancel">Cancel</button>

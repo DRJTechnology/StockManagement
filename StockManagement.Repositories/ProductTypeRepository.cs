@@ -18,6 +18,8 @@ namespace StockManagement.Repositories
             parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
             parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
             parameters.Add("@ProductTypeName", productTypeDto.ProductTypeName);
+            parameters.Add("@DefaultCostPrice", productTypeDto.DefaultCostPrice);
+            parameters.Add("@DefaultSalePrice", productTypeDto.DefaultSalePrice);
             parameters.Add("@Deleted", productTypeDto.Deleted);
             parameters.Add("@CurrentUserId", currentUserId);
 
@@ -71,6 +73,8 @@ namespace StockManagement.Repositories
             parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
             parameters.Add("@Id", productTypeDto.Id);
             parameters.Add("@ProductTypeName", productTypeDto.ProductTypeName);
+            parameters.Add("@DefaultCostPrice", productTypeDto.DefaultCostPrice);
+            parameters.Add("@DefaultSalePrice", productTypeDto.DefaultSalePrice);
             parameters.Add("@Deleted", productTypeDto.Deleted);
             parameters.Add("@CurrentUserId", currentUserId);
 

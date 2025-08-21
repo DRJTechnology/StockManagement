@@ -1,13 +1,17 @@
-﻿-- =========================================================
+﻿-- ===========================================================
 -- Author:		Dave Brown
 -- Create date: 23 May 2025
 -- Description:	Update ProductType
--- =========================================================
+-- ===========================================================
+-- 21 Aug 2025 - Dave Brown - Added Default Cost and Sale price
+-- ===========================================================
 CREATE PROCEDURE [dbo].[ProductType_Update]
 (
 	@Success bit output,
 	@Id int,
 	@ProductTypeName nvarchar(50),
+	@DefaultCostPrice MONEY,
+	@DefaultSalePrice MONEY,
 	@Deleted bit,
 	@CurrentUserId int
 )
@@ -21,6 +25,8 @@ BEGIN
 	UPDATE [ProductType]
 	SET
 		[ProductTypeName] = @ProductTypeName,
+		[DefaultCostPrice] = @DefaultCostPrice,
+		[DefaultSalePrice] = @DefaultSalePrice,
 		[Deleted] = @Deleted,
 		[AmendUserID] = @CurrentUserId,
 		[AmendDate] = GetDate()

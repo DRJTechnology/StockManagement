@@ -9,23 +9,30 @@ namespace StockManagement.Repositories
     {
         public async Task<int> CreateAsync(int currentUserId, StockReceiptDto StockReceiptDto)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
-            parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            parameters.Add("@Date", StockReceiptDto.Date);
-            parameters.Add("@SupplierId", StockReceiptDto.ContactId);
-            parameters.Add("@Deleted", StockReceiptDto.Deleted);
-            parameters.Add("@CurrentUserId", currentUserId);
-
-            await dbConnection.ExecuteAsync("dbo.StockReceipt_Create", parameters, commandType: CommandType.StoredProcedure);
-
-            if (parameters.Get<bool>("@Success"))
+            try
             {
-                return parameters.Get<int>("@Id");
+                var parameters = new DynamicParameters();
+                parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+                parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                parameters.Add("@Date", StockReceiptDto.Date);
+                parameters.Add("@SupplierId", StockReceiptDto.ContactId);
+                parameters.Add("@Deleted", StockReceiptDto.Deleted);
+                parameters.Add("@CurrentUserId", currentUserId);
+
+                await dbConnection.ExecuteAsync("dbo.StockReceipt_Create", parameters, commandType: CommandType.StoredProcedure);
+
+                if (parameters.Get<bool>("@Success"))
+                {
+                    return parameters.Get<int>("@Id");
+                }
+                else
+                {
+                    throw new UnauthorizedAccessException();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                throw new UnauthorizedAccessException();
+                throw;
             }
         }
 

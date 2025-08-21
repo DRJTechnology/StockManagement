@@ -9,6 +9,9 @@ namespace StockManagement.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "A product type name is required.")]
         public string ProductTypeName { get; set; } = string.Empty;
 
+        public decimal DefaultCostPrice { get; set; }
+        public decimal DefaultSalePrice { get; set; }
+
         public bool Deleted { get; set; }
     }
 }
