@@ -83,14 +83,14 @@ ADD CONSTRAINT FK_DeliveryNote_Location
 FOREIGN KEY (LocationId) REFERENCES dbo.Location(Id);
 GO
 
-EXEC sp_rename 'dbo.StockReceipt.SupplierId', 'ContactId', 'COLUMN';
+EXEC sp_rename 'dbo.StockOrder.SupplierId', 'ContactId', 'COLUMN';
 
-ALTER TABLE dbo.StockReceipt
-DROP CONSTRAINT FK_StockReceipt_Supplier;
+ALTER TABLE dbo.StockOrder
+DROP CONSTRAINT FK_StockOrder_Supplier;
 GO
 
-ALTER TABLE dbo.StockReceipt
-ADD CONSTRAINT FK_StockReceipt_Contact
+ALTER TABLE dbo.StockOrder
+ADD CONSTRAINT FK_StockOrder_Contact
 FOREIGN KEY (ContactId) REFERENCES dbo.Contact(Id);
 GO
 

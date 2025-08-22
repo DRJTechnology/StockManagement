@@ -26,7 +26,7 @@ namespace StockManagement.Models
 
         public int DeliveryNoteId { get; set; }
 
-        public int StockReceiptId { get; set; }
+        public int StockOrderId { get; set; }
 
         public bool Deleted { get; set; }
     }

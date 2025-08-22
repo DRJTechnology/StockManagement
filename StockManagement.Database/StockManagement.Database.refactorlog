@@ -8,9 +8,9 @@
     <Property Name="NewName" Value="Name" />
   </Operation>
   <Operation Name="Rename Refactor" Key="4cf194a5-6b07-4d79-a9ce-17b1be1f55c3" ChangeDateTime="07/25/2025 14:06:46">
-    <Property Name="ElementName" Value="[dbo].[StockReceipt].[SupplierId]" />
+    <Property Name="ElementName" Value="[dbo].[StockOrder].[SupplierId]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
-    <Property Name="ParentElementName" Value="[dbo].[StockReceipt]" />
+    <Property Name="ParentElementName" Value="[dbo].[StockOrder]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ContactId" />
   </Operation>
@@ -20,5 +20,12 @@
     <Property Name="ParentElementName" Value="[finance].[InventoryBatch]" />
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="InitialQuantity" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="18f0a01e-64a0-426f-946c-08dbc0e34021" ChangeDateTime="08/22/2025 08:57:09">
+    <Property Name="ElementName" Value="[dbo].[StockOrder].[StockRecorded]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[StockOrder]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StockOrderRecorded" />
   </Operation>
 </Operations>

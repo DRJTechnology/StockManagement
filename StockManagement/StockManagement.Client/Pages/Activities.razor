@@ -221,9 +221,9 @@ else
                                         <i class="bi bi-clipboard"></i>
                                     </button>
                                 }
-                                else if (activity.StockReceiptId > 0)
+                                else if (activity.StockOrderId > 0)
                                 {
-                                    <button class="btn btn-link" title="Show Delivery Note" @onclick="() => OpenStockReceipt(activity.StockReceiptId)">
+                                    <button class="btn btn-link" title="Show Delivery Note" @onclick="() => OpenStockOrder(activity.StockOrderId)">
                                         <i class="bi bi-box-seam"></i>
                                     </button>
                                 }

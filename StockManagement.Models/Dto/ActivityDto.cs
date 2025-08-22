@@ -12,7 +12,7 @@ namespace StockManagement.Models.Dto
         public int LocationId { get; set; }
         public string LocationName { get; set; } = string.Empty;
         public int DeliveryNoteId { get; set; }
-        public int StockReceiptId { get; set; }
+        public int StockOrderId { get; set; }
         public int Quantity { get; set; }
     }
 }

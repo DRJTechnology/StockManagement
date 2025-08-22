@@ -55,7 +55,7 @@ BEGIN
         l.[Name] AS LocationName,
         a.[Quantity],
         dnd.DeliveryNoteId,
-        srd.StockReceiptId,
+        srd.StockOrderId,
         a.[Deleted],
         a.[AmendUserID],
         a.[AmendDate]
@@ -65,7 +65,7 @@ BEGIN
     INNER JOIN [Location] l ON a.[LocationId] = l.Id
     INNER JOIN [Action] act ON a.[ActionId] = act.Id
     LEFT OUTER JOIN [DeliveryNoteDetail] dnd ON a.DeliveryNoteDetailId = dnd.Id
-    LEFT OUTER JOIN [StockReceiptDetail] srd ON a.StockReceiptDetailId = srd.Id
+    LEFT OUTER JOIN [StockOrderDetail] srd ON a.StockOrderDetailId = srd.Id
     WHERE
         a.[Deleted] <> 1
         AND (@ActivityDate IS NULL OR CAST(a.[ActivityDate] AS DATE) = CAST(@ActivityDate AS DATE))

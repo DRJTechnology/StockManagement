@@ -113,7 +113,7 @@ public partial class ActivitiesBase : ComponentBase
         Navigation.NavigateTo($"/delivery-note/{deliveryNoteId}");
     }
 
-    protected void OpenStockReceipt(int stockReceiptId)
+    protected void OpenStockOrder(int stockReceiptId)
     {
         Navigation.NavigateTo($"/stock-receipt/{stockReceiptId}");
     }

@@ -133,16 +133,16 @@
     <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Delete.sql" />
     <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Create.sql" />
     <Build Include="dbo\Stored Procedures\DeliveryNote_Delete.sql" />
-    <Build Include="dbo\Tables\StockReceipt.sql" />
-    <Build Include="dbo\Tables\StockReceiptDetail.sql" />
-    <Build Include="dbo\Stored Procedures\StockReceipt_LoadAll.sql" />
-    <Build Include="dbo\Stored Procedures\StockReceipt_Create.sql" />
-    <Build Include="dbo\Stored Procedures\StockReceipt_LoadById.sql" />
-    <Build Include="dbo\Stored Procedures\StockReceipt_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\StockReceiptDetail_Create.sql" />
-    <Build Include="dbo\Stored Procedures\StockReceiptDetail_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\StockReceiptDetail_Update.sql" />
-    <Build Include="dbo\Stored Procedures\StockReceipt_Update.sql" />
+    <Build Include="dbo\Tables\StockOrder.sql" />
+    <Build Include="dbo\Tables\StockOrderDetail.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrder_LoadAll.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrder_Create.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrder_LoadById.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrder_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrderDetail_Create.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrderDetail_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrderDetail_Update.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrder_Update.sql" />
     <Build Include="dbo\Tables\Setting.sql" />
     <Build Include="dbo\Stored Procedures\Setting_LoadAll.sql" />
     <Build Include="dbo\Stored Procedures\Setting_Update.sql" />
@@ -236,6 +236,7 @@
     <None Include="Scripts\Report-sql.sql" />
     <None Include="Scripts\2. Populate InventoryBatch Data.sql" />
     <None Include="Scripts\3. Populate Transactions.sql" />
+    <None Include="Scripts\0. PreSchemaUpdate.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="StockManagement.Database.refactorlog" />

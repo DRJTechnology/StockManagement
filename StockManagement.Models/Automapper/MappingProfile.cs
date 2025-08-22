@@ -43,11 +43,11 @@ namespace StockManagement.Models.Automapper
             CreateMap<SettingDto, SettingResponseModel>();
             CreateMap<SettingEditModel, SettingDto>();
 
-            CreateMap<StockReceiptDetailDto, StockReceiptDetailResponseModel>();
-            CreateMap<StockReceiptDetailEditModel, StockReceiptDetailDto>();
+            CreateMap<StockOrderDetailDto, StockOrderDetailResponseModel>();
+            CreateMap<StockOrderDetailEditModel, StockOrderDetailDto>();
 
-            CreateMap<StockReceiptDto, StockReceiptResponseModel>();
-            CreateMap<StockReceiptEditModel, StockReceiptDto>();
+            CreateMap<StockOrderDto, StockOrderResponseModel>();
+            CreateMap<StockOrderEditModel, StockOrderDto>();
 
             CreateMap<TransactionDetailDto, TransactionDetailResponseModel>()
                 .ForMember(dest => dest.TransactionType, opt => opt.MapFrom(src => (TransactionTypeEnum)src.TransactionTypeId));
