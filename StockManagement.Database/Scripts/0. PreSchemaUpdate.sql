@@ -12,7 +12,8 @@ CREATE TABLE [dbo].[StockOrder] (
     [Date]                  DATETIME NOT NULL,
     [ContactId]             INT      NOT NULL,
     [PaymentRecorded]       BIT      CONSTRAINT [DF_StockOrder_PaymentRecorded] DEFAULT ((0)) NOT NULL,
-    [StockOrderRecorded]    BIT      CONSTRAINT [DF_StockOrder_StockOrderRecorded] DEFAULT ((0)) NOT NULL,
+    [StockReceiptRecorded]  BIT      CONSTRAINT [DF_StockOrder_StockOrderRecorded] DEFAULT ((0)) NOT NULL,
+    [TransactionId]		    INT      NULL,
     [Deleted]               BIT      CONSTRAINT [DF_StockOrder_Deleted] DEFAULT ((0)) NOT NULL,
     [AmendUserID]           INT      NOT NULL,
     [AmendDate]             DATETIME CONSTRAINT [DF_StockOrder_AmendDate] DEFAULT (sysdatetime()) NOT NULL,
@@ -39,7 +40,7 @@ GO
 
 -- Copy the data from the StockReceipt table to the StockOrder table, maintaining the Id values
 SET IDENTITY_INSERT [dbo].[StockOrder] ON;
-INSERT INTO [dbo].[StockOrder] ([Id], [Date], [ContactId], [PaymentRecorded], [StockOrderRecorded], [Deleted], [AmendUserID], [AmendDate])
+INSERT INTO [dbo].[StockOrder] ([Id], [Date], [ContactId], [PaymentRecorded], [StockReceiptRecorded], [Deleted], [AmendUserID], [AmendDate])
 SELECT [Id], [Date], [ContactId], 1, 1, [Deleted], [AmendUserID], [AmendDate]
 FROM [dbo].[StockReceipt]
 SET IDENTITY_INSERT [dbo].[StockOrder] OFF;

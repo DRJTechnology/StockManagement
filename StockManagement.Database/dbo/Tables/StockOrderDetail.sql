@@ -1,9 +1,10 @@
 ﻿CREATE TABLE [dbo].[StockOrderDetail] (
     [Id]             INT      IDENTITY (1, 1) NOT NULL,
-    [StockOrderId] INT      NOT NULL,
+    [StockOrderId] INT        NOT NULL,
     [ProductId]      INT      NOT NULL,
     [ProductTypeId]  INT      NOT NULL,
     [Quantity]       INT      NOT NULL,
+    [InitialInventoryBatchId] INT NULL,
     [Deleted]        BIT      CONSTRAINT [DF_StockOrderDetail_Deleted] DEFAULT ((0)) NOT NULL,
     [AmendUserID]    INT      NOT NULL,
     [AmendDate]      DATETIME CONSTRAINT [DF_StockOrderDetail_AmendDate] DEFAULT (sysdatetime()) NOT NULL,

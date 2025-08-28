@@ -27,10 +27,11 @@ BEGIN
     IF @ActionId = 1 -- Add new stock add to
     BEGIN
         EXEC	[finance].[InventoryBatch_Create]
+        @InventoryBatchStatusId = 1, -- Active
 		@ProductId = @ProductId,
 		@ProductTypeId = @ProductTypeId,
 		@LocationId = @LocationId,
-		@Quantity = @Quantity,
+		@InitialQuantity = @Quantity,
         @UnitCost = 0,
 		@ActivityDate = @ActivityDate,
 		@ActivityId = @Id,
@@ -103,7 +104,7 @@ BEGIN
 		--@ProductId = @ProductId,
 		--@ProductTypeId = @ProductTypeId,
 		--@LocationId = @LocationId,
-		--@Quantity = @Quantity,
+		--@InitialQuantity = @Quantity,
   --      @UnitCost = 0,
 		--@ActivityDate = @ActivityDate,
 		--@ActivityId = @Id,
@@ -114,10 +115,11 @@ BEGIN
     IF  @ActionId = 2 -- Move from stock room to
     BEGIN
         EXEC	[finance].[InventoryBatch_Create]
+        @InventoryBatchStatusId = 1, -- Active
 		@ProductId = @ProductId,
 		@ProductTypeId = @ProductTypeId,
 		@LocationId = @LocationId,
-		@Quantity = @Quantity,
+		@InitialQuantity = @Quantity,
         @UnitCost = 0,
 		@ActivityDate = @ActivityDate,
 		@ActivityId = @Id,
@@ -147,10 +149,11 @@ BEGIN
 
         -- Add to Stock room
         EXEC	[finance].[InventoryBatch_Create]
+        @InventoryBatchStatusId = 1, -- Active
         @ProductId = @ProductId,
         @ProductTypeId = @ProductTypeId,
         @LocationId = 1, -- stock room
-        @Quantity = @Quantity,
+        @InitialQuantity = @Quantity,
         @UnitCost = 0,
         @ActivityDate = @ActivityDate,
         @ActivityId = @Id,

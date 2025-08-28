@@ -11,35 +11,37 @@ BEGIN
 	DECLARE @Err int
 
 	SELECT
-		sr.[Id],
-		sr.[Date],
-		sr.[ContactId],
+		so.[Id],
+		so.[Date],
+		so.[ContactId],
 		c.[Name] AS ContactName,
-		sr.[Deleted],
-		sr.[AmendUserID],
-		sr.[AmendDate]
-	FROM [StockOrder] sr
-	INNER JOIN [Contact] c ON sr.ContactId = c.Id
+		so.[PaymentRecorded],
+		so.[StockReceiptRecorded],
+		so.[Deleted],
+		so.[AmendUserID],
+		so.[AmendDate]
+	FROM [StockOrder] so
+	INNER JOIN [Contact] c ON so.ContactId = c.Id
 	WHERE
-		sr.[Deleted] <> 1
-		AND sr.[Id] = @Id
+		so.[Deleted] <> 1
+		AND so.[Id] = @Id
 
 	SELECT
-		srd.[Id],
-		srd.[ProductId],
+		sod.[Id],
+		sod.[ProductId],
 		p.[ProductName],
-		srd.[ProductTypeId],
+		sod.[ProductTypeId],
 		pt.[ProductTypeName],
-		srd.Quantity,
-		srd.[Deleted],
-		srd.[AmendUserID],
-		srd.[AmendDate]
-	FROM [StockOrderDetail] srd
-	INNER JOIN [Product] p ON srd.ProductId = p.Id
-	INNER JOIN [ProductType] pt ON srd.ProductTypeId = pt.Id
+		sod.Quantity,
+		sod.[Deleted],
+		sod.[AmendUserID],
+		sod.[AmendDate]
+	FROM [StockOrderDetail] sod
+	INNER JOIN [Product] p ON sod.ProductId = p.Id
+	INNER JOIN [ProductType] pt ON sod.ProductTypeId = pt.Id
 	WHERE
-		srd.[Deleted] <> 1
-		AND srd.[StockOrderId] = @Id
+		sod.[Deleted] <> 1
+		AND sod.[StockOrderId] = @Id
 
 	SET @Err = @@Error
 

@@ -1,3 +1,4 @@
+using StockManagement.Models;
 using StockManagement.Models.Dto;
 
 namespace StockManagement.Repositories.Interfaces
@@ -9,5 +10,6 @@ namespace StockManagement.Repositories.Interfaces
         Task<bool> UpdateAsync(int currentUserId, StockOrderDto StockOrderDto);
         Task<List<StockOrderDto>> GetAllAsync();
         Task<StockOrderDto> GetByIdAsync(int StockOrderId);
+        Task<bool> CreateStockOrderPayments(int currentUserId, StockOrderPaymentsCreateModel stockOrderDetailPayments);
     }
 }

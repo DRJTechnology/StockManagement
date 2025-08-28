@@ -61,3 +61,10 @@ INSERT INTO [finance].[Account] (Id,[AccountTypeId],[Name],[Notes],[Active],[Del
 VALUES (15,4,'Charity Donation','',1,0,0,GETDATE(),0,GETDATE())
 SET IDENTITY_INSERT [finance].[Account] OFF;
 
+-- Populate the InventoryBatchStatus table with initial data
+INSERT INTO [finance].[InventoryBatchStatus] ([Id],[Status],[Deleted],[CreateUserId],[CreateDate],[AmendUserId],[AmendDate])
+VALUES (1,'Pending',0,0,GETDATE(),0,GETDATE())
+INSERT INTO [finance].[InventoryBatchStatus] ([Id],[Status],[Deleted],[CreateUserId],[CreateDate],[AmendUserId],[AmendDate])
+VALUES (2,'Active',0,0,GETDATE(),0,GETDATE())
+INSERT INTO [finance].[InventoryBatchStatus] ([Id],[Status],[Deleted],[CreateUserId],[CreateDate],[AmendUserId],[AmendDate])
+VALUES (3,'Depleted',0,0,GETDATE(),0,GETDATE())

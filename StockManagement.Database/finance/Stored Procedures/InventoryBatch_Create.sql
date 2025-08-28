@@ -1,52 +1,59 @@
 ﻿-- =========================================================================
 -- Author:		Dave Brown
 -- Create date: 10 Aug 2025
--- Description:	Cteate Inventory Batch
+-- Description:	Create Inventory Batch
 -- =========================================================================
 CREATE PROCEDURE [finance].[InventoryBatch_Create]
-    @ProductId INT,
-    @ProductTypeId INT,
-    @LocationId INT,
-    @Quantity INT,
-    @UnitCost MONEY,
-    @ActivityDate DATETIME,
-    @ActivityId INT,
-    @UserId INT
+	@Success    BIT OUTPUT,
+	@Id         INT OUTPUT, 
+    @InventoryBatchStatusId SMALLINT,
+    @ProductId      INT,
+    @ProductTypeId  INT,
+    @LocationId     INT,
+    @InitialQuantity INT,
+    @UnitCost       MONEY,
+    @ActivityDate   DATETIME,
+    @ActivityId     INT,
+    @UserId         INT
 AS
+BEGIN
+	SET NOCOUNT OFF
+	DECLARE @Err int
 
-    DECLARE @NewInventoryBatchId INT,
-            @AmendDate DATETIME = GETDATE()
+    DECLARE @AmendDate DATETIME = GETDATE()
 
-    INSERT INTO finance.InventoryBatch (ProductId,ProductTypeId,LocationId,InitialQuantity,QuantityRemaining,UnitCost,PurchaseDate,Deleted,CreateUserId,CreateDate,AmendUserId,AmendDate)
+    INSERT INTO finance.InventoryBatch (InventoryBatchStatusId, ProductId,ProductTypeId,LocationId,InitialQuantity,QuantityRemaining,UnitCost,PurchaseDate,Deleted,CreateUserId,CreateDate,AmendUserId,AmendDate)
     VALUES (
+        @InventoryBatchStatusId,
         @ProductId,
         @ProductTypeId,
         @LocationId,
-        @Quantity,
-        @Quantity,
+        @InitialQuantity,
+        @InitialQuantity,
         @UnitCost,
         @ActivityDate,
         0, -- Deleted
         @UserId, -- CreateUserId
-        GETDATE(),
+        @AmendDate,
         @UserId, -- AmendUserId
         @AmendDate
     )
 
     -- Get the newly created InventoryBatch Id
-    SET @NewInventoryBatchId = SCOPE_IDENTITY()
+    SET @Id = SCOPE_IDENTITY()
 
     -- Insert into InventoryBatchActivity
     INSERT INTO finance.InventoryBatchActivity (InventoryBatchId,ActivityId,Quantity,Deleted,CreateUserId,CreateDate,AmendUserId,AmendDate)
     VALUES (
-        @NewInventoryBatchId,
+        @Id,
         @ActivityId,
-        @Quantity,
+        @InitialQuantity,
         0, -- Deleted
         1, -- CreateUserId
-        GETDATE(),
+        @AmendDate,
         1, -- AmendUserId
         @AmendDate
     )
 
-RETURN 0
+	RETURN @Err
+END

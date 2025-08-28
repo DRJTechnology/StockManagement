@@ -185,9 +185,6 @@
     <Build Include="finance\Stored Procedures\Account_Update.sql">
       <AnsiNulls>Off</AnsiNulls>
     </Build>
-    <Build Include="finance\Stored Procedures\BankStatement_Upload.sql">
-      <AnsiNulls>Off</AnsiNulls>
-    </Build>
     <Build Include="finance\Stored Procedures\Account_Delete.sql">
       <AnsiNulls>Off</AnsiNulls>
     </Build>
@@ -222,6 +219,11 @@
     </Build>
     <Build Include="finance\Stored Procedures\TransactionDetail_LoadTotalFiltered.sql" />
     <Build Include="finance\Stored Procedures\Inventory_SaleOfStock.sql" />
+    <Build Include="finance\Tables\InventoryBatchStatus.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\User Defined Types\StockPaymentTableType.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrder_CreateStockOrderPayments.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\1. PopulateFinanceTables.sql" />

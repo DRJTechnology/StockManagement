@@ -78,6 +78,7 @@ builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<IDeliveryNoteDetailRepository, DeliveryNoteDetailRepository>();
 builder.Services.AddScoped<IDeliveryNoteRepository, DeliveryNoteRepository>();
+builder.Services.AddScoped<IInventoryBatchRepository, InventoryBatchRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();

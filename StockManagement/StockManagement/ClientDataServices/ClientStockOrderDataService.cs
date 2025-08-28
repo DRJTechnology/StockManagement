@@ -10,6 +10,11 @@ namespace StockManagement.ClientDataServices
             throw new NotImplementedException();
         }
 
+        public Task<bool> CreateStockOrderPayments(StockOrderPaymentsCreateModel stockOrderDetailPayments)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<bool> DeleteAsync(int entityId)
         {
             throw new NotImplementedException();

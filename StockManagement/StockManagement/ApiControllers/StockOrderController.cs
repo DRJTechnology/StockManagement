@@ -125,5 +125,30 @@ namespace StockManagement.ApiControllers
                 };
             }
         }
+
+        [HttpPost("CreateStockOrderPayments")]
+        public async Task<ApiResponse> CreateStockOrderPayments(StockOrderPaymentsCreateModel stockOrderDetailPayments)
+        {
+            try
+            {
+                var appUser = await userAccessor.GetRequiredUserAsync(HttpContext);
+                var success = await StockOrderService.CreateStockOrderPayments(appUser.Id, stockOrderDetailPayments);
+
+                return new ApiResponse()
+                {
+                    Success = success,
+                };
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Post");
+                return new ApiResponse()
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message,
+                };
+            }
+        }
+
     }
 }

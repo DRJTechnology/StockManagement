@@ -36,9 +36,15 @@ public partial class StockOrderBase : ComponentBase
 
     protected bool IsLoading { get; set; }
     protected StockOrderResponseModel EditStockOrder { get; set; } = new();
+    //public List<StockOrderDetailPaymentResponseModel> PaymentDetailList { get; set; } = new();
+    public StockOrderPaymentsCreateModel PaymentDetail { get; set; } = new();
+
+
+
     protected StockOrderDetailEditModel EditStockOrderDetail { get; set; } = new();
 
     protected bool ShowEditDetailForm { get; set; }
+    protected bool ShowRecordPaymentForm { get; set; }
 
     protected EditContext editContext;
     protected bool IsFormValid = false;
@@ -127,7 +133,43 @@ public partial class StockOrderBase : ComponentBase
 
     protected async Task RecordPayment()
     {
+        var description = "Purchase of stock (";
+        description += string.Join(", ", EditStockOrder.DetailList.Select(d => d.ProductTypeName).Distinct());
+        description += ")";
+
+        PaymentDetail = new StockOrderPaymentsCreateModel()
+        {
+            StockOrderId = EditStockOrder.Id,
+            Cost = 0,
+            PaymentDate = DateTime.Now,
+            Description = description,
+            ContactId = EditStockOrder.ContactId,
+            StockOrderDetailPayments = EditStockOrder.DetailList
+            .Select(detail => new StockOrderDetailPaymentResponseModel
+            {
+                Id = detail.Id,
+                StockOrderId = detail.StockOrderId,
+                ProductId = detail.ProductId,
+                ProductName = detail.ProductName,
+                ProductTypeId = detail.ProductTypeId,
+                ProductTypeName = detail.ProductTypeName,
+                Quantity = detail.Quantity,
+                Deleted = detail.Deleted,
+                UnitPrice = Lookups.ProductTypeList.FirstOrDefault(pt => pt.Id == detail.ProductTypeId)!.DefaultCostPrice,
+                Total = Lookups.ProductTypeList.FirstOrDefault(pt => pt.Id == detail.ProductTypeId)!.DefaultCostPrice * detail.Quantity,
+            })
+            .ToList()
+        };
+
+        ShowRecordPaymentForm = true;
     }
+
+    protected async Task HandleRecordPayment()
+    {
+        var response = await StockOrderService.CreateStockOrderPayments(PaymentDetail);
+        ShowRecordPaymentForm = false;
+    }
+
 
     protected async Task ReceiveStock()
     {
@@ -136,6 +178,10 @@ public partial class StockOrderBase : ComponentBase
     protected void CancelDetailEdit()
     {
         ShowEditDetailForm = false;
+    }
+    protected void CancelRecordPayment()
+    {
+        ShowRecordPaymentForm = false;
     }
     protected async Task HandleValidDetailSubmit()
     {

@@ -7,5 +7,8 @@ namespace StockManagement.Models.Dto
         public string ContactName { get; set; } = string.Empty;
         public bool Deleted { get; set; }
         public List<StockOrderDetailDto> DetailList { get; set; } = new List<StockOrderDetailDto>();
+        public bool PaymentRecorded { get; set; }
+        public bool StockRecorded { get; set; }
+
     }
 }
