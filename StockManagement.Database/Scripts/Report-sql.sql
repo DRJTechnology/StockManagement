@@ -35,7 +35,7 @@ where td.AccountId = 3
 
 
 -- Quantity of stock remaining at each location
-select l.[Name] AS LocationName, pt.ProductTypeName, p.ProductName, SUM(ib.QuantityRemaining) AS QuantityRemaining
+select l.[Name] AS LocationName, pt.ProductTypeName, p.ProductName, SUM(ib.QuantityRemaining) AS ActiveQuantity, SUM(ib.QuantityRemaining) AS PendingQuantity
 from finance.InventoryBatch ib
 INNER JOIN Product p ON ib.ProductId = p.Id
 INNER JOIN ProductType pt ON ib.ProductTypeId = pt.Id
@@ -43,3 +43,16 @@ INNER JOIN Location l ON ib.LocationId = l.Id
 WHERE ib.Deleted = 0 AND ib.InventoryBatchStatusId = 2 /* active */ AND ib.QuantityRemaining > 0
 GROUP BY l.[Name], pt.ProductTypeName, p.ProductName
 
+-- Quantity of stock remaining at each location
+SELECT
+    l.[Name] AS LocationName,
+    pt.ProductTypeName,
+    p.ProductName,
+    SUM(CASE WHEN ib.InventoryBatchStatusId = 2 THEN ib.QuantityRemaining ELSE 0 END) AS ActiveQuantity,
+    SUM(CASE WHEN ib.InventoryBatchStatusId = 1 THEN ib.QuantityRemaining ELSE 0 END) AS PendingQuantity
+FROM finance.InventoryBatch ib
+INNER JOIN Product p ON ib.ProductId = p.Id
+INNER JOIN ProductType pt ON ib.ProductTypeId = pt.Id
+INNER JOIN Location l ON ib.LocationId = l.Id
+WHERE ib.Deleted = 0 AND ib.QuantityRemaining > 0
+GROUP BY l.[Name], pt.ProductTypeName, p.ProductName

@@ -8,6 +8,7 @@
         public string ProductTypeName { get; set; } = string.Empty;
         public int ProductId { get; set; }
         public string ProductName { get; set; } = string.Empty;
-        public int TotalQuantity { get; set; }
+        public int ActiveQuantity { get; set; }
+        public int PendingQuantity { get; set; }
     }
 }

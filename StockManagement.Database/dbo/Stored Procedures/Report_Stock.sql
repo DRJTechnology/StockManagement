@@ -19,12 +19,14 @@ BEGIN
 
     IF @LocationId = -1 -- Totals (not grouped by Location)
     BEGIN
-        SELECT  -1 AS LocationId, 'Totals' AS LocationName, pt.Id AS ProductTypeId, pt.ProductTypeName, p.Id AS ProductId, p.ProductName, SUM(ib.QuantityRemaining) AS TotalQuantity
+        SELECT  -1 AS LocationId, 'Totals' AS LocationName, pt.Id AS ProductTypeId, pt.ProductTypeName, p.Id AS ProductId, p.ProductName,
+                SUM(CASE WHEN ib.InventoryBatchStatusId = 2 THEN ib.QuantityRemaining ELSE 0 END) AS ActiveQuantity,
+                SUM(CASE WHEN ib.InventoryBatchStatusId = 1 THEN ib.QuantityRemaining ELSE 0 END) AS PendingQuantity
         FROM    finance.InventoryBatch ib
         INNER JOIN Product p ON ib.ProductId = p.Id
         INNER JOIN ProductType pt ON ib.ProductTypeId = pt.Id
         INNER JOIN Location l ON ib.LocationId = l.Id
-        WHERE ib.Deleted = 0 AND ib.InventoryBatchStatusId = 2 /* active */ AND ib.QuantityRemaining > 0
+        WHERE ib.Deleted = 0 AND ib.QuantityRemaining > 0
             AND (@ProductId = 0 OR ib.ProductId = @ProductId)
             AND (@ProductTypeId = 0 OR ib.ProductTypeId = @ProductTypeId)
         GROUP BY pt.Id, pt.ProductTypeName, p.Id, p.ProductName
@@ -33,12 +35,14 @@ BEGIN
     END
     ELSE IF @LocationId = 0 -- No location selected
     BEGIN
-        SELECT  l.Id AS LocationId, l.[Name] AS LocationName, pt.Id AS ProductTypeId, pt.ProductTypeName, p.Id AS ProductId, p.ProductName, SUM(ib.QuantityRemaining) AS TotalQuantity
+        SELECT  l.Id AS LocationId, l.[Name] AS LocationName, pt.Id AS ProductTypeId, pt.ProductTypeName, p.Id AS ProductId, p.ProductName,
+                SUM(CASE WHEN ib.InventoryBatchStatusId = 2 THEN ib.QuantityRemaining ELSE 0 END) AS ActiveQuantity,
+                SUM(CASE WHEN ib.InventoryBatchStatusId = 1 THEN ib.QuantityRemaining ELSE 0 END) AS PendingQuantity
         FROM    finance.InventoryBatch ib
         INNER JOIN Product p ON ib.ProductId = p.Id
         INNER JOIN ProductType pt ON ib.ProductTypeId = pt.Id
         INNER JOIN Location l ON ib.LocationId = l.Id
-        WHERE ib.Deleted = 0 AND ib.InventoryBatchStatusId = 2 /* active */ AND ib.QuantityRemaining > 0
+        WHERE ib.Deleted = 0 AND ib.QuantityRemaining > 0
             AND (@ProductId = 0 OR ib.ProductId = @ProductId)
             AND (@ProductTypeId = 0 OR ib.ProductTypeId = @ProductTypeId)
         GROUP BY l.Id, l.[Name], pt.Id, pt.ProductTypeName, p.Id, p.ProductName
@@ -47,12 +51,14 @@ BEGIN
     END
     ELSE IF @LocationId = 1 -- Stockroom
     BEGIN
-        SELECT  l.Id AS LocationId, l.[Name] AS LocationName, pt.Id AS ProductTypeId, pt.ProductTypeName, p.Id AS ProductId, p.ProductName, SUM(ib.QuantityRemaining) AS TotalQuantity
+        SELECT  l.Id AS LocationId, l.[Name] AS LocationName, pt.Id AS ProductTypeId, pt.ProductTypeName, p.Id AS ProductId, p.ProductName,
+                SUM(CASE WHEN ib.InventoryBatchStatusId = 2 THEN ib.QuantityRemaining ELSE 0 END) AS ActiveQuantity,
+                SUM(CASE WHEN ib.InventoryBatchStatusId = 1 THEN ib.QuantityRemaining ELSE 0 END) AS PendingQuantity
         FROM    finance.InventoryBatch ib
         INNER JOIN Product p ON ib.ProductId = p.Id
         INNER JOIN ProductType pt ON ib.ProductTypeId = pt.Id
         INNER JOIN Location l ON ib.LocationId = l.Id
-        WHERE ib.Deleted = 0 AND ib.InventoryBatchStatusId = 2 /* active */ AND ib.QuantityRemaining > 0
+        WHERE ib.Deleted = 0 AND ib.QuantityRemaining > 0
             AND (@LocationId = 0 OR ib.LocationId = @LocationId)
             AND (@ProductId = 0 OR ib.ProductId = @ProductId)
             AND (@ProductTypeId = 0 OR ib.ProductTypeId = @ProductTypeId)
@@ -62,12 +68,14 @@ BEGIN
     END
     ELSE
     BEGIN -- Non-stockroom location selected
-        SELECT  l.Id AS LocationId, l.[Name] AS LocationName, pt.Id AS ProductTypeId, pt.ProductTypeName, p.Id AS ProductId, p.ProductName, SUM(ib.QuantityRemaining) AS TotalQuantity
+        SELECT  l.Id AS LocationId, l.[Name] AS LocationName, pt.Id AS ProductTypeId, pt.ProductTypeName, p.Id AS ProductId, p.ProductName,
+                SUM(CASE WHEN ib.InventoryBatchStatusId = 2 THEN ib.QuantityRemaining ELSE 0 END) AS ActiveQuantity,
+                SUM(CASE WHEN ib.InventoryBatchStatusId = 1 THEN ib.QuantityRemaining ELSE 0 END) AS PendingQuantity
         FROM    finance.InventoryBatch ib
         INNER JOIN Product p ON ib.ProductId = p.Id
         INNER JOIN ProductType pt ON ib.ProductTypeId = pt.Id
         INNER JOIN Location l ON ib.LocationId = l.Id
-        WHERE ib.Deleted = 0 AND ib.InventoryBatchStatusId = 2 /* active */ AND ib.QuantityRemaining > 0
+        WHERE ib.Deleted = 0 AND ib.QuantityRemaining > 0
             AND (@LocationId = 0 OR ib.LocationId = @LocationId)
             AND (@ProductId = 0 OR ib.ProductId = @ProductId)
             AND (@ProductTypeId = 0 OR ib.ProductTypeId = @ProductTypeId)

@@ -62,7 +62,7 @@ else
     {
         <div class="row">
             <div class="col d-flex justify-content-between pt-2">
-                <button class="btn btn-primary mb-2" @onclick="ShowAddDetailForm" disabled="@( IsDirty )">Add Product</button>
+                <button class="btn btn-primary mb-2" @onclick="ShowAddDetailForm" disabled="@( IsDirty || EditStockOrder.PaymentRecorded || EditStockOrder.StockReceiptRecorded )">Add Product</button>
                 <div>
                     <button class="btn btn-primary mb-2" @onclick="RecordPayment" disabled="@( IsDirty || EditStockOrder.PaymentRecorded )">Record Payment</button>
                     <button class="btn btn-primary mb-2" @onclick="ReceiveStock" disabled="@( IsDirty || EditStockOrder.StockReceiptRecorded )">Receive Stock</button>
