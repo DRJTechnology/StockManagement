@@ -15,6 +15,12 @@ else
                         ItemName="@SelectedItemName"
                         ConfirmationResult="HandleDeleteConfirmation" />
 
+    <ConfirmDialogModal Show="@ShowReceiveStockConfirm"
+                        Title="Confirmation"
+                        Message="Are you sure you want to make the stock available in the stock room?"
+                        ConfirmationResult="HandleReceiveStock" />
+
+
     <div class="row">
         <div class="col-md-6">
             <EditForm EditContext="editContext" OnValidSubmit="HandleValidSubmit">
@@ -41,7 +47,7 @@ else
                     <button class="btn btn-success" type="submit" disabled="@( !IsFormValid || !IsDirty )">Save</button>
                     @if (EditStockOrder.Id > 0)
                     {
-                        <button class="btn btn-danger ms-2" type="button" @onclick="DeleteStockOrder">Delete</button>
+                        <button class="btn btn-danger ms-2" type="button" @onclick="DeleteStockOrder" disabled="@( EditStockOrder.PaymentRecorded || EditStockOrder.StockReceiptRecorded )">Delete</button>
                     }
                 </div>
             </EditForm>
@@ -58,8 +64,8 @@ else
             <div class="col d-flex justify-content-between pt-2">
                 <button class="btn btn-primary mb-2" @onclick="ShowAddDetailForm" disabled="@( IsDirty )">Add Product</button>
                 <div>
-                    <button class="btn btn-primary mb-2" @onclick="RecordPayment" disabled="@( IsDirty )">Record Payment</button>
-                    <button class="btn btn-primary mb-2" @onclick="ReceiveStock" disabled="@( IsDirty )">Receive Stock</button>
+                    <button class="btn btn-primary mb-2" @onclick="RecordPayment" disabled="@( IsDirty || EditStockOrder.PaymentRecorded )">Record Payment</button>
+                    <button class="btn btn-primary mb-2" @onclick="ReceiveStock" disabled="@( IsDirty || EditStockOrder.StockReceiptRecorded )">Receive Stock</button>
                 </div>
             </div>
         </div>
@@ -129,8 +135,8 @@ else
                                     @stockReceiptDetail.Quantity
                                 </div>
                                 <div class="col-12 col-lg-3">
-                                    <button class="btn btn-sm btn-warning" @onclick="() => EditDetail(stockReceiptDetail)">Edit</button>
-                                    <button class="btn btn-sm btn-danger ms-2" @onclick="() => DeleteDetail(stockReceiptDetail.Id)">Delete</button>
+                                    <button class="btn btn-sm btn-warning" @onclick="() => EditDetail(stockReceiptDetail)" disabled="@( EditStockOrder.PaymentRecorded || EditStockOrder.StockReceiptRecorded )">Edit</button>
+                                    <button class="btn btn-sm btn-danger ms-2" @onclick="() => DeleteDetail(stockReceiptDetail.Id)" disabled="@( EditStockOrder.PaymentRecorded || EditStockOrder.StockReceiptRecorded )">Delete</button>
                                 </div>
                             </div>
                         </div>

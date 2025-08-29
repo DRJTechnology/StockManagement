@@ -224,6 +224,7 @@
     </Build>
     <Build Include="finance\User Defined Types\StockPaymentTableType.sql" />
     <Build Include="dbo\Stored Procedures\StockOrder_CreateStockOrderPayments.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrder_ActivateStock.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\1. PopulateFinanceTables.sql" />

@@ -26,76 +26,87 @@ BEGIN
 			@TranstionSuccess BIT
 	SET		@UpdateDate = GetDate()
 
-	-- Create the transaction for the payment
-	EXEC [finance].[Transaction_CreateExpenseIncome] 
-					@Success = @TranstionSuccess OUTPUT,
-					@Id = @TransactionDetailId OUTPUT,
-					@TransactionTypeId = 2, -- Expense
-					@AccountId = 6, -- Inventory
-					@Date = @PaymentDate,
-					@Description = @Description,
-					@Amount = @Cost,
-					@ContactId = @ContactId,
-					@CurrentUserId = @CurrentUserId
+	BEGIN TRY
+		BEGIN TRANSACTION
 
-	SELECT	@TransactionId = TransactionId
-	FROM	finance.TransactionDetail
-	WHERE	Id = @TransactionDetailId
+		-- Create the transaction for the payment
+		EXEC [finance].[Transaction_CreateExpenseIncome] 
+						@Success = @TranstionSuccess OUTPUT,
+						@Id = @TransactionDetailId OUTPUT,
+						@TransactionTypeId = 2, -- Expense
+						@AccountId = 6, -- Inventory
+						@Date = @PaymentDate,
+						@Description = @Description,
+						@Amount = @Cost,
+						@ContactId = @ContactId,
+						@CurrentUserId = @CurrentUserId
 
-	-- Link the transaction to the stock order
-	UPDATE	dbo.StockOrder
-	SET		TransactionId = @TransactionId,
-			PaymentRecorded = 1,
-			AmendUserID = @CurrentUserId,
-			AmendDate = @UpdateDate
-	WHERE Id = @StockOrderId
+		SELECT	@TransactionId = TransactionId
+		FROM	finance.TransactionDetail
+		WHERE	Id = @TransactionDetailId
 
-	-- Create a cursor to iterate through the @StockPaymentDetails table variable
-	DECLARE @ProductId INT,
-			@ProductTypeId INT,
-			@Quantity INT,
-			@UnitPrice MONEY,
-			@StockOrderDetailId INT,
-			@InventoryBatchId INT
-	
-	DECLARE StockPaymentCursor CURSOR FOR
-	SELECT ProductId, ProductTypeId, Quantity, UnitPrice, StockOrderDetailId
-	FROM @StockPaymentDetails
-
-	OPEN StockPaymentCursor
-	FETCH NEXT FROM StockPaymentCursor INTO @ProductId, @ProductTypeId, @Quantity, @UnitPrice, @StockOrderDetailId
-	WHILE @@FETCH_STATUS = 0
-	BEGIN
-
-		INSERT INTO finance.InventoryBatch (InventoryBatchStatusId, ProductId, ProductTypeId, LocationId, InitialQuantity, QuantityRemaining, UnitCost, PurchaseDate, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
-		SELECT	1 /* pending */, ProductId, ProductTypeId, 1 /* stockroom */, Quantity, Quantity, UnitPrice, @UpdateDate, 0, @CurrentUserId, @UpdateDate, @CurrentUserId, @UpdateDate
-		FROM	@StockPaymentDetails
-		WHERE	StockOrderDetailId = @StockOrderDetailId
-
-		SET @InventoryBatchId = SCOPE_IDENTITY()
-
-		-- Insert into InventoryBatchActivity
-		INSERT INTO finance.InventoryBatchActivity (InventoryBatchId, ActivityId, Quantity, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
-		SELECT @InventoryBatchId, Id, @Quantity, 0, @CurrentUserId, @UpdateDate, @CurrentUserId, @UpdateDate
-		FROM dbo.Activity
-		WHERE	ActionId = 1 -- Add new stock add to
-			AND StockOrderDetailId = @StockOrderDetailId
-
-		UPDATE	dbo.StockOrderDetail
-		SET		InitialInventoryBatchId = @InventoryBatchId,
+		-- Link the transaction to the stock order
+		UPDATE	dbo.StockOrder
+		SET		TransactionId = @TransactionId,
+				PaymentRecorded = 1,
 				AmendUserID = @CurrentUserId,
 				AmendDate = @UpdateDate
-		WHERE	Id = @StockOrderDetailId
+		WHERE Id = @StockOrderId
 
+		-- Create a cursor to iterate through the @StockPaymentDetails table variable
+		DECLARE @ProductId INT,
+				@ProductTypeId INT,
+				@Quantity INT,
+				@UnitPrice MONEY,
+				@StockOrderDetailId INT,
+				@InventoryBatchId INT
+	
+		DECLARE StockPaymentCursor CURSOR FOR
+		SELECT ProductId, ProductTypeId, Quantity, UnitPrice, StockOrderDetailId
+		FROM @StockPaymentDetails
+
+		OPEN StockPaymentCursor
 		FETCH NEXT FROM StockPaymentCursor INTO @ProductId, @ProductTypeId, @Quantity, @UnitPrice, @StockOrderDetailId
-	END
-	CLOSE StockPaymentCursor
-	DEALLOCATE StockPaymentCursor
+		WHILE @@FETCH_STATUS = 0
+		BEGIN
 
+			INSERT INTO finance.InventoryBatch (InventoryBatchStatusId, ProductId, ProductTypeId, LocationId, InitialQuantity, QuantityRemaining, UnitCost, PurchaseDate, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
+			SELECT	1 /* pending */, ProductId, ProductTypeId, 1 /* stockroom */, Quantity, Quantity, UnitPrice, @UpdateDate, 0, @CurrentUserId, @UpdateDate, @CurrentUserId, @UpdateDate
+			FROM	@StockPaymentDetails
+			WHERE	StockOrderDetailId = @StockOrderDetailId
 
-	SET @Success = 1
+			SET @InventoryBatchId = SCOPE_IDENTITY()
 
-	SET @Err = @@Error
+			-- Insert into InventoryBatchActivity
+			INSERT INTO finance.InventoryBatchActivity (InventoryBatchId, ActivityId, Quantity, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
+			SELECT @InventoryBatchId, Id, @Quantity, 0, @CurrentUserId, @UpdateDate, @CurrentUserId, @UpdateDate
+			FROM dbo.Activity
+			WHERE	ActionId = 1 -- Add new stock add to
+				AND StockOrderDetailId = @StockOrderDetailId
+
+			UPDATE	dbo.StockOrderDetail
+			SET		InitialInventoryBatchId = @InventoryBatchId,
+					AmendUserID = @CurrentUserId,
+					AmendDate = @UpdateDate
+			WHERE	Id = @StockOrderDetailId
+
+			FETCH NEXT FROM StockPaymentCursor INTO @ProductId, @ProductTypeId, @Quantity, @UnitPrice, @StockOrderDetailId
+		END
+		CLOSE StockPaymentCursor
+		DEALLOCATE StockPaymentCursor
+
+		COMMIT TRANSACTION
+
+		SET @Success = 1
+		SET @Err = 0
+	END TRY
+	BEGIN CATCH
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRANSACTION
+
+		SET @Success = 0
+		SET @Err = ERROR_NUMBER()
+	END CATCH
 
 	RETURN @Err
 END

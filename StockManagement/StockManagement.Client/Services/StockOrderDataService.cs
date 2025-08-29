@@ -33,5 +33,25 @@ namespace StockManagement.Client.Services
                 throw;
             }
         }
+
+        public async Task<bool> MarkStockReceived(int stockOrderId)
+        {
+            try
+            {
+                var response = await httpClient.PostAsJsonAsync<int>($"api/{ApiControllerName}/MarkStockReceived", stockOrderId);
+                if (response == null || !response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"Failed to mark stock as received.");
+                }
+
+                var returnValue = await response.Content.ReadFromJsonAsync<ApiResponse>();
+
+                return returnValue.Success;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

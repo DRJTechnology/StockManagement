@@ -118,6 +118,32 @@ namespace StockManagement.Repositories
             }
         }
 
+        public async Task<bool> MarkStockReceivedAsync(int currentUserId, int stockOrderId)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+                parameters.Add("@StockOrderId", stockOrderId);
+                parameters.Add("@CurrentUserId", currentUserId);
+
+                await dbConnection.ExecuteAsync("dbo.StockOrder_ActivateStock", parameters, commandType: CommandType.StoredProcedure);
+
+                if (parameters.Get<bool>("@Success"))
+                {
+                    return true;
+                }
+                else
+                {
+                    throw new UnauthorizedAccessException();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public async Task<bool> UpdateAsync(int currentUserId, StockOrderDto StockOrderDto)
         {
             var parameters = new DynamicParameters();

@@ -17,7 +17,9 @@ DECLARE @Id INT,
         @ProductTypeId INT,
         @Quantity INT,
         @AmendDate DATETIME,
-        @NewInventoryBatchId INT
+        @NewInventoryBatchId INT,
+		@Success BIT,
+		@TempId INT
 
 OPEN activity_cursor
 FETCH NEXT FROM activity_cursor INTO @Id, @ActivityDate, @ActionId, @LocationId, @ProductId, @ProductTypeId, @Quantity, @AmendDate
@@ -27,7 +29,9 @@ BEGIN
     IF @ActionId = 1 -- Add new stock add to
     BEGIN
         EXEC	[finance].[InventoryBatch_Create]
-        @InventoryBatchStatusId = 1, -- Active
+        @Success = @Success OUTPUT,
+        @Id = @TempId OUTPUT,
+        @InventoryBatchStatusId = 2, -- Active
 		@ProductId = @ProductId,
 		@ProductTypeId = @ProductTypeId,
 		@LocationId = @LocationId,
@@ -91,7 +95,9 @@ DECLARE @Id INT,
         @AmendDate DATETIME,
         @NewInventoryBatchId INT,
         @CostRemoved MONEY,
-        @TransactionId INT
+        @TransactionId INT,
+		@Success BIT,
+		@TempId INT
 
 OPEN activity_cursor
 FETCH NEXT FROM activity_cursor INTO @Id, @ActivityDate, @ActionId, @LocationId, @ProductId, @ProductTypeId, @Quantity, @AmendDate
@@ -115,7 +121,9 @@ BEGIN
     IF  @ActionId = 2 -- Move from stock room to
     BEGIN
         EXEC	[finance].[InventoryBatch_Create]
-        @InventoryBatchStatusId = 1, -- Active
+        @Success = @Success OUTPUT,
+        @Id = @TempId OUTPUT,
+        @InventoryBatchStatusId = 2, -- Active
 		@ProductId = @ProductId,
 		@ProductTypeId = @ProductTypeId,
 		@LocationId = @LocationId,
@@ -149,7 +157,9 @@ BEGIN
 
         -- Add to Stock room
         EXEC	[finance].[InventoryBatch_Create]
-        @InventoryBatchStatusId = 1, -- Active
+        @Success = @Success OUTPUT,
+        @Id = @TempId OUTPUT,
+        @InventoryBatchStatusId = 2, -- Active
         @ProductId = @ProductId,
         @ProductTypeId = @ProductTypeId,
         @LocationId = 1, -- stock room

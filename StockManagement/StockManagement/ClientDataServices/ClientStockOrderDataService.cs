@@ -30,6 +30,11 @@ namespace StockManagement.ClientDataServices
             throw new NotImplementedException();
         }
 
+        public Task<bool> MarkStockReceived(int stockOrderId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<bool> UpdateAsync(StockOrderEditModel entity)
         {
             throw new NotImplementedException();

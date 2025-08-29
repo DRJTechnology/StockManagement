@@ -32,6 +32,8 @@ public partial class StockOrderBase : ComponentBase
     protected LookupsModel Lookups { get; private set; }
     protected bool ShowDeleteReceiptConfirm { get; set; } = false;
     protected bool ShowDeleteDetailConfirm { get; set; } = false;
+
+    protected bool ShowReceiveStockConfirm { get; set; } = false;
     protected string SelectedItemName { get; set; } = string.Empty;
 
     protected bool IsLoading { get; set; }
@@ -167,12 +169,30 @@ public partial class StockOrderBase : ComponentBase
     protected async Task HandleRecordPayment()
     {
         var response = await StockOrderService.CreateStockOrderPayments(PaymentDetail);
+        if (response)
+        {
+            EditStockOrder.PaymentRecorded = true;
+        }
         ShowRecordPaymentForm = false;
     }
 
 
     protected async Task ReceiveStock()
     {
+        ShowReceiveStockConfirm = true;
+    }
+
+    protected async Task HandleReceiveStock(bool confirmed)
+    {
+        if (confirmed)
+        {
+            var response = await StockOrderService.MarkStockReceived(EditStockOrder.Id);
+            if (response)
+            {
+                EditStockOrder.StockReceiptRecorded = true;
+            }
+        }
+        ShowReceiveStockConfirm = false;
     }
 
     protected void CancelDetailEdit()

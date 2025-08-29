@@ -16,7 +16,7 @@ namespace StockManagement.Services
             return await stockOrderRepository.CreateAsync(currentUserId, dto);
         }
 
-        public async Task<bool> CreateStockOrderPayments(int currentUserId, StockOrderPaymentsCreateModel stockOrderDetailPayments)
+        public async Task<bool> CreateStockOrderPaymentsAsync(int currentUserId, StockOrderPaymentsCreateModel stockOrderDetailPayments)
         {
             return await stockOrderRepository.CreateStockOrderPayments(currentUserId, stockOrderDetailPayments);
         }
@@ -36,6 +36,11 @@ namespace StockManagement.Services
         {
             var StockOrder = await stockOrderRepository.GetByIdAsync(StockOrderId);
             return mapper.Map<StockOrderResponseModel>(StockOrder);
+        }
+
+        public async Task<bool> MarkStockReceivedAsync(int currentUserId, int stockOrderId)
+        {
+            return await stockOrderRepository.MarkStockReceivedAsync(currentUserId, stockOrderId);
         }
 
         public async Task<bool> UpdateAsync(int currentUserId, StockOrderEditModel StockOrder)

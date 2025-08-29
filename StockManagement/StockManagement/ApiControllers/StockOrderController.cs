@@ -132,7 +132,7 @@ namespace StockManagement.ApiControllers
             try
             {
                 var appUser = await userAccessor.GetRequiredUserAsync(HttpContext);
-                var success = await StockOrderService.CreateStockOrderPayments(appUser.Id, stockOrderDetailPayments);
+                var success = await StockOrderService.CreateStockOrderPaymentsAsync(appUser.Id, stockOrderDetailPayments);
 
                 return new ApiResponse()
                 {
@@ -141,7 +141,31 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Post");
+                logger.LogError(ex, "CreateStockOrderPayments");
+                return new ApiResponse()
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message,
+                };
+            }
+        }
+
+        [HttpPost("MarkStockReceived")]
+        public async Task<ApiResponse> MarkStockReceived([FromBody] int stockOrderId)
+        {
+            try
+            {
+                var appUser = await userAccessor.GetRequiredUserAsync(HttpContext);
+                var success = await StockOrderService.MarkStockReceivedAsync(appUser.Id, stockOrderId);
+
+                return new ApiResponse()
+                {
+                    Success = success,
+                };
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "MarkStockReceived");
                 return new ApiResponse()
                 {
                     Success = false,

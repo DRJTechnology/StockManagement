@@ -11,5 +11,6 @@ namespace StockManagement.Repositories.Interfaces
         Task<List<StockOrderDto>> GetAllAsync();
         Task<StockOrderDto> GetByIdAsync(int StockOrderId);
         Task<bool> CreateStockOrderPayments(int currentUserId, StockOrderPaymentsCreateModel stockOrderDetailPayments);
+        Task<bool> MarkStockReceivedAsync(int currentUserId, int stockOrderId);
     }
 }
