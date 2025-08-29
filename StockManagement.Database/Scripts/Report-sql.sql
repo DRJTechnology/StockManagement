@@ -40,6 +40,6 @@ from finance.InventoryBatch ib
 INNER JOIN Product p ON ib.ProductId = p.Id
 INNER JOIN ProductType pt ON ib.ProductTypeId = pt.Id
 INNER JOIN Location l ON ib.LocationId = l.Id
-WHERE ib.Deleted = 0 AND ib.QuantityRemaining > 0
+WHERE ib.Deleted = 0 AND ib.InventoryBatchStatusId = 2 /* active */ AND ib.QuantityRemaining > 0
 GROUP BY l.[Name], pt.ProductTypeName, p.ProductName
 
