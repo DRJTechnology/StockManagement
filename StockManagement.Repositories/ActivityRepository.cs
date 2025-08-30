@@ -25,6 +25,7 @@ namespace StockManagement.Repositories
             parameters.Add("@ProductTypeId", activityDto.ProductTypeId);
             parameters.Add("@LocationId", activityDto.LocationId);
             parameters.Add("@Quantity", activityDto.Quantity);
+            parameters.Add("@Notes", activityDto.Notes);
             parameters.Add("@Deleted", activityDto.Deleted);
             parameters.Add("@CurrentUserId", currentUserId);
 
@@ -113,6 +114,7 @@ namespace StockManagement.Repositories
             parameters.Add("@ProductTypeId", activityDto.ProductTypeId);
             parameters.Add("@LocationId", activityDto.LocationId);
             parameters.Add("@Quantity", activityDto.Quantity);
+            parameters.Add("@Notes", activityDto.Notes);
             parameters.Add("@Deleted", activityDto.Deleted);
             parameters.Add("@CurrentUserId", currentUserId);
 

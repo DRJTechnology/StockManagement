@@ -3,6 +3,8 @@
 -- Create date: 27 May 2025
 -- Description:	Update Activity
 -- =========================================================
+-- 30 Aug 2025 - Dave Brown - Added Notes
+-- =========================================================
 CREATE PROCEDURE [dbo].[Activity_Update]
 (
 	@Success bit output,
@@ -13,6 +15,7 @@ CREATE PROCEDURE [dbo].[Activity_Update]
 	@ProductTypeId int,
 	@LocationId int,
 	@Quantity int,
+	@Notes nvarchar(1024) = NULL,
 	@Deleted bit,
 	@CurrentUserId int
 )
@@ -31,6 +34,7 @@ BEGIN
 		[ProductTypeId] = @ProductTypeId,
 		[LocationId] = @LocationId,
 		[Quantity] = @Quantity,
+		[Notes] = @Notes,
 		[Deleted] = @Deleted,
 		[AmendUserID] = @CurrentUserId,
 		[AmendDate] = GetDate()

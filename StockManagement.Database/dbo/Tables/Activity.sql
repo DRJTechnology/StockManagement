@@ -6,6 +6,7 @@
     [ProductTypeId]         INT      NOT NULL,
     [LocationId]            INT      NOT NULL,
     [Quantity]              INT      NOT NULL,
+    [Notes]                 NVARCHAR(1024) NULL,
     [DeliveryNoteDetailId]  INT      NULL,
     [StockOrderDetailId]    INT      NULL,
     [Deleted]               BIT      CONSTRAINT [DF_Activity_Deleted] DEFAULT ((0)) NOT NULL,

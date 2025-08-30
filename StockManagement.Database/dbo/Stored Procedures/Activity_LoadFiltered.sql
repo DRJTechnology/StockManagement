@@ -5,6 +5,7 @@
 -- =========================================================
 -- 04 Jul 2025 - Dave Brown - DeliveryNoteId added
 -- 09 Jul 2025 - Dave Brown - StockNoteId added
+-- 30 Aug 2025 - Dave Brown - Added Notes
 -- =========================================================
 CREATE PROCEDURE [dbo].[Activity_LoadFiltered]
     @ActivityDate datetime = NULL,
@@ -54,6 +55,7 @@ BEGIN
         a.[LocationId],
         l.[Name] AS LocationName,
         a.[Quantity],
+		a.[Notes],
         dnd.DeliveryNoteId,
         srd.StockOrderId,
         a.[Deleted],

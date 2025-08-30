@@ -234,6 +234,14 @@ else
                                 }
                             </div>
                         </div>
+                        @if (!string.IsNullOrEmpty(activity.Notes))
+                        {
+                        <div class="row">
+                            <div class="col-12 offset-lg-2 col-lg-8 mt-1 mt-lg-0">
+                                <span class="text-muted">Notes: @activity.Notes</span>
+                            </div>
+                        </div>
+                        }
                     </div>
                 </div>
             </div>

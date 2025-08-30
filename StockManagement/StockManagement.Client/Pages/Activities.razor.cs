@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
 using StockManagement.Models;
+using System.Diagnostics;
 
 [Authorize]
 public partial class ActivitiesBase : ComponentBase
@@ -103,6 +104,7 @@ public partial class ActivitiesBase : ComponentBase
             ProductTypeId = activity.ProductTypeId,
             LocationId = activity.LocationId,
             Quantity = activity.Quantity,
+            Notes = activity.Notes,
             Deleted = activity.Deleted
         };
         ShowForm = true;
@@ -135,6 +137,7 @@ public partial class ActivitiesBase : ComponentBase
                     ProductTypeId = EditActivity.ProductTypeId,
                     LocationId = EditActivity.LocationId,
                     Quantity = EditActivity.Quantity,
+                    Notes = EditActivity.Notes,
                     ProductName = Lookups.ProductList.Where(p => p.Id == EditActivity.ProductId).FirstOrDefault()!.ProductName,
                     ProductTypeName = Lookups.ProductTypeList.Where(pt => pt.Id == EditActivity.ProductTypeId).FirstOrDefault()!.ProductTypeName,
                     LocationName = Lookups.LocationList.Where(v => v.Id == EditActivity.LocationId).FirstOrDefault()!.Name,
@@ -157,6 +160,7 @@ public partial class ActivitiesBase : ComponentBase
                     ProductTypeId = EditActivity.ProductTypeId,
                     LocationId = EditActivity.LocationId,
                     Quantity = EditActivity.Quantity,
+                    Notes = EditActivity.Notes,
                     ProductName = Lookups.ProductList.Where(p => p.Id == EditActivity.ProductId).FirstOrDefault()!.ProductName,
                     ProductTypeName = Lookups.ProductTypeList.Where(pt => pt.Id == EditActivity.ProductTypeId).FirstOrDefault()!.ProductTypeName,
                     LocationName = Lookups.LocationList.Where(v => v.Id == EditActivity.LocationId).FirstOrDefault()!.Name,
@@ -196,24 +200,6 @@ public partial class ActivitiesBase : ComponentBase
         activityFilterModel.CurrentPage = page;
         await LoadActivities();
     }
-
-    //protected async Task PreviousPage()
-    //{
-    //    if (activityFilterModel.CurrentPage > 1)
-    //    {
-    //        activityFilterModel.CurrentPage--;
-    //        await LoadActivities();
-    //    }
-    //}
-
-    //protected async Task NextPage()
-    //{
-    //    if (activityFilterModel.CurrentPage < TotalPages)
-    //    {
-    //        activityFilterModel.CurrentPage++;
-    //        await LoadActivities();
-    //    }
-    //}
 
     protected void ToggleFilters()
     {

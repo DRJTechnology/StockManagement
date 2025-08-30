@@ -14,5 +14,6 @@ namespace StockManagement.Models.Dto
         public int DeliveryNoteId { get; set; }
         public int StockOrderId { get; set; }
         public int Quantity { get; set; }
+        public string Notes { get; set; } = string.Empty;
     }
 }
