@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
 using StockManagement.Client.Interfaces.Finance;
@@ -10,6 +11,9 @@ using StockManagement.Models.Finance;
 [Authorize]
 public partial class OwnersAccountBase : ComponentBase
 {
+    [Inject]
+    protected IAccountDataService AccountService { get; set; } = default!;
+
     [Inject]
     protected IContactDataService ContactService { get; set; } = default!;
 
@@ -27,7 +31,21 @@ public partial class OwnersAccountBase : ComponentBase
     protected bool IsLoading { get; set; }
     protected bool FiltersExpanded { get; set; } = false;
 
+
+    protected List<AccountResponseModel> ExpenseAccounts { get; set; } = new();
+    protected List<ContactResponseModel> Suppliers { get; set; } = new();
+    protected List<AccountResponseModel> IncomeAccounts { get; set; } = new();
+    protected List<ContactResponseModel> Customers { get; set; } = new();
+
+
+    protected TransactionDetailEditModel EditTransactionDetail { get; set; } = new();
+    protected bool ShowIncomeAddForm { get; set; }
+    protected bool ShowExpenseAddForm { get; set; }
+
     const int OwnersAccountId = -1; // -1 is used by stored procedure to incude both Owner’s Capital/Investment and Drawings
+    const int ExpenseAccountTypeId = 4; //  4 is the ID for Expense Account Type
+    const int IncomeAccountTypeId = 3; //  3 is the ID for Revenue (Income) Account Type
+
     protected TransactionFilterModel transactionFilterModel = new TransactionFilterModel() { AccountId = OwnersAccountId };
 
     protected override async Task OnInitializedAsync()
@@ -37,6 +55,10 @@ public partial class OwnersAccountBase : ComponentBase
         if (JSRuntime is IJSInProcessRuntime)
         {
             await LoadContacts();
+            await LoadExpenseAccounts();
+            await LoadIncomeAccounts();
+            await LoadSuppliers();
+            await LoadCustomers();
             await LoadTransactionDetailsAsync();
         }
     }
@@ -47,15 +69,38 @@ public partial class OwnersAccountBase : ComponentBase
         TransactionDetails = transactionFilteredResponseModel.TransactionDetailList;
         TotalPages = transactionFilteredResponseModel.TotalPages;
 
-        TotalAmount = await TransactionService.GetTotalAmountFilteredAsync(transactionFilterModel);
-        TotalAmount *= -1;
+        await CalculateTotalAmount();
         IsLoading = false;
         await InvokeAsync(StateHasChanged);
     }
+
+    private async Task CalculateTotalAmount()
+    {
+        TotalAmount = await TransactionService.GetTotalAmountFilteredAsync(transactionFilterModel);
+        TotalAmount *= -1;
+    }
+
     protected async Task LoadContacts()
     {
         ContactList = (await ContactService.GetAllAsync())?.ToList() ?? new();
     }
+    protected async Task LoadExpenseAccounts()
+    {
+        ExpenseAccounts = (await AccountService.GetByTypeAsync(ExpenseAccountTypeId))?.ToList() ?? new();
+    }
+    protected async Task LoadIncomeAccounts()
+    {
+        IncomeAccounts = (await AccountService.GetByTypeAsync(IncomeAccountTypeId))?.ToList() ?? new();
+    }
+    protected async Task LoadSuppliers()
+    {
+        Suppliers = (await ContactService.GetByTypeAsync((int)ContactTypeEnum.Supplier))?.ToList() ?? new();
+    }
+    protected async Task LoadCustomers()
+    {
+        Customers = (await ContactService.GetByTypeAsync((int)ContactTypeEnum.Customer))?.ToList() ?? new();
+    }
+
 
     protected async Task OnReset()
     {
@@ -84,5 +129,65 @@ public partial class OwnersAccountBase : ComponentBase
         transactionFilterModel.CurrentPage = page;
         await LoadTransactionDetailsAsync();
     }
-
+    protected void ShowAddIncomeForm(MouseEventArgs args)
+    {
+        EditTransactionDetail = new TransactionDetailEditModel() { AccountId = 0, Date = DateTime.Now, Direction = 1, TransactionType = TransactionTypeEnum.Income };
+        ShowIncomeAddForm = true;
+    }
+    protected void ShowAddExpenseForm(MouseEventArgs args)
+    {
+        EditTransactionDetail = new TransactionDetailEditModel() { AccountId = 0, Date = DateTime.Now, Direction = -1, TransactionType = TransactionTypeEnum.Expense };
+        ShowExpenseAddForm = true;
+    }
+    protected void CancelEdit()
+    {
+        ShowIncomeAddForm = false;
+        ShowExpenseAddForm = false;
+    }
+    protected async Task HandleIncomeAddSubmit()
+    {
+        var newId = await TransactionService.CreateExpenseIncomeAsync(EditTransactionDetail);
+        TransactionDetails.Insert(
+            0,
+            new TransactionDetailResponseModel()
+            {
+                Id = newId,
+                //TransactionId = ?, TransactionId not required in front-end
+                TransactionType = EditTransactionDetail.TransactionType,
+                AccountId = EditTransactionDetail.AccountId,
+                Date = EditTransactionDetail.Date,
+                Description = EditTransactionDetail.Description,
+                Amount = EditTransactionDetail.Amount,
+                Direction = EditTransactionDetail.Direction,
+                //Credit = EditTransactionDetail.Credit,
+                //Debit = EditTransactionDetail.Debit,
+                ContactId = EditTransactionDetail.ContactId,
+                ContactName = Customers.Where(s => s.Id == EditTransactionDetail.ContactId).FirstOrDefault()!.Name,
+            });
+        await CalculateTotalAmount();
+        ShowIncomeAddForm = false;
+    }
+    protected async Task HandleExpenseAddSubmit()
+    {
+        var newId = await TransactionService.CreateExpenseIncomeAsync(EditTransactionDetail);
+        TransactionDetails.Insert(
+            0,
+            new TransactionDetailResponseModel()
+            {
+                Id = newId,
+                //TransactionId = ?, TransactionId not required in front-end
+                TransactionType = EditTransactionDetail.TransactionType,
+                AccountId = EditTransactionDetail.AccountId,
+                Date = EditTransactionDetail.Date,
+                Description = EditTransactionDetail.Description,
+                Amount = EditTransactionDetail.Amount,
+                Direction = EditTransactionDetail.Direction,
+                //Credit = EditTransactionDetail.Credit,
+                //Debit = EditTransactionDetail.Debit,
+                ContactId = EditTransactionDetail.ContactId,
+                ContactName = Suppliers.Where(s => s.Id == EditTransactionDetail.ContactId).FirstOrDefault()!.Name,
+            });
+        await CalculateTotalAmount();
+        ShowExpenseAddForm = false;
+    }
 }

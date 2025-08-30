@@ -92,7 +92,8 @@ public partial class ExpensesBase : ComponentBase
         if (EditTransactionDetail.Id == 0)
         {
             var newId = await TransactionService.CreateExpenseIncomeAsync(EditTransactionDetail);
-            TransactionDetails.Add(
+            TransactionDetails.Insert(
+                0,
                 new TransactionDetailResponseModel()
                 {
                     Id = newId,
