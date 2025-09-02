@@ -120,54 +120,74 @@ BEGIN
   --  ELSE 
     IF  @ActionId = 2 -- Move from stock room to
     BEGIN
-        EXEC	[finance].[InventoryBatch_Create]
-        @Success = @Success OUTPUT,
-        @Id = @TempId OUTPUT,
-        @InventoryBatchStatusId = 2, -- Active
+        EXEC	[finance].[InventoryBatch_MoveQuantity]
 		@ProductId = @ProductId,
 		@ProductTypeId = @ProductTypeId,
-		@LocationId = @LocationId,
-		@InitialQuantity = @Quantity,
-        @UnitCost = 0,
-		@ActivityDate = @ActivityDate,
+		@FromLocationId = 1, -- Stock room
+		@ToLocationId = @LocationId,
+		@Quantity = @Quantity,
 		@ActivityId = @Id,
 		@UserId = 1
 
-        -- Remove From Stock room
-        EXEC	[finance].[InventoryBatch_ReduceQuantity]
-		@ProductId = @ProductId,
-		@ProductTypeId = @ProductTypeId,
-		@LocationId = 1,
-		@Quantity = @Quantity,
-		@ActivityId = @Id,
-		@UserId = 1,
-        @CostRemoved = @CostRemoved OUTPUT
+
+  --      EXEC	[finance].[InventoryBatch_Create]
+  --      @Success = @Success OUTPUT,
+  --      @Id = @TempId OUTPUT,
+  --      @InventoryBatchStatusId = 2, -- Active
+		--@ProductId = @ProductId,
+		--@ProductTypeId = @ProductTypeId,
+		--@LocationId = @LocationId,
+		--@InitialQuantity = @Quantity,
+  --      @UnitCost = 0,
+		--@ActivityDate = @ActivityDate,
+		--@ActivityId = @Id,
+		--@UserId = 1
+
+  --      -- Remove From Stock room
+  --      EXEC	[finance].[InventoryBatch_ReduceQuantity]
+		--@ProductId = @ProductId,
+		--@ProductTypeId = @ProductTypeId,
+		--@LocationId = 1,
+		--@Quantity = @Quantity,
+		--@ActivityId = @Id,
+		--@UserId = 1,
+  --      @CostRemoved = @CostRemoved OUTPUT
     END
     ELSE IF @ActionId = 3 -- Return to stock room from
     BEGIN
-        -- Remove From location
-        EXEC	[finance].[InventoryBatch_ReduceQuantity]
+        EXEC	[finance].[InventoryBatch_MoveQuantity]
 		@ProductId = @ProductId,
 		@ProductTypeId = @ProductTypeId,
-		@LocationId = @LocationId,
+		@FromLocationId = @LocationId,
+		@ToLocationId = 1, -- Stock room
 		@Quantity = @Quantity,
 		@ActivityId = @Id,
-		@UserId = 1,
-        @CostRemoved = @CostRemoved OUTPUT
+		@UserId = 1
 
-        -- Add to Stock room
-        EXEC	[finance].[InventoryBatch_Create]
-        @Success = @Success OUTPUT,
-        @Id = @TempId OUTPUT,
-        @InventoryBatchStatusId = 2, -- Active
-        @ProductId = @ProductId,
-        @ProductTypeId = @ProductTypeId,
-        @LocationId = 1, -- stock room
-        @InitialQuantity = @Quantity,
-        @UnitCost = 0,
-        @ActivityDate = @ActivityDate,
-        @ActivityId = @Id,
-        @UserId = 1
+
+  --      -- Remove From location
+  --      EXEC	[finance].[InventoryBatch_ReduceQuantity]
+		--@ProductId = @ProductId,
+		--@ProductTypeId = @ProductTypeId,
+		--@LocationId = @LocationId,
+		--@Quantity = @Quantity,
+		--@ActivityId = @Id,
+		--@UserId = 1,
+  --      @CostRemoved = @CostRemoved OUTPUT
+
+  --      -- Add to Stock room
+  --      EXEC	[finance].[InventoryBatch_Create]
+  --      @Success = @Success OUTPUT,
+  --      @Id = @TempId OUTPUT,
+  --      @InventoryBatchStatusId = 2, -- Active
+  --      @ProductId = @ProductId,
+  --      @ProductTypeId = @ProductTypeId,
+  --      @LocationId = 1, -- stock room
+  --      @InitialQuantity = @Quantity,
+  --      @UnitCost = 0,
+  --      @ActivityDate = @ActivityDate,
+  --      @ActivityId = @Id,
+  --      @UserId = 1
     END
     ELSE IF @ActionId = 4 -- Delete stock
     BEGIN

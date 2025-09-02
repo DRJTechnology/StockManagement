@@ -16,6 +16,7 @@ CREATE PROCEDURE [finance].[InventoryBatch_ReduceQuantity]
 AS
 BEGIN
     SET NOCOUNT ON;
+    SET XACT_ABORT ON;
 
     DECLARE @QtyToDeduct INT = @Quantity;
     DECLARE @BatchId INT;
@@ -25,45 +26,75 @@ BEGIN
 
     SET @CostRemoved = 0;
 
-    DECLARE curBatches CURSOR LOCAL FAST_FORWARD FOR
-        SELECT Id, QuantityRemaining, UnitCost
-        FROM finance.InventoryBatch
-        WHERE ProductId = @ProductId
-          AND ProductTypeId = @ProductTypeId
-          AND LocationId = @LocationId
-          AND QuantityRemaining > 0
-          AND Deleted = 0
-        ORDER BY PurchaseDate ASC, Id ASC;
+    BEGIN TRANSACTION;
 
-    OPEN curBatches;
-    FETCH NEXT FROM curBatches INTO @BatchId, @BatchQty, @UnitCost;
+    BEGIN TRY
+        DECLARE curBatches CURSOR LOCAL FAST_FORWARD FOR
+            SELECT Id, QuantityRemaining, UnitCost
+            FROM finance.InventoryBatch
+            WHERE ProductId = @ProductId
+              AND ProductTypeId = @ProductTypeId
+              AND LocationId = @LocationId
+              AND QuantityRemaining > 0
+              AND InventoryBatchStatusId = 2 -- Active
+              AND Deleted = 0
+            ORDER BY PurchaseDate ASC, Id ASC;
 
-    WHILE @@FETCH_STATUS = 0 AND @QtyToDeduct > 0
-    BEGIN
-        SET @DeductNow = CASE WHEN @BatchQty >= @QtyToDeduct THEN @QtyToDeduct ELSE @BatchQty END;
-        SET @CostRemoved = @CostRemoved + (@DeductNow * @UnitCost);
-
-        -- Deduct stock
-        UPDATE finance.InventoryBatch
-        SET QuantityRemaining = QuantityRemaining - @DeductNow,
-            AmendUserId = @UserId,
-            AmendDate = GETDATE()
-        WHERE Id = @BatchId;
-
-        -- Record activity
-        INSERT INTO finance.InventoryBatchActivity (InventoryBatchId, ActivityId, Quantity, CreateUserId, AmendUserId)
-        VALUES (@BatchId, @ActivityId, @DeductNow, @UserId, @UserId);
-
-        SET @QtyToDeduct = @QtyToDeduct - @DeductNow;
-
+        OPEN curBatches;
         FETCH NEXT FROM curBatches INTO @BatchId, @BatchQty, @UnitCost;
-    END
 
-    CLOSE curBatches;
-    DEALLOCATE curBatches;
+        WHILE @@FETCH_STATUS = 0 AND @QtyToDeduct > 0
+        BEGIN
+            SET @DeductNow = CASE WHEN @BatchQty >= @QtyToDeduct THEN @QtyToDeduct ELSE @BatchQty END;
+            SET @CostRemoved = @CostRemoved + (@DeductNow * @UnitCost);
 
-    IF @QtyToDeduct > 0
-    BEGIN
-        RAISERROR('Not enough stock to fulfil request. ActivityId=%d', 16, 1, @ActivityId);
-    END
+            -- Deduct stock
+            UPDATE finance.InventoryBatch
+            SET QuantityRemaining = QuantityRemaining - @DeductNow,
+                AmendUserId = @UserId,
+                AmendDate = GETDATE()
+            WHERE Id = @BatchId;
+
+            -- Record activity
+            INSERT INTO finance.InventoryBatchActivity (InventoryBatchId, ActivityId, Quantity, CreateUserId, AmendUserId)
+            VALUES (@BatchId, @ActivityId, @DeductNow, @UserId, @UserId);
+
+            SET @QtyToDeduct = @QtyToDeduct - @DeductNow;
+
+            FETCH NEXT FROM curBatches INTO @BatchId, @BatchQty, @UnitCost;
+        END
+
+        CLOSE curBatches;
+        DEALLOCATE curBatches;
+
+        IF @QtyToDeduct > 0
+        BEGIN
+            RAISERROR('Not enough stock to fulfil request. ActivityId=%d', 16, 1, @ActivityId);
+        END
+
+        -- If we get here, all operations succeeded
+        COMMIT TRANSACTION;
+
+    END TRY
+    BEGIN CATCH
+        -- Close and deallocate cursor if still open
+        IF CURSOR_STATUS('local', 'curBatches') >= 0
+        BEGIN
+            CLOSE curBatches;
+            DEALLOCATE curBatches;
+        END
+
+        -- Rollback the transaction
+        IF @@TRANCOUNT > 0
+        BEGIN
+            ROLLBACK TRANSACTION;
+        END
+
+        -- Re-raise the error
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+        
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH
 END

@@ -78,9 +78,10 @@ BEGIN
         AND (@Quantity IS NULL OR a.[Quantity] = @Quantity)
     ORDER BY
         a.[ActivityDate] DESC,
-        p.[ProductName] ASC,
-        pt.[ProductTypeName] ASC,
-        l.[Name] ASC
+        a.Id DESC
+        --p.[ProductName] ASC,
+        --pt.[ProductTypeName] ASC,
+        --l.[Name] ASC
     OFFSET (@CurrentPage - 1) * @PageSize ROWS
     FETCH NEXT @PageSize ROWS ONLY;
 

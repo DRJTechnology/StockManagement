@@ -1,6 +1,7 @@
 using StockManagement.Models;
 using StockManagement.Models.Enums;
 using StockManagement.Services.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StockManagement.Services
 {
@@ -28,11 +29,12 @@ namespace StockManagement.Services
 
         public async Task<List<LookupsModel>> GetLookupsAsync()
         {
+            var actionList = await _actionService.GetAllAsync();
             return new List<LookupsModel>
             {
                 new LookupsModel
                 {
-                    ActionList = await _actionService.GetAllAsync(),
+                    ActionList = actionList.Where(a => a.Id != 1 && a.Id != 5).ToList(), // Exclude 'Add new stock add to' and 'Sale from'
                     ProductList = await _productService.GetAllAsync(),
                     ProductTypeList = await _productTypeService.GetAllAsync(),
                     LocationList = await _locationService.GetAllAsync(),
