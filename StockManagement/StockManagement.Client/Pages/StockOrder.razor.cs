@@ -259,7 +259,7 @@ public partial class StockOrderBase : ComponentBase
             if (confirmed)
             {
                 await StockOrderService.DeleteAsync(EditStockOrder.Id);
-                Navigation.NavigateTo("/stock-receipt-list");
+                Navigation.NavigateTo("/stock-order-list");
             }
         }
         else if (confirmed && ShowDeleteDetailConfirm)

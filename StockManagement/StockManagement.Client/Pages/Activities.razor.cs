@@ -110,14 +110,14 @@ public partial class ActivitiesBase : ComponentBase
         ShowForm = true;
     }
 
-    protected void OpenDeliveryNote(int deliveryNoteId)
+    protected void OpenStockSale(int stockSaleId)
     {
-        Navigation.NavigateTo($"/delivery-note/{deliveryNoteId}");
+        Navigation.NavigateTo($"/stock-sale/{stockSaleId}");
     }
 
     protected void OpenStockOrder(int stockReceiptId)
     {
-        Navigation.NavigateTo($"/stock-receipt/{stockReceiptId}");
+        Navigation.NavigateTo($"/stock-order/{stockReceiptId}");
     }
 
     protected async Task HandleValidSubmit()

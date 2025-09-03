@@ -7,10 +7,10 @@ ALTER TABLE dbo.Activity
 DROP CONSTRAINT FK_Activity_Venue;
 GO
 
-EXEC sp_rename 'dbo.DeliveryNote.VenueId', 'LocationId', 'COLUMN';
+EXEC sp_rename 'dbo.StockSale.VenueId', 'LocationId', 'COLUMN';
 
-ALTER TABLE dbo.DeliveryNote
-DROP CONSTRAINT FK_DeliveryNote_Venue;
+ALTER TABLE dbo.StockSale
+DROP CONSTRAINT FK_StockSale_Venue;
 GO
 
 CREATE TABLE [dbo].[Location] (
@@ -78,8 +78,8 @@ ADD CONSTRAINT FK_Activity_Location
 FOREIGN KEY (LocationId) REFERENCES dbo.Location(Id);
 GO
 
-ALTER TABLE dbo.DeliveryNote
-ADD CONSTRAINT FK_DeliveryNote_Location
+ALTER TABLE dbo.StockSale
+ADD CONSTRAINT FK_StockSale_Location
 FOREIGN KEY (LocationId) REFERENCES dbo.Location(Id);
 GO
 

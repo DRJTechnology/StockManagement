@@ -25,11 +25,11 @@ namespace StockManagement.Models.Automapper
             CreateMap<ContactDto, ContactResponseModel>();
             CreateMap<ContactEditModel, ContactDto>();
 
-            CreateMap<DeliveryNoteDetailDto, DeliveryNoteDetailResponseModel>();
-            CreateMap<DeliveryNoteDetailEditModel, DeliveryNoteDetailDto>();
+            CreateMap<StockSaleDetailDto, StockSaleDetailResponseModel>();
+            CreateMap<StockSaleDetailEditModel, StockSaleDetailDto>();
 
-            CreateMap<DeliveryNoteDto, DeliveryNoteResponseModel>();
-            CreateMap<DeliveryNoteEditModel, DeliveryNoteDto>();
+            CreateMap<StockSaleDto, StockSaleResponseModel>();
+            CreateMap<StockSaleEditModel, StockSaleDto>();
 
             CreateMap<LocationDto, LocationResponseModel>();
             CreateMap<LocationEditModel, LocationDto>();

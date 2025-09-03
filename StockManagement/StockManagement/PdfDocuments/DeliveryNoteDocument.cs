@@ -5,15 +5,15 @@ using QuestPDF.Infrastructure;
 using StockManagement.Models;
 using StockManagement.Models.Enums;
 
-public class DeliveryNoteDocument : IDocument
+public class StockSaleDocument : IDocument
 {
-    private readonly DeliveryNoteResponseModel _deliveryNote;
+    private readonly StockSaleResponseModel _stockSale;
     private readonly byte[] _logoImage;
     private List<SettingResponseModel> _settings = new();
 
-    public DeliveryNoteDocument(DeliveryNoteResponseModel deliveryNote, byte[] logoImage, List<SettingResponseModel> settings)
+    public StockSaleDocument(StockSaleResponseModel stockSale, byte[] logoImage, List<SettingResponseModel> settings)
     {
-        _deliveryNote = deliveryNote;
+        _stockSale = stockSale;
         _logoImage = logoImage;
         _settings = settings;
     }
@@ -37,7 +37,7 @@ public class DeliveryNoteDocument : IDocument
 
     private void ComposeHeader(IContainer container)
     {
-        var title = _deliveryNote.DirectSale ? "Invoice" : "Delivery Note";
+        var title = _stockSale.DirectSale ? "Invoice" : "Delivery Note";
 
         container.Row(row =>
         {
@@ -45,11 +45,11 @@ public class DeliveryNoteDocument : IDocument
                 {
                     column.Item().PaddingTop(5).Text(title)
                                                 .FontSize(20).SemiBold().FontColor(Colors.Black);
-                    if (_deliveryNote.DirectSale)
+                    if (_stockSale.DirectSale)
                     {
-                        column.Item().Text($"Invoice Num: {_deliveryNote.Id:D5}");
+                        column.Item().Text($"Invoice Num: {_stockSale.Id:D5}");
                     }
-                    column.Item().Text($"Date: {_deliveryNote.Date:dd/MM/yyyy}");
+                    column.Item().Text($"Date: {_stockSale.Date:dd/MM/yyyy}");
                 });
             row.RelativeItem().AlignRight().Height(60).Image(_logoImage);
         });
@@ -74,7 +74,7 @@ public class DeliveryNoteDocument : IDocument
                 {
                     column.Spacing(2);
                     column.Item().BorderBottom(1).PaddingBottom(2).Text("To:").SemiBold();
-                    column.Item().Text(_deliveryNote.LocationName);
+                    column.Item().Text(_stockSale.LocationName);
                 });
                 row.ConstantItem(50);
                 row.RelativeItem().Column(column =>
@@ -96,7 +96,7 @@ public class DeliveryNoteDocument : IDocument
                 columns.RelativeColumn(3); // Product Type  
                 columns.RelativeColumn(8); // Product Name  
                 columns.RelativeColumn(1); // Quantity  
-                if (_deliveryNote.DirectSale)
+                if (_stockSale.DirectSale)
                 {
                     columns.RelativeColumn(2); // Unit Price  
                     columns.RelativeColumn(2); // Total
@@ -108,7 +108,7 @@ public class DeliveryNoteDocument : IDocument
                 header.Cell().Element(CellStyle).Text("Type").SemiBold();
                 header.Cell().Element(CellStyle).Text("Product Name").SemiBold();
                 header.Cell().Element(CellStyle).AlignRight().Text("Qty").SemiBold();
-                if (_deliveryNote.DirectSale)
+                if (_stockSale.DirectSale)
                 {
                     header.Cell().Element(CellStyle).AlignRight().Text("Unit").SemiBold();
                     header.Cell().Element(CellStyle).AlignRight().Text("Total").SemiBold();
@@ -119,13 +119,13 @@ public class DeliveryNoteDocument : IDocument
             });
 
             var totalQuantity = 0;
-            foreach (var item in _deliveryNote.DetailList)
+            foreach (var item in _stockSale.DetailList)
             {
                 totalQuantity += item.Quantity;
                 table.Cell().Element(CellStyle).Text(item.ProductTypeName);
                 table.Cell().Element(CellStyle).Text(item.ProductName);
                 table.Cell().Element(CellStyle).AlignRight().Text(item.Quantity.ToString());
-                if (_deliveryNote.DirectSale)
+                if (_stockSale.DirectSale)
                 {
                     table.Cell().Element(CellStyle);
                     table.Cell().Element(CellStyle);
@@ -139,7 +139,7 @@ public class DeliveryNoteDocument : IDocument
             // Add the totals column
             table.Cell().ColumnSpan(2).Element(TotalCellStyle).Text("Total");
             table.Cell().Element(TotalCellStyle).AlignRight().Text(totalQuantity.ToString());
-            if (_deliveryNote.DirectSale)
+            if (_stockSale.DirectSale)
             {
                 table.Cell().Element(TotalCellStyle);
                 table.Cell().Element(TotalCellStyle);
@@ -153,7 +153,7 @@ public class DeliveryNoteDocument : IDocument
 
     private void ComposeFooter(IContainer container)
     {
-        if (_deliveryNote.DirectSale)
+        if (_stockSale.DirectSale)
         {
             container.Row(row =>
             {

@@ -5,18 +5,18 @@ using StockManagement.Client.Interfaces;
 using StockManagement.Models;
 
 [Authorize]
-public partial class StockOrderListBase : ComponentBase
+public partial class StockSaleListBase : ComponentBase
 {
     [Inject]
     protected NavigationManager Navigation { get; set; } = default!;
 
     [Inject]
-    protected IStockOrderDataService StockOrderService { get; set; } = default!;
+    protected IStockSaleDataService StockSaleService { get; set; } = default!;
 
     [Inject]
     public IJSRuntime JSRuntime { get; set; } = default!;
 
-    protected List<StockOrderResponseModel> StockOrders { get; set; } = new();
+    protected List<StockSaleResponseModel> StockSales { get; set; } = new();
     protected bool IsLoading { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -24,24 +24,24 @@ public partial class StockOrderListBase : ComponentBase
         IsLoading = true;
         if (JSRuntime is IJSInProcessRuntime)
         {
-            await LoadStockOrders();
+            await LoadStockSales();
         }
     }
 
-    protected async Task LoadStockOrders()
+    protected async Task LoadStockSales()
     {
-        StockOrders = (await StockOrderService.GetAllAsync())?.ToList() ?? new();
+        StockSales = (await StockSaleService.GetAllAsync())?.ToList() ?? new();
         IsLoading = false;
     }
 
-    protected void AddStockOrder()
+    protected void AddStockSale()
     {
-        Navigation.NavigateTo("/stock-order/0");
+        Navigation.NavigateTo("/stock-sale/0");
     }
 
-    protected void ViewDetails(StockOrderResponseModel stockReceipt)
+    protected void ViewDetails(StockSaleResponseModel note)
     {
-        Navigation.NavigateTo($"/stock-order/{stockReceipt.Id}");
+        Navigation.NavigateTo($"/stock-sale/{note.Id}");
     }
 
 }

@@ -70,3 +70,11 @@ INSERT INTO [finance].[InventoryBatchStatus] ([Id],[Status],[Deleted],[CreateUse
 VALUES (2,'Active',0,0,GETDATE(),0,GETDATE())
 INSERT INTO [finance].[InventoryBatchStatus] ([Id],[Status],[Deleted],[CreateUserId],[CreateDate],[AmendUserId],[AmendDate])
 VALUES (3,'Depleted',0,0,GETDATE(),0,GETDATE())
+
+-- If Action table doesn't have id=8 than add it
+IF NOT EXISTS (SELECT 1 FROM [dbo].[Action] WHERE Id = 8)
+BEGIN
+	INSERT INTO [dbo].[Action] ([Id],[ActionName],[Direction],[AffectStockRoom],[Deleted],[AmendUserID],[AmendDate])
+	VALUES (8, 'Personal use', -1, 0, 0, 1, GETDATE())
+END
+GO

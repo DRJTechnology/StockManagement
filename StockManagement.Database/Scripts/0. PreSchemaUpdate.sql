@@ -61,3 +61,70 @@ GO
 DROP TABLE [dbo].[StockReceiptDetail];
 DROP TABLE [dbo].[StockReceipt];
 GO
+
+-- Creaate the StockSale table
+CREATE TABLE [dbo].[StockSale] (
+    [Id]          INT      IDENTITY (1, 1) NOT NULL,
+    [Date]        DATETIME NOT NULL,
+    [LocationId]  INT      NOT NULL,
+    [DirectSale]  BIT      DEFAULT ((0)) NOT NULL,
+    [TransactionId]  INT   NULL,
+    [Deleted]     BIT      CONSTRAINT [DF_StockSale_Deleted] DEFAULT ((0)) NOT NULL,
+    [AmendUserID] INT      NOT NULL,
+    [AmendDate]   DATETIME CONSTRAINT [DF_StockSale_AmendDate] DEFAULT (sysdatetime()) NOT NULL,
+    CONSTRAINT [PK_StockSale] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_StockSale_Location] FOREIGN KEY ([LocationId]) REFERENCES [dbo].[Location] ([Id])
+);
+GO
+
+-- Create the Stock Sale Detail table
+CREATE TABLE [dbo].[StockSaleDetail] (
+    [Id]             INT      IDENTITY (1, 1) NOT NULL,
+    [StockSaleId] INT      NOT NULL,
+    [ProductId]      INT      NOT NULL,
+    [ProductTypeId]  INT      NOT NULL,
+    [Quantity]       INT      NOT NULL,
+    [Deleted]        BIT      CONSTRAINT [DF_StockSaleDetail_Deleted] DEFAULT ((0)) NOT NULL,
+    [AmendUserID]    INT      NOT NULL,
+    [AmendDate]      DATETIME CONSTRAINT [DF_StockSaleDetail_AmendDate] DEFAULT (sysdatetime()) NOT NULL,
+    CONSTRAINT [PK_StockSaleDetail] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_StockSaleDetail_StockSale] FOREIGN KEY ([StockSaleId]) REFERENCES [dbo].[StockSale] ([Id]),
+    CONSTRAINT [FK_StockSaleDetail_Product] FOREIGN KEY ([ProductId]) REFERENCES [dbo].[Product] ([Id]),
+    CONSTRAINT [FK_StockSaleDetail_ProductType] FOREIGN KEY ([ProductTypeId]) REFERENCES [dbo].[ProductType] ([Id])
+);
+GO
+
+-- Copy the data from the DeliveryNote table to the StockSale table, maintaining the Id values
+SET IDENTITY_INSERT [dbo].[StockSale] ON;
+INSERT INTO [dbo].[StockSale] ([Id], [Date], [LocationId], [DirectSale], [TransactionId], [Deleted], [AmendUserID], [AmendDate])
+SELECT [Id], [Date], [LocationId], [DirectSale], NULL, [Deleted], [AmendUserID], [AmendDate]
+FROM [dbo].[DeliveryNote]
+SET IDENTITY_INSERT [dbo].[StockSale] OFF;
+GO
+
+-- Copy the data from the DeliveryNoteDetail table to the StockSaleDetail table, maintaining the Id values
+SET IDENTITY_INSERT [dbo].[StockSaleDetail] ON;
+INSERT INTO [dbo].[StockSaleDetail] ([Id], [StockSaleId], [ProductId], [ProductTypeId], [Quantity], [Deleted], [AmendUserID], [AmendDate])
+SELECT [Id], [DeliveryNoteId], [ProductId], [ProductTypeId], [Quantity], [Deleted], [AmendUserID], [AmendDate]
+FROM [dbo].[DeliveryNoteDetail]
+SET IDENTITY_INSERT [dbo].[StockSaleDetail] OFF;
+GO
+
+
+-- Rename the DeliveryNoteDetailId column in the dbo.Activity table to StockSaleDetailId
+EXEC sp_rename 'dbo.Activity.DeliveryNoteDetailId', 'StockSaleDetailId', 'COLUMN';
+GO
+
+-- Drop any foreign key constraints in the Activity table that reference the DeliveryNoteDetail table (FK_Activity_DeliveryNoteDetailId)
+IF OBJECT_ID('FK_Activity_DeliveryNoteDetailId', 'F') IS NOT NULL
+BEGIN
+    ALTER TABLE [dbo].[Activity] DROP CONSTRAINT [FK_Activity_DeliveryNoteDetailId];
+END
+GO
+
+-- Drop the DeliveryNote and DeliveryNoteDetail tables
+DROP TABLE [dbo].[DeliveryNoteDetail];
+DROP TABLE [dbo].[DeliveryNote];
+GO
+
+

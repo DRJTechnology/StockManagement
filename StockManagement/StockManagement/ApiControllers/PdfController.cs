@@ -8,24 +8,24 @@ namespace StockManagement.ApiControllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class PdfController(ILogger<DeliveryNoteController> logger, IDeliveryNoteService deliveryNoteService, ISettingService settingService) : ControllerBase
+    public class PdfController(ILogger<StockSaleController> logger, IStockSaleService stockSaleService, ISettingService settingService) : ControllerBase
     {
-        [HttpGet("delivery-note/{id}")]
-        public async Task<IActionResult> GetDeliveryNotePdf(int id)
+        [HttpGet("stock-sale/{id}")]
+        public async Task<IActionResult> GetStockSalePdf(int id)
         {
             try
             {
-                var deliveryNote = await deliveryNoteService.GetByIdAsync(id);
-                if (deliveryNote == null)
+                var stockSale = await stockSaleService.GetByIdAsync(id);
+                if (stockSale == null)
                 {
                     return NotFound();
                 }
                 byte[] logoImage = System.IO.File.ReadAllBytes("wwwroot/images/logo.jpg");
-                //var logoImage = await deliveryNoteService.GetLogoImageAsync(); // Assuming this method exists
-                var document = new DeliveryNoteDocument(deliveryNote, logoImage, await settingService.GetAllAsync());
+                //var logoImage = await stockSaleService.GetLogoImageAsync(); // Assuming this method exists
+                var document = new StockSaleDocument(stockSale, logoImage, await settingService.GetAllAsync());
                 var pdfBytes = document.GeneratePdf(); // Assuming GeneratePdf is a method that creates the PDF
                 return File(pdfBytes, "application/pdf");
-                //return File(pdfBytes, "application/pdf", $"DeliveryNote_{id}.pdf");
+                //return File(pdfBytes, "application/pdf", $"StockSale_{id}.pdf");
             }
             catch (Exception ex)
             {

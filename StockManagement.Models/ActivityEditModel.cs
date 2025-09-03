@@ -26,7 +26,7 @@ namespace StockManagement.Models
 
         public string Notes { get; set; } = string.Empty;
 
-        public int DeliveryNoteId { get; set; }
+        public int StockSaleId { get; set; }
 
         public int StockOrderId { get; set; }
 

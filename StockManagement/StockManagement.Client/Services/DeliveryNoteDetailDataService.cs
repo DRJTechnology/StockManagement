@@ -3,12 +3,12 @@ using StockManagement.Models;
 
 namespace StockManagement.Client.Services
 {
-    public class DeliveryNoteDetailDataService : GenericDataService<DeliveryNoteDetailEditModel, DeliveryNoteDetailResponseModel>, IDeliveryNoteDetailDataService
+    public class StockSaleDetailDataService : GenericDataService<StockSaleDetailEditModel, StockSaleDetailResponseModel>, IStockSaleDetailDataService
     {
-        public DeliveryNoteDetailDataService(HttpClient httpClient)
+        public StockSaleDetailDataService(HttpClient httpClient)
             : base(httpClient)
         {
-            ApiControllerName = "DeliveryNoteDetail";
+            ApiControllerName = "StockSaleDetail";
         }
     }
 }

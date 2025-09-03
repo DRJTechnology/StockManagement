@@ -1,9 +1,9 @@
 @using StockManagement.Client.Components
-@page "/stock-order/{StockOrderId:int}"
+@page "/stock-sale/{StockSaleId:int}"
 @rendermode InteractiveWebAssembly
-@inherits StockOrderBase
+@inherits StockSaleBase
 
-<h3>Stock Order</h3>
+<h3>Delivery Note</h3>
 
 @if (IsLoading)
 {
@@ -11,15 +11,9 @@
 }
 else
 {
-    <ConfirmDialogModal Show="@(ShowDeleteReceiptConfirm || ShowDeleteDetailConfirm)"
+    <ConfirmDialogModal Show="@(ShowDeleteNoteConfirm || ShowDeleteDetailConfirm)"
                         ItemName="@SelectedItemName"
                         ConfirmationResult="HandleDeleteConfirmation" />
-
-    <ConfirmDialogModal Show="@ShowReceiveStockConfirm"
-                        Title="Confirmation"
-                        Message="Are you sure you want to make the stock available in the stock room?"
-                        ConfirmationResult="HandleReceiveStock" />
-
 
     <div class="row">
         <div class="col-md-6">
@@ -28,59 +22,62 @@ else
                 <ValidationSummary />
                 <div class="mb-2">
                     <label>Date:</label>
-                    <InputDate class="form-control" @bind-Value="EditStockOrder.Date" />
+                    <InputDate class="form-control" @bind-Value="EditStockSale.Date" />
                 </div>
                 <div class="mb-2">
-                    <label>Supplier:</label>
-                    <InputSelect class="form-control" @bind-Value="EditStockOrder.ContactId">
-                        <option value="0">-- Select Supplier --</option>
-                        @if (Lookups?.SupplierList != null)
+                    <label>Location:</label>
+                    <InputSelect class="form-control" @bind-Value="EditStockSale.LocationId">
+                        <option value="0">-- Select Location --</option>
+                        @if (Lookups?.LocationList != null)
                         {
-                            foreach (var supplier in Lookups.SupplierList)
+                            foreach (var location in Lookups.LocationList)
                             {
-                                <option value="@supplier.Id">@supplier.Name</option>
+                                <option value="@location.Id">@location.Name</option>
                             }
                         }
                     </InputSelect>
                 </div>
+                <div class="mb-2">
+                    <label>Direct Sale:</label>
+                    <div>
+                        <InputRadioGroup @bind-Value="EditStockSale.DirectSale">
+                            <InputRadio class="btn-check" id="directSaleYes" Value="true" />
+                            <label class="btn btn-outline-success me-2" for="directSaleYes">Yes</label>
+                            <InputRadio class="btn-check" id="directSaleNo" Value="false" />
+                            <label class="btn btn-outline-secondary" for="directSaleNo">No</label>
+                        </InputRadioGroup>
+                    </div>
+                </div>
                 <div class="d-flex justify-content-end">
                     <button class="btn btn-success" type="submit" disabled="@( !IsFormValid || !IsDirty )">Save</button>
-                    @if (EditStockOrder.Id > 0)
+                    @if (EditStockSale.Id > 0)
                     {
-                        <button class="btn btn-danger ms-2" type="button" @onclick="DeleteStockOrder" disabled="@( EditStockOrder.PaymentRecorded || EditStockOrder.StockReceiptRecorded )">Delete</button>
+                        <button class="btn btn-danger ms-2" type="button" @onclick="DeleteStockSale">Delete</button>
                     }
                 </div>
             </EditForm>
         </div>
         <div class="col-md-6 d-none d-md-block border rounded p-2">
-            <p>Products saved with a stock order will be moved into stock.</p>
+            <p>Products saved on a delivery note will be moved from stock to the selected location.</p>
+            <p>Selecting 'Direct Sale' will mark the stock as sold by the selected location.</p>
             <p>Corresponding 'Activity' records will be created.</p>
         </div>
     </div>
 
-    @if (EditStockOrder.Id > 0)
+    @if (EditStockSale.Id > 0)
     {
         <div class="row">
             <div class="col d-flex justify-content-between pt-2">
-                <button class="btn btn-primary mb-2" @onclick="ShowAddDetailForm" disabled="@( IsDirty || EditStockOrder.PaymentRecorded || EditStockOrder.StockReceiptRecorded )">Add Product</button>
-                <div>
-                    <button class="btn btn-primary mb-2" @onclick="RecordPayment" disabled="@( IsDirty || EditStockOrder.PaymentRecorded )">Record Payment</button>
-                    <button class="btn btn-primary mb-2" @onclick="ReceiveStock" disabled="@( IsDirty || EditStockOrder.StockReceiptRecorded )">Receive Stock</button>
-                </div>
+                <button class="btn btn-primary mb-2" @onclick="ShowAddDetailForm" disabled="@( IsDirty )">Add Product</button>
+                <button class="btn btn-primary" @onclick="DownloadPdf" disabled="@( IsDirty )">Print</button>
             </div>
         </div>
 
-        <StockOrderDetailEditModal Show="ShowEditDetailForm"
-                           EditStockOrderDetail="EditStockOrderDetail"
+        <StockSaleDetailEditModal Show="ShowEditDetailForm"
+                           EditStockSaleDetail="EditStockSaleDetail"
                            Lookups="Lookups"
                            OnCancel="CancelDetailEdit"
                            OnValidSubmit="HandleValidDetailSubmit" />
-
-        <StockOrderRecordPaymentModal Show="ShowRecordPaymentForm"
-                                      PaymentDetail="PaymentDetail"
-                                      OnCancel="CancelRecordPayment"
-                                      OnValidSubmit="HandleValidDetailSubmit"
-                                      OnRecordPayment="HandleRecordPayment" />
 
         <div class="d-none d-md-block">
             <div class="px-3 py-2">
@@ -108,7 +105,7 @@ else
             </div>
         </div>
         int rowIndex = 0;
-        @foreach (var stockReceiptDetail in EditStockOrder.DetailList)
+        @foreach (var stockSaleDetail in EditStockSale.DetailList)
         {
             var rowClass = rowIndex % 2 == 0 ? "alt-row" : "";
             <div class="card mb-3 mb-lg-0 @rowClass">
@@ -120,23 +117,23 @@ else
                                     Type:
                                 </div>
                                 <div class="col-8 col-md-4 col-lg-3">
-                                    @stockReceiptDetail.ProductTypeName
+                                    @stockSaleDetail.ProductTypeName
                                 </div>
                                 <div class="col-4 d-md-none">
                                     Product:
                                 </div>
                                 <div class="col-8 col-md-5 col-lg-4">
-                                    @stockReceiptDetail.ProductName
+                                    @stockSaleDetail.ProductName
                                 </div>
                                 <div class="col-4 d-md-none">
                                     Quantity:
                                 </div>
                                 <div class="col-8 col-md-3 col-lg-2">
-                                    @stockReceiptDetail.Quantity
+                                    @stockSaleDetail.Quantity
                                 </div>
                                 <div class="col-12 col-lg-3">
-                                    <button class="btn btn-sm btn-warning" @onclick="() => EditDetail(stockReceiptDetail)" disabled="@( EditStockOrder.PaymentRecorded || EditStockOrder.StockReceiptRecorded )">Edit</button>
-                                    <button class="btn btn-sm btn-danger ms-2" @onclick="() => DeleteDetail(stockReceiptDetail.Id)" disabled="@( EditStockOrder.PaymentRecorded || EditStockOrder.StockReceiptRecorded )">Delete</button>
+                                    <button class="btn btn-sm btn-warning" @onclick="() => EditDetail(stockSaleDetail)">Edit</button>
+                                    <button class="btn btn-sm btn-danger ms-2" @onclick="() => DeleteDetail(stockSaleDetail.Id)">Delete</button>
                                 </div>
                             </div>
                         </div>

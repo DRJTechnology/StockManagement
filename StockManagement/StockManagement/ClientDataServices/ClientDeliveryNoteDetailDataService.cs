@@ -3,9 +3,9 @@ using StockManagement.Models;
 
 namespace StockManagement.ClientDataServices
 {
-    public class ClientDeliveryNoteDetailDataService : IDeliveryNoteDetailDataService
+    public class ClientStockSaleDetailDataService : IStockSaleDetailDataService
     {
-        public Task<int> CreateAsync(DeliveryNoteDetailEditModel entity)
+        public Task<int> CreateAsync(StockSaleDetailEditModel entity)
         {
             throw new NotImplementedException();
         }
@@ -15,17 +15,17 @@ namespace StockManagement.ClientDataServices
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<DeliveryNoteDetailResponseModel>> GetAllAsync()
+        public Task<IEnumerable<StockSaleDetailResponseModel>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<DeliveryNoteDetailResponseModel> GetByIdAsync(int entityId)
+        public Task<StockSaleDetailResponseModel> GetByIdAsync(int entityId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> UpdateAsync(DeliveryNoteDetailEditModel entity)
+        public Task<bool> UpdateAsync(StockSaleDetailEditModel entity)
         {
             throw new NotImplementedException();
         }

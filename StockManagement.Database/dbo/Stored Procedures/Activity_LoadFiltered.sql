@@ -3,7 +3,7 @@
 -- Create date: May 2025
 -- Description:	Get Activity
 -- =========================================================
--- 04 Jul 2025 - Dave Brown - DeliveryNoteId added
+-- 04 Jul 2025 - Dave Brown - StockSaleId added
 -- 09 Jul 2025 - Dave Brown - StockNoteId added
 -- 30 Aug 2025 - Dave Brown - Added Notes
 -- =========================================================
@@ -56,7 +56,7 @@ BEGIN
         l.[Name] AS LocationName,
         a.[Quantity],
 		a.[Notes],
-        dnd.DeliveryNoteId,
+        dnd.StockSaleId,
         srd.StockOrderId,
         a.[Deleted],
         a.[AmendUserID],
@@ -66,7 +66,7 @@ BEGIN
     INNER JOIN [ProductType] pt ON a.[ProductTypeId] = pt.Id
     INNER JOIN [Location] l ON a.[LocationId] = l.Id
     INNER JOIN [Action] act ON a.[ActionId] = act.Id
-    LEFT OUTER JOIN [DeliveryNoteDetail] dnd ON a.DeliveryNoteDetailId = dnd.Id
+    LEFT OUTER JOIN [StockSaleDetail] dnd ON a.StockSaleDetailId = dnd.Id
     LEFT OUTER JOIN [StockOrderDetail] srd ON a.StockOrderDetailId = srd.Id
     WHERE
         a.[Deleted] <> 1
