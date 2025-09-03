@@ -23,7 +23,7 @@ BEGIN
     INSERT INTO [finance].[Account] (AccountTypeId, [Name], Notes, Active, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
 	VALUES (@AccountTypeId, @Name, @Notes, @Active, 0, @CurrentUserId, SYSDATETIME(), @CurrentUserId, SYSDATETIME())
 
-	SELECT @ID = SCOPE_IDENTITY()
+	SELECT @Id = SCOPE_IDENTITY()
 
 	SET @Success = 1
 

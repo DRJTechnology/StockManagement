@@ -35,7 +35,7 @@ BEGIN
 		INSERT INTO dbo.[StockOrderDetail] ([StockOrderId],[ProductId],[ProductTypeId],[Quantity],[Deleted],[AmendUserID],[AmendDate])
 		VALUES (@StockOrderId, @ProductId, @ProductTypeId, @Quantity, @Deleted, @CurrentUserId, @UpdateDate)
 
-		SELECT @ID = SCOPE_IDENTITY()
+		SELECT @Id = SCOPE_IDENTITY()
 
 		-- Create the activity record to add stock to the stock room
 		INSERT INTO dbo.[Activity] ([ActivityDate],[ActionId],[ProductId],[ProductTypeId],[LocationId],[Quantity],[StockOrderDetailId],[Deleted],[AmendUserID],[AmendDate])

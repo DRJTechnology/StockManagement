@@ -39,7 +39,7 @@ BEGIN
 		INSERT INTO dbo.[StockSaleDetail] ([StockSaleId],[ProductId],[ProductTypeId],[Quantity],[Deleted],[AmendUserID],[AmendDate])
 		VALUES (@StockSaleId, @ProductId, @ProductTypeId, @Quantity, @Deleted, @CurrentUserId, @UpdateDate)
 
-		SELECT @ID = SCOPE_IDENTITY()
+		SELECT @Id = SCOPE_IDENTITY()
 
 		-- Create the activity record to move from the stock room to the location
 		INSERT INTO dbo.[Activity] ([ActivityDate],[ActionId],[ProductId],[ProductTypeId],[LocationId],[Quantity],[StockSaleDetailId],[Deleted],[AmendUserID],[AmendDate])

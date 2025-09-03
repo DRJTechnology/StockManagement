@@ -23,7 +23,7 @@ BEGIN
 	INSERT INTO dbo.[Product] ([ProductName],[Deleted],[AmendUserID],[AmendDate])
 	VALUES (@ProductName, @Deleted, @CurrentUserId, @UpdateDate)
 
-	SELECT @ID = SCOPE_IDENTITY()
+	SELECT @Id = SCOPE_IDENTITY()
 
 	SET @Success = 1
 

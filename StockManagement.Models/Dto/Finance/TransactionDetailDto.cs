@@ -28,6 +28,6 @@
 
         public int? ContactId { get; set; }
 
-        public string ContactName { get; set; }
+        public string ContactName { get; set; } = string.Empty;
     }
 }

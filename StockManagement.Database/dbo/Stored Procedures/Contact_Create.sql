@@ -28,7 +28,7 @@ BEGIN
 	INSERT INTO dbo.[Contact] ([ContactTypeId],[Name],[Notes],[Deleted],[AmendUserID],[AmendDate])
 	VALUES (@ContactTypeId, @Name, @Notes, @Deleted, @CurrentUserId, @UpdateDate)
 
-	SELECT @ID = SCOPE_IDENTITY()
+	SELECT @Id = SCOPE_IDENTITY()
 
 	SET @Success = 1
 

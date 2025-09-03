@@ -27,7 +27,7 @@ BEGIN
 	INSERT INTO dbo.[ProductType] ([ProductTypeName],[DefaultCostPrice],[DefaultSalePrice],[Deleted],[AmendUserID],[AmendDate])
 	VALUES (@ProductTypeName, @DefaultCostPrice, @DefaultSalePrice, @Deleted, @CurrentUserId, @UpdateDate)
 
-	SELECT @ID = SCOPE_IDENTITY()
+	SELECT @Id = SCOPE_IDENTITY()
 
 	SET @Success = 1
 

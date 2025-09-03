@@ -25,7 +25,7 @@ BEGIN
 	INSERT INTO dbo.[Location] ([Name],[Notes],[Deleted],[AmendUserID],[AmendDate])
 	VALUES (@Name, @Notes, @Deleted, @CurrentUserId, @UpdateDate)
 
-	SELECT @ID = SCOPE_IDENTITY()
+	SELECT @Id = SCOPE_IDENTITY()
 
 	SET @Success = 1
 
