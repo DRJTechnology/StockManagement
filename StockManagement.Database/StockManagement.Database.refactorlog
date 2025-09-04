@@ -35,4 +35,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="StockReceiptRecorded" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="18fd4d25-6f61-431a-a519-85ce8e75fdd6" ChangeDateTime="09/04/2025 11:20:09">
+    <Property Name="ElementName" Value="[finance].[InventoryBatch].[BatchIdentifier]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[finance].[InventoryBatch]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OriginalInventoryBatchId" />
+  </Operation>
 </Operations>

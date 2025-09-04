@@ -21,6 +21,7 @@ BEGIN
     DECLARE @BatchQty INT;
     DECLARE @UnitCost MONEY;
     DECLARE @PurchaseDate DATETIME;
+    DECLARE @OriginalInventoryBatchId INT;
     DECLARE @DeductNow INT;
     DECLARE @UpdateDate DATETIME = GETDATE();
 
@@ -28,7 +29,7 @@ BEGIN
 
     BEGIN TRY
         DECLARE curBatches CURSOR LOCAL FAST_FORWARD FOR
-            SELECT Id, QuantityRemaining, UnitCost, PurchaseDate
+            SELECT Id, QuantityRemaining, UnitCost, PurchaseDate, OriginalInventoryBatchId
             FROM finance.InventoryBatch
             WHERE ProductId = @ProductId
               AND ProductTypeId = @ProductTypeId
@@ -39,7 +40,7 @@ BEGIN
             ORDER BY PurchaseDate ASC, Id ASC;
 
         OPEN curBatches;
-        FETCH NEXT FROM curBatches INTO @BatchId, @BatchQty, @UnitCost, @PurchaseDate;
+        FETCH NEXT FROM curBatches INTO @BatchId, @BatchQty, @UnitCost, @PurchaseDate, @OriginalInventoryBatchId;
 
         WHILE @@FETCH_STATUS = 0 AND @QtyToMove > 0
         BEGIN
@@ -47,7 +48,8 @@ BEGIN
 
             -- Deduct stock
             UPDATE finance.InventoryBatch
-            SET QuantityRemaining = QuantityRemaining - @DeductNow,
+            SET InventoryBatchStatusId = CASE WHEN @QtyToMove < @BatchQty THEN 2 /* Active */ ELSE 3 /* Depleted */ END,
+                QuantityRemaining = QuantityRemaining - @DeductNow,
                 AmendUserId = @UserId,
                 AmendDate = @UpdateDate
             WHERE Id = @BatchId;
@@ -57,8 +59,8 @@ BEGIN
             VALUES (@BatchId, @ActivityId, @DeductNow, @UserId, @UpdateDate, @UserId, @UpdateDate);
 
             -- Add stock to new location
-            INSERT INTO finance.InventoryBatch (InventoryBatchStatusId, ProductId, ProductTypeId, LocationId, InitialQuantity, QuantityRemaining, UnitCost, PurchaseDate, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
-            VALUES (2 /* Active */, @ProductId, @ProductTypeId, @ToLocationId, @DeductNow, @DeductNow, @UnitCost, @PurchaseDate, 0, @UserId, @UpdateDate, @UserId, @UpdateDate);
+            INSERT INTO finance.InventoryBatch (InventoryBatchStatusId, ProductId, ProductTypeId, LocationId, InitialQuantity, QuantityRemaining, UnitCost, PurchaseDate, OriginalInventoryBatchId, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
+            VALUES (2 /* Active */, @ProductId, @ProductTypeId, @ToLocationId, @DeductNow, @DeductNow, @UnitCost, @PurchaseDate, @OriginalInventoryBatchId, 0, @UserId, @UpdateDate, @UserId, @UpdateDate);
 
             -- Record activity for new batch
             DECLARE @NewBatchId INT = SCOPE_IDENTITY();
@@ -67,7 +69,7 @@ BEGIN
 
             SET @QtyToMove = @QtyToMove - @DeductNow;
 
-            FETCH NEXT FROM curBatches INTO @BatchId, @BatchQty, @UnitCost, @PurchaseDate;
+            FETCH NEXT FROM curBatches INTO @BatchId, @BatchQty, @UnitCost, @PurchaseDate, @OriginalInventoryBatchId;
         END
 
         CLOSE curBatches;

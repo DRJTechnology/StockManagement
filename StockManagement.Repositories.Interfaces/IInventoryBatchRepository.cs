@@ -1,3 +1,4 @@
+using StockManagement.Models;
 using StockManagement.Models.Dto;
 
 namespace StockManagement.Repositories.Interfaces
@@ -8,6 +9,6 @@ namespace StockManagement.Repositories.Interfaces
         //Task<bool> DeleteAsync(int currentUserId, int InventoryBatchId);
         //Task<bool> UpdateAsync(int currentUserId, InventoryBatchDto inventoryBatchDto);
         //Task<List<InventoryBatchDto>> GetAllAsync();
-        //Task<ActivityFilteredResponseModel> GetFilteredAsync(ActivityFilterModel activityFilterModel);
+        Task<InventoryBatchFilteredResponseModel> GetFilteredAsync(InventoryBatchFilterModel inventoryBatchFilterModel);
     }
 }

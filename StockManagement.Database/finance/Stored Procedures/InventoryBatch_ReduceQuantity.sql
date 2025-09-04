@@ -50,7 +50,8 @@ BEGIN
 
             -- Deduct stock
             UPDATE finance.InventoryBatch
-            SET QuantityRemaining = QuantityRemaining - @DeductNow,
+            SET InventoryBatchStatusId = CASE WHEN @QtyToDeduct < @BatchQty THEN 2 /* Active */ ELSE 3 /* Depleted */ END,
+                QuantityRemaining = QuantityRemaining - @DeductNow,
                 AmendUserId = @UserId,
                 AmendDate = GETDATE()
             WHERE Id = @BatchId;

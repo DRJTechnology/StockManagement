@@ -31,5 +31,6 @@ builder.Services.AddScoped<IStockOrderDetailDataService, StockOrderDetailDataSer
 builder.Services.AddScoped<IStockOrderDataService, StockOrderDataService>();
 builder.Services.AddScoped<ILocationDataService, LocationDataService>();
 builder.Services.AddScoped<ITransactionDataService, TransactionDataService>();
+builder.Services.AddScoped<IInventoryBatchDataService, InventoryBatchDataService>();
 
 await builder.Build().RunAsync();

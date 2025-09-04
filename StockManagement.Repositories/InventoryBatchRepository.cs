@@ -1,48 +1,43 @@
+using AutoMapper;
 using Dapper;
-using StockManagement.Models.Dto;
+using StockManagement.Models;
+using StockManagement.Models.Dto.Finance;
+using StockManagement.Models.Finance;
 using StockManagement.Repositories.Interfaces;
 using System.Data;
+using System.Diagnostics;
 
 namespace StockManagement.Repositories
 {
-    public class InventoryBatchRepository(IDbConnection dbConnection) : IInventoryBatchRepository
+    public class InventoryBatchRepository(IDbConnection dbConnection, IMapper mapper) : IInventoryBatchRepository
     {
-        //public async Task<int> CreateAsync(int currentUserId, InventoryBatchDto inventoryBatchDto)
-        //{
-        //    try
-        //    {
-        //        if (inventoryBatchDto == null)
-        //        {
-        //            throw new ArgumentNullException(nameof(inventoryBatchDto));
-        //        }
+        public async Task<InventoryBatchFilteredResponseModel> GetFilteredAsync(InventoryBatchFilterModel inventoryBatchFilterModel)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@InventoryBatchStatusId", (int)inventoryBatchFilterModel.Status);
+                parameters.Add("@ProductId", inventoryBatchFilterModel.ProductId);
+                parameters.Add("@ProductTypeId", inventoryBatchFilterModel.ProductTypeId);
+                parameters.Add("@LocationId", inventoryBatchFilterModel.LocationId);
+                parameters.Add("@PurchaseDate", inventoryBatchFilterModel.PurchaseDate);
+                parameters.Add("@CurrentPage", inventoryBatchFilterModel.CurrentPage);
+                parameters.Add("@PageSize", inventoryBatchFilterModel.PageSize);
+                parameters.Add("@TotalPages", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
-        //        var parameters = new DynamicParameters();
-        //        parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
-        //        parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
-        //        parameters.Add("@InventoryBatchStatusId", inventoryBatchDto.InventoryBatchStatusId);
-        //        parameters.Add("@ProductId", inventoryBatchDto.ProductId);
-        //        parameters.Add("@ProductTypeId", inventoryBatchDto.ProductTypeId);
-        //        parameters.Add("@LocationId", inventoryBatchDto.LocationId);
-        //        parameters.Add("@InitialQuantity", inventoryBatchDto.InitialQuantity);
-        //        parameters.Add("@UnitCost", inventoryBatchDto.UnitCost);
-        //        parameters.Add("@Deleted", inventoryBatchDto.Deleted);
-        //        parameters.Add("@CurrentUserId", currentUserId);
+                var filteredinventory = await dbConnection.QueryAsync<InventoryBatchDto>("finance.InventoryBatch_LoadFiltered", parameters, commandType: CommandType.StoredProcedure);
 
-        //        await dbConnection.ExecuteAsync("finance.InventoryBatch_Create", parameters, commandType: CommandType.StoredProcedure);
-
-        //        if (parameters.Get<bool>("@Success"))
-        //        {
-        //            return parameters.Get<int>("@Id");
-        //        }
-        //        else
-        //        {
-        //            throw new UnauthorizedAccessException();
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw;
-        //    }
-        //}
+                return new InventoryBatchFilteredResponseModel()
+                {
+                    InventoryBatchList = mapper.Map<List<InventoryBatchResponseModel>>(filteredinventory.ToList()),
+                    TotalPages = parameters.Get<int>("@TotalPages"),
+                };
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in GetFilteredAsync: {ex.Message}");
+                throw;
+            }
+        }
     }
 }

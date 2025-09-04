@@ -34,8 +34,8 @@ namespace StockManagement.Models.Automapper
             CreateMap<LocationDto, LocationResponseModel>();
             CreateMap<LocationEditModel, LocationDto>();
 
-            CreateMap<InventoryBatchEditModel, InventoryBatchDto>()
-                .ForMember(dest => dest.InventoryBatchStatusId, opt => opt.MapFrom(src => (int)src.InventoryBatchStatus));
+            CreateMap<InventoryBatchDto, InventoryBatchResponseModel>()
+                .ForMember(dest => dest.InventoryBatchStatus, opt => opt.MapFrom(src => (InventoryBatchStatusEnum)src.InventoryBatchStatusId));
 
             CreateMap<ProductDto, ProductResponseModel>();
             CreateMap<ProductEditModel, ProductDto>();
