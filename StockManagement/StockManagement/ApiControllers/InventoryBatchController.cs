@@ -24,5 +24,20 @@ namespace StockManagement.ApiControllers
                 return this.BadRequest();
             }
         }
+
+        [HttpGet("GetActivity/{inventoryBatchId}")]
+        public async Task<IActionResult> GetActivity(int inventoryBatchId)
+        {
+            try
+            {
+                var inventoryBatchActivity = await inventoryBatchService.GetActivityAsync(inventoryBatchId);
+                return this.Ok(inventoryBatchActivity);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "GetActivity");
+                return this.BadRequest();
+            }
+        }
     }
 }

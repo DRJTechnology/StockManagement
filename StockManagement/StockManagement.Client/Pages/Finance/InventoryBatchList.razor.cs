@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
 using StockManagement.Models;
+using StockManagement.Models.Dto.Finance;
 using StockManagement.Models.Enums;
 using StockManagement.Models.Finance;
 using System.Diagnostics;
@@ -26,8 +28,10 @@ public partial class InventoryBatchListBase : ComponentBase
     protected IJavascriptMethodsService JavascriptMethodsService { get; set; } = default!;
 
     protected List<InventoryBatchResponseModel> InventoryBatchList { get; set; } = new();
+    protected List<InventoryBatchActivityDto> InventoryBatchActivity {  get; set; } = new();
     protected bool IsLoading { get; set; }
     protected bool filtersExpanded = false;
+    protected bool showActivityHistory = false;
 
     public LookupsModel Lookups { get; private set; }
 
@@ -99,6 +103,22 @@ public partial class InventoryBatchListBase : ComponentBase
 
     protected async Task ShowHistory(int inventoryBatchId)
     {
-
+        InventoryBatchActivity = await InventoryBatchService.GetActivityAsync(inventoryBatchId);
+        showActivityHistory = true;
     }
+    protected void OnCancelHistory(MouseEventArgs args)
+    {
+        showActivityHistory = false;
+    }
+
+    protected void OpenStockSale(int stockSaleId)
+    {
+        Navigation.NavigateTo($"/stock-sale/{stockSaleId}");
+    }
+
+    protected void OpenStockOrder(int stockReceiptId)
+    {
+        Navigation.NavigateTo($"/stock-order/{stockReceiptId}");
+    }
+
 }

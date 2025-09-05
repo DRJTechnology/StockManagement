@@ -228,6 +228,7 @@
     <Build Include="finance\Stored Procedures\InventoryBatch_MoveQuantity.sql" />
     <Build Include="finance\Stored Procedures\Transaction_Create.sql" />
     <Build Include="finance\Stored Procedures\InventoryBatch_LoadFiltered.sql" />
+    <Build Include="finance\Stored Procedures\InventoryBatchActivity_LoadByInventoryBatchId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\1. PopulateFinanceTables.sql" />

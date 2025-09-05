@@ -11,6 +11,23 @@ namespace StockManagement.Repositories
 {
     public class InventoryBatchRepository(IDbConnection dbConnection, IMapper mapper) : IInventoryBatchRepository
     {
+        public async Task<List<InventoryBatchActivityDto>> GetActivityAsync(int inventoryBatchId)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@InventoryBatchId", inventoryBatchId);
+
+                var filteredinventory = await dbConnection.QueryAsync<InventoryBatchActivityDto>("finance.InventoryBatchActivity_LoadByInventoryBatchId", parameters, commandType: CommandType.StoredProcedure);
+                return filteredinventory.ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error in GetFilteredAsync: {ex.Message}");
+                throw;
+            }
+        }
+
         public async Task<InventoryBatchFilteredResponseModel> GetFilteredAsync(InventoryBatchFilterModel inventoryBatchFilterModel)
         {
             try

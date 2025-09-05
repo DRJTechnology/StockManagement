@@ -1,5 +1,6 @@
 using StockManagement.Client.Interfaces;
 using StockManagement.Models;
+using StockManagement.Models.Dto.Finance;
 using System.Net.Http.Json;
 
 namespace StockManagement.Client.Services
@@ -38,6 +39,20 @@ namespace StockManagement.Client.Services
                 var url = $"api/{ApiControllerName}/GetFiltered?{queryString}";
 
                 return await httpClient.GetFromJsonAsync<InventoryBatchFilteredResponseModel>(url);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<InventoryBatchActivityDto>> GetActivityAsync(int inventoryBatchId)
+        {
+            try
+            {
+                var url = $"api/{ApiControllerName}/GetActivity/{inventoryBatchId}";
+
+                return await httpClient.GetFromJsonAsync<List<InventoryBatchActivityDto>>(url);
             }
             catch (Exception ex)
             {
