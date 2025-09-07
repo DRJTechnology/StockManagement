@@ -6,6 +6,7 @@
 -- 04 Jul 2025 - Dave Brown - StockSaleId added
 -- 09 Jul 2025 - Dave Brown - StockNoteId added
 -- 30 Aug 2025 - Dave Brown - Added Notes
+-- 07 Sep 2025 - Dave Brown - Delivery Note re-added
 -- =========================================================
 CREATE PROCEDURE [dbo].[Activity_LoadFiltered]
     @ActivityDate datetime = NULL,
@@ -56,7 +57,8 @@ BEGIN
         l.[Name] AS LocationName,
         a.[Quantity],
 		a.[Notes],
-        dnd.StockSaleId,
+        dnd.DeliveryNoteId,
+        ssd.StockSaleId,
         srd.StockOrderId,
         a.[Deleted],
         a.[AmendUserID],
@@ -66,7 +68,8 @@ BEGIN
     INNER JOIN [ProductType] pt ON a.[ProductTypeId] = pt.Id
     INNER JOIN [Location] l ON a.[LocationId] = l.Id
     INNER JOIN [Action] act ON a.[ActionId] = act.Id
-    LEFT OUTER JOIN [StockSaleDetail] dnd ON a.StockSaleDetailId = dnd.Id
+    LEFT OUTER JOIN [DeliveryNoteDetail] dnd ON a.DeliveryNoteDetailId = dnd.Id
+    LEFT OUTER JOIN [StockSaleDetail] ssd ON a.StockSaleDetailId = ssd.Id
     LEFT OUTER JOIN [StockOrderDetail] srd ON a.StockOrderDetailId = srd.Id
     WHERE
         a.[Deleted] <> 1
@@ -79,9 +82,6 @@ BEGIN
     ORDER BY
         a.[ActivityDate] DESC,
         a.Id DESC
-        --p.[ProductName] ASC,
-        --pt.[ProductTypeName] ASC,
-        --l.[Name] ASC
     OFFSET (@CurrentPage - 1) * @PageSize ROWS
     FETCH NEXT @PageSize ROWS ONLY;
 

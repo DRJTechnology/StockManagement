@@ -18,7 +18,7 @@ BEGIN
 		dn.[Date],
 		dn.[LocationId],
 		l.[Name] AS LocationName,
-		dn.DirectSale,
+		--dn.DirectSale,
 		dn.[Deleted],
 		dn.[AmendUserID],
 		dn.[AmendDate]

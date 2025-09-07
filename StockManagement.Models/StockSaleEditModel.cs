@@ -12,7 +12,7 @@ namespace StockManagement.Models
         [Range(1, int.MaxValue, ErrorMessage = "Location must be selected.")]
         public int LocationId { get; set; }
 
-        public bool DirectSale { get; set; }
+        //public bool DirectSale { get; set; }
 
         public bool Deleted { get; set; }
     }

@@ -120,6 +120,11 @@ public partial class ActivitiesBase : ComponentBase
         Navigation.NavigateTo($"/stock-order/{stockReceiptId}");
     }
 
+    protected void OpenDeliveryNote(int deliveryNoteId)
+    {
+        Navigation.NavigateTo($"/delivery-note/{deliveryNoteId}");
+    }
+
     protected async Task HandleValidSubmit()
     {
         if (EditActivity.Id == 0)

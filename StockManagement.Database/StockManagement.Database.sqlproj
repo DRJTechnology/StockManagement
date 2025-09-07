@@ -229,6 +229,16 @@
     <Build Include="finance\Stored Procedures\Transaction_Create.sql" />
     <Build Include="finance\Stored Procedures\InventoryBatch_LoadFiltered.sql" />
     <Build Include="finance\Stored Procedures\InventoryBatchActivity_LoadByInventoryBatchId.sql" />
+    <Build Include="dbo\Tables\DeliveryNoteDetail.sql" />
+    <Build Include="dbo\Tables\DeliveryNote.sql" />
+    <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Update.sql" />
+    <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Create.sql" />
+    <Build Include="dbo\Stored Procedures\DeliveryNote_Update.sql" />
+    <Build Include="dbo\Stored Procedures\DeliveryNote_LoadById.sql" />
+    <Build Include="dbo\Stored Procedures\DeliveryNote_LoadAll.sql" />
+    <Build Include="dbo\Stored Procedures\DeliveryNote_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\DeliveryNote_Create.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\1. PopulateFinanceTables.sql" />

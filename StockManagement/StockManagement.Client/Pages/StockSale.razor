@@ -3,7 +3,7 @@
 @rendermode InteractiveWebAssembly
 @inherits StockSaleBase
 
-<h3>Delivery Note</h3>
+<h3>Stock Sale</h3>
 
 @if (IsLoading)
 {
@@ -37,7 +37,7 @@ else
                         }
                     </InputSelect>
                 </div>
-                <div class="mb-2">
+@*                 <div class="mb-2">
                     <label>Direct Sale:</label>
                     <div>
                         <InputRadioGroup @bind-Value="EditStockSale.DirectSale">
@@ -47,7 +47,7 @@ else
                             <label class="btn btn-outline-secondary" for="directSaleNo">No</label>
                         </InputRadioGroup>
                     </div>
-                </div>
+                </div> *@
                 <div class="d-flex justify-content-end">
                     <button class="btn btn-success" type="submit" disabled="@( !IsFormValid || !IsDirty )">Save</button>
                     @if (EditStockSale.Id > 0)

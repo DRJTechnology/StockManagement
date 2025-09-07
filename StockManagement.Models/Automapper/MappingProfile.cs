@@ -25,11 +25,11 @@ namespace StockManagement.Models.Automapper
             CreateMap<ContactDto, ContactResponseModel>();
             CreateMap<ContactEditModel, ContactDto>();
 
-            CreateMap<StockSaleDetailDto, StockSaleDetailResponseModel>();
-            CreateMap<StockSaleDetailEditModel, StockSaleDetailDto>();
+            CreateMap<DeliveryNoteDetailDto, DeliveryNoteDetailResponseModel>();
+            CreateMap<DeliveryNoteDetailEditModel, DeliveryNoteDetailDto>();
 
-            CreateMap<StockSaleDto, StockSaleResponseModel>();
-            CreateMap<StockSaleEditModel, StockSaleDto>();
+            CreateMap<DeliveryNoteDto, DeliveryNoteResponseModel>();
+            CreateMap<DeliveryNoteEditModel, DeliveryNoteDto>();
 
             CreateMap<LocationDto, LocationResponseModel>();
             CreateMap<LocationEditModel, LocationDto>();
@@ -54,6 +54,12 @@ namespace StockManagement.Models.Automapper
 
             CreateMap<StockOrderDetailPaymentResponseModel, StockOrderResponseModel>();
             CreateMap<StockOrderResponseModel, StockOrderDetailPaymentResponseModel>();
+
+            CreateMap<StockSaleDetailDto, StockSaleDetailResponseModel>();
+            CreateMap<StockSaleDetailEditModel, StockSaleDetailDto>();
+
+            CreateMap<StockSaleDto, StockSaleResponseModel>();
+            CreateMap<StockSaleEditModel, StockSaleDto>();
 
             CreateMap<TransactionDetailDto, TransactionDetailResponseModel>()
                 .ForMember(dest => dest.TransactionType, opt => opt.MapFrom(src => (TransactionTypeEnum)src.TransactionTypeId));

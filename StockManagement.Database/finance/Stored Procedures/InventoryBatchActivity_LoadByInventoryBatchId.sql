@@ -19,7 +19,7 @@ BEGIN
     LEFT OUTER JOIN dbo.[StockSaleDetail] ssd on a.StockSaleDetailId = ssd.Id
     WHERE   iba.Deleted = 0
         AND inventoryBatchid = @InventoryBatchId
-    ORDER BY a.ActivityDate DESC, iba.Id DESC
+    ORDER BY a.ActivityDate, iba.Id
 
     SET @Err = @@Error;
     RETURN @Err;

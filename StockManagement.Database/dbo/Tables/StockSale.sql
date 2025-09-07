@@ -2,7 +2,7 @@
     [Id]          INT      IDENTITY (1, 1) NOT NULL,
     [Date]        DATETIME NOT NULL,
     [LocationId]  INT      NOT NULL,
-    [DirectSale]  BIT      DEFAULT ((0)) NOT NULL,
+    --[DirectSale]  BIT      DEFAULT ((0)) NOT NULL,
     [TransactionId]  INT   NULL,
     [Deleted]     BIT      CONSTRAINT [DF_StockSale_Deleted] DEFAULT ((0)) NOT NULL,
     [AmendUserID] INT      NOT NULL,

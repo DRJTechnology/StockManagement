@@ -1,6 +1,4 @@
 ﻿
--- UPDATE THE SCHEMA FIRST
-
 -- Populate the TransactionType table with initial data
 INSERT INTO [finance].[TransactionType] ([Id],[Type],[Deleted],[CreateUserId],[CreateDate],[AmendUserId],[AmendDate])
 VALUES (1,'Journal',0,0,GETDATE(),0,GETDATE())
@@ -77,4 +75,10 @@ BEGIN
 	INSERT INTO [dbo].[Action] ([Id],[ActionName],[Direction],[AffectStockRoom],[Deleted],[AmendUserID],[AmendDate])
 	VALUES (8, 'Personal use', -1, 0, 0, 1, GETDATE())
 END
+GO
+
+-- Update all DeliveryNote records so that the DeliveyCompleted value is true
+UPDATE	dbo.DeliveryNote
+SET		DeliveryCompleted = 1
+WHERE	Deleted = 0
 GO

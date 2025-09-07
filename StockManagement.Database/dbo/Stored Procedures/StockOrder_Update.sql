@@ -9,7 +9,6 @@ CREATE PROCEDURE [dbo].[StockOrder_Update]
 	@Id int,
 	@Date datetime,
 	@ContactId int,
-	@DirectSale bit,
 	@Deleted bit,
 	@CurrentUserId int
 )
