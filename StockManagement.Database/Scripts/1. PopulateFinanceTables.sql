@@ -82,3 +82,17 @@ UPDATE	dbo.DeliveryNote
 SET		DeliveryCompleted = 1
 WHERE	Deleted = 0
 GO
+
+-- Update all Location records to set the ContactId based on matching Name in Contact table
+UPDATE l
+	SET ContactId = c.Id
+FROM dbo.[Location] l
+INNER JOIN dbo.[Contact] c ON l.[Name] = c.[Name]
+GO
+UPDATE Location
+SET		ContactId = 3 -- General Piublic
+WHERE	Id = 1 -- Stockroom
+GO
+
+
+

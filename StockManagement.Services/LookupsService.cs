@@ -29,12 +29,11 @@ namespace StockManagement.Services
 
         public async Task<List<LookupsModel>> GetLookupsAsync()
         {
-            var actionList = await _actionService.GetAllAsync();
             return new List<LookupsModel>
             {
                 new LookupsModel
                 {
-                    ActionList = actionList.Where(a => a.Id != 1 && a.Id != 5).ToList(), // Exclude 'Add new stock add to' and 'Sale from'
+                    ActionList = await _actionService.GetAllAsync(),
                     ProductList = await _productService.GetAllAsync(),
                     ProductTypeList = await _productTypeService.GetAllAsync(),
                     LocationList = await _locationService.GetAllAsync(),

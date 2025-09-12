@@ -17,6 +17,8 @@ namespace StockManagement.Models
         [Required(ErrorMessage = "Quantity is required.")]
         public int Quantity { get; set; }
 
+        public decimal? UnitPrice { get; set; }
+
         public bool Deleted { get; set; }
     }
 }

@@ -9,7 +9,7 @@ CREATE PROCEDURE [dbo].[StockSale_Update]
 	@Id int,
 	@Date datetime,
 	@LocationId int,
-	--@DirectSale bit,
+	@ContactId int,
 	@Deleted bit,
 	@CurrentUserId int
 )
@@ -36,7 +36,7 @@ BEGIN
 		SET
 			[Date] = @Date,
 			[LocationId] = @LocationId,
-			--[DirectSale] = @DirectSale,
+			[ContactId] = @ContactId,
 			[Deleted] = @Deleted,
 			[AmendUserID] = @CurrentUserId,
 			[AmendDate] = @UpdateDate

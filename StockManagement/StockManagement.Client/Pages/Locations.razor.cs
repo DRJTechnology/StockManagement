@@ -4,6 +4,7 @@ using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
 using StockManagement.Client.Pages;
 using StockManagement.Models;
+using StockManagement.Models.Enums;
 
 [Authorize]
 public partial class LocationsBase : ComponentBase
@@ -12,9 +13,13 @@ public partial class LocationsBase : ComponentBase
     protected ILocationDataService LocationService { get; set; } = default!;
 
     [Inject]
+    protected IContactDataService ContactService { get; set; } = default!;
+
+    [Inject]
     public IJSRuntime JSRuntime { get; set; } = default!;
 
     protected List<LocationResponseModel> Locations { get; set; } = new();
+    protected List<ContactResponseModel> Customers { get; set; } = new();
     protected LocationEditModel EditLocation { get; set; } = new();
     protected bool ShowForm { get; set; }
     protected bool ShowDeleteConfirm { get; set; } = false;
@@ -28,6 +33,7 @@ public partial class LocationsBase : ComponentBase
         IsLoading = true;
         if (JSRuntime is IJSInProcessRuntime)
         {
+            await LoadCustomers();
             await LoadLocations();
         }
     }
@@ -36,6 +42,10 @@ public partial class LocationsBase : ComponentBase
     {
         Locations = (await LocationService.GetAllAsync())?.ToList() ?? new();
         IsLoading = false;
+    }
+    protected async Task LoadCustomers()
+    {
+        Customers = (await ContactService.GetByTypeAsync((int)ContactTypeEnum.Customer))?.ToList() ?? new();
     }
 
     protected void ShowAddForm()
@@ -50,7 +60,8 @@ public partial class LocationsBase : ComponentBase
         {
             Id = location.Id,
             Name = location.Name,
-            Notes = location.Notes
+            Notes = location.Notes,
+            ContactId = location.ContactId,
         };
         ShowForm = true;
     }

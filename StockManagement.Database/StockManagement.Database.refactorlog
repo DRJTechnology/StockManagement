@@ -42,4 +42,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="OriginalInventoryBatchId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="f1ea84c7-9364-4e22-92d5-fc67bd218bfe" ChangeDateTime="09/11/2025 16:07:22">
+    <Property Name="ElementName" Value="[dbo].[StockSaleDetail].[UnitCost]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[StockSaleDetail]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UnitPrice" />
+  </Operation>
 </Operations>

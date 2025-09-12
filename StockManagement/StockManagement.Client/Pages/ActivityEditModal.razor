@@ -51,7 +51,7 @@
                                 <option value="">-- Select Action --</option>
                                 @if (Lookups?.ActionList != null)
                                 {
-                                    foreach (var action in Lookups.ActionList)
+                                    foreach (var action in Lookups.ActionList.Where(a => a.Id != 1 && a.Id != 5).ToList())
                                     {
                                         <option value="@action.Id">@action.ActionName</option>
                                     }

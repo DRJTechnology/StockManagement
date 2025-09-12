@@ -4,7 +4,7 @@
 -- Description:	Get Delivery Note
 -- ===========================================================================
 -- 02 JUL 2025 - Dave Brown - include DirectSale column
--- 03 JUL 2025 - Dave Brown - include delivery note detail child records
+-- 03 JUL 2025 - Dave Brown - include stock sale detail child records
 -- ===========================================================================
 CREATE PROCEDURE [dbo].[StockSale_LoadById]
 	@Id int
@@ -14,36 +14,42 @@ BEGIN
 	DECLARE @Err int
 
 	SELECT
-		dn.[Id],
-		dn.[Date],
-		dn.[LocationId],
+		ss.[Id],
+		ss.[Date],
+		ss.[LocationId],
 		l.[Name] AS LocationName,
-		--dn.DirectSale,
-		dn.[Deleted],
-		dn.[AmendUserID],
-		dn.[AmendDate]
-	FROM [StockSale] dn
-	INNER JOIN [Location] l ON dn.LocationId = l.Id
+		ss.[ContactId],
+		c.[Name] AS ContactName,
+		ss.SaleConfirmed,
+		ss.PaymentReceived,
+		ss.[Deleted],
+		ss.[AmendUserID],
+		ss.[AmendDate]
+	FROM [StockSale] ss
+	INNER JOIN [Location] l ON ss.LocationId = l.Id
+	INNER JOIN [Contact] c ON ss.ContactId = c.Id
 	WHERE
-		dn.[Deleted] <> 1
-		AND dn.[Id] = @Id
+		ss.[Deleted] <> 1
+		AND ss.[Id] = @Id
 
 	SELECT
-		dnd.[Id],
-		dnd.[ProductId],
+		ssd.[Id],
+		ssd.[StockSaleId],
+		ssd.[ProductId],
 		p.[ProductName],
-		dnd.[ProductTypeId],
+		ssd.[ProductTypeId],
 		pt.[ProductTypeName],
-		dnd.Quantity,
-		dnd.[Deleted],
-		dnd.[AmendUserID],
-		dnd.[AmendDate]
-	FROM [StockSaleDetail] dnd
-	INNER JOIN [Product] p ON dnd.ProductId = p.Id
-	INNER JOIN [ProductType] pt ON dnd.ProductTypeId = pt.Id
+		ssd.Quantity,
+		ssd.UnitPrice,
+		ssd.[Deleted],
+		ssd.[AmendUserID],
+		ssd.[AmendDate]
+	FROM [StockSaleDetail] ssd
+	INNER JOIN [Product] p ON ssd.ProductId = p.Id
+	INNER JOIN [ProductType] pt ON ssd.ProductTypeId = pt.Id
 	WHERE
-		dnd.[Deleted] <> 1
-		AND dnd.[StockSaleId] = @Id
+		ssd.[Deleted] <> 1
+		AND ssd.[StockSaleId] = @Id
 
 	SET @Err = @@Error
 

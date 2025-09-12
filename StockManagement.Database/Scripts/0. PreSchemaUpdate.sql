@@ -67,13 +67,17 @@ CREATE TABLE [dbo].[StockSale] (
     [Id]          INT      IDENTITY (1, 1) NOT NULL,
     [Date]        DATETIME NOT NULL,
     [LocationId]  INT      NOT NULL,
-    --[DirectSale]  BIT      DEFAULT ((0)) NOT NULL,
+    [ContactId]   INT      NOT NULL,
+    [SaleConfirmed]   BIT  CONSTRAINT [DF_StockSale_SaleConfirmed] DEFAULT ((0)) NOT NULL,
+    [PaymentReceived] BIT  CONSTRAINT [DF_StockSale_PaymentReceived] DEFAULT ((0)) NOT NULL,
     [TransactionId]  INT   NULL,
     [Deleted]     BIT      CONSTRAINT [DF_StockSale_Deleted] DEFAULT ((0)) NOT NULL,
     [AmendUserID] INT      NOT NULL,
     [AmendDate]   DATETIME CONSTRAINT [DF_StockSale_AmendDate] DEFAULT (sysdatetime()) NOT NULL,
     CONSTRAINT [PK_StockSale] PRIMARY KEY CLUSTERED ([Id] ASC),
-    CONSTRAINT [FK_StockSale_Location] FOREIGN KEY ([LocationId]) REFERENCES [dbo].[Location] ([Id])
+    CONSTRAINT [FK_StockSale_Location] FOREIGN KEY ([LocationId]) REFERENCES [dbo].[Location] ([Id]),
+    CONSTRAINT [FK_StockSale_Contact] FOREIGN KEY ([ContactId]) REFERENCES [dbo].[Contact] ([Id])--,
+--    CONSTRAINT [FK_StockSale_Transaction] FOREIGN KEY ([TransactionId]) REFERENCES [finance].[Transaction] ([Id])
 );
 GO
 
@@ -84,6 +88,7 @@ CREATE TABLE [dbo].[StockSaleDetail] (
     [ProductId]      INT      NOT NULL,
     [ProductTypeId]  INT      NOT NULL,
     [Quantity]       INT      NOT NULL,
+    [UnitPrice]	     MONEY    NULL,
     [Deleted]        BIT      CONSTRAINT [DF_StockSaleDetail_Deleted] DEFAULT ((0)) NOT NULL,
     [AmendUserID]    INT      NOT NULL,
     [AmendDate]      DATETIME CONSTRAINT [DF_StockSaleDetail_AmendDate] DEFAULT (sysdatetime()) NOT NULL,
@@ -96,9 +101,11 @@ GO
 
 -- Copy the data from the DeliveryNote table to the StockSale table, maintaining the Id values
 SET IDENTITY_INSERT [dbo].[StockSale] ON;
-INSERT INTO [dbo].[StockSale] ([Id], [Date], [LocationId], /* [DirectSale], */ [TransactionId], [Deleted], [AmendUserID], [AmendDate])
-SELECT [Id], [Date], [LocationId], /* [DirectSale], */ NULL, [Deleted], [AmendUserID], [AmendDate]
-FROM [dbo].[DeliveryNote]
+INSERT INTO [dbo].[StockSale] ([Id], [Date], [LocationId], [ContactId], [SaleConfirmed], [PaymentReceived], [TransactionId], [Deleted], [AmendUserID], [AmendDate])
+SELECT dn.[Id], dn.[Date], dn.[LocationId], ISNULL(c.Id, 3 /* General Public */), 1, 1, null, dn.[Deleted], dn.[AmendUserID], dn.[AmendDate]
+FROM [dbo].[DeliveryNote] dn
+LEFT OUTER JOIN [dbo].[Location] l ON dn.LocationId = l.Id
+LEFT OUTER JOIN [dbo].[Contact] c ON l.[Name] = c.[Name]
 Where [DirectSale] = 1
 SET IDENTITY_INSERT [dbo].[StockSale] OFF;
 GO
@@ -125,7 +132,7 @@ GO
 --END
 --GO
 
--- Drop the DeliveryNote and DeliveryNoteDetail tables
+-- Delete the DeliveryNote and DeliveryNoteDetail records relating to sales (that have been moved to the StockSale and StockSaleDetail tables)
 UPDATE  [dbo].[DeliveryNoteDetail]
 SET     Deleted  = 1
 WHERE   DeliveryNoteId IN (SELECT Id FROM [dbo].[DeliveryNote] WHERE DirectSale = 1);

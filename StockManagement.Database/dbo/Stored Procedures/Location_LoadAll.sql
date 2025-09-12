@@ -4,6 +4,8 @@
 -- Create date: 23 May 2025
 -- Description:	Get Locations
 -- =========================================================
+-- 10 Sep 2025 - DB Updated to include ContactId
+-- =========================================================
 CREATE PROCEDURE [dbo].[Location_LoadAll]
 AS
 BEGIN
@@ -14,6 +16,7 @@ BEGIN
 		[Id],
 		[Name],
 		[Notes],
+		[ContactId],
 		[Deleted],
 		[AmendUserID],
 		[AmendDate]

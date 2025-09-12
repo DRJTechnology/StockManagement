@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
 using StockManagement.Models;
+using StockManagement.Models.Enums;
 
 public partial class StockSaleBase : ComponentBase
 {
@@ -24,6 +25,9 @@ public partial class StockSaleBase : ComponentBase
     protected ILookupsDataService LookupsService { get; set; } = default!;
 
     [Inject]
+    protected IContactDataService ContactService { get; set; } = default!;
+
+    [Inject]
     protected IJavascriptMethodsService JavascriptMethodsService { get; set; } = default!;
 
     [Inject]
@@ -32,11 +36,15 @@ public partial class StockSaleBase : ComponentBase
     protected LookupsModel Lookups { get; private set; }
     protected bool ShowDeleteNoteConfirm { get; set; } = false;
     protected bool ShowDeleteDetailConfirm { get; set; } = false;
+    protected bool ShowSaleConfirmForm { get; set; } = false;
+    
     protected string SelectedItemName { get; set; } = string.Empty;
 
     protected bool IsLoading { get; set; }
     protected StockSaleResponseModel EditStockSale { get; set; } = new();
     protected StockSaleDetailEditModel EditStockSaleDetail { get; set; } = new();
+    protected StockSaleConfirmationModel StockSaleConfirmationObject { get; set; } = new();
+    protected List<ContactResponseModel> Customers { get; set; } = new();
 
     protected bool ShowEditDetailForm { get; set; }
 
@@ -51,6 +59,7 @@ public partial class StockSaleBase : ComponentBase
         if (JSRuntime is IJSInProcessRuntime)
         {
             await LoadLookups();
+            await LoadCustomers();
             await LoadStockSale();
         }
         // Initialization done, trigger re-render
@@ -85,19 +94,23 @@ public partial class StockSaleBase : ComponentBase
         if (StockSaleId == 0)
         {
             var localNow = await JavascriptMethodsService.GetLocalDateTimeAsync();
-            EditStockSale = new StockSaleResponseModel() { Date = localNow, LocationId = 0, DetailList = new List<StockSaleDetailResponseModel>() };
+            EditStockSale = new StockSaleResponseModel() { Date = localNow, LocationId = 1, ContactId = 3, DetailList = new List<StockSaleDetailResponseModel>() };
         }
         else
         {
             EditStockSale = await StockSaleService.GetByIdAsync(StockSaleId);
             if (EditStockSale == null)
             {
-                throw new Exception("Invalid Delivery Note");
+                throw new Exception("Invalid Stock Sale");
             }
         }
         CreateValidationContext();
 
         IsLoading = false;
+    }
+    protected async Task LoadCustomers()
+    {
+        Customers = (await ContactService.GetByTypeAsync((int)ContactTypeEnum.Customer))?.ToList() ?? new();
     }
 
     private void CreateValidationContext()
@@ -212,11 +225,6 @@ public partial class StockSaleBase : ComponentBase
         ShowEditDetailForm = true;
     }
 
-    //protected async Task DeleteDetail(int id)
-    //{
-    //    await StockSaleDetailService.DeleteAsync(id);
-    //    EditStockSale.DetailList.RemoveAll(dnd => dnd.Id == id);
-    //}
     protected void DeleteDetail(int id)
     {
         EditStockSaleDetail = new StockSaleDetailEditModel { Id = id };
@@ -229,4 +237,77 @@ public partial class StockSaleBase : ComponentBase
         var url = $"/api/pdf/stock-sale/{EditStockSale.Id}";
         await JS.InvokeVoidAsync("open", url, "_blank");
     }
+    public int LocationId
+    {
+        get => EditStockSale.LocationId;
+        set
+        {
+            if (EditStockSale.LocationId != value)
+            {
+                EditStockSale.LocationId = value;
+                EditStockSale.ContactId = Lookups.LocationList.Where(l => l.Id == EditStockSale.LocationId).FirstOrDefault().ContactId;
+            }
+        }
+    }
+
+    protected void CancelConfirmSale()
+    {
+        ShowSaleConfirmForm = false;
+    }
+
+    protected void HandleConfirmSale()
+    {
+        ShowSaleConfirmForm = false;
+    }
+
+    protected async Task ConfirmSale()
+    {
+        StockSaleConfirmationObject = new StockSaleConfirmationModel()
+        {
+            StockSaleId = EditStockSale.Id,
+            StockSaleDetails = EditStockSale.DetailList
+            .Select(detail => new StockSaleDetailResponseModel
+            {
+                Id = detail.Id,
+                StockSaleId = detail.StockSaleId,
+                ProductId = detail.ProductId,
+                ProductName = detail.ProductName,
+                ProductTypeId = detail.ProductTypeId,
+                ProductTypeName = detail.ProductTypeName,
+                Quantity = detail.Quantity,
+                Deleted = detail.Deleted,
+                UnitPrice = Math.Round(Lookups.ProductTypeList.FirstOrDefault(pt => pt.Id == detail.ProductTypeId)!.DefaultSalePrice, 2),
+            })
+            .ToList(),
+        };
+
+        // TODO Call API so that InventoryBatch records are reduced and SalePrice is stored on the StockSales record
+        ShowSaleConfirmForm = true;
+    }
+
+    protected async Task RecordPayment()
+    {
+        //StockSaleConfirmationObject = new StockSaleConfirmationModel()
+        //{
+        //    StockSaleId = EditStockSale.Id,
+        //    StockSaleDetails = EditStockSale.DetailList
+        //    .Select(detail => new StockSaleDetailResponseModel
+        //    {
+        //        Id = detail.Id,
+        //        StockOrderId = detail.StockOrderId,
+        //        ProductId = detail.ProductId,
+        //        ProductName = detail.ProductName,
+        //        ProductTypeId = detail.ProductTypeId,
+        //        ProductTypeName = detail.ProductTypeName,
+        //        Quantity = detail.Quantity,
+        //        Deleted = detail.Deleted,
+        //        UnitPrice = Lookups.ProductTypeList.FirstOrDefault(pt => pt.Id == detail.ProductTypeId)!.DefaultCostPrice,
+        //        Total = Lookups.ProductTypeList.FirstOrDefault(pt => pt.Id == detail.ProductTypeId)!.DefaultCostPrice * detail.Quantity,
+        //    })
+        //    .ToList()
+        //};
+
+        //ShowRecordPaymentForm = true;
+    }
+
 }

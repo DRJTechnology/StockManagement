@@ -1,8 +1,7 @@
-using System.Data;
 using Dapper;
 using StockManagement.Models.Dto;
-using StockManagement.Models.Dto.Profile;
 using StockManagement.Repositories.Interfaces;
+using System.Data;
 
 namespace StockManagement.Repositories
 {
@@ -15,7 +14,7 @@ namespace StockManagement.Repositories
             parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
             parameters.Add("@Date", stockSaleDto.Date);
             parameters.Add("@LocationId", stockSaleDto.LocationId);
-            //parameters.Add("@DirectSale", stockSaleDto.DirectSale);
+            parameters.Add("@ContactId", stockSaleDto.ContactId);
             parameters.Add("@Deleted", stockSaleDto.Deleted);
             parameters.Add("@CurrentUserId", currentUserId);
 

@@ -4,6 +4,7 @@
     [ProductId]      INT      NOT NULL,
     [ProductTypeId]  INT      NOT NULL,
     [Quantity]       INT      NOT NULL,
+    [UnitPrice]	     MONEY    NULL,
     [Deleted]        BIT      CONSTRAINT [DF_StockSaleDetail_Deleted] DEFAULT ((0)) NOT NULL,
     [AmendUserID]    INT      NOT NULL,
     [AmendDate]      DATETIME CONSTRAINT [DF_StockSaleDetail_AmendDate] DEFAULT (sysdatetime()) NOT NULL,

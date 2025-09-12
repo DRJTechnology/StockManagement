@@ -9,7 +9,7 @@ CREATE PROCEDURE [dbo].[StockSale_Create]
 	@Id int output,
 	@Date datetime,
 	@LocationId int,
-	--@DirectSale bit,
+	@ContactId int,
 	@Deleted bit,
 	@CurrentUserId int
 )
@@ -22,8 +22,8 @@ BEGIN
 	DECLARE @UpdateDate DATETIME
 	SET @UpdateDate = GetDate()
 
-	INSERT INTO dbo.[StockSale] ([Date],[LocationId], /* [DirectSale], */ [Deleted],[AmendUserID],[AmendDate])
-	VALUES (@Date, @LocationId, /* @DirectSale, */ @Deleted, @CurrentUserId, @UpdateDate)
+	INSERT INTO dbo.[StockSale] ([Date],[LocationId], [ContactId], [Deleted],[AmendUserID],[AmendDate])
+	VALUES (@Date, @LocationId, @ContactId, @Deleted, @CurrentUserId, @UpdateDate)
 
 	SELECT @Id = SCOPE_IDENTITY()
 

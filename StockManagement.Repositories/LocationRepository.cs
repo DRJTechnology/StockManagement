@@ -18,6 +18,7 @@ namespace StockManagement.Repositories
             parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
             parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
             parameters.Add("@Name", locationDto.Name);
+            parameters.Add("@ContactId", locationDto.ContactId);
             parameters.Add("@Notes", locationDto.Notes);
             parameters.Add("@Deleted", locationDto.Deleted);
             parameters.Add("@CurrentUserId", currentUserId);
@@ -72,6 +73,7 @@ namespace StockManagement.Repositories
             parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
             parameters.Add("@Id", locationDto.Id);
             parameters.Add("@Name", locationDto.Name);
+            parameters.Add("@ContactId", locationDto.ContactId);
             parameters.Add("@Notes", locationDto.Notes);
             parameters.Add("@Deleted", locationDto.Deleted);
             parameters.Add("@CurrentUserId", currentUserId);

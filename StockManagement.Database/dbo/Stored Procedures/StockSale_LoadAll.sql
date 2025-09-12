@@ -12,18 +12,22 @@ BEGIN
 	DECLARE @Err int
 
 	SELECT
-		dn.[Id],
-		dn.[Date],
-		dn.[LocationId],
+		ss.[Id],
+		ss.[Date],
+		ss.[LocationId],
 		l.[Name] AS LocationName,
-		--dn.DirectSale,
-		dn.[Deleted],
-		dn.[AmendUserID],
-		dn.[AmendDate]
-	FROM [StockSale] dn
-	INNER JOIN [Location] l ON dn.LocationId = l.Id
+		ss.[ContactId],
+		c.[Name] AS ContactName,
+		ss.SaleConfirmed,
+		ss.PaymentReceived,
+		ss.[Deleted],
+		ss.[AmendUserID],
+		ss.[AmendDate]
+	FROM [StockSale] ss
+	INNER JOIN [Location] l ON ss.LocationId = l.Id
+	INNER JOIN [Contact] c ON ss.ContactId = c.Id
 	WHERE
-		dn.[Deleted] <> 1
+		ss.[Deleted] <> 1
 	ORDER BY
 		[Date] DESC
 
