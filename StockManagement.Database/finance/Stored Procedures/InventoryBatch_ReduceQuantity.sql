@@ -11,7 +11,7 @@ CREATE PROCEDURE [finance].[InventoryBatch_ReduceQuantity]
     @LocationId INT,
     @Quantity INT,
     @ActivityId INT,
-    @UserId INT,
+    @CurrentUserId INT,
     @CostRemoved MONEY OUTPUT
 AS
 BEGIN
@@ -52,13 +52,13 @@ BEGIN
             UPDATE finance.InventoryBatch
             SET InventoryBatchStatusId = CASE WHEN @QtyToDeduct < @BatchQty THEN 2 /* Active */ ELSE 3 /* Depleted */ END,
                 QuantityRemaining = QuantityRemaining - @DeductNow,
-                AmendUserId = @UserId,
+                AmendUserId = @CurrentUserId,
                 AmendDate = GETDATE()
             WHERE Id = @BatchId;
 
             -- Record activity
             INSERT INTO finance.InventoryBatchActivity (InventoryBatchId, ActivityId, Quantity, CreateUserId, AmendUserId)
-            VALUES (@BatchId, @ActivityId, @DeductNow, @UserId, @UserId);
+            VALUES (@BatchId, @ActivityId, @DeductNow, @CurrentUserId, @CurrentUserId);
 
             SET @QtyToDeduct = @QtyToDeduct - @DeductNow;
 
@@ -90,6 +90,9 @@ BEGIN
         BEGIN
             ROLLBACK TRANSACTION;
         END
+		
+		INSERT INTO dbo.ErrorLog (ErrorDate, ProcedureName, ErrorNumber, ErrorSeverity, ErrorState, ErrorLine, ErrorMessage, UserId)
+		VALUES (GETDATE(), ERROR_PROCEDURE(), ERROR_NUMBER(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_LINE(), ERROR_MESSAGE(), @CurrentUserId);
 
         -- Re-raise the error
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();

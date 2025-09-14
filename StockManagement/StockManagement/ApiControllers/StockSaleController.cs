@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using StockManagement.Components.Account;
 using StockManagement.Models;
 using StockManagement.Models.InternalObjects;
+using StockManagement.Services;
 using StockManagement.Services.Interfaces;
 
 namespace StockManagement.ApiControllers
@@ -125,5 +126,53 @@ namespace StockManagement.ApiControllers
                 };
             }
         }
+        [HttpPost("ConfirmStockSale")]
+        public async Task<ApiResponse> ConfirmStockSale(StockSaleConfirmationModel stockSaleConfirmation)
+        {
+            try
+            {
+                var appUser = await userAccessor.GetRequiredUserAsync(HttpContext);
+                var success = await stockSaleService.ConfirmStockSaleAsync(appUser.Id, stockSaleConfirmation);
+
+                return new ApiResponse()
+                {
+                    Success = success,
+                };
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "ConfirmStockSale");
+                return new ApiResponse()
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message,
+                };
+            }
+        }
+
+        [HttpPost("ConfirmStockSalePayment")]
+        public async Task<ApiResponse> ConfirmStockSalePayment([FromBody] StockSaleConfirmPaymentModel stockSaleConfirmPaymentModel)
+        {
+            try
+            {
+                var appUser = await userAccessor.GetRequiredUserAsync(HttpContext);
+                var success = await stockSaleService.ConfirmStockSalePaymentAsync(appUser.Id, stockSaleConfirmPaymentModel);
+
+                return new ApiResponse()
+                {
+                    Success = success,
+                };
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "ConfirmStockSalePayment");
+                return new ApiResponse()
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message,
+                };
+            }
+        }
+
     }
 }

@@ -13,14 +13,14 @@ else
 {
     <button class="btn btn-primary mb-2" @onclick="ShowAddForm">Add Activity</button>
 
-    <ActivityEditModal Show="ShowForm"
+@*     <ActivityEditModal Show="ShowForm"
                        EditActivity="EditActivity"
                        Lookups="Lookups"
                        OnCancel="CancelEdit"
                        OnValidSubmit="HandleValidSubmit" />
 
     <ConfirmDialogModal Show="ShowDeleteConfirm"
-                        ConfirmationResult="HandleDeleteConfirmation" />
+                        ConfirmationResult="HandleDeleteConfirmation" /> *@
 
     <div class="card mb-3">
         <div class="card-header" style="cursor:pointer"
@@ -233,11 +233,11 @@ else
                                         <i class="bi bi-box"></i>
                                     </button>
                                 }
-                                else
+@*                                 else
                                 {
                                     <button class="btn btn-sm btn-warning me-1 mt-1" @onclick="() => Edit(activity)">Edit</button>
                                     <button class="btn btn-sm btn-danger mt-1" @onclick="() => Delete(activity.Id)">Delete</button>
-                                }
+                                } *@
                             </div>
                         </div>
                         @if (!string.IsNullOrEmpty(activity.Notes))

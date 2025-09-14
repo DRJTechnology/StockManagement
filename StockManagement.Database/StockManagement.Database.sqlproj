@@ -239,6 +239,10 @@
     <Build Include="dbo\Stored Procedures\DeliveryNote_LoadAll.sql" />
     <Build Include="dbo\Stored Procedures\DeliveryNote_Delete.sql" />
     <Build Include="dbo\Stored Procedures\DeliveryNote_Create.sql" />
+    <Build Include="finance\User Defined Types\StockSaleConfirmTableType.sql" />
+    <Build Include="dbo\Stored Procedures\StockSale_ConfirmSale.sql" />
+    <Build Include="dbo\Tables\ErrorLog.sql" />
+    <Build Include="dbo\Stored Procedures\StockSale_ConfirmPayment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\1. PopulateFinanceTables.sql" />

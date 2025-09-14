@@ -36,7 +36,7 @@ public class InvoiceDocument : IDocument
 
     private void ComposeHeader(IContainer container)
     {
-        var title = "TODO Invoice or Delivery Note"; // _stockSale.DirectSale ? "Invoice" : "Delivery Note";
+        var title = "Invoice";
 
         container.Row(row =>
         {
@@ -44,10 +44,7 @@ public class InvoiceDocument : IDocument
                 {
                     column.Item().PaddingTop(5).Text(title)
                                                 .FontSize(20).SemiBold().FontColor(Colors.Black);
-                    //if (_stockSale.DirectSale)
-                    //{
-                        column.Item().Text($"Invoice Num: {_stockSale.Id:D5}");
-                    //}
+                    column.Item().Text($"Invoice Num: {_stockSale.Id:D5}");
                     column.Item().Text($"Date: {_stockSale.Date:dd/MM/yyyy}");
                 });
             row.RelativeItem().AlignRight().Height(60).Image(_logoImage);
@@ -73,7 +70,7 @@ public class InvoiceDocument : IDocument
                 {
                     column.Spacing(2);
                     column.Item().BorderBottom(1).PaddingBottom(2).Text("To:").SemiBold();
-                    column.Item().Text(_stockSale.LocationName);
+                    column.Item().Text(_stockSale.ContactName);
                 });
                 row.ConstantItem(50);
                 row.RelativeItem().Column(column =>
@@ -95,11 +92,8 @@ public class InvoiceDocument : IDocument
                 columns.RelativeColumn(3); // Product Type  
                 columns.RelativeColumn(8); // Product Name  
                 columns.RelativeColumn(1); // Quantity  
-                //if (_stockSale.DirectSale)
-                //{
-                    columns.RelativeColumn(2); // Unit Price  
-                    columns.RelativeColumn(2); // Total
-                //}
+                columns.RelativeColumn(2); // Unit Price  
+                columns.RelativeColumn(2); // Total
             });
 
             table.Header(header =>
@@ -107,28 +101,24 @@ public class InvoiceDocument : IDocument
                 header.Cell().Element(CellStyle).Text("Type").SemiBold();
                 header.Cell().Element(CellStyle).Text("Product Name").SemiBold();
                 header.Cell().Element(CellStyle).AlignRight().Text("Qty").SemiBold();
-                //if (_stockSale.DirectSale)
-                //{
-                    header.Cell().Element(CellStyle).AlignRight().Text("Unit").SemiBold();
-                    header.Cell().Element(CellStyle).AlignRight().Text("Total").SemiBold();
-                //}
+                header.Cell().Element(CellStyle).AlignRight().Text("Unit").SemiBold();
+                header.Cell().Element(CellStyle).AlignRight().Text("Total").SemiBold();
 
                 IContainer CellStyle(IContainer container) =>
                     container.DefaultTextStyle(x => x.FontSize(12).SemiBold());
             });
 
             var totalQuantity = 0;
+            decimal totalPrice = 0;
             foreach (var item in _stockSale.DetailList)
             {
                 totalQuantity += item.Quantity;
+                totalPrice += ((item.UnitPrice ?? 0) * item.Quantity);
                 table.Cell().Element(CellStyle).Text(item.ProductTypeName);
                 table.Cell().Element(CellStyle).Text(item.ProductName);
                 table.Cell().Element(CellStyle).AlignRight().Text(item.Quantity.ToString());
-                //if (_stockSale.DirectSale)
-                //{
-                    table.Cell().Element(CellStyle);
-                    table.Cell().Element(CellStyle);
-                //}
+                table.Cell().Element(CellStyle).AlignRight().Text((item.UnitPrice ?? 0).ToString("C"));
+                table.Cell().Element(CellStyle).AlignRight().Text((item.UnitPrice * item.Quantity ?? 0).ToString("C"));
             }
 
             IContainer CellStyle(IContainer container) =>
@@ -138,11 +128,8 @@ public class InvoiceDocument : IDocument
             // Add the totals column
             table.Cell().ColumnSpan(2).Element(TotalCellStyle).Text("Total");
             table.Cell().Element(TotalCellStyle).AlignRight().Text(totalQuantity.ToString());
-            //if (_stockSale.DirectSale)
-            //{
-                table.Cell().Element(TotalCellStyle);
-                table.Cell().Element(TotalCellStyle);
-            //}
+            table.Cell().Element(TotalCellStyle);
+            table.Cell().Element(TotalCellStyle).AlignRight().Text(totalPrice.ToString("C"));
 
             IContainer TotalCellStyle(IContainer container) =>
                 container.DefaultTextStyle(x => x.FontSize(11).Bold())
@@ -152,34 +139,22 @@ public class InvoiceDocument : IDocument
 
     private void ComposeFooter(IContainer container)
     {
-        //if (_stockSale.DirectSale)
-        //{
-        //    container.Row(row =>
-        //    {
-        //        row.RelativeItem().Column(column =>
-        //        {
-        //            column.Item().Text("Payment information:").FontSize(10);
-        //            column.Item().Text($"Account Name: {GetSetting(SettingEnum.BankAccountName)}").FontSize(10);
-        //            column.Item().Text($"Account Number: {GetSetting(SettingEnum.BankAccountNumber)}").FontSize(10);
-        //            column.Item().Text($"Account Sort Code: {GetSetting(SettingEnum.BankAccountSortCode)}").FontSize(10);
-        //        });
-        //        row.RelativeItem().AlignBottom().Column(column =>
-        //        {
-        //            column.Item().AlignRight().AlignBottom().Text(GetSetting(SettingEnum.BusinessWebsite))
-        //                .FontSize(10)
-        //                .FontColor(Colors.Blue.Medium);
-        //        });
-        //    });
-        //}
-        //else
-        //{
-            container.Row(row =>
+        container.Row(row =>
+        {
+            row.RelativeItem().Column(column =>
             {
-                row.RelativeItem().AlignCenter().Text(GetSetting(SettingEnum.BusinessWebsite))
+                column.Item().Text("Payment information:").FontSize(10);
+                column.Item().Text($"Account Name: {GetSetting(SettingEnum.BankAccountName)}").FontSize(10);
+                column.Item().Text($"Account Number: {GetSetting(SettingEnum.BankAccountNumber)}").FontSize(10);
+                column.Item().Text($"Account Sort Code: {GetSetting(SettingEnum.BankAccountSortCode)}").FontSize(10);
+            });
+            row.RelativeItem().AlignBottom().Column(column =>
+            {
+                column.Item().AlignRight().AlignBottom().Text(GetSetting(SettingEnum.BusinessWebsite))
                     .FontSize(10)
                     .FontColor(Colors.Blue.Medium);
             });
-        //}
+        });
     }
 
     private string GetSetting(SettingEnum settingEnum)

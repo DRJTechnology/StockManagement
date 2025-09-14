@@ -33,6 +33,7 @@ BEGIN
 		EXEC [finance].[Transaction_CreateExpenseIncome] 
 						@Success = @TranstionSuccess OUTPUT,
 						@Id = @TransactionDetailId OUTPUT,
+						@TransactionId = @TransactionId OUTPUT,
 						@TransactionTypeId = 2, -- Expense
 						@AccountId = 6, -- Inventory
 						@Date = @PaymentDate,
@@ -40,10 +41,6 @@ BEGIN
 						@Amount = @Cost,
 						@ContactId = @ContactId,
 						@CurrentUserId = @CurrentUserId
-
-		SELECT	@TransactionId = TransactionId
-		FROM	finance.TransactionDetail
-		WHERE	Id = @TransactionDetailId
 
 		-- Link the transaction to the stock order
 		UPDATE	dbo.StockOrder
@@ -103,6 +100,10 @@ BEGIN
 	BEGIN CATCH
 		IF @@TRANCOUNT > 0
 			ROLLBACK TRANSACTION
+		
+		INSERT INTO dbo.ErrorLog
+		(ErrorDate,	ProcedureName, ErrorNumber, ErrorSeverity, ErrorState, ErrorLine, ErrorMessage, UserId)
+		VALUES (GETDATE(), ERROR_PROCEDURE(), ERROR_NUMBER(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_LINE(), ERROR_MESSAGE(), @CurrentUserId);
 
 		SET @Success = 0
 		SET @Err = ERROR_NUMBER()

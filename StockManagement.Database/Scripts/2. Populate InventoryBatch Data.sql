@@ -127,7 +127,7 @@ BEGIN
 		@ToLocationId = @LocationId,
 		@Quantity = @Quantity,
 		@ActivityId = @Id,
-		@UserId = 1
+		@CurrentUserId = 1
 
 
   --      EXEC	[finance].[InventoryBatch_Create]
@@ -150,7 +150,7 @@ BEGIN
 		--@LocationId = 1,
 		--@Quantity = @Quantity,
 		--@ActivityId = @Id,
-		--@UserId = 1,
+		--@CurrentUserId = 1,
   --      @CostRemoved = @CostRemoved OUTPUT
     END
     ELSE IF @ActionId = 3 -- Return to stock room from
@@ -162,7 +162,7 @@ BEGIN
 		@ToLocationId = 1, -- Stock room
 		@Quantity = @Quantity,
 		@ActivityId = @Id,
-		@UserId = 1
+		@CurrentUserId = 1
 
 
   --      -- Remove From location
@@ -172,7 +172,7 @@ BEGIN
 		--@LocationId = @LocationId,
 		--@Quantity = @Quantity,
 		--@ActivityId = @Id,
-		--@UserId = 1,
+		--@CurrentUserId = 1,
   --      @CostRemoved = @CostRemoved OUTPUT
 
   --      -- Add to Stock room
@@ -198,7 +198,7 @@ BEGIN
         @LocationId = @LocationId,
         @Quantity = @Quantity,
         @ActivityId = @Id,
-        @UserId = 1,
+        @CurrentUserId = 1,
         @CostRemoved = @CostRemoved OUTPUT
     END
     ELSE IF @ActionId = 5 -- Sale of stock
@@ -210,7 +210,7 @@ BEGIN
         @LocationId = @LocationId,
         @Quantity = @Quantity,
         @ActivityId = @Id,
-        @UserId = 1,
+        @CurrentUserId = 1,
         @CostRemoved = @CostRemoved OUTPUT
 
         -- TODO Create transaction for sale of stock
@@ -241,7 +241,7 @@ BEGIN
         @LocationId = @LocationId,
         @Quantity = @Quantity,
         @ActivityId = @Id,
-        @UserId = 1,
+        @CurrentUserId = 1,
         @CostRemoved = @CostRemoved OUTPUT
     END
     ELSE IF @ActionId = 7 -- Damaged Stock
@@ -253,7 +253,7 @@ BEGIN
         @LocationId = @LocationId,
         @Quantity = @Quantity,
         @ActivityId = @Id,
-        @UserId = 1,
+        @CurrentUserId = 1,
         @CostRemoved = @CostRemoved OUTPUT
     END
 

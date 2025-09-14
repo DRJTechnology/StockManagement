@@ -22,7 +22,7 @@ BEGIN
 
 	DECLARE @UpdateDate		DATETIME
 	DECLARE @ActivityDate	DATETIME
-	DECLARE @ActionId		INT = 2 -- Move from stock room to
+	DECLARE @ActionId		INT = 5 -- Sale from
 	DECLARE @LocationId		INT
 	--DECLARE @DirectSale		BIT
 	SET @UpdateDate = GetDate()
@@ -60,6 +60,10 @@ BEGIN
 	BEGIN CATCH
 		IF @@TRANCOUNT > 0
 			ROLLBACK TRANSACTION
+		
+		INSERT INTO dbo.ErrorLog
+		(ErrorDate,	ProcedureName, ErrorNumber, ErrorSeverity, ErrorState, ErrorLine, ErrorMessage, UserId)
+		VALUES (GETDATE(), ERROR_PROCEDURE(), ERROR_NUMBER(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_LINE(), ERROR_MESSAGE(), @CurrentUserId);
 
 		SET @Success = 0
 		SET @Err = ERROR_NUMBER()

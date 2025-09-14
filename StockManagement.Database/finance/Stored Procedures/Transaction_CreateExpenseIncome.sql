@@ -5,10 +5,12 @@
 -- =========================================================================
 -- 04 Aug 2025 - Updated Expense procedure to handle Income too
 -- 20 Aug 2025 - Split the Owner’s Capital/Investment and Drawings accounts
+-- 14 Sep 2025 - @TransactionId OUTPUT parameter added
 -- =========================================================================
 CREATE PROCEDURE [finance].[Transaction_CreateExpenseIncome]
 	@Success			BIT OUTPUT,
 	@Id					INT OUTPUT, 
+	@TransactionId		INT OUTPUT, 
 	@TransactionTypeId	INT, -- Expense = 2, Income = 3
 	@AccountId			INT,
 	@Date				DATETIME,
@@ -25,8 +27,7 @@ BEGIN
 	DECLARE @UpdateDate DATETIME
 	SET @UpdateDate = GetDate()
 
-	DECLARE @TransactionId				INT,
-			@Direction					SMALLINT,
+	DECLARE @Direction					SMALLINT,
 			@AssociatedAccountId		INT, -- Owner’s Capital/Investment or Drawings account
 			@ContactName				NVARCHAR(100),
 			@ReferencePrefix			NVARCHAR(3)

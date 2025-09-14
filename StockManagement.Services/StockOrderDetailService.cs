@@ -8,10 +8,10 @@ namespace StockManagement.Services
 {
     public class StockOrderDetailService(IMapper mapper, IStockOrderDetailRepository StockOrderDetailRepository) : IStockOrderDetailService
     {
-        public async Task<int> CreateAsync(int currentUserId, StockOrderDetailEditModel StockOrder)
+        public async Task<int> CreateAsync(int currentUserId, StockOrderDetailEditModel stockOrder)
         {
-            var dto = mapper.Map<StockOrderDetailDto>(StockOrder);
-            return await StockOrderDetailRepository.CreateAsync(currentUserId, dto);
+            var stockOrderDetaildto = mapper.Map<StockOrderDetailDto>(stockOrder);
+            return await StockOrderDetailRepository.CreateAsync(currentUserId, stockOrderDetaildto);
         }
 
         public async Task<bool> DeleteAsync(int currentUserId, int StockOrderId)

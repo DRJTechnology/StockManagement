@@ -10,7 +10,7 @@ CREATE PROCEDURE [finance].[InventoryBatch_MoveQuantity]
     @ToLocationId INT,
     @Quantity INT,
     @ActivityId INT,
-    @UserId INT
+    @CurrentUserId INT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -50,22 +50,22 @@ BEGIN
             UPDATE finance.InventoryBatch
             SET InventoryBatchStatusId = CASE WHEN @QtyToMove < @BatchQty THEN 2 /* Active */ ELSE 3 /* Depleted */ END,
                 QuantityRemaining = QuantityRemaining - @DeductNow,
-                AmendUserId = @UserId,
+                AmendUserId = @CurrentUserId,
                 AmendDate = @UpdateDate
             WHERE Id = @BatchId;
 
             -- Record activity
             INSERT INTO finance.InventoryBatchActivity (InventoryBatchId, ActivityId, Quantity, CreateUserId, CreateDate, AmendUserId, AmendDate)
-            VALUES (@BatchId, @ActivityId, @DeductNow, @UserId, @UpdateDate, @UserId, @UpdateDate);
+            VALUES (@BatchId, @ActivityId, @DeductNow, @CurrentUserId, @UpdateDate, @CurrentUserId, @UpdateDate);
 
             -- Add stock to new location
             INSERT INTO finance.InventoryBatch (InventoryBatchStatusId, ProductId, ProductTypeId, LocationId, InitialQuantity, QuantityRemaining, UnitCost, PurchaseDate, OriginalInventoryBatchId, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
-            VALUES (2 /* Active */, @ProductId, @ProductTypeId, @ToLocationId, @DeductNow, @DeductNow, @UnitCost, @PurchaseDate, @OriginalInventoryBatchId, 0, @UserId, @UpdateDate, @UserId, @UpdateDate);
+            VALUES (2 /* Active */, @ProductId, @ProductTypeId, @ToLocationId, @DeductNow, @DeductNow, @UnitCost, @PurchaseDate, @OriginalInventoryBatchId, 0, @CurrentUserId, @UpdateDate, @CurrentUserId, @UpdateDate);
 
             -- Record activity for new batch
             DECLARE @NewBatchId INT = SCOPE_IDENTITY();
             INSERT INTO finance.InventoryBatchActivity (InventoryBatchId, ActivityId, Quantity, CreateUserId, CreateDate, AmendUserId, AmendDate)
-            VALUES (@NewBatchId, @ActivityId, @DeductNow, @UserId, @UpdateDate, @UserId, @UpdateDate);
+            VALUES (@NewBatchId, @ActivityId, @DeductNow, @CurrentUserId, @UpdateDate, @CurrentUserId, @UpdateDate);
 
             SET @QtyToMove = @QtyToMove - @DeductNow;
 
@@ -97,6 +97,9 @@ BEGIN
         BEGIN
             ROLLBACK TRANSACTION;
         END
+		
+		INSERT INTO dbo.ErrorLog (ErrorDate,	ProcedureName, ErrorNumber, ErrorSeverity, ErrorState, ErrorLine, ErrorMessage, UserId)
+		VALUES (GETDATE(), ERROR_PROCEDURE(), ERROR_NUMBER(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_LINE(), ERROR_MESSAGE(), @CurrentUserId);
 
         -- Re-raise the error
         DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();

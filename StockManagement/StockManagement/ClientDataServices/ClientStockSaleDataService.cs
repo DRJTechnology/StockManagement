@@ -5,6 +5,16 @@ namespace StockManagement.ClientDataServices
 {
     public class ClientStockSaleDataService : IStockSaleDataService
     {
+        public Task<bool> ConfirmStockSale(StockSaleConfirmationModel stockSaleConfirmation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> ConfirmStockSalePayment(StockSaleConfirmPaymentModel stockSaleConfirmPaymentModel)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<int> CreateAsync(StockSaleEditModel entity)
         {
             throw new NotImplementedException();

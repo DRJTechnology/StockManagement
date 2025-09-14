@@ -10,14 +10,14 @@ namespace StockManagement.ApiControllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class StockOrderController(ILogger<StockOrderController> logger, IdentityUserAccessor userAccessor, IStockOrderService StockOrderService) : ControllerBase
+    public class StockOrderController(ILogger<StockOrderController> logger, IdentityUserAccessor userAccessor, IStockOrderService stockOrderService) : ControllerBase
     {
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try
             {
-                var StockOrder = await StockOrderService.GetByIdAsync(id);
+                var StockOrder = await stockOrderService.GetByIdAsync(id);
                 return this.Ok(StockOrder);
             }
             catch (Exception ex)
@@ -32,7 +32,7 @@ namespace StockManagement.ApiControllers
         {
             try
             {
-                var StockOrderList = await StockOrderService.GetAllAsync();
+                var StockOrderList = await stockOrderService.GetAllAsync();
                 return Ok(StockOrderList);
             }
             catch (Exception ex)
@@ -48,7 +48,7 @@ namespace StockManagement.ApiControllers
             try
             {
                 var appUser = await userAccessor.GetRequiredUserAsync(HttpContext);
-                var newId = await StockOrderService.CreateAsync(appUser.Id, model);
+                var newId = await stockOrderService.CreateAsync(appUser.Id, model);
 
                 return new ApiResponse()
                 {
@@ -73,7 +73,7 @@ namespace StockManagement.ApiControllers
             try
             {
                 var appUser = await userAccessor.GetRequiredUserAsync(HttpContext);
-                if (await StockOrderService.UpdateAsync(appUser.Id, model))
+                if (await stockOrderService.UpdateAsync(appUser.Id, model))
                 {
                     return new ApiResponse()
                     {
@@ -107,7 +107,7 @@ namespace StockManagement.ApiControllers
             try
             {
                 var appUser = await userAccessor.GetRequiredUserAsync(HttpContext);
-                var result = await StockOrderService.DeleteAsync(appUser.Id, id);
+                var result = await stockOrderService.DeleteAsync(appUser.Id, id);
 
                 return new ApiResponse()
                 {
@@ -132,7 +132,7 @@ namespace StockManagement.ApiControllers
             try
             {
                 var appUser = await userAccessor.GetRequiredUserAsync(HttpContext);
-                var success = await StockOrderService.CreateStockOrderPaymentsAsync(appUser.Id, stockOrderDetailPayments);
+                var success = await stockOrderService.CreateStockOrderPaymentsAsync(appUser.Id, stockOrderDetailPayments);
 
                 return new ApiResponse()
                 {
@@ -156,7 +156,7 @@ namespace StockManagement.ApiControllers
             try
             {
                 var appUser = await userAccessor.GetRequiredUserAsync(HttpContext);
-                var success = await StockOrderService.MarkStockReceivedAsync(appUser.Id, stockOrderId);
+                var success = await stockOrderService.MarkStockReceivedAsync(appUser.Id, stockOrderId);
 
                 return new ApiResponse()
                 {

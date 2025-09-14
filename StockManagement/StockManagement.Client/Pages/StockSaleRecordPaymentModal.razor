@@ -1,0 +1,35 @@
+@using System.ComponentModel.DataAnnotations
+@inherits StockSaleRecordPaymentModalBase
+
+@if (Show)
+{
+    <div class="modal-backdrop fade show"></div>
+    <div class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.2)">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Payment</h5>
+                    <button type="button" class="btn-close" aria-label="Close" @onclick="OnCancel"></button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="StockSaleConfirmPayment" OnValidSubmit="HandleValidSubmit">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary />
+                        <div class="mb-2">
+                            <label>Date:</label>
+                            <InputDate class="form-control" @bind-Value="StockSaleConfirmPayment.PaymentDate" />
+                        </div>
+                        <div class="mb-2">
+                            <label>Description:</label>
+                            <InputTextArea class="form-control" @bind-Value="StockSaleConfirmPayment.Description" />
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-success" type="submit">Confirm</button>
+                            <button class="btn btn-secondary ms-2" type="button" @onclick="OnCancel">Cancel</button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}

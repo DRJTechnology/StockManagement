@@ -37,13 +37,16 @@ public partial class StockSaleBase : ComponentBase
     protected bool ShowDeleteNoteConfirm { get; set; } = false;
     protected bool ShowDeleteDetailConfirm { get; set; } = false;
     protected bool ShowSaleConfirmForm { get; set; } = false;
+    protected bool ShowSaleConfirmPayment { get; set; } = false;
     
+
     protected string SelectedItemName { get; set; } = string.Empty;
 
     protected bool IsLoading { get; set; }
     protected StockSaleResponseModel EditStockSale { get; set; } = new();
     protected StockSaleDetailEditModel EditStockSaleDetail { get; set; } = new();
     protected StockSaleConfirmationModel StockSaleConfirmationObject { get; set; } = new();
+    protected StockSaleConfirmPaymentModel StockSaleConfirmPayment { get; set; } = new();
     protected List<ContactResponseModel> Customers { get; set; } = new();
 
     protected bool ShowEditDetailForm { get; set; }
@@ -94,7 +97,7 @@ public partial class StockSaleBase : ComponentBase
         if (StockSaleId == 0)
         {
             var localNow = await JavascriptMethodsService.GetLocalDateTimeAsync();
-            EditStockSale = new StockSaleResponseModel() { Date = localNow, LocationId = 1, ContactId = 3, DetailList = new List<StockSaleDetailResponseModel>() };
+            EditStockSale = new StockSaleResponseModel() { Date = localNow, LocationId = 0, ContactId = 0, DetailList = new List<StockSaleDetailResponseModel>() };
         }
         else
         {
@@ -232,9 +235,9 @@ public partial class StockSaleBase : ComponentBase
         ShowDeleteDetailConfirm = true;
     }
 
-    protected async Task DownloadPdf()
+    protected async Task DownloadInvoicePdf()
     {
-        var url = $"/api/pdf/stock-sale/{EditStockSale.Id}";
+        var url = $"/api/pdf/invoice/{EditStockSale.Id}";
         await JS.InvokeVoidAsync("open", url, "_blank");
     }
     public int LocationId
@@ -255,8 +258,13 @@ public partial class StockSaleBase : ComponentBase
         ShowSaleConfirmForm = false;
     }
 
-    protected void HandleConfirmSale()
+    protected async Task HandleConfirmSale()
     {
+        var response = await StockSaleService.ConfirmStockSale(StockSaleConfirmationObject);
+        if (response)
+        {
+            EditStockSale.SaleConfirmed = true;
+        }
         ShowSaleConfirmForm = false;
     }
 
@@ -265,6 +273,8 @@ public partial class StockSaleBase : ComponentBase
         StockSaleConfirmationObject = new StockSaleConfirmationModel()
         {
             StockSaleId = EditStockSale.Id,
+            LocationId = EditStockSale.LocationId,
+            ContactId = EditStockSale.ContactId,
             StockSaleDetails = EditStockSale.DetailList
             .Select(detail => new StockSaleDetailResponseModel
             {
@@ -281,33 +291,52 @@ public partial class StockSaleBase : ComponentBase
             .ToList(),
         };
 
-        // TODO Call API so that InventoryBatch records are reduced and SalePrice is stored on the StockSales record
         ShowSaleConfirmForm = true;
     }
 
-    protected async Task RecordPayment()
+    protected void RecordPayment()
     {
-        //StockSaleConfirmationObject = new StockSaleConfirmationModel()
-        //{
-        //    StockSaleId = EditStockSale.Id,
-        //    StockSaleDetails = EditStockSale.DetailList
-        //    .Select(detail => new StockSaleDetailResponseModel
-        //    {
-        //        Id = detail.Id,
-        //        StockOrderId = detail.StockOrderId,
-        //        ProductId = detail.ProductId,
-        //        ProductName = detail.ProductName,
-        //        ProductTypeId = detail.ProductTypeId,
-        //        ProductTypeName = detail.ProductTypeName,
-        //        Quantity = detail.Quantity,
-        //        Deleted = detail.Deleted,
-        //        UnitPrice = Lookups.ProductTypeList.FirstOrDefault(pt => pt.Id == detail.ProductTypeId)!.DefaultCostPrice,
-        //        Total = Lookups.ProductTypeList.FirstOrDefault(pt => pt.Id == detail.ProductTypeId)!.DefaultCostPrice * detail.Quantity,
-        //    })
-        //    .ToList()
-        //};
-
-        //ShowRecordPaymentForm = true;
+        StockSaleConfirmPayment = new StockSaleConfirmPaymentModel()
+        {
+            StockSaleId = EditStockSale.Id,
+            PaymentDate = DateTime.Now.Date,
+            Description = DescribeSale(),
+        };
+        ShowSaleConfirmPayment = true;
     }
 
+    private string DescribeSale()
+    {
+        var saleDescription = $"Sale to {Customers.FirstOrDefault(c => c.Id == EditStockSale.ContactId)?.Name} of ";
+        var productTypeQuantities = EditStockSale.DetailList
+            .GroupBy(d => d.ProductTypeName)
+            .Select(g => new
+            {
+                ProductTypeName = g.Key,
+                TotalQuantity = g.Sum(d => d.Quantity)
+            })
+            .ToList();
+
+        foreach (var ptq in productTypeQuantities)
+        {
+            saleDescription += $"{ptq.TotalQuantity} x {ptq.ProductTypeName}, ";
+        }
+        saleDescription = saleDescription.TrimEnd(',', ' ');
+        return saleDescription;
+    }
+
+    protected async Task HandleRecordPayment()
+    {
+        var response = await StockSaleService.ConfirmStockSalePayment(StockSaleConfirmPayment);
+        if (response)
+        {
+            EditStockSale.PaymentReceived = true;
+        }
+        ShowSaleConfirmPayment = false;
+    }
+
+    protected void CancelRecordPaymentSale()
+    {
+        ShowSaleConfirmPayment = false;
+    }
 }

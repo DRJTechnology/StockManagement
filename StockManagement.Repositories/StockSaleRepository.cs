@@ -1,4 +1,5 @@
 using Dapper;
+using StockManagement.Models;
 using StockManagement.Models.Dto;
 using StockManagement.Repositories.Interfaces;
 using System.Data;
@@ -7,6 +8,76 @@ namespace StockManagement.Repositories
 {
     public class StockSaleRepository(IDbConnection dbConnection) : IStockSaleRepository
     {
+        public async Task<bool> ConfirmStockSaleAsync(int currentUserId, StockSaleConfirmationModel stockSaleConfirmation)
+        {
+            try
+            {
+                var recordList = new DataTable();
+                recordList.Columns.Add("UnitPrice", typeof(decimal));
+                recordList.Columns.Add("StockSaleDetailId", typeof(int));
+                recordList.Columns.Add("ProductId", typeof(int));
+                recordList.Columns.Add("ProductTypeId", typeof(int));
+                recordList.Columns.Add("Quantity", typeof(int));
+
+                foreach (var item in stockSaleConfirmation.StockSaleDetails)
+                {
+                    recordList.Rows.Add(item.UnitPrice, item.Id, item.ProductId, item.ProductTypeId, item.Quantity);
+                }
+
+                var parameters = new DynamicParameters();
+                parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+                parameters.Add("@StockSaleId", stockSaleConfirmation.StockSaleId);
+                parameters.Add("@FromLocationId", stockSaleConfirmation.LocationId);
+                parameters.Add("@ContactId", stockSaleConfirmation.ContactId);
+                parameters.Add("@TotalPrice", stockSaleConfirmation.TotalPrice);
+                parameters.Add("@StockSaleDetails", recordList.AsTableValuedParameter("[finance].[StockSaleConfirmTableType]"));
+                parameters.Add("@CurrentUserId", currentUserId);
+
+                var result = await dbConnection.ExecuteAsync("dbo.StockSale_ConfirmSale", parameters, commandType: CommandType.StoredProcedure);
+
+                if (parameters.Get<bool>("@Success"))
+                {
+                    return true;
+                }
+                else
+                {
+                    throw new UnauthorizedAccessException();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> ConfirmStockSalePaymentAsync(int currentUserId, StockSaleConfirmPaymentModel stockSaleConfirmPaymentModel)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+                parameters.Add("@StockSaleId", stockSaleConfirmPaymentModel.StockSaleId);
+                parameters.Add("@PaymentDate", stockSaleConfirmPaymentModel.PaymentDate);
+                parameters.Add("@Description", stockSaleConfirmPaymentModel.Description);
+                parameters.Add("@CurrentUserId", currentUserId);
+
+                var result = await dbConnection.ExecuteAsync("dbo.StockSale_ConfirmPayment", parameters, commandType: CommandType.StoredProcedure);
+
+                if (parameters.Get<bool>("@Success"))
+                {
+                    return true;
+                }
+                else
+                {
+                    throw new UnauthorizedAccessException();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public async Task<int> CreateAsync(int currentUserId, StockSaleDto stockSaleDto)
         {
             var parameters = new DynamicParameters();

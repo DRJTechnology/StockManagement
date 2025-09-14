@@ -8,6 +8,16 @@ namespace StockManagement.Services
 {
     public class StockSaleService(IMapper mapper, IStockSaleRepository stockSaleRepository) : IStockSaleService
     {
+        public async Task<bool> ConfirmStockSaleAsync(int currentUserId, StockSaleConfirmationModel stockSaleConfirmation)
+        {
+            return await stockSaleRepository.ConfirmStockSaleAsync(currentUserId, stockSaleConfirmation);
+        }
+
+        public async Task<bool> ConfirmStockSalePaymentAsync(int currentUserId, StockSaleConfirmPaymentModel stockSaleConfirmPaymentModel)
+        {
+            return await stockSaleRepository.ConfirmStockSalePaymentAsync(currentUserId, stockSaleConfirmPaymentModel);
+        }
+
         public async Task<int> CreateAsync(int currentUserId, StockSaleEditModel stockSale)
         {
             var dto = mapper.Map<StockSaleDto>(stockSale);

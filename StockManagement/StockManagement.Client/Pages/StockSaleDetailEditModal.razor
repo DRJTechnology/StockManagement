@@ -17,8 +17,8 @@
                         <ValidationSummary />
                         <div class="mb-2">
                             <label>Product Type:</label>
-                            <InputSelect class="form-control" @bind-Value="EditStockSaleDetail.ProductTypeId">
-                                <option value="">-- Select Product Type --</option>
+                            <InputSelect class="form-control" @bind-Value="ProductTypeId" TValue="int">
+                                <option value="0">-- Select Product Type --</option>
                                 @if (Lookups?.ProductTypeList != null)
                                 {
                                     foreach (var type in Lookups.ProductTypeList)
@@ -30,8 +30,8 @@
                         </div>
                         <div class="mb-2">
                             <label>Product:</label>
-                            <InputSelect class="form-control" @bind-Value="EditStockSaleDetail.ProductId">
-                                <option value="">-- Select Product --</option>
+                            <InputSelect class="form-control" @bind-Value="ProductId" TValue="int">
+                                <option value="0">-- Select Product --</option>
                                 @if (Lookups?.ProductList != null)
                                 {
                                     foreach (var product in Lookups.ProductList)
@@ -45,8 +45,26 @@
                             <label>Quantity:</label>
                             <InputNumber class="form-control" @bind-Value="EditStockSaleDetail.Quantity" />
                         </div>
+                        @if (EditStockSaleDetail.ProductTypeId > 0 && EditStockSaleDetail.ProductId > 0 && availableQuantity == 0)
+                        {
+                            <div class="text-danger">
+                                No stock available in @LocationName
+                            </div>
+                        }
+                        else if (availableQuantity > 0 && availableQuantity < EditStockSaleDetail.Quantity)
+                        {
+                            <div class="text-danger">
+                                Only @availableQuantity available in @LocationName
+                            </div>
+                        }
+                        else if (availableQuantity > 0)
+                        {
+                            <div class="text-muted">
+                                @availableQuantity available in @LocationName
+                            </div>
+                        }
                         <div class="d-flex justify-content-end">
-                            <button class="btn btn-success" type="submit">Save</button>
+                            <button class="btn btn-success" type="submit" disabled="@(availableQuantity == 0 || availableQuantity < EditStockSaleDetail.Quantity)">Save</button>
                             <button class="btn btn-secondary ms-2" type="button" @onclick="OnCancel">Cancel</button>
                         </div>
                     </EditForm>

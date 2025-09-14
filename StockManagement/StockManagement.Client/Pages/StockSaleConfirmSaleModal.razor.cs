@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using StockManagement.Models;
 
-public partial class StockSaleConfirmSateModalBase : ComponentBase
+public partial class StockSaleConfirmSaleModalBase : ComponentBase
 {
     [Parameter] public bool Show { get; set; }
 

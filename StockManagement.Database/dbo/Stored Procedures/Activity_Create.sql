@@ -54,7 +54,7 @@ BEGIN
 					@ToLocationId = @LocationId,
 					@Quantity = @Quantity,
 					@ActivityId = @Id,
-					@UserId = @CurrentUserId
+					@CurrentUserId = @CurrentUserId
 		END
 		ELSE IF @ActionId = 3 -- Move to stock room from
 		BEGIN
@@ -65,7 +65,7 @@ BEGIN
 					@ToLocationId = 1, -- Stock room
 					@Quantity = @Quantity,
 					@ActivityId = @Id,
-					@UserId = @CurrentUserId
+					@CurrentUserId = @CurrentUserId
 		END
 		ELSE IF @ActionId = 4 -- Delete Stock
 		BEGIN
@@ -75,7 +75,7 @@ BEGIN
 					@LocationId = @LocationId,
 					@Quantity = @Quantity,
 					@ActivityId = @Id,
-					@UserId = @CurrentUserId,
+					@CurrentUserId = @CurrentUserId,
 					@CostRemoved = @CostRemoved OUTPUT
 
 			EXEC [finance].[Transaction_Create]
@@ -99,7 +99,7 @@ BEGIN
 					@LocationId = @LocationId,
 					@Quantity = @Quantity,
 					@ActivityId = @Id,
-					@UserId = 1,
+					@CurrentUserId = 1,
 					@CostRemoved = @CostRemoved OUTPUT
 
 			EXEC [finance].[Transaction_Create]
@@ -123,7 +123,7 @@ BEGIN
 					@LocationId = @LocationId,
 					@Quantity = @Quantity,
 					@ActivityId = @Id,
-					@UserId = 1,
+					@CurrentUserId = 1,
 					@CostRemoved = @CostRemoved OUTPUT
 
 			EXEC [finance].[Transaction_Create]
@@ -147,7 +147,7 @@ BEGIN
 					@LocationId = @LocationId,
 					@Quantity = @Quantity,
 					@ActivityId = @Id,
-					@UserId = 1,
+					@CurrentUserId = 1,
 					@CostRemoved = @CostRemoved OUTPUT
 
 			EXEC [finance].[Transaction_Create]
@@ -175,6 +175,10 @@ BEGIN
 		BEGIN
 			ROLLBACK TRANSACTION;
 		END
+		
+		INSERT INTO dbo.ErrorLog
+		(ErrorDate,	ProcedureName, ErrorNumber, ErrorSeverity, ErrorState, ErrorLine, ErrorMessage, UserId)
+		VALUES (GETDATE(), ERROR_PROCEDURE(), ERROR_NUMBER(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_LINE(), ERROR_MESSAGE(), @CurrentUserId);
 
 		-- Capture error information
 		SET @Err = ERROR_NUMBER();

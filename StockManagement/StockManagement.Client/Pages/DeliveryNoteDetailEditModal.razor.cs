@@ -22,7 +22,6 @@ public partial class DeliveryNoteDetailEditModalBase : ComponentBase
         get => EditDeliveryNoteDetail.ProductTypeId;
         set
         {
-            Console.WriteLine("ProductTypeId setter");
             if (EditDeliveryNoteDetail.ProductTypeId != value)
             {
                 EditDeliveryNoteDetail.ProductTypeId = value;
@@ -36,7 +35,6 @@ public partial class DeliveryNoteDetailEditModalBase : ComponentBase
         get => EditDeliveryNoteDetail.ProductId;
         set
         {
-            Console.WriteLine("ProductId setter");
             if (EditDeliveryNoteDetail.ProductId != value)
             {
                 EditDeliveryNoteDetail.ProductId = value;
