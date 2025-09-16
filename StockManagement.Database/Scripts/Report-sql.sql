@@ -26,6 +26,11 @@ WHERE td.Date < @ToDate
 group by	act.Id, a.Id, act.[Type], a.[Name]
 order by	act.[Type], a.[Name]
 
+-- Total value of stock in InventoryBatch records
+SELECT	SUM(Quantityremaining * UnitCost) AS TotalValue
+FROM	finance.InventoryBatch
+Where Deleted = 0 -- AND InventoryBatchStatusId = 2 -- Active
+
 -- Total credit/debit for owner's investment/drawings:
 select SUM(td.Amount * td.Direction * act.CreditDebit) AS TotalBalance
 from finance.TransactionDetail td

@@ -6,7 +6,7 @@ FROM Activity
 WHERE Deleted = 0
 AND ActionId = 1 -- Only include adding new stock
 --AND ActionId != 1 -- Include all except adding new stock
-AND ProductTypeId != 1 -- Exclude Originals
+--AND ProductTypeId != 1 -- Exclude Originals
 ORDER BY ActivityDate, Id --, ActionId
 
 DECLARE @Id INT,
@@ -52,28 +52,41 @@ GO
 
 
 --Update unit price based on each order
-UPDATE finance.InventoryBatch SET UnitCost = 31.55/20 WHERE PurchaseDate = '14 Apr 2025' AND ProductTypeId = 2 -- Card
-UPDATE finance.InventoryBatch SET UnitCost = 63.15/100 WHERE PurchaseDate = '23 Apr 2025' AND ProductTypeId = 2 -- Card
-UPDATE finance.InventoryBatch SET UnitCost = 81.95/100 WHERE PurchaseDate = '30 May 2025' AND ProductTypeId = 2 -- Card
-UPDATE finance.InventoryBatch SET UnitCost = 126.95/200 WHERE PurchaseDate = '10 Jun 2025' AND ProductTypeId = 2 -- Card
-UPDATE finance.InventoryBatch SET UnitCost = 227.95/500 WHERE PurchaseDate = '14 Jul 2025' AND ProductTypeId = 2 -- Card
+UPDATE finance.InventoryBatch SET UnitCost = 31.55/20 WHERE PurchaseDate = '14 Apr 2025' AND ProductTypeId = 2 -- Card     [Spreadsheet 14 Apr]
+UPDATE finance.InventoryBatch SET UnitCost = 62.80/12 WHERE PurchaseDate = '23 May 2025' AND ProductTypeId = 5 -- Print A4 [Spreadsheet 23 Apr]
+UPDATE finance.InventoryBatch SET UnitCost = 63.15/100 WHERE PurchaseDate = '23 Apr 2025' AND ProductTypeId = 2 -- Card    [Spreadsheet 23 Apr]
+UPDATE finance.InventoryBatch SET UnitCost = 39.60/12 WHERE PurchaseDate = '23 May 2025' AND ProductTypeId = 3 -- Print A6 [Spreadsheet 06 May]
 
-UPDATE finance.InventoryBatch SET UnitCost = 62.80/12 WHERE PurchaseDate = '23 May 2025' AND ProductTypeId = 5 -- Print A4
-UPDATE finance.InventoryBatch SET UnitCost = 39.60/12 WHERE PurchaseDate = '23 May 2025' AND ProductTypeId = 3 -- Print A6
+---- Payment of 44.40
+UPDATE finance.InventoryBatch SET UnitCost = 44.40/12 WHERE PurchaseDate = '08 Aug 2025' AND ProductTypeId = 4 --(Qty 2) Print A5   2 Updated
+UPDATE finance.InventoryBatch SET UnitCost = 44.40/12 WHERE PurchaseDate = '24 Jun 2025' AND ProductTypeId = 4 -- Print A5          2 Updated
+UPDATE finance.InventoryBatch SET UnitCost = 44.40/12 WHERE PurchaseDate = '21 Jun 2025' AND ProductTypeId = 4 AND ProductId in (1,27,8,7) --(Qty 4)
+UPDATE finance.InventoryBatch SET UnitCost = 44.40/12 WHERE PurchaseDate = '23 Apr 2025' AND ProductTypeId = 4 AND ProductId in (23,8,26) -- Print A5  4 Updated
 
-UPDATE finance.InventoryBatch SET UnitCost = 11.00/1 WHERE PurchaseDate = '14 Jun 2025' AND ProductTypeId = 6 -- Print 30x30cm
 
-UPDATE finance.InventoryBatch SET UnitCost = 4.23 WHERE PurchaseDate = '11 Jun 2025' AND ProductTypeId = 3 -- Print A6
-UPDATE finance.InventoryBatch SET UnitCost = 4.23 WHERE PurchaseDate = '21 Jun 2025' AND ProductTypeId = 3 -- Print A6
+UPDATE finance.InventoryBatch SET UnitCost = 81.95/100 WHERE PurchaseDate = '30 May 2025' AND ProductTypeId = 2 -- Card    [Spreadsheet 25 May]
+UPDATE finance.InventoryBatch SET UnitCost = 126.95/200 WHERE PurchaseDate = '10 Jun 2025' AND ProductTypeId = 2 -- Card   [Spreadsheet 10 Jun]
 
-UPDATE finance.InventoryBatch SET UnitCost = 3.70 WHERE PurchaseDate = '21 Jun 2025' AND ProductTypeId = 4 --(Qty 7) Print A5
-UPDATE finance.InventoryBatch SET UnitCost = 6.48 WHERE PurchaseDate = '24 Jun 2025' AND ProductTypeId = 4 -- Print A5
-UPDATE finance.InventoryBatch SET UnitCost = 3.70 WHERE PurchaseDate = '08 Aug 2025' AND ProductTypeId = 4 --(Qty 2) Print A5
-UPDATE finance.InventoryBatch SET UnitCost = 6.48 WHERE PurchaseDate = '23 Apr 2025' AND ProductTypeId = 4 AND ProductId = 23 -- Print A5 Whispers amongst petals 
-UPDATE finance.InventoryBatch SET UnitCost = 6.48 WHERE PurchaseDate = '23 Apr 2025' AND ProductTypeId = 4 AND ProductId in (26,8) -- Print A5 (Meadow Blooms,Day Dreams)
-UPDATE finance.InventoryBatch SET UnitCost = 6.48 WHERE PurchaseDate = '23 Apr 2025' AND ProductTypeId = 4 AND ProductId = 14 -- Print A5 Lunar serenity
+-- Payment of 32.40
+UPDATE finance.InventoryBatch SET UnitCost = 32.4/6 WHERE PurchaseDate = '11 Jun 2025' AND ProductTypeId = 3 -- Print A6
+UPDATE finance.InventoryBatch SET UnitCost = 32.4/6 WHERE PurchaseDate = '21 Jun 2025' AND ProductTypeId = 3 -- Print A6
+UPDATE finance.InventoryBatch SET UnitCost = 32.4/6 WHERE PurchaseDate = '21 Jun 2025' AND ProductTypeId = 4 AND ProductId in (10,20) -- Print A5
+
+
+
+UPDATE finance.InventoryBatch SET UnitCost = 11.00/1 WHERE PurchaseDate = '14 Jun 2025' AND ProductTypeId = 6 -- Print 30x30cm    [Spreadsheet 16 Jun]
+UPDATE finance.InventoryBatch SET UnitCost = 227.95/500 WHERE PurchaseDate = '14 Jul 2025' AND ProductTypeId = 2 -- Card          [Spreadsheet 10 Jul]
+UPDATE finance.InventoryBatch SET UnitCost = 66.90/10 WHERE PurchaseDate = '02 Sep 2025' AND ProductTypeId = 8 -- Calendars       [Spreadsheet 15 Aug]
+UPDATE finance.InventoryBatch SET UnitCost = 69.95/100 WHERE PurchaseDate = '21 Aug 2025' AND ProductTypeId = 2 -- Christmas Card [Spreadsheet 15 Aug]
+UPDATE finance.InventoryBatch SET UnitCost = 81.95/100 WHERE PurchaseDate = '10 Sep 2025' AND ProductId != 1036 AND ProductTypeId = 2 -- Cards [Spreadsheet 07 Sep]
+
+-- Payment of 32.34 [09 Sep in Spreadsheet]
+UPDATE finance.InventoryBatch SET UnitCost = 23.52/10 WHERE PurchaseDate = '10 Sep 2025' AND ProductTypeId = 7 -- Print 20x20cm [Spreadsheet 09 Sep]
+UPDATE finance.InventoryBatch SET UnitCost = 8.82/10 WHERE PurchaseDate = '10 Sep 2025' AND ProductId = 1036 AND ProductTypeId = 2 -- Cards [Spreadsheet 09 Sep]
+
 GO
 
+-- TODO Check that the total cost of inventory matches the speadsheet before proceeding
 
 -- Cursor to iterate over Activity records
 DECLARE activity_cursor CURSOR FOR
@@ -82,7 +95,7 @@ FROM Activity
 WHERE Deleted = 0
 --AND ActionId = 1 -- Only include adding new stock
 AND ActionId != 1 -- Include all except adding new stock
-AND ProductTypeId != 1 -- Exclude Originals
+--AND ProductTypeId != 1 -- Exclude Originals
 ORDER BY ActivityDate, Id --, ActionId
 
 DECLARE @Id INT,
@@ -104,20 +117,6 @@ FETCH NEXT FROM activity_cursor INTO @Id, @ActivityDate, @ActionId, @LocationId,
 
 WHILE @@FETCH_STATUS = 0
 BEGIN
-  --  IF @ActionId = 1 -- Add new stock add to
-  --  BEGIN
-  --      EXEC	[finance].[InventoryBatch_Create]
-		--@ProductId = @ProductId,
-		--@ProductTypeId = @ProductTypeId,
-		--@LocationId = @LocationId,
-		--@InitialQuantity = @Quantity,
-  --      @UnitCost = 0,
-		--@ActivityDate = @ActivityDate,
-		--@ActivityId = @Id,
-		--@UserId = 1
-
-  --  END
-  --  ELSE 
     IF  @ActionId = 2 -- Move from stock room to
     BEGIN
         EXEC	[finance].[InventoryBatch_MoveQuantity]
@@ -128,30 +127,6 @@ BEGIN
 		@Quantity = @Quantity,
 		@ActivityId = @Id,
 		@CurrentUserId = 1
-
-
-  --      EXEC	[finance].[InventoryBatch_Create]
-  --      @Success = @Success OUTPUT,
-  --      @Id = @TempId OUTPUT,
-  --      @InventoryBatchStatusId = 2, -- Active
-		--@ProductId = @ProductId,
-		--@ProductTypeId = @ProductTypeId,
-		--@LocationId = @LocationId,
-		--@InitialQuantity = @Quantity,
-  --      @UnitCost = 0,
-		--@ActivityDate = @ActivityDate,
-		--@ActivityId = @Id,
-		--@UserId = 1
-
-  --      -- Remove From Stock room
-  --      EXEC	[finance].[InventoryBatch_ReduceQuantity]
-		--@ProductId = @ProductId,
-		--@ProductTypeId = @ProductTypeId,
-		--@LocationId = 1,
-		--@Quantity = @Quantity,
-		--@ActivityId = @Id,
-		--@CurrentUserId = 1,
-  --      @CostRemoved = @CostRemoved OUTPUT
     END
     ELSE IF @ActionId = 3 -- Return to stock room from
     BEGIN
@@ -163,31 +138,6 @@ BEGIN
 		@Quantity = @Quantity,
 		@ActivityId = @Id,
 		@CurrentUserId = 1
-
-
-  --      -- Remove From location
-  --      EXEC	[finance].[InventoryBatch_ReduceQuantity]
-		--@ProductId = @ProductId,
-		--@ProductTypeId = @ProductTypeId,
-		--@LocationId = @LocationId,
-		--@Quantity = @Quantity,
-		--@ActivityId = @Id,
-		--@CurrentUserId = 1,
-  --      @CostRemoved = @CostRemoved OUTPUT
-
-  --      -- Add to Stock room
-  --      EXEC	[finance].[InventoryBatch_Create]
-  --      @Success = @Success OUTPUT,
-  --      @Id = @TempId OUTPUT,
-  --      @InventoryBatchStatusId = 2, -- Active
-  --      @ProductId = @ProductId,
-  --      @ProductTypeId = @ProductTypeId,
-  --      @LocationId = 1, -- stock room
-  --      @InitialQuantity = @Quantity,
-  --      @UnitCost = 0,
-  --      @ActivityDate = @ActivityDate,
-  --      @ActivityId = @Id,
-  --      @UserId = 1
     END
     ELSE IF @ActionId = 4 -- Delete stock
     BEGIN
@@ -200,6 +150,20 @@ BEGIN
         @ActivityId = @Id,
         @CurrentUserId = 1,
         @CostRemoved = @CostRemoved OUTPUT
+
+
+			EXEC [finance].[Transaction_Create]
+				@Success			OUTPUT,
+				@Id					OUTPUT, 
+				@TransactionTypeId	= 1, -- Journal = 1, Expense = 2, Income = 3, Sale = 4
+				@DebitAccountId		= 10,-- Inventory Shrinkage (Expense)
+				@CreditAccountId	= 6, -- Inventory
+				@Date				= @ActivityDate,
+				@Description		= 'Deleted stock',
+				@Amount				= @CostRemoved,
+				@ContactId			= NULL,
+				@CurrentUserId		= 1
+
     END
     ELSE IF @ActionId = 5 -- Sale of stock
     BEGIN
@@ -243,6 +207,19 @@ BEGIN
         @ActivityId = @Id,
         @CurrentUserId = 1,
         @CostRemoved = @CostRemoved OUTPUT
+
+			EXEC [finance].[Transaction_Create]
+				@Success			OUTPUT,
+				@Id					OUTPUT, 
+				@TransactionTypeId	= 3, -- Journal = 1, Expense = 2, Income = 3, Sale = 4
+				@DebitAccountId		= 8,-- Advertising/Promotion (Expense)
+				@CreditAccountId	= 6, -- Inventory
+				@Date				= @ActivityDate,
+				@Description		= 'Stock for promotional use',
+				@Amount				= @CostRemoved,
+				@ContactId			= NULL,
+				@CurrentUserId		= 1
+
     END
     ELSE IF @ActionId = 7 -- Damaged Stock
     BEGIN
@@ -255,6 +232,45 @@ BEGIN
         @ActivityId = @Id,
         @CurrentUserId = 1,
         @CostRemoved = @CostRemoved OUTPUT
+
+			EXEC [finance].[Transaction_Create]
+				@Success			OUTPUT,
+				@Id					OUTPUT, 
+				@TransactionTypeId	= 1, -- Journal = 1, Expense = 2, Income = 3, Sale = 4
+				@DebitAccountId		= 10,-- Inventory Shrinkage (Expense)
+				@CreditAccountId	= 6, -- Inventory
+				@Date				= @ActivityDate,
+				@Description		= 'Damaged stock',
+				@Amount				= @CostRemoved,
+				@ContactId			= NULL,
+				@CurrentUserId		= 1
+
+    END
+    ELSE IF @ActionId = 8 -- Personal Use
+    BEGIN
+        -- Remove Stock
+        EXEC	[finance].[InventoryBatch_ReduceQuantity]
+        @ProductId = @ProductId,
+        @ProductTypeId = @ProductTypeId,
+        @LocationId = @LocationId,
+        @Quantity = @Quantity,
+        @ActivityId = @Id,
+        @CurrentUserId = 1,
+        @CostRemoved = @CostRemoved OUTPUT
+
+			EXEC [finance].[Transaction_Create]
+				@Success			OUTPUT,
+				@Id					OUTPUT, 
+				@TransactionTypeId	= 1, -- Journal = 1, Expense = 2, Income = 3, Sale = 4
+				@DebitAccountId		= 4 ,-- Owner’s Drawings (Equity)
+				@CreditAccountId	= 6, -- Inventory
+				@Date				= @ActivityDate,
+				@Description		= 'Stock for owner''s personal use',
+				@Amount				= @CostRemoved,
+				@ContactId			= NULL,
+				@CurrentUserId		= 1
+
+
     END
 
     FETCH NEXT FROM activity_cursor INTO @Id, @ActivityDate, @ActionId, @LocationId, @ProductId, @ProductTypeId, @Quantity, @AmendDate

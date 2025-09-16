@@ -59,6 +59,8 @@ INSERT INTO [finance].[Account] (Id,[AccountTypeId],[Name],[Notes],[Active],[Del
 VALUES (114,4,'Stationary & Consumables','',1,0,0,GETDATE(),0,GETDATE())
 INSERT INTO [finance].[Account] (Id,[AccountTypeId],[Name],[Notes],[Active],[Deleted],[CreateUserId],[CreateDate],[AmendUserId],[AmendDate])
 VALUES (115,4,'Charity Donation','',1,0,0,GETDATE(),0,GETDATE())
+INSERT INTO [finance].[Account] (Id,[AccountTypeId],[Name],[Notes],[Active],[Deleted],[CreateUserId],[CreateDate],[AmendUserId],[AmendDate])
+VALUES (116,4,'Payment fees','',1,0,0,GETDATE(),0,GETDATE())
 SET IDENTITY_INSERT [finance].[Account] OFF;
 
 -- Populate the InventoryBatchStatus table with initial data
