@@ -20,6 +20,7 @@ BEGIN
 		l.[Name] AS LocationName,
 		ss.[ContactId],
 		c.[Name] AS ContactName,
+		ss.TotalPrice,
 		ss.SaleConfirmed,
 		ss.PaymentReceived,
 		ss.[Deleted],

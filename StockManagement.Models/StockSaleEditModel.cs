@@ -16,6 +16,7 @@ namespace StockManagement.Models
 
         [Range(1, int.MaxValue, ErrorMessage = "Customer must be selected.")]
         public int ContactId { get; set; }
+        public decimal TotalPrice { get; set; }
 
         public bool SaleConfirmed { get; set; }
 

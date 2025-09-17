@@ -264,6 +264,7 @@ public partial class StockSaleBase : ComponentBase
         if (response)
         {
             EditStockSale.SaleConfirmed = true;
+            EditStockSale.TotalPrice = StockSaleConfirmationObject.TotalPrice;
         }
         ShowSaleConfirmForm = false;
     }

@@ -71,7 +71,7 @@ BEGIN
 		AND (ISNULL(@ContactId, 0) = 0 OR td.ContactId = @ContactId)
 		AND (ISNULL(@TransactionTypeId, 0) = 0 OR t.TransactionTypeId = @TransactionTypeId)
 		AND td.Deleted = 0
-	ORDER BY	td.[Date] DESC, td.TransactionId, a.[Name], Credit, Debit
+	ORDER BY	CAST(td.[Date] AS date) DESC, td.TransactionId DESC, a.[Name], Credit, Debit
     OFFSET (@CurrentPage - 1) * @PageSize ROWS
     FETCH NEXT @PageSize ROWS ONLY;
 

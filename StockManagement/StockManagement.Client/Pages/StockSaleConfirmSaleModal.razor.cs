@@ -22,10 +22,11 @@ public partial class StockSaleConfirmSaleModalBase : ComponentBase
     }
 
     [Parameter] public EventCallback OnCancel { get; set; }
-    [Parameter] public EventCallback OnValidSubmit { get; set; }
     [Parameter] public EventCallback OnConfirmSale { get; set; }
 
-    protected decimal TotalPurchasePrice { get; set; }
+    protected decimal ManualTotalPurchasePrice { get; set; }
+    protected decimal CalculatedPrice { get; set; }
+    protected bool ManualPriceOverride { get; set; } = false;
     protected bool SyncProductTypePrices { get; set; } = true;
 
     protected override void OnInitialized()
@@ -33,9 +34,17 @@ public partial class StockSaleConfirmSaleModalBase : ComponentBase
         CalculateTotalPrice();
     }
 
-    protected async Task HandleValidSubmit()
+    protected async Task ConfirmSale()
     {
-        await OnValidSubmit.InvokeAsync();
+        if (ManualPriceOverride)
+        {
+            StockSaleConfirmationObject.TotalPrice = ManualTotalPurchasePrice;
+        }
+        else
+        {
+            StockSaleConfirmationObject.TotalPrice = CalculatedPrice;
+        }
+        await OnConfirmSale.InvokeAsync();
     }
 
     protected void OnUnitPriceInput(ChangeEventArgs e, StockSaleDetailResponseModel detail)
@@ -53,8 +62,12 @@ public partial class StockSaleConfirmSaleModalBase : ComponentBase
 
     protected void CalculateTotalPrice()
     {
-        StockSaleConfirmationObject.TotalPrice = _stockSaleConfirmation.StockSaleDetails
+        CalculatedPrice = _stockSaleConfirmation.StockSaleDetails
                                         .Where(ssd => ssd.UnitPrice.HasValue) // Ensure UnitPrice is not null
                                         .Sum(ssd => (decimal)ssd.UnitPrice!.Value * ssd.Quantity); // Safely access the value
+        if (!ManualPriceOverride)
+        {
+            ManualTotalPurchasePrice = CalculatedPrice;
+        }
     }
 }
