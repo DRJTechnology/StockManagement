@@ -69,6 +69,7 @@
     <Folder Include="finance\User Defined Types\" />
     <Folder Include="Scripts" />
     <Folder Include="Scripts\V1.8.0" />
+    <Folder Include="Scripts\V2.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\ProductType.sql" />
@@ -243,9 +244,12 @@
     <Build Include="dbo\Stored Procedures\StockSale_ConfirmSale.sql" />
     <Build Include="dbo\Tables\ErrorLog.sql" />
     <Build Include="dbo\Stored Procedures\StockSale_ConfirmPayment.sql" />
+    <None Include="Scripts\V2.0.0\0. PreSchemaUpdate.sql" />
+    <None Include="Scripts\V2.0.0\1. PopulateFinanceTables.sql" />
+    <None Include="Scripts\V2.0.0\2. Populate InventoryBatch Data.sql" />
+    <None Include="Scripts\V2.0.0\3. Populate Transactions.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Scripts\1. PopulateFinanceTables.sql" />
     <Build Include="dbo\Tables\ContactType.sql" />
     <Build Include="dbo\Tables\Contact.sql" />
     <Build Include="dbo\Stored Procedures\Contact_LoadByType.sql" />
@@ -255,9 +259,6 @@
     <Build Include="dbo\Stored Procedures\Location_Update.sql" />
     <Build Include="dbo\Tables\Location.sql" />
     <None Include="Scripts\Report-sql.sql" />
-    <None Include="Scripts\2. Populate InventoryBatch Data.sql" />
-    <None Include="Scripts\3. Populate Transactions.sql" />
-    <None Include="Scripts\0. PreSchemaUpdate.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="StockManagement.Database.refactorlog" />
