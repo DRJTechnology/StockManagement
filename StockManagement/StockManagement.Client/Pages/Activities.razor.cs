@@ -93,22 +93,22 @@ public partial class ActivitiesBase : ComponentBase
         ShowForm = true;
     }
 
-    //protected void Edit(ActivityResponseModel activity)
-    //{
-    //    EditActivity = new ActivityEditModel
-    //    {
-    //        Id = activity.Id,
-    //        ActivityDate = activity.ActivityDate,
-    //        ActionId = activity.ActionId,
-    //        ProductId = activity.ProductId,
-    //        ProductTypeId = activity.ProductTypeId,
-    //        LocationId = activity.LocationId,
-    //        Quantity = activity.Quantity,
-    //        Notes = activity.Notes,
-    //        Deleted = activity.Deleted
-    //    };
-    //    ShowForm = true;
-    //}
+    protected void Edit(ActivityResponseModel activity)
+    {
+        EditActivity = new ActivityEditModel
+        {
+            Id = activity.Id,
+            ActivityDate = activity.ActivityDate,
+            ActionId = activity.ActionId,
+            ProductId = activity.ProductId,
+            ProductTypeId = activity.ProductTypeId,
+            LocationId = activity.LocationId,
+            Quantity = activity.Quantity,
+            Notes = activity.Notes,
+            Deleted = activity.Deleted
+        };
+        ShowForm = true;
+    }
 
     protected void OpenStockSale(int stockSaleId)
     {
@@ -125,61 +125,61 @@ public partial class ActivitiesBase : ComponentBase
         Navigation.NavigateTo($"/delivery-note/{deliveryNoteId}");
     }
 
-    //protected async Task HandleValidSubmit()
-    //{
-    //    if (EditActivity.Id == 0)
-    //    {
-    //        var newId = await ActivityService.CreateAsync(EditActivity);
-    //        Activities.Insert(
-    //            0,
-    //            new ActivityResponseModel()
-    //            {
-    //                Id = newId,
-    //                ActionId = EditActivity.ActionId,
-    //                ActionName = Lookups.ActionList.Where(a => a.Id == EditActivity.ActionId).FirstOrDefault()!.ActionName,
-    //                ActivityDate = EditActivity.ActivityDate,
-    //                ProductId = EditActivity.ProductId,
-    //                ProductTypeId = EditActivity.ProductTypeId,
-    //                LocationId = EditActivity.LocationId,
-    //                Quantity = EditActivity.Quantity,
-    //                Notes = EditActivity.Notes,
-    //                ProductName = Lookups.ProductList.Where(p => p.Id == EditActivity.ProductId).FirstOrDefault()!.ProductName,
-    //                ProductTypeName = Lookups.ProductTypeList.Where(pt => pt.Id == EditActivity.ProductTypeId).FirstOrDefault()!.ProductTypeName,
-    //                LocationName = Lookups.LocationList.Where(v => v.Id == EditActivity.LocationId).FirstOrDefault()!.Name,
-    //                Deleted = false
-    //            });
-    //    }
-    //    else
-    //    {
-    //        await ActivityService.UpdateAsync(EditActivity);
-    //        var index = Activities.FindIndex(p => p.Id == EditActivity.Id);
-    //        if (index >= 0)
-    //        {
-    //            Activities[index] = new ActivityResponseModel()
-    //            {
-    //                Id = EditActivity.Id,
-    //                ActionId = EditActivity.ActionId,
-    //                ActionName = Lookups.ActionList.Where(a => a.Id == EditActivity.ActionId).FirstOrDefault()!.ActionName,
-    //                ActivityDate = EditActivity.ActivityDate,
-    //                ProductId = EditActivity.ProductId,
-    //                ProductTypeId = EditActivity.ProductTypeId,
-    //                LocationId = EditActivity.LocationId,
-    //                Quantity = EditActivity.Quantity,
-    //                Notes = EditActivity.Notes,
-    //                ProductName = Lookups.ProductList.Where(p => p.Id == EditActivity.ProductId).FirstOrDefault()!.ProductName,
-    //                ProductTypeName = Lookups.ProductTypeList.Where(pt => pt.Id == EditActivity.ProductTypeId).FirstOrDefault()!.ProductTypeName,
-    //                LocationName = Lookups.LocationList.Where(v => v.Id == EditActivity.LocationId).FirstOrDefault()!.Name,
-    //                Deleted = false
-    //            };
-    //        }
-    //    }
-    //    ShowForm = false;
-    //}
+    protected async Task HandleValidSubmit()
+    {
+        if (EditActivity.Id == 0)
+        {
+            var newId = await ActivityService.CreateAsync(EditActivity);
+            Activities.Insert(
+                0,
+                new ActivityResponseModel()
+                {
+                    Id = newId,
+                    ActionId = EditActivity.ActionId,
+                    ActionName = Lookups.ActionList.Where(a => a.Id == EditActivity.ActionId).FirstOrDefault()!.ActionName,
+                    ActivityDate = EditActivity.ActivityDate,
+                    ProductId = EditActivity.ProductId,
+                    ProductTypeId = EditActivity.ProductTypeId,
+                    LocationId = EditActivity.LocationId,
+                    Quantity = EditActivity.Quantity,
+                    Notes = EditActivity.Notes,
+                    ProductName = Lookups.ProductList.Where(p => p.Id == EditActivity.ProductId).FirstOrDefault()!.ProductName,
+                    ProductTypeName = Lookups.ProductTypeList.Where(pt => pt.Id == EditActivity.ProductTypeId).FirstOrDefault()!.ProductTypeName,
+                    LocationName = Lookups.LocationList.Where(v => v.Id == EditActivity.LocationId).FirstOrDefault()!.Name,
+                    Deleted = false
+                });
+        }
+        //else
+        //{
+        //    await ActivityService.UpdateAsync(EditActivity);
+        //    var index = Activities.FindIndex(p => p.Id == EditActivity.Id);
+        //    if (index >= 0)
+        //    {
+        //        Activities[index] = new ActivityResponseModel()
+        //        {
+        //            Id = EditActivity.Id,
+        //            ActionId = EditActivity.ActionId,
+        //            ActionName = Lookups.ActionList.Where(a => a.Id == EditActivity.ActionId).FirstOrDefault()!.ActionName,
+        //            ActivityDate = EditActivity.ActivityDate,
+        //            ProductId = EditActivity.ProductId,
+        //            ProductTypeId = EditActivity.ProductTypeId,
+        //            LocationId = EditActivity.LocationId,
+        //            Quantity = EditActivity.Quantity,
+        //            Notes = EditActivity.Notes,
+        //            ProductName = Lookups.ProductList.Where(p => p.Id == EditActivity.ProductId).FirstOrDefault()!.ProductName,
+        //            ProductTypeName = Lookups.ProductTypeList.Where(pt => pt.Id == EditActivity.ProductTypeId).FirstOrDefault()!.ProductTypeName,
+        //            LocationName = Lookups.LocationList.Where(v => v.Id == EditActivity.LocationId).FirstOrDefault()!.Name,
+        //            Deleted = false
+        //        };
+        //    }
+        //}
+        ShowForm = false;
+    }
 
-    //protected void CancelEdit()
-    //{
-    //    ShowForm = false;
-    //}
+    protected void CancelEdit()
+    {
+        ShowForm = false;
+    }
 
     //protected void Delete(int id)
     //{
