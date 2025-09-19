@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
 using StockManagement.Client.Interfaces.Finance;
 using StockManagement.Client.Services;
 using StockManagement.Client.Services.Finance;
+using System.Globalization;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -35,4 +37,12 @@ builder.Services.AddScoped<ILocationDataService, LocationDataService>();
 builder.Services.AddScoped<ITransactionDataService, TransactionDataService>();
 builder.Services.AddScoped<IInventoryBatchDataService, InventoryBatchDataService>();
 
-await builder.Build().RunAsync();
+var host = builder.Build();
+
+// Set the culture globally to en-GB (UK)
+var js = host.Services.GetRequiredService<IJSRuntime>();
+var culture = new CultureInfo("en-GB");
+CultureInfo.DefaultThreadCurrentCulture = culture;
+CultureInfo.DefaultThreadCurrentUICulture = culture;
+
+await host.RunAsync();

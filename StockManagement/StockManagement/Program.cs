@@ -21,6 +21,7 @@ using StockManagement.Services.Interfaces;
 using StockManagement.Services.Interfaces.Finance;
 using StockManagement.UserManagement;
 using System.Data;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -128,6 +129,11 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddControllers();
 
 var app = builder.Build();
+
+// Set the culture globally to en-GB (UK)
+var culture = new CultureInfo("en-GB");
+CultureInfo.DefaultThreadCurrentCulture = culture;
+CultureInfo.DefaultThreadCurrentUICulture = culture;
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
