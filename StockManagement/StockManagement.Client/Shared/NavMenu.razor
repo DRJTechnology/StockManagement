@@ -6,8 +6,7 @@
     </div>
 </div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-
+<InputCheckbox title="Navigation menu" class="navbar-toggler" @bind-Value="mobileMenuActive" />
 <div class="nav-scrollable">
     <nav class="nav flex-column">
         <AuthorizeView>
@@ -155,26 +154,4 @@
         </AuthorizeView>
     </nav>
 </div>
-
-@* @code {
-    private string? currentUrl;
-    private bool showSettingsSubMenu = false;
-
-    protected override void OnInitialized()
-    {
-        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
-        NavigationManager.LocationChanged += OnLocationChanged;
-    }
-
-    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
-    {
-        currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
-        StateHasChanged();
-    }
-
-    public void Dispose()
-    {
-        NavigationManager.LocationChanged -= OnLocationChanged;
-    }
-} *@
 

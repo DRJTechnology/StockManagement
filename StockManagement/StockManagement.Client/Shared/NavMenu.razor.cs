@@ -12,6 +12,7 @@ namespace StockManagement.Client.Shared
         protected bool showSettingsSubMenu = false;
         protected bool showFinanceOptions = false;
         protected bool showSettingsOptions = false;
+        protected bool mobileMenuActive = false;
 
         protected override void OnInitialized()
         {
@@ -22,6 +23,7 @@ namespace StockManagement.Client.Shared
         private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
         {
             currentUrl = Navigation.ToBaseRelativePath(e.Location);
+            mobileMenuActive = false;
             StateHasChanged();
         }
 
