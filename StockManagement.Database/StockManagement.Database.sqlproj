@@ -248,6 +248,7 @@
     <None Include="Scripts\V2.0.0\1. PopulateFinanceTables.sql" />
     <None Include="Scripts\V2.0.0\2. Populate InventoryBatch Data.sql" />
     <None Include="Scripts\V2.0.0\3. Populate Transactions.sql" />
+    <Build Include="finance\Stored Procedures\ReportBalanceSheet.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\ContactType.sql" />

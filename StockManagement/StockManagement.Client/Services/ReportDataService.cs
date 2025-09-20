@@ -1,4 +1,6 @@
 ﻿using StockManagement.Client.Interfaces;
+using StockManagement.Client.Pages;
+using StockManagement.Models.Dto.Finance;
 using StockManagement.Models.Dto.Reports;
 using System.Net.Http.Json;
 
@@ -30,6 +32,12 @@ namespace StockManagement.Client.Services
         public async Task<List<StockReportItemDto>> GetStockReportAsync(int locationId, int productTypeId, int productId)
         {
             var returnVal = await httpClient.GetFromJsonAsync<List<StockReportItemDto>>($"api/{ApiControllerName}/stock?locationId={locationId}&productTypeId={productTypeId}&productId={productId}");
+            return returnVal;
+        }
+
+        public async Task<List<BalanceSheetDto>> GetBalanceSheetReportAsync()
+        {
+            var returnVal = await httpClient.GetFromJsonAsync<List<BalanceSheetDto>>($"api/{ApiControllerName}/balancesheet");
             return returnVal;
         }
     }
