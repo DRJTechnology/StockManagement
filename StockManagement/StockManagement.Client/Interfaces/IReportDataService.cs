@@ -8,5 +8,6 @@ namespace StockManagement.Client.Interfaces
         Task<List<BalanceSheetDto>> GetBalanceSheetReportAsync();
         Task<List<SalesReportItemDto>> GetSalesReportAsync(int locationId, int productTypeId, int productId);
         Task<List<StockReportItemDto>> GetStockReportAsync(int locationId, int productTypeId, int productId);
+        Task<decimal> GetInventoryValueReportAsync();
     }
 }

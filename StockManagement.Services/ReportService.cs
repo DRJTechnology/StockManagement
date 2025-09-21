@@ -14,6 +14,12 @@ namespace StockManagement.Services
             return reportItems;
         }
 
+        public async Task<decimal> GetInventoryValueReportAsync()
+        {
+            var totalValue = await reportRepository.GetInventoryValueReportAsync();
+            return totalValue;
+        }
+
         public async Task<List<SalesReportItemDto>> GetSalesReportAsync(int locationId, int productTypeId, int productId)
         {
             var reportItems = mapper.Map<List<SalesReportItemDto>>(await reportRepository.GetSalesReportAsync(locationId, productTypeId, productId));

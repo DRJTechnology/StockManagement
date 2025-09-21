@@ -1,0 +1,12 @@
+﻿@inherits InventoryValueBase
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="inventory-value">
+        Total Inventory Value: @TotalValue.ToString("C")
+    </div>
+}

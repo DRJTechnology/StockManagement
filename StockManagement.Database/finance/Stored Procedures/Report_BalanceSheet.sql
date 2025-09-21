@@ -3,7 +3,7 @@
 -- Create date: 20 Sep 2025
 -- Description:	Balance Sheet Report
 -- =======================================================================
-CREATE PROCEDURE [finance].[ReportBalanceSheet]
+CREATE PROCEDURE [finance].[Report_BalanceSheet]
 	@FromDate	datetime = '2000-01-01',
 	@ToDate		datetime = '2099-12-31'
 AS

@@ -11,6 +11,11 @@ namespace StockManagement.ClientDataServices
             throw new NotImplementedException();
         }
 
+        public Task<decimal> GetInventoryValueReportAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<List<SalesReportItemDto>> GetSalesReportAsync(int locationId, int productTypeId, int productId)
         {
             throw new NotImplementedException();

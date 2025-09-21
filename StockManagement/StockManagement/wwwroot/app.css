@@ -130,6 +130,11 @@ div.filters {
             display: block;
         }
 
+.inventory-value {
+    padding: 10px;
+    text-align: end;
+}
+
 @media (min-width: 641px) {
     .navbar-toggler {
         display: none;

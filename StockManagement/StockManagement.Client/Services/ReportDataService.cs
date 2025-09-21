@@ -40,5 +40,11 @@ namespace StockManagement.Client.Services
             var returnVal = await httpClient.GetFromJsonAsync<List<BalanceSheetDto>>($"api/{ApiControllerName}/balancesheet");
             return returnVal;
         }
+
+        public async Task<decimal> GetInventoryValueReportAsync()
+        {
+            var returnVal = await httpClient.GetFromJsonAsync<decimal>($"api/{ApiControllerName}/inventoryvalue");
+            return returnVal;
+        }
     }
 }

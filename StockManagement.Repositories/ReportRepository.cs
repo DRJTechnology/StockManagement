@@ -34,8 +34,26 @@ namespace StockManagement.Repositories
             //parameters.Add("@FromDate", fromDate);
             //parameters.Add("@ToDate", toDate);
 
-            var reportItemList = await dbConnection.QueryAsync<BalanceSheetDto>("[finance].[ReportBalanceSheet]", parameters, commandType: CommandType.StoredProcedure);
+            var reportItemList = await dbConnection.QueryAsync<BalanceSheetDto>("[finance].[Report_BalanceSheet]", parameters, commandType: CommandType.StoredProcedure);
             return reportItemList.Cast<BalanceSheetDto>().ToList(); ;
+        }
+        public async Task<decimal> GetInventoryValueReportAsync()
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@TotalValue", dbType: DbType.Currency, direction: ParameterDirection.Output);
+                //parameters.Add("@TotalAmount", dbType: DbType.Currency, direction: ParameterDirection.Output);
+
+                await dbConnection.ExecuteAsync("[finance].[Report_InventoryValue]", parameters, commandType: CommandType.StoredProcedure);
+
+                return parameters.Get<decimal>("@TotalValue");
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
         }
     }
 }

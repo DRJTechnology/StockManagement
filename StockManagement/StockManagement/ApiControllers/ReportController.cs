@@ -53,5 +53,20 @@ namespace StockManagement.ApiControllers
                 return this.BadRequest();
             }
         }
+
+        [HttpGet("inventoryvalue")]
+        public async Task<IActionResult> GetInventoryValueReport()
+        {
+            try
+            {
+                var totalValue = await reportService.GetInventoryValueReportAsync();
+                return this.Ok(totalValue);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "GetInventoryValueReport");
+                return this.BadRequest();
+            }
+        }
     }
 }
