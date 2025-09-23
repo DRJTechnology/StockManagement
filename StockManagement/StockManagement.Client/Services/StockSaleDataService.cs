@@ -52,5 +52,24 @@ namespace StockManagement.Client.Services
             }
         }
 
+        public async Task<bool> ResetAsync(int stockSaleId)
+        {
+            try
+            {
+                var response = await httpClient.PostAsJsonAsync<int>($"api/{ApiControllerName}/ResetStockSale", stockSaleId);
+                if (response == null || !response.IsSuccessStatusCode)
+                {
+                    throw new Exception($"Failed to reset stock sale.");
+                }
+
+                var returnValue = await response.Content.ReadFromJsonAsync<ApiResponse>();
+
+                return returnValue.Success;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

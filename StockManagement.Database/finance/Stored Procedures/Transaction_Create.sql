@@ -3,9 +3,11 @@
 -- Create date: 02 Sep 2025
 -- Description:	Creates a transaction and transaction detail records
 -- =========================================================================
+-- 23 Sep 2025 - Dave Brown - Update @Id to TransactionDetailId for clarity
+-- =========================================================================
 CREATE PROCEDURE [finance].[Transaction_Create]
 	@Success			BIT OUTPUT,
-	@Id					INT OUTPUT, 
+	@TransactionDetailId INT OUTPUT, 
 	@TransactionTypeId	INT, -- Journal = 1, Expense = 2, Income = 3, Sale = 4
 	@DebitAccountId		INT,
 	@CreditAccountId	INT,
@@ -54,7 +56,7 @@ BEGIN
 	-- Debit Account
     INSERT INTO [finance].[TransactionDetail] (TransactionId, AccountId, [Date], [Description], Amount, Direction, ContactId, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
 	VALUES (@TransactionId, @DebitAccountId, @Date, @Description, @Amount, 1 /* Direction */, @ContactId, 0, @CurrentUserId, SYSDATETIME(), @CurrentUserId, SYSDATETIME())
-	SELECT @Id = SCOPE_IDENTITY()
+	SELECT @TransactionDetailId = SCOPE_IDENTITY()
 
 	-- Credit Account
     INSERT INTO [finance].[TransactionDetail] (TransactionId, AccountId, [Date], [Description], Amount, Direction, ContactId, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)

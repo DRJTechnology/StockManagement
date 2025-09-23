@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
+using StockManagement.Client.Services;
 using StockManagement.Models;
 using StockManagement.Models.Enums;
 
@@ -22,6 +23,9 @@ public partial class StockSaleBase : ComponentBase
     protected IStockSaleDetailDataService StockSaleDetailService { get; set; } = default!;
 
     [Inject]
+    protected IInventoryBatchDataService InventoryBatchService { get; set; } = default!;
+
+    [Inject]
     protected ILookupsDataService LookupsService { get; set; } = default!;
 
     [Inject]
@@ -38,7 +42,7 @@ public partial class StockSaleBase : ComponentBase
     protected bool ShowDeleteDetailConfirm { get; set; } = false;
     protected bool ShowSaleConfirmForm { get; set; } = false;
     protected bool ShowSaleConfirmPayment { get; set; } = false;
-    
+    protected bool ShowResetConfirm { get; set; } = false;
 
     protected string SelectedItemName { get; set; } = string.Empty;
 
@@ -50,6 +54,7 @@ public partial class StockSaleBase : ComponentBase
     protected List<ContactResponseModel> Customers { get; set; } = new();
 
     protected bool ShowEditDetailForm { get; set; }
+    protected decimal StockCostPrice { get; set; } = 0;
 
     protected EditContext editContext;
     protected bool IsFormValid = false;
@@ -108,6 +113,11 @@ public partial class StockSaleBase : ComponentBase
             }
         }
         CreateValidationContext();
+
+        if (EditStockSale.SaleConfirmed)
+        {
+            StockCostPrice = await InventoryBatchService.GetSaleCostAsync(EditStockSale.Id);
+        }
 
         IsLoading = false;
     }
@@ -214,6 +224,32 @@ public partial class StockSaleBase : ComponentBase
         ShowDeleteDetailConfirm = false;
     }
 
+    protected void ResetStockSale()
+    {
+        if (EditStockSale.Id > 0)
+        {
+            //SelectedItemName = "this entire Delivery Note";
+            ShowResetConfirm = true;
+        }
+    }
+
+    protected async Task HandleResetConfirmation(bool confirmed)
+    {
+        if (confirmed)
+        {
+            if (confirmed)
+            {
+                await StockSaleService.ResetAsync(EditStockSale.Id);
+                EditStockSale.SaleConfirmed = false;
+                EditStockSale.PaymentReceived = false;
+                EditStockSale.TotalPrice = 0;
+                StockCostPrice = 0;
+            }
+        }
+
+        ShowResetConfirm = false;
+    }
+
     protected void EditDetail(StockSaleDetailResponseModel activity)
     {
         EditStockSaleDetail = new StockSaleDetailEditModel
@@ -265,6 +301,7 @@ public partial class StockSaleBase : ComponentBase
         {
             EditStockSale.SaleConfirmed = true;
             EditStockSale.TotalPrice = StockSaleConfirmationObject.TotalPrice;
+            StockCostPrice = await InventoryBatchService.GetSaleCostAsync(EditStockSale.Id);
         }
         ShowSaleConfirmForm = false;
     }

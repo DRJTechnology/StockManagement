@@ -19,5 +19,10 @@ namespace StockManagement.Services
             var filteredInventory = mapper.Map<InventoryBatchFilteredResponseModel>(await inventoryBatchRepository.GetFilteredAsync(inventoryBatchFilterModel));
             return filteredInventory;
         }
+
+        public Task<decimal> GetSaleCostAsync(int stockSaleId)
+        {
+            return inventoryBatchRepository.GetSaleCostAsync(stockSaleId);
+        }
     }
 }

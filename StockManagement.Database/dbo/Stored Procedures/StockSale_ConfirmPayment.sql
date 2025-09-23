@@ -34,7 +34,7 @@ BEGIN
 
 		EXEC [finance].[Transaction_CreateExpenseIncome]
 			@Success = @Success OUTPUT,
-			@Id = @TransactionDetailId OUTPUT,
+			@TransactionDetailId = @TransactionDetailId OUTPUT,
 			@TransactionId = @TransactionId OUTPUT,
 			@TransactionTypeId = 3,
 			@AccountId = 110, -- Sales - Art

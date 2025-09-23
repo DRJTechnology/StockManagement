@@ -70,6 +70,7 @@
     <Folder Include="Scripts" />
     <Folder Include="Scripts\V1.8.0" />
     <Folder Include="Scripts\V2.0.0" />
+    <Folder Include="Scripts\V2.0.3" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\ProductType.sql" />
@@ -219,7 +220,6 @@
       <AnsiNulls>Off</AnsiNulls>
     </Build>
     <Build Include="finance\Stored Procedures\TransactionDetail_LoadTotalFiltered.sql" />
-    <Build Include="finance\Stored Procedures\Inventory_SaleOfStock.sql" />
     <Build Include="finance\Tables\InventoryBatchStatus.sql">
       <AnsiNulls>Off</AnsiNulls>
     </Build>
@@ -250,6 +250,8 @@
     <None Include="Scripts\V2.0.0\3. Populate Transactions.sql" />
     <Build Include="finance\Stored Procedures\Report_BalanceSheet.sql" />
     <Build Include="finance\Stored Procedures\Report_InventoryValue.sql" />
+    <Build Include="dbo\Stored Procedures\StockSale_ResetSale.sql" />
+    <Build Include="finance\Stored Procedures\InventoryBatch_SaleCost.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\ContactType.sql" />
@@ -264,5 +266,8 @@
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="StockManagement.Database.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\V2.0.3\0. Rename column.sql" />
   </ItemGroup>
 </Project>

@@ -56,5 +56,24 @@ namespace StockManagement.Repositories
                 throw;
             }
         }
+        public async Task<decimal> GetSaleCostAsync(int stockSaleId)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@StockSaleId", stockSaleId);
+                parameters.Add("@SaleCost", dbType: DbType.Currency, direction: ParameterDirection.Output);
+
+                await dbConnection.ExecuteAsync("[finance].[InventoryBatch_SaleCost]", parameters, commandType: CommandType.StoredProcedure);
+
+                return parameters.Get<decimal>("@SaleCost");
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+        }
+
     }
 }

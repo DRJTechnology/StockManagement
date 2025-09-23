@@ -1,11 +1,11 @@
 ﻿CREATE TABLE [dbo].[StockSaleDetail] (
     [Id]             INT      IDENTITY (1, 1) NOT NULL,
-    [StockSaleId] INT      NOT NULL,
+    [StockSaleId]    INT      NOT NULL,
     [ProductId]      INT      NOT NULL,
     [ProductTypeId]  INT      NOT NULL,
     [Quantity]       INT      NOT NULL,
     [UnitPrice]	     MONEY    NULL,
-    [TransactionId]	 INT      NULL,
+    [TransactionDetailId]	 INT      NULL,
     [Deleted]        BIT      CONSTRAINT [DF_StockSaleDetail_Deleted] DEFAULT ((0)) NOT NULL,
     [AmendUserID]    INT      NOT NULL,
     [AmendDate]      DATETIME CONSTRAINT [DF_StockSaleDetail_AmendDate] DEFAULT (sysdatetime()) NOT NULL,

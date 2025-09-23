@@ -32,7 +32,7 @@ BEGIN
 		-- Create the transaction for the payment
 		EXEC [finance].[Transaction_CreateExpenseIncome] 
 						@Success = @TranstionSuccess OUTPUT,
-						@Id = @TransactionDetailId OUTPUT,
+						@TransactionDetailId = @TransactionDetailId OUTPUT,
 						@TransactionId = @TransactionId OUTPUT,
 						@TransactionTypeId = 2, -- Expense
 						@AccountId = 6, -- Inventory

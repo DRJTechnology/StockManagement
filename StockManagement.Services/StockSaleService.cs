@@ -41,6 +41,11 @@ namespace StockManagement.Services
             return mapper.Map<StockSaleResponseModel>(stockSale);
         }
 
+        public async Task<bool> ResetStockSaleAsync(int currentUserId, int stockSaleId)
+        {
+            return await stockSaleRepository.ResetStockSaleAsync(currentUserId, stockSaleId);
+        }
+
         public async Task<bool> UpdateAsync(int currentUserId, StockSaleEditModel stockSale)
         {
             var dto = mapper.Map<StockSaleDto>(stockSale);

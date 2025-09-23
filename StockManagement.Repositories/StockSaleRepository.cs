@@ -145,6 +145,32 @@ namespace StockManagement.Repositories
             }
         }
 
+        public async Task<bool> ResetStockSaleAsync(int currentUserId, int stockSaleId)
+        {
+            try
+            {
+                var parameters = new DynamicParameters();
+                parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+                parameters.Add("@StockSaleId", stockSaleId);
+                parameters.Add("@CurrentUserId", currentUserId);
+
+                var result = await dbConnection.ExecuteAsync("dbo.StockSale_ResetSale", parameters, commandType: CommandType.StoredProcedure);
+
+                if (parameters.Get<bool>("@Success"))
+                {
+                    return true;
+                }
+                else
+                {
+                    throw new UnauthorizedAccessException();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
         public async Task<bool> UpdateAsync(int currentUserId, StockSaleDto stockSaleDto)
         {
             var parameters = new DynamicParameters();

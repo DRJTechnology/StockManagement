@@ -10,6 +10,7 @@ namespace StockManagement.Services.Interfaces
         Task<bool> DeleteAsync(int currentUserId, int stockSaleId);
         Task<List<StockSaleResponseModel>> GetAllAsync();
         Task<StockSaleResponseModel> GetByIdAsync(int stockSaleId);
+        Task<bool> ResetStockSaleAsync(int currentUserId, int stockSaleId);
         Task<bool> UpdateAsync(int currentUserId, StockSaleEditModel stockSale);
     }
 }

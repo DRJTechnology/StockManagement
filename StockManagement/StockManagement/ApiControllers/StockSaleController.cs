@@ -174,5 +174,29 @@ namespace StockManagement.ApiControllers
             }
         }
 
+        [HttpPost("ResetStockSale")]
+        public async Task<ApiResponse> ResetStockSale([FromBody] int stockSaleId)
+        {
+            try
+            {
+                var appUser = await userAccessor.GetRequiredUserAsync(HttpContext);
+                var success = await stockSaleService.ResetStockSaleAsync(appUser.Id, stockSaleId);
+
+                return new ApiResponse()
+                {
+                    Success = success,
+                };
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "ResetStockSale");
+                return new ApiResponse()
+                {
+                    Success = false,
+                    ErrorMessage = ex.Message,
+                };
+            }
+        }
+        
     }
 }

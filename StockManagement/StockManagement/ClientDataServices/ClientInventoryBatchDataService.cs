@@ -15,5 +15,10 @@ namespace StockManagement.ClientDataServices
         {
             throw new NotImplementedException();
         }
+
+        public Task<decimal> GetSaleCostAsync(int stockSaleId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

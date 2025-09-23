@@ -21,7 +21,7 @@ BEGIN
 
 	DECLARE @UpdateDate DATETIME,
 			@SaleDate DATETIME,
-			@TransactionId INT,
+			@TransactionDetailId INT,
 			@TranstionSuccess BIT,
 			@ActivityId INT,
 			@CostRemoved MONEY
@@ -76,7 +76,7 @@ BEGIN
 			-- Create Transaction for Cost of Goods Sold
 			EXEC	[finance].[Transaction_Create]
 						@Success = @TranstionSuccess OUTPUT,
-						@Id = @TransactionId OUTPUT,
+						@TransactionDetailId = @TransactionDetailId OUTPUT,
 						@TransactionTypeId = 4, -- Sale
 						@DebitAccountId = 9, -- Cost of Goods Sold
 						@CreditAccountId = 6, -- Inventory
@@ -95,7 +95,7 @@ BEGIN
 			-- Link transaction to stock sale detail
 			UPDATE	dbo.StockSaleDetail
 			SET		UnitPrice = @UnitPrice,
-					TransactionId = @TransactionId,
+					TransactionDetailId = @TransactionDetailId,
 					AmendUserID = @CurrentUserId,
 					AmendDate = @UpdateDate
 			WHERE	Id = @StockSaleDetailId

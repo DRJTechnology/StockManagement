@@ -6,10 +6,11 @@
 -- 04 Aug 2025 - Updated Expense procedure to handle Income too
 -- 20 Aug 2025 - Split the Owner’s Capital/Investment and Drawings accounts
 -- 14 Sep 2025 - @TransactionId OUTPUT parameter added
+-- 23 Sep 2025 - Dave Brown - Update @Id to TransactionDetailId for clarity
 -- =========================================================================
 CREATE PROCEDURE [finance].[Transaction_CreateExpenseIncome]
 	@Success			BIT OUTPUT,
-	@Id					INT OUTPUT, 
+	@TransactionDetailId INT OUTPUT, 
 	@TransactionId		INT OUTPUT, 
 	@TransactionTypeId	INT, -- Expense = 2, Income = 3
 	@AccountId			INT,
@@ -54,7 +55,7 @@ BEGIN
 
     INSERT INTO [finance].[TransactionDetail] (TransactionId, AccountId, [Date], [Description], Amount, Direction, ContactId, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
 	VALUES (@TransactionId, @AccountId, @Date, @Description, @Amount, @Direction, @ContactId, 0, @CurrentUserId, SYSDATETIME(), @CurrentUserId, SYSDATETIME())
-	SELECT @Id = SCOPE_IDENTITY()
+	SELECT @TransactionDetailId = SCOPE_IDENTITY()
 
     INSERT INTO [finance].[TransactionDetail] (TransactionId, AccountId, [Date], [Description], Amount, Direction, ContactId, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
 	VALUES (@TransactionId, @AssociatedAccountId, @Date, @Description, @Amount, @Direction * -1, @ContactId, 0, @CurrentUserId, SYSDATETIME(), @CurrentUserId, SYSDATETIME())

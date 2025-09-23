@@ -6,6 +6,7 @@
 -- 30 Aug 2025 - Dave Brown - Added Notes
 -- 01 Sep 2025 - Dave Brown - InventoryBatch records updated
 -- 02 Sep 2025 - Dave Brown - Transactions added
+-- 23 Sep 2025 - Dave Brown - Updated @Id to @@TransactionDetailId for transaction create
 -- =========================================================
 CREATE PROCEDURE [dbo].[Activity_Create]
 (
@@ -30,6 +31,7 @@ BEGIN
 	DECLARE @Err int = 0;
 	DECLARE @UpdateDate DATETIME = GETDATE();
 	DECLARE @CostRemoved MONEY = 0;
+	DECLARE @TransactionDetailId INT;
 
 	-- Initialize output parameters
 	SET @Success = 0;
@@ -80,7 +82,7 @@ BEGIN
 
 			EXEC [finance].[Transaction_Create]
 				@Success			OUTPUT,
-				@Id					OUTPUT, 
+				@TransactionDetailId OUTPUT, 
 				@TransactionTypeId	= 1, -- Journal = 1, Expense = 2, Income = 3, Sale = 4
 				@DebitAccountId		= 10,-- Inventory Shrinkage (Expense)
 				@CreditAccountId	= 6, -- Inventory
@@ -104,7 +106,7 @@ BEGIN
 
 			EXEC [finance].[Transaction_Create]
 				@Success			OUTPUT,
-				@Id					OUTPUT, 
+				@TransactionDetailId OUTPUT, 
 				@TransactionTypeId	= 3, -- Journal = 1, Expense = 2, Income = 3, Sale = 4
 				@DebitAccountId		= 8,-- Advertising/Promotion (Expense)
 				@CreditAccountId	= 6, -- Inventory
@@ -128,7 +130,7 @@ BEGIN
 
 			EXEC [finance].[Transaction_Create]
 				@Success			OUTPUT,
-				@Id					OUTPUT, 
+				@TransactionDetailId OUTPUT, 
 				@TransactionTypeId	= 1, -- Journal = 1, Expense = 2, Income = 3, Sale = 4
 				@DebitAccountId		= 10,-- Inventory Shrinkage (Expense)
 				@CreditAccountId	= 6, -- Inventory
@@ -152,7 +154,7 @@ BEGIN
 
 			EXEC [finance].[Transaction_Create]
 				@Success			OUTPUT,
-				@Id					OUTPUT, 
+				@TransactionDetailId OUTPUT, 
 				@TransactionTypeId	= 1, -- Journal = 1, Expense = 2, Income = 3, Sale = 4
 				@DebitAccountId		= 4 ,-- Owner’s Drawings (Equity)
 				@CreditAccountId	= 6, -- Inventory

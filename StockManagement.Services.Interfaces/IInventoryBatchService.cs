@@ -7,5 +7,6 @@ namespace StockManagement.Services.Interfaces
     {
         Task<InventoryBatchFilteredResponseModel> GetFilteredAsync(InventoryBatchFilterModel inventoryBatchFilterModel);
         Task<List<InventoryBatchActivityDto>> GetActivityAsync(int inventoryBatchId);
+        Task<decimal> GetSaleCostAsync(int stockSaleId);
     }
 }

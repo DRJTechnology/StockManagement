@@ -35,6 +35,11 @@ namespace StockManagement.ClientDataServices
             throw new NotImplementedException();
         }
 
+        public Task<bool> ResetAsync(int stockSaleId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<bool> UpdateAsync(StockSaleEditModel entity)
         {
             throw new NotImplementedException();

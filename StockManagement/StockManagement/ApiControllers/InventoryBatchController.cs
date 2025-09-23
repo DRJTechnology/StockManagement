@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using StockManagement.Client.Pages;
 using StockManagement.Models;
+using StockManagement.Services;
 using StockManagement.Services.Interfaces;
 
 namespace StockManagement.ApiControllers
@@ -36,6 +38,21 @@ namespace StockManagement.ApiControllers
             catch (Exception ex)
             {
                 logger.LogError(ex, "GetActivity");
+                return this.BadRequest();
+            }
+        }
+
+        [HttpGet("GetSaleCost/{stockSaleId}")]
+        public async Task<IActionResult> GetSaleCost(int stockSaleId)
+        {
+            try
+            {
+                var saleCost = await inventoryBatchService.GetSaleCostAsync(stockSaleId);
+                return this.Ok(saleCost);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "GetSaleCost");
                 return this.BadRequest();
             }
         }

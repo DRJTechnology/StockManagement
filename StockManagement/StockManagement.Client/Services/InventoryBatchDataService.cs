@@ -59,5 +59,11 @@ namespace StockManagement.Client.Services
                 throw;
             }
         }
+
+        public async Task<decimal> GetSaleCostAsync(int stockSaleId)
+        {
+            var returnVal = await httpClient.GetFromJsonAsync<decimal>($"api/{ApiControllerName}/GetSaleCost/{stockSaleId}");
+            return returnVal;
+        }
     }
 }
