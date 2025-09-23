@@ -16,6 +16,7 @@ BEGIN
 	INNER JOIN dbo.Activity a ON iba.ActivityId = a.Id
 	INNER JOIN StockSaleDetail ssd ON a.StockSaleDetailId = ssd.Id
 	WHERE	ssd.StockSaleId = @StockSaleId
+		AND a.ActionId = 5 -- Sale
 		AND iba.Deleted = 0
 		AND ib.Deleted = 0
 		AND a.Deleted = 0
