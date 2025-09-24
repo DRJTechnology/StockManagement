@@ -73,6 +73,22 @@ public partial class StockSaleBase : ComponentBase
         // Initialization done, trigger re-render
         StateHasChanged();
     }
+
+    protected int TotalQuantity
+    { 
+        get
+        {
+            if (EditStockSale.DetailList.Count>1)
+            {
+                return EditStockSale.DetailList.Sum(ss => ss.Quantity);
+            }
+            else
+            {
+                return 0;
+            }
+        } 
+    }
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         // Only run after initialization and only once

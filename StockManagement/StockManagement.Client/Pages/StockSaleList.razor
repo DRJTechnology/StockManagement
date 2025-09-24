@@ -68,13 +68,27 @@ else
                                 Confirmed:
                             </div>
                             <div class="col-8 col-md-2 col-lg-2">
-                                @(sale.SaleConfirmed ? "Yes" : "No")
+                                @if (sale.SaleConfirmed)
+                                {
+                                    <span class="px-1">Yes</span>
+                                }
+                                else
+                                {
+                                    <span class="bg-danger text-white px-2 py-1 rounded">No</span>
+                                }
                             </div>
                             <div class="col-4 d-md-none">
                                 Paid:
                             </div>
                             <div class="col-8 col-md-2 col-lg-2">
-                                @(sale.PaymentReceived ? "Yes" : "No")
+                                @if (sale.PaymentReceived)
+                                {
+                                    <span class="px-1">Yes</span>
+                                }
+                                else
+                                {
+                                    <span class="bg-danger text-white px-2 py-1 rounded">No</span>
+                                }
                             </div>
                             <div class="col-12 col-md-2 col-lg-2">
                                 <button class="btn btn-sm btn-secondary" @onclick="() => ViewDetails(sale)">Details</button>
