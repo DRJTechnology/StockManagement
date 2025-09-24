@@ -10,11 +10,11 @@ namespace StockManagement.ApiControllers
     public class ReportController(ILogger<ReportController> logger, IReportService reportService) : ControllerBase
     {
         [HttpGet("sales")]
-        public async Task<IActionResult> GetSalesReport(int venueId, int productTypeId, int productId)
+        public async Task<IActionResult> GetSalesReport(int locationId, int productTypeId, int productId)
         {
             try
             {
-                var reportItems = await reportService.GetSalesReportAsync(venueId, productTypeId, productId);
+                var reportItems = await reportService.GetSalesReportAsync(locationId, productTypeId, productId);
                 return this.Ok(reportItems);
             }
             catch (Exception ex)
@@ -25,16 +25,46 @@ namespace StockManagement.ApiControllers
         }
 
         [HttpGet("stock")]
-        public async Task<IActionResult> GetStockReport(int venueId, int productTypeId, int productId)
+        public async Task<IActionResult> GetStockReport(int locationId, int productTypeId, int productId)
         {
             try
             {
-                var reportItems = await reportService.GetStockReportAsync(venueId, productTypeId, productId);
+                var reportItems = await reportService.GetStockReportAsync(locationId, productTypeId, productId);
                 return this.Ok(reportItems);
             }
             catch (Exception ex)
             {
                 logger.LogError(ex, "GetStockReport");
+                return this.BadRequest();
+            }
+        }
+
+        [HttpGet("balancesheet")]
+        public async Task<IActionResult> GetBalanceSheetReport()
+        {
+            try
+            {
+                var reportItems = await reportService.GetBalanceSheetReportAsync();
+                return this.Ok(reportItems);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "GetBalanceSheetReport");
+                return this.BadRequest();
+            }
+        }
+
+        [HttpGet("inventoryvalue")]
+        public async Task<IActionResult> GetInventoryValueReport()
+        {
+            try
+            {
+                var totalValue = await reportService.GetInventoryValueReportAsync();
+                return this.Ok(totalValue);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "GetInventoryValueReport");
                 return this.BadRequest();
             }
         }

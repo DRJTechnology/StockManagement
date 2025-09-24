@@ -47,7 +47,9 @@ public partial class ProductTypesBase : ComponentBase
         EditProductType = new ProductTypeEditModel
         {
             Id = productType.Id,
-            ProductTypeName = productType.ProductTypeName
+            ProductTypeName = productType.ProductTypeName,
+            DefaultCostPrice = Math.Round(productType.DefaultCostPrice, 2),
+            DefaultSalePrice = Math.Round(productType.DefaultSalePrice, 2),
         };
         ShowForm = true;
     }
@@ -62,6 +64,8 @@ public partial class ProductTypesBase : ComponentBase
                 {
                     Id = newId,
                     ProductTypeName = EditProductType.ProductTypeName,
+                    DefaultCostPrice = EditProductType.DefaultCostPrice,
+                    DefaultSalePrice = EditProductType.DefaultSalePrice,
                     Deleted = false
                 });
         }
@@ -75,6 +79,8 @@ public partial class ProductTypesBase : ComponentBase
                 {
                     Id = EditProductType.Id,
                     ProductTypeName = EditProductType.ProductTypeName,
+                    DefaultCostPrice = EditProductType.DefaultCostPrice,
+                    DefaultSalePrice = EditProductType.DefaultSalePrice,
                     Deleted = false
                 };
             }

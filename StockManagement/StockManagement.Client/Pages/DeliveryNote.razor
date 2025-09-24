@@ -1,7 +1,8 @@
-@using StockManagement.Client.Components
+﻿@using StockManagement.Client.Components
 @page "/delivery-note/{DeliveryNoteId:int}"
 @rendermode InteractiveWebAssembly
 @inherits DeliveryNoteBase
+<PageTitle>Delivery Note</PageTitle>
 
 <h3>Delivery Note</h3>
 
@@ -22,44 +23,32 @@ else
                 <ValidationSummary />
                 <div class="mb-2">
                     <label>Date:</label>
-                    <InputDate class="form-control" @bind-Value="EditDeliveryNote.Date" />
+                    <InputDate class="form-control" @bind-Value="EditDeliveryNote.Date" disabled="@( EditDeliveryNote.DeliveryCompleted )" />
                 </div>
                 <div class="mb-2">
-                    <label>Venue:</label>
-                    <InputSelect class="form-control" @bind-Value="EditDeliveryNote.VenueId">
-                        <option value="0">-- Select Venue --</option>
-                        @if (Lookups?.VenueList != null)
+                    <label>Location:</label>
+                    <InputSelect class="form-control" @bind-Value="EditDeliveryNote.LocationId" disabled="@( EditDeliveryNote.DeliveryCompleted )">
+                        <option value="0">-- Select Location --</option>
+                        @if (Lookups?.LocationList != null)
                         {
-                            foreach (var venue in Lookups.VenueList)
+                            foreach (var location in Lookups.LocationList.Where(l => l.Id != 1))
                             {
-                                <option value="@venue.Id">@venue.VenueName</option>
+                                <option value="@location.Id">@location.Name</option>
                             }
                         }
                     </InputSelect>
                 </div>
-                <div class="mb-2">
-                    <label>Direct Sale:</label>
-                    <div>
-                        <InputRadioGroup @bind-Value="EditDeliveryNote.DirectSale">
-                            <InputRadio class="btn-check" id="directSaleYes" Value="true" />
-                            <label class="btn btn-outline-success me-2" for="directSaleYes">Yes</label>
-                            <InputRadio class="btn-check" id="directSaleNo" Value="false" />
-                            <label class="btn btn-outline-secondary" for="directSaleNo">No</label>
-                        </InputRadioGroup>
-                    </div>
-                </div>
                 <div class="d-flex justify-content-end">
-                    <button class="btn btn-success" type="submit" disabled="@( !IsFormValid || !IsDirty )">Save</button>
+                    <button class="btn btn-success" type="submit" disabled="@( !IsFormValid || !IsDirty || EditDeliveryNote.DeliveryCompleted )">Save</button>
                     @if (EditDeliveryNote.Id > 0)
                     {
-                        <button class="btn btn-danger ms-2" type="button" @onclick="DeleteDeliveryNote">Delete</button>
+                        <button class="btn btn-danger ms-2" type="button" @onclick="DeleteDeliveryNote" disabled="@( EditDeliveryNote.DeliveryCompleted )">Delete</button>
                     }
                 </div>
             </EditForm>
         </div>
         <div class="col-md-6 d-none d-md-block border rounded p-2">
-            <p>Products saved on a delivery note will be moved from stock to the selected venue.</p>
-            <p>Selecting 'Direct Sale' will mark the stock as sold by the selected venue.</p>
+            <p>Products saved on a delivery note will be moved from the stock room to the selected location when the 'Complete Delivery' option is selected.</p>
             <p>Corresponding 'Activity' records will be created.</p>
         </div>
     </div>
@@ -68,16 +57,19 @@ else
     {
         <div class="row">
             <div class="col d-flex justify-content-between pt-2">
-                <button class="btn btn-primary mb-2" @onclick="ShowAddDetailForm" disabled="@( IsDirty )">Add Product</button>
-                <button class="btn btn-primary" @onclick="DownloadPdf" disabled="@( IsDirty )">Print</button>
+                <button class="btn btn-primary mb-2" @onclick="ShowAddDetailForm" disabled="@( IsDirty || EditDeliveryNote.DeliveryCompleted )">Add Product</button>
+                <div>
+                    <button class="btn btn-success mb-2" @onclick="ConfirmDelivery" disabled="@( IsDirty || EditDeliveryNote.DeliveryCompleted || !DetailsExist )">Complete Delivery</button>
+                    <button class="btn btn-primary mb-2" @onclick="DownloadDeliveryNotePdf" disabled="@( IsDirty || !DetailsExist )">Print Delivery Note</button>
+                </div>
             </div>
         </div>
 
         <DeliveryNoteDetailEditModal Show="ShowEditDetailForm"
-                           EditDeliveryNoteDetail="EditDeliveryNoteDetail"
-                           Lookups="Lookups"
-                           OnCancel="CancelDetailEdit"
-                           OnValidSubmit="HandleValidDetailSubmit" />
+                                     EditDeliveryNoteDetail="EditDeliveryNoteDetail"
+                                     Lookups="Lookups"
+                                     OnCancel="CancelDetailEdit"
+                                     OnValidSubmit="HandleValidDetailSubmit" />
 
         <div class="d-none d-md-block">
             <div class="px-3 py-2">

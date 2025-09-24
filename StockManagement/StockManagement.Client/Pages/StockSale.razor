@@ -1,0 +1,191 @@
+@using StockManagement.Client.Components
+@page "/stock-sale/{StockSaleId:int}"
+@rendermode InteractiveWebAssembly
+@inherits StockSaleBase
+<PageTitle>Stock Sale</PageTitle>
+
+<h3>Stock Sale</h3>
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ConfirmDialogModal Show="@(ShowDeleteNoteConfirm || ShowDeleteDetailConfirm)"
+    ItemName="@SelectedItemName"
+    ConfirmationResult="HandleDeleteConfirmation" />
+
+    <ConfirmDialogModal Show="@(ShowResetConfirm)"
+                        Title="Confirm Reset of Sale"
+                        Message="Are you sure that you want to reset this sale?"
+                        ConfirmationResult="HandleResetConfirmation" />
+
+    <div class="row">
+        <div class="col-md-6">
+            <EditForm EditContext="editContext" OnValidSubmit="HandleValidSubmit">
+                <DataAnnotationsValidator />
+                <div class="mb-2">
+                    <label>Date:</label>
+                    <InputDate class="form-control" @bind-Value="EditStockSale.Date" />
+                </div>
+                <div class="mb-2">
+                    <label>Sold from Location:</label>
+                    <InputSelect class="form-control" @bind-Value="LocationId">
+                        <option value="0">-- Select Location --</option>
+                        @if (Lookups?.LocationList != null)
+                        {
+                            foreach (var location in Lookups.LocationList)
+                            {
+                                <option value="@location.Id">@location.Name</option>
+                            }
+                        }
+                    </InputSelect>
+                </div>
+                <div class="mb-2">
+                    <label>Sold to Customer:</label>
+                    <InputSelect class="form-control" @bind-Value="EditStockSale.ContactId">
+                        <option value="0">-- Select Customer --</option>
+                        @if (Customers != null)
+                        {
+                            foreach (var customer in Customers)
+                            {
+                                <option value="@customer.Id">@customer.Name</option>
+                            }
+                        }
+                    </InputSelect>
+                </div>
+                @if (EditStockSale.SaleConfirmed || EditStockSale.PaymentReceived)
+                {
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-success" type="button" @onclick="ResetStockSale">Reset</button>
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-success" type="submit" disabled="@( !IsFormValid || !IsDirty )">Save</button>
+                        @if (EditStockSale.Id > 0)
+                        {
+                            <button class="btn btn-danger ms-2" type="button" @onclick="DeleteStockSale" disabled="@( EditStockSale.SaleConfirmed )">Delete</button>
+                        }
+                    </div>               
+                }
+                <ValidationSummary />
+            </EditForm>
+        </div>
+        <div class="col-md-6 d-none d-md-block border rounded p-2">
+            <p>Products saved on a stock sale will be marked as sold to the selected customer from the selected location.</p>
+            <p>Corresponding 'Activity' records will be created.</p>
+            <p>Once the sale is confirmed the stock will be removed from the location.</p>
+            <p>Once payment is recorded the applicable accounts will be updated.</p>
+        </div>
+    </div>
+
+    @if (EditStockSale.Id > 0)
+    {
+        <div class="row">
+            <div class="col d-flex justify-content-between pt-2">
+                <div>
+                    <button class="btn btn-primary mb-2" @onclick="ShowAddDetailForm" disabled="@( IsDirty || EditStockSale.SaleConfirmed )">Add Product</button>
+                </div>
+                @if (EditStockSale.SaleConfirmed)
+                {
+                    <div class="fw-bold my-auto px-2">
+                        Stock Cost: @StockCostPrice.ToString("C")
+                    </div>
+                    <div class="fw-bold my-auto px-2">
+                        Sale Price: @EditStockSale.TotalPrice.ToString("C")
+                    </div>
+                }
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-success mb-2 ms-2" @onclick="ConfirmSale" disabled="@( IsDirty || EditStockSale.SaleConfirmed )">Confirm Sale</button>
+                    <button class="btn btn-primary mb-2 ms-2" @onclick="DownloadInvoicePdf" disabled="@( IsDirty || !EditStockSale.SaleConfirmed )">Print Invoice</button>
+                    <button class="btn btn-success mb-2 ms-2" @onclick="RecordPayment" disabled="@( IsDirty  || !EditStockSale.SaleConfirmed || EditStockSale.PaymentReceived)">Record Payment</button>
+                </div>
+            </div>
+        </div>
+
+        <StockSaleDetailEditModal Show="ShowEditDetailForm"
+                                    LocationId="EditStockSale.LocationId"
+                                    EditStockSaleDetail="EditStockSaleDetail"
+                                    Lookups="Lookups"
+                                    OnCancel="CancelDetailEdit"
+                                    OnValidSubmit="HandleValidDetailSubmit" />
+
+        <StockSaleConfirmSaleModal Show="ShowSaleConfirmForm"
+                                   StockSaleConfirmationObject="StockSaleConfirmationObject"
+                                   OnCancel="CancelConfirmSale"
+                                   OnConfirmSale="HandleConfirmSale" />
+
+        <StockSaleRecordPaymentModal Show="ShowSaleConfirmPayment"
+                                   StockSaleConfirmPayment="StockSaleConfirmPayment"
+                                   OnCancel="CancelRecordPaymentSale"
+                                   OnRecordPayment="HandleRecordPayment" />
+
+        <div class="d-none d-md-block">
+            <div class="px-3 py-2">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-md-4 col-lg-3">
+                                <div class="fw-bold">
+                                    Product Type
+                                </div>
+                            </div>
+                            <div class="col-md-5 col-lg-4">
+                                <div class="fw-bold">
+                                    Product
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-lg-5">
+                                <div class="fw-bold">
+                                    Quantity
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        int rowIndex = 0;
+        @foreach (var stockSaleDetail in EditStockSale.DetailList)
+        {
+            var rowClass = rowIndex % 2 == 0 ? "alt-row" : "";
+            <div class="card mb-3 mb-lg-0 @rowClass">
+                <div class="card-body py-2">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-4 d-md-none">
+                                    Type:
+                                </div>
+                                <div class="col-8 col-md-4 col-lg-3">
+                                    @stockSaleDetail.ProductTypeName
+                                </div>
+                                <div class="col-4 d-md-none">
+                                    Product:
+                                </div>
+                                <div class="col-8 col-md-5 col-lg-4">
+                                    @stockSaleDetail.ProductName
+                                </div>
+                                <div class="col-4 d-md-none">
+                                    Quantity:
+                                </div>
+                                <div class="col-8 col-md-3 col-lg-2">
+                                    @stockSaleDetail.Quantity
+                                </div>
+                                <div class="col-12 col-lg-3">
+                                    <button class="btn btn-sm btn-warning" @onclick="() => EditDetail(stockSaleDetail)" disabled="@( IsDirty  || EditStockSale.SaleConfirmed || EditStockSale.PaymentReceived)">Edit</button>
+                                    <button class="btn btn-sm btn-danger ms-2" @onclick="() => DeleteDetail(stockSaleDetail.Id)" disabled="@( IsDirty  || EditStockSale.SaleConfirmed || EditStockSale.PaymentReceived)">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            rowIndex++;
+        }
+    }
+
+}

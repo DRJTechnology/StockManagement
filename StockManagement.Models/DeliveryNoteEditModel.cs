@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StockManagement.Models
 {
@@ -9,10 +9,10 @@ namespace StockManagement.Models
         [Required(ErrorMessage = "Date is required.")]
         public DateTime Date { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Venue must be selected.")]
-        public int VenueId { get; set; }
+        [Range(1, int.MaxValue, ErrorMessage = "Location must be selected.")]
+        public int LocationId { get; set; }
 
-        public bool DirectSale { get; set; }
+        public bool DeliveryCompleted { get; set; }
 
         public bool Deleted { get; set; }
     }

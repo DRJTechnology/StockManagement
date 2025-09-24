@@ -4,6 +4,8 @@
 -- Create date: 23 May 2025
 -- Description:	Get Activity
 -- =========================================================
+-- 30 Aug 2025 - Dave Brown - Added Notes
+-- =========================================================
 CREATE PROCEDURE [dbo].[Activity_LoadAll]
 AS
 BEGIN
@@ -19,16 +21,17 @@ BEGIN
 		p.[ProductName],
 		a.[ProductTypeId],
 		pt.[ProductTypeName],
-		a.[VenueId],
-		v.[VenueName],
+		a.[LocationId],
+		l.[Name] AS LocationName,
 		a.[Quantity],
+		a.[Notes],
 		a.[Deleted],
 		a.[AmendUserID],
 		a.[AmendDate]
 	FROM [Activity] a
 	INNER JOIN [Product] p ON a.[ProductId] = p.Id
 	INNER JOIN [ProductType] pt ON a.[ProductTypeId] = pt.Id
-	INNER JOIN [Venue] v ON a.[VenueId] = v.Id
+	INNER JOIN [Location] l ON a.[LocationId] = l.Id
 	INNER JOIN [Action] act ON a.[ActionId] = act.Id
 	WHERE
 		a.[Deleted] <> 1
@@ -36,7 +39,7 @@ BEGIN
 		a.[ActivityDate] DESC,
 		p.[ProductName] ASC,
 		pt.[ProductTypeName] ASC,
-		v.[VenueName] ASC
+		l.[Name] ASC
 
 	SET @Err = @@Error
 

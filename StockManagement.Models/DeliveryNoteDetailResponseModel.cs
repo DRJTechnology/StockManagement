@@ -1,4 +1,4 @@
-namespace StockManagement.Models
+﻿namespace StockManagement.Models
 {
     public class DeliveryNoteDetailResponseModel : DeliveryNoteDetailEditModel
     {

@@ -1,9 +1,7 @@
 namespace StockManagement.Models.Dto
 {
-    public class ProductDto
+    public class ProductDto : BaseDto
     {
-        public int Id { get; set; }
         public string ProductName { get; set; } = string.Empty;
-        public bool Deleted { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-using StockManagement.Models.Dto;
+﻿using StockManagement.Models.Dto;
 
 namespace StockManagement.Repositories.Interfaces
 {

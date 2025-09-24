@@ -25,7 +25,7 @@ BEGIN
 	INSERT INTO dbo.[Action] ([ActionName],[Direction],[AffectStockRoom],[Deleted],[AmendUserID],[AmendDate])
 	VALUES (@ActionName, @Direction, @AffectStockRoom, @Deleted, @CurrentUserId, @UpdateDate)
 
-	SELECT @ID = SCOPE_IDENTITY()
+	SELECT @Id = SCOPE_IDENTITY()
 
 	SET @Success = 1
 

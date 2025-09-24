@@ -1,4 +1,4 @@
-using System.Data;
+﻿using System.Data;
 using Dapper;
 using StockManagement.Models.Dto;
 using StockManagement.Models.Dto.Profile;
@@ -14,8 +14,7 @@ namespace StockManagement.Repositories
             parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
             parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
             parameters.Add("@Date", deliveryNoteDto.Date);
-            parameters.Add("@VenueId", deliveryNoteDto.VenueId);
-            parameters.Add("@DirectSale", deliveryNoteDto.DirectSale);
+            parameters.Add("@LocationId", deliveryNoteDto.LocationId);
             parameters.Add("@Deleted", deliveryNoteDto.Deleted);
             parameters.Add("@CurrentUserId", currentUserId);
 
@@ -81,8 +80,8 @@ namespace StockManagement.Repositories
             parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
             parameters.Add("@Id", deliveryNoteDto.Id);
             parameters.Add("@Date", deliveryNoteDto.Date);
-            parameters.Add("@VenueId", deliveryNoteDto.VenueId);
-            parameters.Add("@DirectSale", deliveryNoteDto.DirectSale);
+            parameters.Add("@LocationId", deliveryNoteDto.LocationId);
+            parameters.Add("@DeliveryCompleted", deliveryNoteDto.DeliveryCompleted);
             parameters.Add("@Deleted", deliveryNoteDto.Deleted);
             parameters.Add("@CurrentUserId", currentUserId);
 

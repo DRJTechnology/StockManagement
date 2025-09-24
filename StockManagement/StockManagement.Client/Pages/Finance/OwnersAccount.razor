@@ -1,0 +1,178 @@
+@using StockManagement.Client.Components
+@using StockManagement.Client.Components.Finance
+@using StockManagement.Models.Enums
+@page "/owners-account"
+@rendermode InteractiveWebAssembly
+@inherits OwnersAccountBase
+<PageTitle>Owner's Account</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">Owner's Account</h3>
+    <div>
+        <button class="btn btn-primary me-2" @onclick="ShowAddIncomeForm">Add Income</button>
+        <button class="btn btn-primary" @onclick="ShowAddExpenseForm">Add Expense</button>
+    </div>
+</div>
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <TransactionDetailEditModal Show="ShowExpenseAddForm"
+    EditTransactionDetail="EditTransactionDetail"
+    Accounts="ExpenseAccounts"
+    Contacts="Suppliers"
+    TransactionType="TransactionTypeEnum.Expense"
+    OnCancel="CancelEdit"
+    OnValidSubmit="HandleExpenseAddSubmit" />
+
+    <TransactionDetailEditModal Show="ShowIncomeAddForm"
+    EditTransactionDetail="EditTransactionDetail"
+    Accounts="IncomeAccounts"
+    Contacts="Customers"
+    TransactionType="TransactionTypeEnum.Income"
+    OnCancel="CancelEdit"
+    OnValidSubmit="HandleIncomeAddSubmit" />
+
+    <div class="card mb-3">
+        <div class="card-header" style="cursor:pointer"
+        @onclick="ToggleFilters">
+            <strong>Filters</strong>
+            <span class="float-end">
+                <i class="bi @(FiltersExpanded ? "bi-chevron-down" : "bi-chevron-right")"></i>
+            </span>
+        </div>
+        @if (FiltersExpanded)
+        {
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="form-floating">
+                            <InputDate @bind-Value="transactionFilterModel.FromDate" class="form-control" />
+                            <label for="dateFilter">From Date:</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="form-floating">
+                            <InputDate @bind-Value="transactionFilterModel.ToDate" class="form-control" />
+                            <label for="dateFilter">To Date:</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-6">
+                        <div class="form-floating">
+                            <InputSelect @bind-Value="transactionFilterModel.ContactId" class="form-select">
+                                <option value="">All Customers/Suppliers</option>
+                                @if (ContactList != null)
+                                {
+                                    foreach (var c in ContactList)
+                                    {
+                                        <option value="@c.Id">@c.Name</option>
+                                    }
+                                }
+                            </InputSelect>
+                            <label for="productTypeFilter">Customers/Suppliers:</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col pt-2 text-end">
+                        <button class="btn btn-sm btn-primary me-1" @onclick="() => OnFilter()">Filter</button>
+                        <button class="btn btn-sm btn-secondary" @onclick="OnReset" type="button">Reset</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="row">
+        <div class="text-md-end pb-2 pb-md-0 pe-md-4 fw-bold">
+            Total amount: <span class="@(TotalAmount < 0 ? "text-danger" : "")">@TotalAmount.ToString("C")</span>
+        </div>
+    </div>
+
+    <div class="d-none d-md-block">
+        <div class="px-3 py-2">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-md-2 col-lg-2">
+                            <div class="fw-bold">
+                                Date
+                            </div>
+                        </div>
+                        <div class="col-md-5 col-lg-5">
+                            <div class="fw-bold">
+                                Details
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-lg-3">
+                            <div class="fw-bold">
+                                Customer/Supplier
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-lg-2 text-end">
+                            <div class="fw-bold">
+                                Amount
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    int rowIndex = 0;
+    @foreach (var transactionDetail in TransactionDetails)
+    {
+        var rowClass = rowIndex % 2 == 0 ? "alt-row" : "";
+        <div class="card mb-3 mb-lg-0 @rowClass">
+            <div class="card-body py-2">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-4 d-md-none">
+                                Date:
+                            </div>
+                            <div class="col-8 col-md-2 col-lg-2">
+                                <span class="d-none d-md-block d-lg-none">@transactionDetail.Date.ToString("dd MMM yy")</span>
+                                <span class="d-md-none d-lg-block">@transactionDetail.Date.ToString("dd MMM yyyy")</span>
+                            </div>
+                            <div class="col-4 d-md-none">
+                                Details:
+                            </div>
+                            <div class="col-8 col-md-5 col-lg-5">
+                                @transactionDetail.Description
+                            </div>
+                            <div class="col-4 d-md-none">
+                                @if (transactionDetail.Direction == -1)
+                                {
+                                    <text>Supplier:</text>
+                                }
+                                else
+                                {
+                                    <text>Customer:</text>
+                                }
+                            </div>
+                            <div class="col-8 col-md-3 col-lg-3">
+                                @transactionDetail.ContactName
+                            </div>
+                            <div class="col-4 d-md-none">
+                                Amount:
+                            </div>
+                            <div class="col-8 col-md-2 col-lg-2 text-md-end @(transactionDetail.Direction == -1 ? "text-danger" : "")">
+                                @((transactionDetail.Amount * transactionDetail.Direction).ToString("C"))
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        rowIndex++;
+    }
+
+    <Pagination CurrentPage="@transactionFilterModel.CurrentPage"
+    TotalPages="@TotalPages"
+    OnPageChanged="GoToPage" />
+}
+

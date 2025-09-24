@@ -4,6 +4,7 @@
 -- Description:	Get Delivery Notes
 -- =========================================================
 -- 02 JUL 2025 - Dave Brown - include DirectSale column
+-- 07 Sep 2025 - Dave Brown - remove DirectSale column
 -- =========================================================
 CREATE PROCEDURE [dbo].[DeliveryNote_LoadAll]
 AS
@@ -14,14 +15,14 @@ BEGIN
 	SELECT
 		dn.[Id],
 		dn.[Date],
-		dn.[VenueId],
-		v.[VenueName],
-		dn.DirectSale,
+		dn.[LocationId],
+		l.[Name] AS LocationName,
+		dn.DeliveryCompleted,
 		dn.[Deleted],
 		dn.[AmendUserID],
 		dn.[AmendDate]
 	FROM [DeliveryNote] dn
-	INNER JOIN [Venue] v ON dn.VenueId = v.Id
+	INNER JOIN [Location] l ON dn.LocationId = l.Id
 	WHERE
 		dn.[Deleted] <> 1
 	ORDER BY

@@ -2,7 +2,7 @@
 {
     public class SalesReportItemDto
     {
-        public string VenueName { get; set; } = string.Empty;
+        public string LocationName { get; set; } = string.Empty;
         public string ProductTypeName { get; set; } = string.Empty;
         public string ProductName { get; set; } = string.Empty;
         public int TotalSales { get; set; }

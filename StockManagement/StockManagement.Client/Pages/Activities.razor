@@ -2,6 +2,7 @@
 @page "/activities"
 @rendermode InteractiveWebAssembly
 @inherits ActivitiesBase
+<PageTitle>Activities</PageTitle>
 
 <h3>Activities</h3>
 
@@ -19,8 +20,8 @@ else
                        OnCancel="CancelEdit"
                        OnValidSubmit="HandleValidSubmit" />
 
-    <ConfirmDialogModal Show="ShowDeleteConfirm"
-                        ConfirmationResult="HandleDeleteConfirmation" />
+@*     <ConfirmDialogModal Show="ShowDeleteConfirm"
+                        ConfirmationResult="HandleDeleteConfirmation" /> *@
 
     <div class="card mb-3">
         <div class="card-header" style="cursor:pointer"
@@ -87,17 +88,17 @@ else
                     </div>
                     <div class="col-lg-4 col-md-6">
                         <div class="form-floating">
-                            <InputSelect @bind-Value="activityFilterModel.VenueId" class="form-select">
+                            <InputSelect @bind-Value="activityFilterModel.LocationId" class="form-select">
                                 <option value="">All</option>
-                                @if (Lookups?.VenueList != null)
+                                @if (Lookups?.LocationList != null)
                                 {
-                                    foreach (var v in Lookups.VenueList)
+                                    foreach (var v in Lookups.LocationList)
                                     {
-                                        <option value="@v.Id">@v.VenueName</option>
+                                        <option value="@v.Id">@v.Name</option>
                                     }
                                 }
                             </InputSelect>
-                            <label for="venueFilter">Venue:</label>
+                            <label for="locationFilter">Location:</label>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-6">
@@ -144,7 +145,7 @@ else
                         </div>
                         <div class="col-2">
                             <div class="fw-bold">
-                                Venue
+                                Location
                             </div>
                         </div>
                         <div class="col-3">
@@ -166,56 +167,88 @@ else
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="row">
-                            <div class="col-12 col-md-3 col-lg-1">
+                            <div class="col-4 d-lg-none">
+                                Date:
+                            </div>
+                            <div class="col-8 col-lg-1">
                                 <div class="">
                                     @activity.ActivityDate.ToString("dd MMM yy")
                                 </div>
                             </div>
-                            <div class="col-5 col-md-2 col-lg-1">
+                            <div class="col-4 d-lg-none">
+                                Type:
+                            </div>
+                            <div class="col-8 col-lg-1">
                                 <div class="">
                                     @activity.ProductTypeName
                                 </div>
                             </div>
-                            <div class="col-7 col-md-7 col-lg-3">
+                            <div class="col-4 d-lg-none">
+                                Product:
+                            </div>
+                            <div class="col-8 col-lg-3">
                                 <div class="">
                                     @activity.ProductName
                                 </div>
                             </div>
-                            <div class="col-5 col-md-5 col-lg-2">
+                            <div class="col-4 d-lg-none">
+                                Action:
+                            </div>
+                            <div class="col-8 col-lg-2">
                                 <div class="">
                                     @activity.ActionName
                                 </div>
                             </div>
-                            <div class="col-5 col-md-5 col-lg-2">
+                            <div class="col-4 d-lg-none">
+                                Location:
+                            </div>
+                            <div class="col-8 col-lg-2">
                                 <div class="">
-                                    @activity.VenueName
+                                    @activity.LocationName
                                 </div>
                             </div>
-                            <div class="col-2 col-md-2 col-lg-1">
+                            <div class="col-4 d-lg-none">
+                                Quantity:
+                            </div>
+                            <div class="col-8 col-lg-1">
                                 <div class="">
                                     @activity.Quantity
                                 </div>
                             </div>
-                            <div class="col-lg-2">
+                            <div class="col-12 col-lg-2">
                                 @if (activity.DeliveryNoteId > 0)
                                 {
                                     <button class="btn btn-link" title="Show Delivery Note" @onclick="() => OpenDeliveryNote(activity.DeliveryNoteId)">
-                                        <i class="bi bi-clipboard"></i>
+                                        <i class="bi bi-truck"></i>
                                     </button>
                                 }
-                                else if (activity.StockReceiptId > 0)
+                                else if (activity.StockSaleId > 0)
                                 {
-                                    <button class="btn btn-link" title="Show Delivery Note" @onclick="() => OpenStockReceipt(activity.StockReceiptId)">
-                                        <i class="bi bi-box-seam"></i>
+                                    <button class="btn btn-link" title="Show Delivery Note" @onclick="() => OpenStockSale(activity.StockSaleId)">
+                                        <i class="bi bi-currency-pound"></i>
                                     </button>
                                 }
-                                else
+                                else if (activity.StockOrderId > 0)
+                                {
+                                    <button class="btn btn-link" title="Show Delivery Note" @onclick="() => OpenStockOrder(activity.StockOrderId)">
+                                        <i class="bi bi-box"></i>
+                                    </button>
+                                }
+@*                                 else
                                 {
                                     <button class="btn btn-sm btn-warning me-1 mt-1" @onclick="() => Edit(activity)">Edit</button>
                                     <button class="btn btn-sm btn-danger mt-1" @onclick="() => Delete(activity.Id)">Delete</button>
-                                }
+                                } *@
                             </div>
                         </div>
+                        @if (!string.IsNullOrEmpty(activity.Notes))
+                        {
+                        <div class="row">
+                            <div class="col-12 offset-lg-2 col-lg-8 mt-1 mt-lg-0">
+                                <span class="text-muted">Notes: @activity.Notes</span>
+                            </div>
+                        </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -223,35 +256,7 @@ else
         rowIndex++;
     }
 
-    <nav class="mt-lg-3">
-        <ul class="pagination justify-content-center">
-            <li class="page-item @(activityFilterModel.CurrentPage == 1 ? "disabled" : "")">
-                <button class="page-link" @onclick="PreviousPage">&laquo;</button>
-            </li>
-            @if (StartPage > 1)
-            {
-                <li class="page-item">
-                    <button class="page-link" @onclick="() => GoToPage(1)">1</button>
-                </li>
-                <li class="page-item disabled"><span class="page-link">...</span></li>
-            }
-            @for (int i = StartPage; i <= EndPage; i++)
-            {
-                var pageNumber = i; // Capture the current value of i
-                <li class="page-item @(activityFilterModel.CurrentPage == pageNumber ? "active" : "")">
-                    <button class="page-link" @onclick="() => GoToPage(pageNumber)">@pageNumber</button>
-                </li>
-            }
-            @if (EndPage < TotalPages)
-            {
-                <li class="page-item disabled"><span class="page-link">...</span></li>
-                <li class="page-item">
-                    <button class="page-link" @onclick="() => GoToPage(TotalPages)">@TotalPages</button>
-                </li>
-            }
-            <li class="page-item @(activityFilterModel.CurrentPage == TotalPages ? "disabled" : "")">
-                <button class="page-link" @onclick="NextPage">&raquo;</button>
-            </li>
-        </ul>
-    </nav>
+    <Pagination CurrentPage="@activityFilterModel.CurrentPage"
+                TotalPages="@TotalPages"
+                OnPageChanged="GoToPage" />
 }

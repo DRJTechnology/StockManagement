@@ -7,16 +7,16 @@ public partial class ConfirmDialogModalBase : ComponentBase
     [Parameter] public EventCallback<bool> ConfirmationResult { get; set; }
     [Parameter] public string ItemName { get; set; } = string.Empty;
 
-    protected string Title { get; set; } = "Confirm Delete";
-    protected string Message { get; set; } = "Are you sure you want to delete this item?";
+    [Parameter] public string Title { get; set; } = "Confirm Delete";
+    [Parameter] public string Message { get; set; } = string.Empty;
 
     protected override void OnParametersSet()
     {
-        if (Show && !string.IsNullOrEmpty(ItemName))
+        if (Show && string.IsNullOrEmpty(Message) && !string.IsNullOrEmpty(ItemName))
         {
             Message = $"Are you sure you want to delete {ItemName}?";
         }
-        else
+        else if (string.IsNullOrEmpty(Message))
         {
             Message = "Are you sure you want to delete this item?";
         }

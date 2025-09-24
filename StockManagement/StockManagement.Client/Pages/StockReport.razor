@@ -2,6 +2,7 @@
 @page "/stock-report"
 @inherits StockReportBase
 @rendermode InteractiveWebAssembly
+<PageTitle>Stock Report</PageTitle>
 
 <h3>Stock Report</h3>
 
@@ -19,7 +20,7 @@ else
 {
     <ReportFilter
         Lookups="Lookups"
-        @bind-VenueId="VenueId"
+        @bind-LocationId="LocationId"
         @bind-ProductTypeId="ProductTypeId"
         @bind-ProductId="ProductId" />
 
@@ -29,21 +30,22 @@ else
     }
     else
     {
-        @foreach (var venueGroup in GroupedStockReport)
+        @foreach (var locationGroup in GroupedStockReport)
         {
-            <h4 class="venue-group">
-                @venueGroup.Key
-                @if (venueGroup.Key != "Totals")
+            <h4 class="location-group">
+                @locationGroup.Key
+                @if (locationGroup.Key != "Totals")
                 {
-                    <button class="btn btn-link ms-2" title="Show Notes" @onclick="() => ShowVenueNotes(venueGroup.Key)">
+                    <button class="btn btn-link ms-2" title="Show Notes" @onclick="() => ShowLocationNotes(locationGroup.Key)">
                         <i class="bi bi-journal-text"></i>
                     </button>
                 }
             </h4>
-            @foreach (var productTypeGroup in venueGroup.Value)
+            @foreach (var productTypeGroup in locationGroup.Value)
             {
                 <h5 class="product-group">@productTypeGroup.Key</h5>
-                var totalQuantity = productTypeGroup.Value.Sum(item => item.TotalQuantity);
+                var totalQuantity = productTypeGroup.Value.Sum(item => item.ActiveQuantity);
+                var totalPendingQuantity = productTypeGroup.Value.Sum(item => item.PendingQuantity);
                 <table class="table table-striped auto-width-table indented-table">
                     <tbody>
                         @foreach (var item in productTypeGroup.Value)
@@ -54,12 +56,18 @@ else
                                         @item.ProductName
                                     </a>
                                 </td>
-                                <td>@item.TotalQuantity</td>
+                                <td>
+                                    @item.ActiveQuantity
+                                    @(item.PendingQuantity > 0 ? $" ({item.PendingQuantity})" : "")
+                                </td>
                             </tr>
                         }
                         <tr style="font-weight:600;">
                             <td>Total</td>
-                            <td>@totalQuantity</td>
+                            <td>
+                                @totalQuantity
+                                @(totalPendingQuantity > 0 ? $" ({totalPendingQuantity})" : "")
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -74,11 +82,11 @@ else
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Notes for @SelectedVenueTitle</h5>
+                    <h5 class="modal-title">Notes for @SelectedLocationTitle</h5>
                     <button type="button" class="btn-close" @onclick="CloseNotesPanel"></button>
                 </div>
                 <div class="modal-body">
-                    @((MarkupString)SelectedVenueNotes.Replace("\n", "<br />"))
+                    @((MarkupString)SelectedLocationNotes.Replace("\n", "<br />"))
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" @onclick="CloseNotesPanel">Close</button>

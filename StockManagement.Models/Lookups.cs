@@ -2,11 +2,10 @@
 {
     public class LookupsModel
     {
-        public List<ProductResponseModel> ProductList { get; set; }
-        public List<ProductTypeResponseModel> ProductTypeList { get; set; }
-        public List<VenueResponseModel> VenueList { get; set; }
-        public List<ActionResponseModel> ActionList { get; set; }
-        public List<SupplierResponseModel> SupplierList { get; set; }
-
+        public List<ProductResponseModel> ProductList { get; set; } = new();
+        public List<ProductTypeResponseModel> ProductTypeList { get; set; } = new();
+        public List<LocationResponseModel> LocationList { get; set; } = new();
+        public List<ActionResponseModel> ActionList { get; set; } = new();
+        public List<ContactResponseModel> SupplierList { get; set; } = new();
     }
 }

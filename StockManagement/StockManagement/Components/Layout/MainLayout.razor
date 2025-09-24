@@ -1,4 +1,6 @@
-﻿@inherits LayoutComponentBase
+﻿@using Microsoft.AspNetCore.Components.Web
+@using StockManagement.Client.Shared
+@inherits LayoutComponentBase
 @inject IConfiguration Configuration
 
 @code {
@@ -12,7 +14,7 @@
 
 <div class="page">
     <div class="sidebar">
-        <NavMenu />
+        <NavMenu @rendermode="InteractiveWebAssembly" />
     </div>
 
     <main>

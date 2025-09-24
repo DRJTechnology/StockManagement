@@ -11,32 +11,40 @@ namespace StockManagement.Repositories
     {
         public async Task<int> CreateAsync(int currentUserId, ActivityDto activityDto)
         {
-            if (activityDto == null)
+            try
             {
-                throw new ArgumentNullException(nameof(activityDto));
+                if (activityDto == null)
+                {
+                    throw new ArgumentNullException(nameof(activityDto));
+                }
+
+                var parameters = new DynamicParameters();
+                parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+                parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                parameters.Add("@ActivityDate", activityDto.ActivityDate);
+                parameters.Add("@ActionId", activityDto.ActionId);
+                parameters.Add("@ProductId", activityDto.ProductId);
+                parameters.Add("@ProductTypeId", activityDto.ProductTypeId);
+                parameters.Add("@LocationId", activityDto.LocationId);
+                parameters.Add("@Quantity", activityDto.Quantity);
+                parameters.Add("@Notes", activityDto.Notes);
+                parameters.Add("@Deleted", activityDto.Deleted);
+                parameters.Add("@CurrentUserId", currentUserId);
+
+                await dbConnection.ExecuteAsync("dbo.Activity_Create", parameters, commandType: CommandType.StoredProcedure);
+
+                if (parameters.Get<bool>("@Success"))
+                {
+                    return parameters.Get<int>("@Id");
+                }
+                else
+                {
+                    throw new UnauthorizedAccessException();
+                }
             }
-
-            var parameters = new DynamicParameters();
-            parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
-            parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            parameters.Add("@ActivityDate", activityDto.ActivityDate);
-            parameters.Add("@ActionId", activityDto.ActionId);
-            parameters.Add("@ProductId", activityDto.ProductId);
-            parameters.Add("@ProductTypeId", activityDto.ProductTypeId);
-            parameters.Add("@VenueId", activityDto.VenueId);
-            parameters.Add("@Quantity", activityDto.Quantity);
-            parameters.Add("@Deleted", activityDto.Deleted);
-            parameters.Add("@CurrentUserId", currentUserId);
-
-            await dbConnection.ExecuteAsync("dbo.Activity_Create", parameters, commandType: CommandType.StoredProcedure);
-
-            if (parameters.Get<bool>("@Success"))
+            catch (Exception ex)
             {
-                return parameters.Get<int>("@Id");
-            }
-            else
-            {
-                throw new UnauthorizedAccessException();
+                throw;
             }
         }
 
@@ -76,7 +84,7 @@ namespace StockManagement.Repositories
                 parameters.Add("@ActionId", activityFilterModel.ActionId);
                 parameters.Add("@ProductId", activityFilterModel.ProductId);
                 parameters.Add("@ProductTypeId", activityFilterModel.ProductTypeId);
-                parameters.Add("@VenueId", activityFilterModel.VenueId);
+                parameters.Add("@LocationId", activityFilterModel.LocationId);
                 parameters.Add("@Quantity", activityFilterModel.Quantity);
                 parameters.Add("@CurrentPage", activityFilterModel.CurrentPage);
                 parameters.Add("@PageSize", activityFilterModel.PageSize);
@@ -111,8 +119,9 @@ namespace StockManagement.Repositories
             parameters.Add("@ActionId", activityDto.ActionId);
             parameters.Add("@ProductId", activityDto.ProductId);
             parameters.Add("@ProductTypeId", activityDto.ProductTypeId);
-            parameters.Add("@VenueId", activityDto.VenueId);
+            parameters.Add("@LocationId", activityDto.LocationId);
             parameters.Add("@Quantity", activityDto.Quantity);
+            parameters.Add("@Notes", activityDto.Notes);
             parameters.Add("@Deleted", activityDto.Deleted);
             parameters.Add("@CurrentUserId", currentUserId);
 
