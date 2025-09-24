@@ -147,18 +147,23 @@ public partial class StockOrderBase : ComponentBase
             Description = description,
             ContactId = EditStockOrder.ContactId,
             StockOrderDetailPayments = EditStockOrder.DetailList
-            .Select(detail => new StockOrderDetailPaymentResponseModel
+            .Select(detail =>
             {
-                Id = detail.Id,
-                StockOrderId = detail.StockOrderId,
-                ProductId = detail.ProductId,
-                ProductName = detail.ProductName,
-                ProductTypeId = detail.ProductTypeId,
-                ProductTypeName = detail.ProductTypeName,
-                Quantity = detail.Quantity,
-                Deleted = detail.Deleted,
-                UnitPrice = Lookups.ProductTypeList.FirstOrDefault(pt => pt.Id == detail.ProductTypeId)!.DefaultCostPrice,
-                Total = Lookups.ProductTypeList.FirstOrDefault(pt => pt.Id == detail.ProductTypeId)!.DefaultCostPrice * detail.Quantity,
+                var productType = Lookups.ProductTypeList.FirstOrDefault(pt => pt.Id == detail.ProductTypeId);
+                var unitPrice = productType!.DefaultCostPrice;
+                return new StockOrderDetailPaymentResponseModel
+                {
+                    Id = detail.Id,
+                    StockOrderId = detail.StockOrderId,
+                    ProductId = detail.ProductId,
+                    ProductName = detail.ProductName,
+                    ProductTypeId = detail.ProductTypeId,
+                    ProductTypeName = detail.ProductTypeName,
+                    Quantity = detail.Quantity,
+                    Deleted = detail.Deleted,
+                    UnitPrice = unitPrice,
+                    Total = unitPrice * detail.Quantity,
+                };
             })
             .ToList()
         };
