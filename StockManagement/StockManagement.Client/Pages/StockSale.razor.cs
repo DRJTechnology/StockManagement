@@ -284,7 +284,8 @@ public partial class StockSaleBase : ComponentBase
             if (EditStockSale.LocationId != value)
             {
                 EditStockSale.LocationId = value;
-                EditStockSale.ContactId = Lookups.LocationList.Where(l => l.Id == EditStockSale.LocationId).FirstOrDefault().ContactId;
+                var location = Lookups.LocationList.Where(l => l.Id == EditStockSale.LocationId).FirstOrDefault();
+                EditStockSale.ContactId = location != null ? location.ContactId : default;
             }
         }
     }
