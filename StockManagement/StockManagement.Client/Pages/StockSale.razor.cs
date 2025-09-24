@@ -325,7 +325,7 @@ public partial class StockSaleBase : ComponentBase
                 ProductTypeName = detail.ProductTypeName,
                 Quantity = detail.Quantity,
                 Deleted = detail.Deleted,
-                UnitPrice = Math.Round(Lookups.ProductTypeList.FirstOrDefault(pt => pt.Id == detail.ProductTypeId)!.DefaultSalePrice, 2),
+                UnitPrice = Math.Round(Lookups.ProductTypeList.FirstOrDefault(pt => pt.Id == detail.ProductTypeId)?.DefaultSalePrice ?? 0, 2),
             })
             .ToList(),
         };
