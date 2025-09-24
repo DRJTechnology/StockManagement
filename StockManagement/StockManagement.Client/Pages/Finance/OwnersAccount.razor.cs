@@ -42,7 +42,7 @@ public partial class OwnersAccountBase : ComponentBase
     protected bool ShowIncomeAddForm { get; set; }
     protected bool ShowExpenseAddForm { get; set; }
 
-    const int OwnersAccountId = -1; // -1 is used by stored procedure to incude both Owner’s Capital/Investment and Drawings
+    const int OwnersAccountId = -1; // -1 is used by stored procedure to incude both Ownerâ€™s Capital/Investment and Drawings
     const int ExpenseAccountTypeId = 4; //  4 is the ID for Expense Account Type
     const int IncomeAccountTypeId = 3; //  3 is the ID for Revenue (Income) Account Type
 
@@ -162,7 +162,7 @@ public partial class OwnersAccountBase : ComponentBase
                 //Credit = EditTransactionDetail.Credit,
                 //Debit = EditTransactionDetail.Debit,
                 ContactId = EditTransactionDetail.ContactId,
-                ContactName = Customers.Where(s => s.Id == EditTransactionDetail.ContactId).FirstOrDefault()!.Name,
+                ContactName = Customers.Where(s => s.Id == EditTransactionDetail.ContactId).FirstOrDefault()?.Name ?? string.Empty,
             });
         await CalculateTotalAmount();
         ShowIncomeAddForm = false;
