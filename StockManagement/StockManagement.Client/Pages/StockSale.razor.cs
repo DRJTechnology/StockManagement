@@ -237,14 +237,11 @@ public partial class StockSaleBase : ComponentBase
     {
         if (confirmed)
         {
-            if (confirmed)
-            {
-                await StockSaleService.ResetAsync(EditStockSale.Id);
-                EditStockSale.SaleConfirmed = false;
-                EditStockSale.PaymentReceived = false;
-                EditStockSale.TotalPrice = 0;
-                StockCostPrice = 0;
-            }
+            await StockSaleService.ResetAsync(EditStockSale.Id);
+            EditStockSale.SaleConfirmed = false;
+            EditStockSale.PaymentReceived = false;
+            EditStockSale.TotalPrice = 0;
+            StockCostPrice = 0;
         }
 
         ShowResetConfirm = false;
