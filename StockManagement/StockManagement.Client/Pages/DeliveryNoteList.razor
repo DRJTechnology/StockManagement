@@ -63,7 +63,14 @@ else
                                 Delivery Completed:
                             </div>
                             <div class="col-8 col-md-3 col-lg-2">
-                                @(note.DeliveryCompleted ? "Yes" : "No")
+                                @if (note.DeliveryCompleted)
+                                {
+                                    <span class="px-1">Yes</span>
+                                }
+                                else
+                                {
+                                    <span class="bg-danger text-white px-2 py-1 rounded">No</span>
+                                }
                             </div>
                             <div class="col-12 col-lg-3">
                                 <button class="btn btn-sm btn-secondary" @onclick="() => ViewDetails(note)">Details</button>
