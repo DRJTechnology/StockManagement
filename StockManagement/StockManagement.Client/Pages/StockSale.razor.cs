@@ -281,7 +281,8 @@ public partial class StockSaleBase : ComponentBase
             if (EditStockSale.LocationId != value)
             {
                 EditStockSale.LocationId = value;
-                EditStockSale.ContactId = Lookups.LocationList.Where(l => l.Id == EditStockSale.LocationId).FirstOrDefault().ContactId;
+                var location = Lookups.LocationList.Where(l => l.Id == EditStockSale.LocationId).FirstOrDefault();
+                EditStockSale.ContactId = location != null ? location.ContactId : default;
             }
         }
     }
@@ -321,7 +322,7 @@ public partial class StockSaleBase : ComponentBase
                 ProductTypeName = detail.ProductTypeName,
                 Quantity = detail.Quantity,
                 Deleted = detail.Deleted,
-                UnitPrice = Math.Round(Lookups.ProductTypeList.FirstOrDefault(pt => pt.Id == detail.ProductTypeId)!.DefaultSalePrice, 2),
+                UnitPrice = Math.Round(Lookups.ProductTypeList.FirstOrDefault(pt => pt.Id == detail.ProductTypeId)?.DefaultSalePrice ?? 0, 2),
             })
             .ToList(),
         };
