@@ -38,5 +38,35 @@ namespace StockManagement.ApiControllers
                 return this.BadRequest();
             }
         }
+
+        [HttpGet("balancesheet")]
+        public async Task<IActionResult> GetBalanceSheetReport()
+        {
+            try
+            {
+                var reportItems = await reportService.GetBalanceSheetReportAsync();
+                return this.Ok(reportItems);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "GetBalanceSheetReport");
+                return this.BadRequest();
+            }
+        }
+
+        [HttpGet("inventoryvalue")]
+        public async Task<IActionResult> GetInventoryValueReport()
+        {
+            try
+            {
+                var totalValue = await reportService.GetInventoryValueReportAsync();
+                return this.Ok(totalValue);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "GetInventoryValueReport");
+                return this.BadRequest();
+            }
+        }
     }
 }

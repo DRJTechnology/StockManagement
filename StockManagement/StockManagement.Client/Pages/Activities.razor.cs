@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
 using StockManagement.Models;
+using System.Diagnostics;
 
 [Authorize]
 public partial class ActivitiesBase : ComponentBase
@@ -34,8 +35,6 @@ public partial class ActivitiesBase : ComponentBase
     protected ActivityFilterModel activityFilterModel = new ActivityFilterModel();
 
     protected int TotalPages { get; set; }
-    protected int StartPage { get; set; }
-    protected int EndPage { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -52,7 +51,6 @@ public partial class ActivitiesBase : ComponentBase
 
     protected async Task LoadActivities()
     {
-        //var allActivities = (await ActivityService.GetAllAsync())?.ToList() ?? new();
         var filteredActivities = await ActivityService.GetFilteredAsync(activityFilterModel);
 
         Activities = filteredActivities.Activity ?? new List<ActivityResponseModel>();
@@ -62,13 +60,6 @@ public partial class ActivitiesBase : ComponentBase
             activityFilterModel.CurrentPage = TotalPages;
         if (activityFilterModel.CurrentPage < 1)
             activityFilterModel.CurrentPage = 1;
-
-        int maxButtons = 5;
-        StartPage = Math.Max(1, activityFilterModel.CurrentPage - 2);
-        EndPage = Math.Min(TotalPages, StartPage + maxButtons - 1);
-        if (EndPage - StartPage < maxButtons - 1)
-            StartPage = Math.Max(1, EndPage - maxButtons + 1);
-
     }
 
     protected async Task OnFilter()
@@ -113,19 +104,25 @@ public partial class ActivitiesBase : ComponentBase
             ProductTypeId = activity.ProductTypeId,
             LocationId = activity.LocationId,
             Quantity = activity.Quantity,
+            Notes = activity.Notes,
             Deleted = activity.Deleted
         };
         ShowForm = true;
     }
 
+    protected void OpenStockSale(int stockSaleId)
+    {
+        Navigation.NavigateTo($"/stock-sale/{stockSaleId}");
+    }
+
+    protected void OpenStockOrder(int stockReceiptId)
+    {
+        Navigation.NavigateTo($"/stock-order/{stockReceiptId}");
+    }
+
     protected void OpenDeliveryNote(int deliveryNoteId)
     {
         Navigation.NavigateTo($"/delivery-note/{deliveryNoteId}");
-    }
-
-    protected void OpenStockReceipt(int stockReceiptId)
-    {
-        Navigation.NavigateTo($"/stock-receipt/{stockReceiptId}");
     }
 
     protected async Task HandleValidSubmit()
@@ -145,35 +142,37 @@ public partial class ActivitiesBase : ComponentBase
                     ProductTypeId = EditActivity.ProductTypeId,
                     LocationId = EditActivity.LocationId,
                     Quantity = EditActivity.Quantity,
+                    Notes = EditActivity.Notes,
                     ProductName = Lookups.ProductList.Where(p => p.Id == EditActivity.ProductId).FirstOrDefault()!.ProductName,
                     ProductTypeName = Lookups.ProductTypeList.Where(pt => pt.Id == EditActivity.ProductTypeId).FirstOrDefault()!.ProductTypeName,
                     LocationName = Lookups.LocationList.Where(v => v.Id == EditActivity.LocationId).FirstOrDefault()!.Name,
                     Deleted = false
                 });
         }
-        else
-        {
-            await ActivityService.UpdateAsync(EditActivity);
-            var index = Activities.FindIndex(p => p.Id == EditActivity.Id);
-            if (index >= 0)
-            {
-                Activities[index] = new ActivityResponseModel()
-                {
-                    Id = EditActivity.Id,
-                    ActionId = EditActivity.ActionId,
-                    ActionName = Lookups.ActionList.Where(a => a.Id == EditActivity.ActionId).FirstOrDefault()!.ActionName,
-                    ActivityDate = EditActivity.ActivityDate,
-                    ProductId = EditActivity.ProductId,
-                    ProductTypeId = EditActivity.ProductTypeId,
-                    LocationId = EditActivity.LocationId,
-                    Quantity = EditActivity.Quantity,
-                    ProductName = Lookups.ProductList.Where(p => p.Id == EditActivity.ProductId).FirstOrDefault()!.ProductName,
-                    ProductTypeName = Lookups.ProductTypeList.Where(pt => pt.Id == EditActivity.ProductTypeId).FirstOrDefault()!.ProductTypeName,
-                    LocationName = Lookups.LocationList.Where(v => v.Id == EditActivity.LocationId).FirstOrDefault()!.Name,
-                    Deleted = false
-                };
-            }
-        }
+        //else
+        //{
+        //    await ActivityService.UpdateAsync(EditActivity);
+        //    var index = Activities.FindIndex(p => p.Id == EditActivity.Id);
+        //    if (index >= 0)
+        //    {
+        //        Activities[index] = new ActivityResponseModel()
+        //        {
+        //            Id = EditActivity.Id,
+        //            ActionId = EditActivity.ActionId,
+        //            ActionName = Lookups.ActionList.Where(a => a.Id == EditActivity.ActionId).FirstOrDefault()!.ActionName,
+        //            ActivityDate = EditActivity.ActivityDate,
+        //            ProductId = EditActivity.ProductId,
+        //            ProductTypeId = EditActivity.ProductTypeId,
+        //            LocationId = EditActivity.LocationId,
+        //            Quantity = EditActivity.Quantity,
+        //            Notes = EditActivity.Notes,
+        //            ProductName = Lookups.ProductList.Where(p => p.Id == EditActivity.ProductId).FirstOrDefault()!.ProductName,
+        //            ProductTypeName = Lookups.ProductTypeList.Where(pt => pt.Id == EditActivity.ProductTypeId).FirstOrDefault()!.ProductTypeName,
+        //            LocationName = Lookups.LocationList.Where(v => v.Id == EditActivity.LocationId).FirstOrDefault()!.Name,
+        //            Deleted = false
+        //        };
+        //    }
+        //}
         ShowForm = false;
     }
 
@@ -182,22 +181,22 @@ public partial class ActivitiesBase : ComponentBase
         ShowForm = false;
     }
 
-    protected void Delete(int id)
-    {
-        EditActivity = new ActivityEditModel { Id = id };
-        ShowDeleteConfirm = true;
-    }
+    //protected void Delete(int id)
+    //{
+    //    EditActivity = new ActivityEditModel { Id = id };
+    //    ShowDeleteConfirm = true;
+    //}
 
-    protected async Task HandleDeleteConfirmation(bool confirmed)
-    {
-        ShowDeleteConfirm = false;
-        if (confirmed)
-        {
-            await ActivityService.DeleteAsync(EditActivity.Id);
-            Activities.RemoveAll(a => a.Id == EditActivity.Id);
-            EditActivity = new ActivityEditModel();
-        }
-    }
+    //protected async Task HandleDeleteConfirmation(bool confirmed)
+    //{
+    //    ShowDeleteConfirm = false;
+    //    if (confirmed)
+    //    {
+    //        await ActivityService.DeleteAsync(EditActivity.Id);
+    //        Activities.RemoveAll(a => a.Id == EditActivity.Id);
+    //        EditActivity = new ActivityEditModel();
+    //    }
+    //}
 
     protected async Task GoToPage(int page)
     {
@@ -205,24 +204,6 @@ public partial class ActivitiesBase : ComponentBase
             return;
         activityFilterModel.CurrentPage = page;
         await LoadActivities();
-    }
-
-    protected async Task PreviousPage()
-    {
-        if (activityFilterModel.CurrentPage > 1)
-        {
-            activityFilterModel.CurrentPage--;
-            await LoadActivities();
-        }
-    }
-
-    protected async Task NextPage()
-    {
-        if (activityFilterModel.CurrentPage < TotalPages)
-        {
-            activityFilterModel.CurrentPage++;
-            await LoadActivities();
-        }
     }
 
     protected void ToggleFilters()

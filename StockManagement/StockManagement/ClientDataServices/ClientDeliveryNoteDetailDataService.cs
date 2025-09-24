@@ -10,6 +10,11 @@ namespace StockManagement.ClientDataServices
             throw new NotImplementedException();
         }
 
+        public Task<int> CreateAsync(StockSaleDetailEditModel entity)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<bool> DeleteAsync(int entityId)
         {
             throw new NotImplementedException();
@@ -26,6 +31,11 @@ namespace StockManagement.ClientDataServices
         }
 
         public Task<bool> UpdateAsync(DeliveryNoteDetailEditModel entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> UpdateAsync(StockSaleDetailEditModel entity)
         {
             throw new NotImplementedException();
         }

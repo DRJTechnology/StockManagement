@@ -1,4 +1,4 @@
-using Dapper;
+﻿using Dapper;
 using StockManagement.Models.Dto;
 using StockManagement.Repositories.Interfaces;
 using System.Data;

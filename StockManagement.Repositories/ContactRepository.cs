@@ -1,7 +1,7 @@
 using System.Data;
 using Dapper;
 using StockManagement.Models.Dto;
-using StockManagement.Models.Emuns;
+using StockManagement.Models.Enums;
 using StockManagement.Repositories.Interfaces;
 
 namespace StockManagement.Repositories

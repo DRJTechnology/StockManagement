@@ -63,7 +63,14 @@
     <Folder Include="auth\" />
     <Folder Include="auth\Tables\" />
     <Folder Include="auth\Stored Procedures\" />
+    <Folder Include="finance\" />
+    <Folder Include="finance\Tables\" />
+    <Folder Include="finance\Stored Procedures\" />
+    <Folder Include="finance\User Defined Types\" />
     <Folder Include="Scripts" />
+    <Folder Include="Scripts\V1.8.0" />
+    <Folder Include="Scripts\V2.0.0" />
+    <Folder Include="Scripts\V2.0.3" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\ProductType.sql" />
@@ -118,29 +125,135 @@
     <Build Include="dbo\Stored Procedures\Report_Sales.sql" />
     <Build Include="dbo\Stored Procedures\Report_Stock.sql" />
     <Build Include="dbo\Stored Procedures\Activity_LoadFiltered.sql" />
-    <Build Include="dbo\Tables\DeliveryNoteDetail.sql" />
-    <Build Include="dbo\Tables\DeliveryNote.sql" />
-    <Build Include="dbo\Stored Procedures\DeliveryNote_LoadAll.sql" />
-    <Build Include="dbo\Stored Procedures\DeliveryNote_LoadById.sql" />
-    <Build Include="dbo\Stored Procedures\DeliveryNote_Create.sql" />
-    <Build Include="dbo\Stored Procedures\DeliveryNote_Update.sql" />
-    <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Update.sql" />
-    <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Create.sql" />
-    <Build Include="dbo\Stored Procedures\DeliveryNote_Delete.sql" />
-    <Build Include="dbo\Tables\StockReceipt.sql" />
-    <Build Include="dbo\Tables\StockReceiptDetail.sql" />
-    <Build Include="dbo\Stored Procedures\StockReceipt_LoadAll.sql" />
-    <Build Include="dbo\Stored Procedures\StockReceipt_Create.sql" />
-    <Build Include="dbo\Stored Procedures\StockReceipt_LoadById.sql" />
-    <Build Include="dbo\Stored Procedures\StockReceipt_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\StockReceiptDetail_Create.sql" />
-    <Build Include="dbo\Stored Procedures\StockReceiptDetail_Delete.sql" />
-    <Build Include="dbo\Stored Procedures\StockReceiptDetail_Update.sql" />
-    <Build Include="dbo\Stored Procedures\StockReceipt_Update.sql" />
+    <Build Include="dbo\Tables\StockSaleDetail.sql" />
+    <Build Include="dbo\Tables\StockSale.sql" />
+    <Build Include="dbo\Stored Procedures\StockSale_LoadAll.sql" />
+    <Build Include="dbo\Stored Procedures\StockSale_LoadById.sql" />
+    <Build Include="dbo\Stored Procedures\StockSale_Create.sql" />
+    <Build Include="dbo\Stored Procedures\StockSale_Update.sql" />
+    <Build Include="dbo\Stored Procedures\StockSaleDetail_Update.sql" />
+    <Build Include="dbo\Stored Procedures\StockSaleDetail_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\StockSaleDetail_Create.sql" />
+    <Build Include="dbo\Stored Procedures\StockSale_Delete.sql" />
+    <Build Include="dbo\Tables\StockOrder.sql" />
+    <Build Include="dbo\Tables\StockOrderDetail.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrder_LoadAll.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrder_Create.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrder_LoadById.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrder_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrderDetail_Create.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrderDetail_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrderDetail_Update.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrder_Update.sql" />
     <Build Include="dbo\Tables\Setting.sql" />
     <Build Include="dbo\Stored Procedures\Setting_LoadAll.sql" />
     <Build Include="dbo\Stored Procedures\Setting_Update.sql" />
+    <Build Include="finance\Tables\AccountType.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Tables\Account.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Tables\TransactionDetail.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Tables\Invoice.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Tables\Transaction.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Tables\InvoiceDetail.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Tables\BankAccount.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Tables\TransactionType.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Tables\BankAccountDetail.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\Account_LoadById.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\TransactionType_LoadAll.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\TransactionDetail_Load.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\Account_Update.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\Account_Delete.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\Account_Create.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\AccountType_LoadAll.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\Account_LoadAll.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\Account_LoadByType.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\User Defined Types\StatementTableType.sql" />
+    <Build Include="Security\finance.sql" />
+    <Build Include="finance\Stored Procedures\TransactionDetail_LoadByAccountType.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <None Include="Scripts\V1.8.0\Migrate Contact Data.sql" />
+    <Build Include="finance\Stored Procedures\Transaction_CreateExpenseIncome.sql" />
+    <Build Include="finance\Stored Procedures\Transaction_UpdateExpenseIncome.sql" />
+    <Build Include="finance\Stored Procedures\Transaction_DeleteByDetailId.sql" />
+    <Build Include="finance\Stored Procedures\TransactionDetail_LoadFiltered.sql" />
+    <Build Include="finance\Tables\InventoryBatch.sql" />
+    <Build Include="finance\Tables\InventoryBatchActivity.sql" />
+    <Build Include="finance\Stored Procedures\InventoryBatch_ReduceQuantity.sql" />
+    <Build Include="finance\Stored Procedures\InventoryBatch_Create.sql" />
+    <Build Include="finance\Stored Procedures\TransactionDetail_LoadByAccount.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\Stored Procedures\TransactionDetail_LoadTotalFiltered.sql" />
+    <Build Include="finance\Tables\InventoryBatchStatus.sql">
+      <AnsiNulls>Off</AnsiNulls>
+    </Build>
+    <Build Include="finance\User Defined Types\StockPaymentTableType.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrder_CreateStockOrderPayments.sql" />
+    <Build Include="dbo\Stored Procedures\StockOrder_ActivateStock.sql" />
+    <Build Include="finance\Stored Procedures\InventoryBatch_MoveQuantity.sql" />
+    <Build Include="finance\Stored Procedures\Transaction_Create.sql" />
+    <Build Include="finance\Stored Procedures\InventoryBatch_LoadFiltered.sql" />
+    <Build Include="finance\Stored Procedures\InventoryBatchActivity_LoadByInventoryBatchId.sql" />
+    <Build Include="dbo\Tables\DeliveryNoteDetail.sql" />
+    <Build Include="dbo\Tables\DeliveryNote.sql" />
+    <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Update.sql" />
+    <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\DeliveryNoteDetail_Create.sql" />
+    <Build Include="dbo\Stored Procedures\DeliveryNote_Update.sql" />
+    <Build Include="dbo\Stored Procedures\DeliveryNote_LoadById.sql" />
+    <Build Include="dbo\Stored Procedures\DeliveryNote_LoadAll.sql" />
+    <Build Include="dbo\Stored Procedures\DeliveryNote_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\DeliveryNote_Create.sql" />
+    <Build Include="finance\User Defined Types\StockSaleConfirmTableType.sql" />
+    <Build Include="dbo\Stored Procedures\StockSale_ConfirmSale.sql" />
+    <Build Include="dbo\Tables\ErrorLog.sql" />
+    <Build Include="dbo\Stored Procedures\StockSale_ConfirmPayment.sql" />
+    <None Include="Scripts\V2.0.0\0. PreSchemaUpdate.sql" />
+    <None Include="Scripts\V2.0.0\1. PopulateFinanceTables.sql" />
+    <None Include="Scripts\V2.0.0\2. Populate InventoryBatch Data.sql" />
+    <None Include="Scripts\V2.0.0\3. Populate Transactions.sql" />
+    <Build Include="finance\Stored Procedures\Report_BalanceSheet.sql" />
+    <Build Include="finance\Stored Procedures\Report_InventoryValue.sql" />
+    <Build Include="dbo\Stored Procedures\StockSale_ResetSale.sql" />
+    <Build Include="finance\Stored Procedures\InventoryBatch_SaleCost.sql" />
+  </ItemGroup>
+  <ItemGroup>
     <Build Include="dbo\Tables\ContactType.sql" />
     <Build Include="dbo\Tables\Contact.sql" />
     <Build Include="dbo\Stored Procedures\Contact_LoadByType.sql" />
@@ -149,11 +262,12 @@
     <Build Include="dbo\Stored Procedures\Location_LoadAll.sql" />
     <Build Include="dbo\Stored Procedures\Location_Update.sql" />
     <Build Include="dbo\Tables\Location.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Scripts\Migrate Contact Data.sql" />
+    <None Include="Scripts\Report-sql.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="StockManagement.Database.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\V2.0.3\0. Rename column.sql" />
   </ItemGroup>
 </Project>

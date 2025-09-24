@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using StockManagement.Client.Interfaces;
@@ -212,11 +212,6 @@ public partial class DeliveryNoteBase : ComponentBase
         ShowEditDetailForm = true;
     }
 
-    //protected async Task DeleteDetail(int id)
-    //{
-    //    await DeliveryNoteDetailService.DeleteAsync(id);
-    //    EditDeliveryNote.DetailList.RemoveAll(dnd => dnd.Id == id);
-    //}
     protected void DeleteDetail(int id)
     {
         EditDeliveryNoteDetail = new DeliveryNoteDetailEditModel { Id = id };
@@ -224,9 +219,20 @@ public partial class DeliveryNoteBase : ComponentBase
         ShowDeleteDetailConfirm = true;
     }
 
-    protected async Task DownloadPdf()
+    protected async Task DownloadDeliveryNotePdf()
     {
         var url = $"/api/pdf/delivery-note/{EditDeliveryNote.Id}";
         await JS.InvokeVoidAsync("open", url, "_blank");
     }
+
+    protected async Task ConfirmDelivery()
+    {
+        EditDeliveryNote.DeliveryCompleted = true;
+        await HandleValidSubmit();
+    }
+    protected bool DetailsExist
+    {
+        get => EditDeliveryNote != null && EditDeliveryNote.DetailList != null && EditDeliveryNote.DetailList.Count > 0;
+    }
+
 }

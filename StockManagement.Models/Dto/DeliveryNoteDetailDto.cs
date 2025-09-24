@@ -1,4 +1,4 @@
-namespace StockManagement.Models.Dto
+﻿namespace StockManagement.Models.Dto
 {
     public class DeliveryNoteDetailDto
     {

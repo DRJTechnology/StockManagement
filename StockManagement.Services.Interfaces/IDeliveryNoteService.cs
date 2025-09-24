@@ -1,4 +1,4 @@
-using StockManagement.Models;
+﻿using StockManagement.Models;
 
 namespace StockManagement.Services.Interfaces
 {

@@ -4,6 +4,8 @@
 -- Create date: 23 May 2025
 -- Description:	Get Activity
 -- =========================================================
+-- 30 Aug 2025 - Dave Brown - Added Notes
+-- =========================================================
 CREATE PROCEDURE [dbo].[Activity_LoadAll]
 AS
 BEGIN
@@ -22,6 +24,7 @@ BEGIN
 		a.[LocationId],
 		l.[Name] AS LocationName,
 		a.[Quantity],
+		a.[Notes],
 		a.[Deleted],
 		a.[AmendUserID],
 		a.[AmendDate]

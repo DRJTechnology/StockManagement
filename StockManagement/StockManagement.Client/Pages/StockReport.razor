@@ -2,6 +2,7 @@
 @page "/stock-report"
 @inherits StockReportBase
 @rendermode InteractiveWebAssembly
+<PageTitle>Stock Report</PageTitle>
 
 <h3>Stock Report</h3>
 
@@ -43,7 +44,8 @@ else
             @foreach (var productTypeGroup in locationGroup.Value)
             {
                 <h5 class="product-group">@productTypeGroup.Key</h5>
-                var totalQuantity = productTypeGroup.Value.Sum(item => item.TotalQuantity);
+                var totalQuantity = productTypeGroup.Value.Sum(item => item.ActiveQuantity);
+                var totalPendingQuantity = productTypeGroup.Value.Sum(item => item.PendingQuantity);
                 <table class="table table-striped auto-width-table indented-table">
                     <tbody>
                         @foreach (var item in productTypeGroup.Value)
@@ -54,12 +56,18 @@ else
                                         @item.ProductName
                                     </a>
                                 </td>
-                                <td>@item.TotalQuantity</td>
+                                <td>
+                                    @item.ActiveQuantity
+                                    @(item.PendingQuantity > 0 ? $" ({item.PendingQuantity})" : "")
+                                </td>
                             </tr>
                         }
                         <tr style="font-weight:600;">
                             <td>Total</td>
-                            <td>@totalQuantity</td>
+                            <td>
+                                @totalQuantity
+                                @(totalPendingQuantity > 0 ? $" ({totalPendingQuantity})" : "")
+                            </td>
                         </tr>
                     </tbody>
                 </table>

@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StockManagement.Models
 {
@@ -12,7 +12,7 @@ namespace StockManagement.Models
         [Range(1, int.MaxValue, ErrorMessage = "Location must be selected.")]
         public int LocationId { get; set; }
 
-        public bool DirectSale { get; set; }
+        public bool DeliveryCompleted { get; set; }
 
         public bool Deleted { get; set; }
     }

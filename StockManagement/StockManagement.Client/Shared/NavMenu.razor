@@ -1,0 +1,162 @@
+﻿@inherits ClientNavMenuBase
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Stock Management</a>
+    </div>
+</div>
+
+<InputCheckbox title="Navigation menu" class="navbar-toggler" @bind-Value="mobileMenuActive" />
+<div class="nav-scrollable">
+    <nav class="nav flex-column">
+        <AuthorizeView>
+            <Authorized>
+                <div class="nav-item">
+                    <NavLink class="nav-link" href="stock-report">
+                        <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Stock Report
+                    </NavLink>
+                </div>
+
+                <div class="nav-item">
+                    <NavLink class="nav-link" href="sales-report">
+                        <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Sales Report
+                    </NavLink>
+                </div>
+
+                <div class="nav-item">
+                    <NavLink class="nav-link" href="stock-sale-list">
+                        <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Sales
+                    </NavLink>
+                </div>
+
+                <div class="nav-item">
+                    <NavLink class="nav-link" href="delivery-note-list">
+                        <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Delivery Notes
+                    </NavLink>
+                </div>
+
+                <div class="nav-item">
+                    <NavLink class="nav-link" href="stock-order-list">
+                        <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> New Stock In
+                    </NavLink>
+                </div>
+
+                <div class="nav-item">
+                    <NavLink class="nav-link" href="activities">
+                        <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Activities
+                    </NavLink>
+                </div>
+
+                <!-- Finance Options Collapsible Section -->
+                <div class="nav-item">
+                    <button class="btn btn-link nav-link p-0" @onclick="ToggleFinanceOptions" type="button">
+                        <span class="bi bi-caret-down-fill" style="transition: transform 0.2s;@(showFinanceOptions ? "" : " transform: rotate(-90deg);")"></span>
+                        Finance Options
+                    </button>
+                </div>
+                @if (showFinanceOptions)
+                {
+                    <div class="nav-item ms-3">
+                        <NavLink class="nav-link" href="owners-account">
+                            <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Owners Account
+                        </NavLink>
+                    </div>
+                    <div class="nav-item ms-3">
+                        <NavLink class="nav-link" href="expenses">
+                            <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Expenses
+                        </NavLink>
+                    </div>
+                    <div class="nav-item ms-3">
+                        <NavLink class="nav-link" href="income">
+                            <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Income
+                        </NavLink>
+                    </div>
+                    <div class="nav-item ms-3">
+                        <NavLink class="nav-link" href="transactions">
+                            <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Transactions
+                        </NavLink>
+                    </div>
+                    <div class="nav-item ms-3">
+                        <NavLink class="nav-link" href="inventory">
+                            <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Inventory
+                        </NavLink>
+                    </div>
+                    <div class="nav-item ms-3">
+                        <NavLink class="nav-link" href="balance-sheet">
+                            <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Balance sheet
+                        </NavLink>
+                    </div>
+                }
+
+                <!-- Settings Options Collapsible Section -->
+                <div class="nav-item">
+                    <button class="btn btn-link nav-link p-0" @onclick="ToggleSettingsOptions" type="button">
+                        <span class="bi bi-caret-down-fill" style="transition: transform 0.2s;@(showSettingsOptions ? "" : " transform: rotate(-90deg);")"></span>
+                        Settings Options
+                    </button>
+                </div>
+                @if (showSettingsOptions)
+                {
+                    <div class="nav-item ms-3">
+                        <NavLink class="nav-link" href="products">
+                            <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Products
+                        </NavLink>
+                    </div>
+                    <div class="nav-item ms-3">
+                        <NavLink class="nav-link" href="producttypes">
+                            <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Product Types
+                        </NavLink>
+                    </div>
+                    <div class="nav-item ms-3">
+                        <NavLink class="nav-link" href="contacts">
+                            <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Contacts
+                        </NavLink>
+                    </div>
+                    <div class="nav-item ms-3">
+                        <NavLink class="nav-link" href="locations">
+                            <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Locations
+                        </NavLink>
+                    </div>
+                    <div class="nav-item ms-3">
+                        <NavLink class="nav-link" href="accounts">
+                            <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Accounts
+                        </NavLink>
+                    </div>
+                    <div class="nav-item ms-3">
+                        <NavLink class="nav-link" href="settings">
+                            <span class="bi bi-box-seam-nav-menu" aria-hidden="true"></span> Settings
+                        </NavLink>
+                    </div>
+                }
+
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="Account/Manage">
+                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> @context.User.Identity?.Name
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <form action="Account/Logout" method="post">
+                        <AntiforgeryToken />
+                        <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+                        <button type="submit" class="nav-link">
+                            <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
+                        </button>
+                    </form>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="Account/Register">
+                        <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="Account/Login">
+                        <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Login
+                    </NavLink>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
+    </nav>
+</div>
+

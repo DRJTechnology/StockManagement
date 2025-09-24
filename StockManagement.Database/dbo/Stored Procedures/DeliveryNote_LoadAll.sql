@@ -4,6 +4,7 @@
 -- Description:	Get Delivery Notes
 -- =========================================================
 -- 02 JUL 2025 - Dave Brown - include DirectSale column
+-- 07 Sep 2025 - Dave Brown - remove DirectSale column
 -- =========================================================
 CREATE PROCEDURE [dbo].[DeliveryNote_LoadAll]
 AS
@@ -16,7 +17,7 @@ BEGIN
 		dn.[Date],
 		dn.[LocationId],
 		l.[Name] AS LocationName,
-		dn.DirectSale,
+		dn.DeliveryCompleted,
 		dn.[Deleted],
 		dn.[AmendUserID],
 		dn.[AmendDate]

@@ -5,6 +5,7 @@
 -- ===========================================================================
 -- 02 JUL 2025 - Dave Brown - include DirectSale column
 -- 03 JUL 2025 - Dave Brown - include delivery note detail child records
+-- 07 Sep 2025 - Dave Brown - remove DirectSale column
 -- ===========================================================================
 CREATE PROCEDURE [dbo].[DeliveryNote_LoadById]
 	@Id int
@@ -18,7 +19,7 @@ BEGIN
 		dn.[Date],
 		dn.[LocationId],
 		l.[Name] AS LocationName,
-		dn.DirectSale,
+		dn.DeliveryCompleted,
 		dn.[Deleted],
 		dn.[AmendUserID],
 		dn.[AmendDate]

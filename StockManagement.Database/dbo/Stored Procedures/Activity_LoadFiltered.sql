@@ -3,8 +3,10 @@
 -- Create date: May 2025
 -- Description:	Get Activity
 -- =========================================================
--- 04 Jul 2025 - Dave Brown - DeliveryNoteId added
+-- 04 Jul 2025 - Dave Brown - StockSaleId added
 -- 09 Jul 2025 - Dave Brown - StockNoteId added
+-- 30 Aug 2025 - Dave Brown - Added Notes
+-- 07 Sep 2025 - Dave Brown - Delivery Note re-added
 -- =========================================================
 CREATE PROCEDURE [dbo].[Activity_LoadFiltered]
     @ActivityDate datetime = NULL,
@@ -54,8 +56,10 @@ BEGIN
         a.[LocationId],
         l.[Name] AS LocationName,
         a.[Quantity],
+		a.[Notes],
         dnd.DeliveryNoteId,
-        srd.StockReceiptId,
+        ssd.StockSaleId,
+        srd.StockOrderId,
         a.[Deleted],
         a.[AmendUserID],
         a.[AmendDate]
@@ -65,7 +69,8 @@ BEGIN
     INNER JOIN [Location] l ON a.[LocationId] = l.Id
     INNER JOIN [Action] act ON a.[ActionId] = act.Id
     LEFT OUTER JOIN [DeliveryNoteDetail] dnd ON a.DeliveryNoteDetailId = dnd.Id
-    LEFT OUTER JOIN [StockReceiptDetail] srd ON a.StockReceiptDetailId = srd.Id
+    LEFT OUTER JOIN [StockSaleDetail] ssd ON a.StockSaleDetailId = ssd.Id
+    LEFT OUTER JOIN [StockOrderDetail] srd ON a.StockOrderDetailId = srd.Id
     WHERE
         a.[Deleted] <> 1
         AND (@ActivityDate IS NULL OR CAST(a.[ActivityDate] AS DATE) = CAST(@ActivityDate AS DATE))
@@ -76,9 +81,7 @@ BEGIN
         AND (@Quantity IS NULL OR a.[Quantity] = @Quantity)
     ORDER BY
         a.[ActivityDate] DESC,
-        p.[ProductName] ASC,
-        pt.[ProductTypeName] ASC,
-        l.[Name] ASC
+        a.Id DESC
     OFFSET (@CurrentPage - 1) * @PageSize ROWS
     FETCH NEXT @PageSize ROWS ONLY;
 

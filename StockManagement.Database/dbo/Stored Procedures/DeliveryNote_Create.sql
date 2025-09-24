@@ -9,7 +9,6 @@ CREATE PROCEDURE [dbo].[DeliveryNote_Create]
 	@Id int output,
 	@Date datetime,
 	@LocationId int,
-	@DirectSale bit,
 	@Deleted bit,
 	@CurrentUserId int
 )
@@ -22,8 +21,8 @@ BEGIN
 	DECLARE @UpdateDate DATETIME
 	SET @UpdateDate = GetDate()
 
-	INSERT INTO dbo.[DeliveryNote] ([Date],[LocationId],[DirectSale],[Deleted],[AmendUserID],[AmendDate])
-	VALUES (@Date, @LocationId, @DirectSale, @Deleted, @CurrentUserId, @UpdateDate)
+	INSERT INTO dbo.[DeliveryNote] ([Date],[LocationId], [Deleted], [AmendUserID],[AmendDate])
+	VALUES (@Date, @LocationId, @Deleted, @CurrentUserId, @UpdateDate)
 
 	SELECT @ID = SCOPE_IDENTITY()
 

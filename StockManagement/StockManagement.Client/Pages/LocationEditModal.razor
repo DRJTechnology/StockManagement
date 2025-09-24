@@ -20,6 +20,19 @@
                             <InputText class="form-control" @bind-Value="EditLocation.Name" autocomplete="off" />
                         </div>
                         <div class="mb-2">
+                            <label>Default Customer:</label>
+                            <InputSelect class="form-control" @bind-Value="EditLocation.ContactId">
+                                <option value="0">-- Select Default Customer --</option>
+                                @if (Customers != null)
+                                {
+                                    foreach (var customer in Customers)
+                                    {
+                                        <option value="@customer.Id">@customer.Name</option>
+                                    }
+                                }
+                            </InputSelect>
+                        </div>
+                        <div class="mb-2">
                             <label>Notes:</label>
                             <InputTextArea class="form-control" @bind-Value="EditLocation.Notes" autocomplete="off" rows="5" />
                         </div>                        

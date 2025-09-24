@@ -25,6 +25,11 @@ namespace StockManagement.ClientDataServices
             throw new NotImplementedException();
         }
 
+        public Task<IEnumerable<ContactResponseModel>> GetByTypeAsync(int contactTypeId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<bool> UpdateAsync(ContactEditModel entity)
         {
             throw new NotImplementedException();

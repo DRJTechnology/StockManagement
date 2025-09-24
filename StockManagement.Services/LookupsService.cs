@@ -1,6 +1,7 @@
 using StockManagement.Models;
-using StockManagement.Models.Emuns;
+using StockManagement.Models.Enums;
 using StockManagement.Services.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace StockManagement.Services
 {

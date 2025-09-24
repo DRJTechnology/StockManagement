@@ -2,6 +2,7 @@
 @page "/locations"
 @rendermode InteractiveWebAssembly
 @inherits LocationsBase
+<PageTitle>Locations</PageTitle>
 
 <h3>Locations</h3>
 
@@ -15,6 +16,7 @@ else
 
     <LocationEditModal Show="ShowForm"
                     EditLocation="EditLocation"
+                    Customers="Customers"
                     OnCancel="CancelEdit"
                     OnValidSubmit="HandleValidSubmit" />
 

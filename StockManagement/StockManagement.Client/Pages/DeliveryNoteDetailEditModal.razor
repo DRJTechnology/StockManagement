@@ -1,4 +1,4 @@
-@using System.ComponentModel.DataAnnotations
+﻿@using System.ComponentModel.DataAnnotations
 @inherits DeliveryNoteDetailEditModalBase
 
 @if (Show)
@@ -9,7 +9,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">@((EditDeliveryNoteDetail?.Id ?? 0) == 0 ? "Add Product" : "Edit Product")</h5>
-                    <button type="button" class="btn-close" aria-label="Close" @onclick="OnCancel"></button>
+                    <button type="button" class="btn-close" aria-label="Close" @onclick="Close"></button>
                 </div>
                 <div class="modal-body">
                     <EditForm Model="EditDeliveryNoteDetail" OnValidSubmit="HandleValidSubmit">
@@ -17,8 +17,8 @@
                         <ValidationSummary />
                         <div class="mb-2">
                             <label>Product Type:</label>
-                            <InputSelect class="form-control" @bind-Value="EditDeliveryNoteDetail.ProductTypeId">
-                                <option value="">-- Select Product Type --</option>
+                            <InputSelect class="form-control" @bind-Value="ProductTypeId" TValue="int">
+                                <option value="0">-- Select Product Type --</option>
                                 @if (Lookups?.ProductTypeList != null)
                                 {
                                     foreach (var type in Lookups.ProductTypeList)
@@ -30,8 +30,8 @@
                         </div>
                         <div class="mb-2">
                             <label>Product:</label>
-                            <InputSelect class="form-control" @bind-Value="EditDeliveryNoteDetail.ProductId">
-                                <option value="">-- Select Product --</option>
+                            <InputSelect class="form-control" @bind-Value="ProductId" TValue="int">
+                                <option value="0">-- Select Product --</option>
                                 @if (Lookups?.ProductList != null)
                                 {
                                     foreach (var product in Lookups.ProductList)
@@ -45,9 +45,27 @@
                             <label>Quantity:</label>
                             <InputNumber class="form-control" @bind-Value="EditDeliveryNoteDetail.Quantity" />
                         </div>
+                        @if (EditDeliveryNoteDetail.ProductTypeId > 0 && EditDeliveryNoteDetail.ProductId > 0 && availableQuantity == 0)
+                        {
+                            <div class="text-danger">
+                                No stock in the stock room
+                            </div>
+                        }
+                        else if (availableQuantity > 0 && availableQuantity < EditDeliveryNoteDetail.Quantity)
+                        {
+                            <div class="text-danger">
+                                Only @availableQuantity available in the stock room
+                            </div>
+                        }
+                        else if (availableQuantity > 0)
+                        {
+                            <div class="text-muted">
+                                @availableQuantity available in the stock room
+                            </div>
+                        }
                         <div class="d-flex justify-content-end">
-                            <button class="btn btn-success" type="submit">Save</button>
-                            <button class="btn btn-secondary ms-2" type="button" @onclick="OnCancel">Cancel</button>
+                            <button class="btn btn-success" type="submit" disabled="@(availableQuantity == 0 || availableQuantity < EditDeliveryNoteDetail.Quantity)">Save</button>
+                            <button class="btn btn-secondary ms-2" type="button" @onclick="Close">Cancel</button>
                         </div>
                     </EditForm>
                 </div>

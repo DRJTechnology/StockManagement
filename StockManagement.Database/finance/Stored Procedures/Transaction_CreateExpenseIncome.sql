@@ -1,0 +1,68 @@
+﻿-- =========================================================================
+-- Author:		Dave Brown
+-- Create date: 30 Jul 2025
+-- Description:	Creates a expense transaction and transaction detail records
+-- =========================================================================
+-- 04 Aug 2025 - Updated Expense procedure to handle Income too
+-- 20 Aug 2025 - Split the Owner’s Capital/Investment and Drawings accounts
+-- 14 Sep 2025 - @TransactionId OUTPUT parameter added
+-- 23 Sep 2025 - Dave Brown - Update @Id to TransactionDetailId for clarity
+-- =========================================================================
+CREATE PROCEDURE [finance].[Transaction_CreateExpenseIncome]
+	@Success			BIT OUTPUT,
+	@TransactionDetailId INT OUTPUT, 
+	@TransactionId		INT OUTPUT, 
+	@TransactionTypeId	INT, -- Expense = 2, Income = 3
+	@AccountId			INT,
+	@Date				DATETIME,
+	@Description		NVARCHAR(512) = NULL,
+	@Amount				MONEY,
+	@ContactId			INT,
+	@CurrentUserId		INT
+AS
+BEGIN
+
+	SET NOCOUNT OFF
+	DECLARE @Err int
+
+	DECLARE @UpdateDate DATETIME
+	SET @UpdateDate = GetDate()
+
+	DECLARE @Direction					SMALLINT,
+			@AssociatedAccountId		INT, -- Owner’s Capital/Investment or Drawings account
+			@ContactName				NVARCHAR(100),
+			@ReferencePrefix			NVARCHAR(3)
+	
+	IF (@TransactionTypeId = 2) -- Expense
+	BEGIN
+		SET @Direction = 1 -- Debit for Expense
+		SET @ReferencePrefix = 'EXP' -- Prefix for Expense transactions
+		SET @AssociatedAccountId = 3 -- Owner’s Capital/Investment account
+	END
+	ELSE IF (@TransactionTypeId = 3) -- Income
+	BEGIN
+		SET @Direction = -1 -- Credit for Income
+		SET @ReferencePrefix = 'INC' -- Prefix for Income transactions
+		SET @AssociatedAccountId = 4 -- Owner’s Drawings account
+	END
+
+	DECLARE @Reference NVARCHAR(256) = @ReferencePrefix + '-' + CONVERT(NVARCHAR(20), @Date, 112) + '-' + CONVERT(VARCHAR(10), @ContactId)
+
+    INSERT INTO [finance].[Transaction] (TransactionTypeId, [Date], Reference, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
+	VALUES (@TransactionTypeId, @Date, @Reference, 0, @CurrentUserId, SYSDATETIME(), @CurrentUserId, SYSDATETIME())
+
+	SELECT @TransactionId = SCOPE_IDENTITY()
+
+    INSERT INTO [finance].[TransactionDetail] (TransactionId, AccountId, [Date], [Description], Amount, Direction, ContactId, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
+	VALUES (@TransactionId, @AccountId, @Date, @Description, @Amount, @Direction, @ContactId, 0, @CurrentUserId, SYSDATETIME(), @CurrentUserId, SYSDATETIME())
+	SELECT @TransactionDetailId = SCOPE_IDENTITY()
+
+    INSERT INTO [finance].[TransactionDetail] (TransactionId, AccountId, [Date], [Description], Amount, Direction, ContactId, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
+	VALUES (@TransactionId, @AssociatedAccountId, @Date, @Description, @Amount, @Direction * -1, @ContactId, 0, @CurrentUserId, SYSDATETIME(), @CurrentUserId, SYSDATETIME())
+
+	SET @Success = 1
+
+	SET @Err = @@Error
+
+	RETURN @Err
+END

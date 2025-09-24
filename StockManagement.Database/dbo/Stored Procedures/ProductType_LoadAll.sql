@@ -1,8 +1,10 @@
-﻿-- =========================================================
+﻿-- ============================================================
 -- Author:		Dave Brown
 -- Create date: 23 May 2025
 -- Description:	Get Product Types
--- =========================================================
+-- ============================================================
+-- 21 Aug 2025 - Dave Brown - Added Default Cost and Sale price
+-- ============================================================
 CREATE PROCEDURE [dbo].[ProductType_LoadAll]
 AS
 BEGIN
@@ -12,6 +14,8 @@ BEGIN
 	SELECT
 		[Id],
 		[ProductTypeName],
+		[DefaultCostPrice],
+		[DefaultSalePrice],
 		[Deleted],
 		[AmendUserID],
 		[AmendDate]

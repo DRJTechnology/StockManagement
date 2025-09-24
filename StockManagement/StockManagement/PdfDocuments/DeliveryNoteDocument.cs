@@ -1,21 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using QuestPDF.Fluent;
+﻿using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using StockManagement.Models;
-using StockManagement.Models.Emuns;
+using StockManagement.Models.Enums;
 
 public class DeliveryNoteDocument : IDocument
 {
-    private readonly DeliveryNoteResponseModel _deliveryNote;
-    private readonly byte[] _logoImage;
-    private List<SettingResponseModel> _settings = new();
+    private readonly DeliveryNoteResponseModel deliveryNote;
+    private readonly byte[] logoImage;
+    private List<SettingResponseModel> settings = new();
 
     public DeliveryNoteDocument(DeliveryNoteResponseModel deliveryNote, byte[] logoImage, List<SettingResponseModel> settings)
     {
-        _deliveryNote = deliveryNote;
-        _logoImage = logoImage;
-        _settings = settings;
+        this.deliveryNote = deliveryNote;
+        this.logoImage = logoImage;
+        this.settings = settings;
     }
 
     public DocumentMetadata GetMetadata() => DocumentMetadata.Default;
@@ -37,7 +36,7 @@ public class DeliveryNoteDocument : IDocument
 
     private void ComposeHeader(IContainer container)
     {
-        var title = _deliveryNote.DirectSale ? "Invoice" : "Delivery Note";
+        var title = "Delivery Note";
 
         container.Row(row =>
         {
@@ -45,13 +44,9 @@ public class DeliveryNoteDocument : IDocument
                 {
                     column.Item().PaddingTop(5).Text(title)
                                                 .FontSize(20).SemiBold().FontColor(Colors.Black);
-                    if (_deliveryNote.DirectSale)
-                    {
-                        column.Item().Text($"Invoice Num: {_deliveryNote.Id:D5}");
-                    }
-                    column.Item().Text($"Date: {_deliveryNote.Date:dd/MM/yyyy}");
+                    column.Item().Text($"Date: {deliveryNote.Date:dd/MM/yyyy}");
                 });
-            row.RelativeItem().AlignRight().Height(60).Image(_logoImage);
+            row.RelativeItem().AlignRight().Height(60).Image(logoImage);
         });
 
     }
@@ -74,7 +69,7 @@ public class DeliveryNoteDocument : IDocument
                 {
                     column.Spacing(2);
                     column.Item().BorderBottom(1).PaddingBottom(2).Text("To:").SemiBold();
-                    column.Item().Text(_deliveryNote.LocationName);
+                    column.Item().Text(deliveryNote.LocationName);
                 });
                 row.ConstantItem(50);
                 row.RelativeItem().Column(column =>
@@ -96,11 +91,6 @@ public class DeliveryNoteDocument : IDocument
                 columns.RelativeColumn(3); // Product Type  
                 columns.RelativeColumn(8); // Product Name  
                 columns.RelativeColumn(1); // Quantity  
-                if (_deliveryNote.DirectSale)
-                {
-                    columns.RelativeColumn(2); // Unit Price  
-                    columns.RelativeColumn(2); // Total
-                }
             });
 
             table.Header(header =>
@@ -108,28 +98,18 @@ public class DeliveryNoteDocument : IDocument
                 header.Cell().Element(CellStyle).Text("Type").SemiBold();
                 header.Cell().Element(CellStyle).Text("Product Name").SemiBold();
                 header.Cell().Element(CellStyle).AlignRight().Text("Qty").SemiBold();
-                if (_deliveryNote.DirectSale)
-                {
-                    header.Cell().Element(CellStyle).AlignRight().Text("Unit").SemiBold();
-                    header.Cell().Element(CellStyle).AlignRight().Text("Total").SemiBold();
-                }
 
                 IContainer CellStyle(IContainer container) =>
                     container.DefaultTextStyle(x => x.FontSize(12).SemiBold());
             });
 
             var totalQuantity = 0;
-            foreach (var item in _deliveryNote.DetailList)
+            foreach (var item in deliveryNote.DetailList)
             {
                 totalQuantity += item.Quantity;
                 table.Cell().Element(CellStyle).Text(item.ProductTypeName);
                 table.Cell().Element(CellStyle).Text(item.ProductName);
                 table.Cell().Element(CellStyle).AlignRight().Text(item.Quantity.ToString());
-                if (_deliveryNote.DirectSale)
-                {
-                    table.Cell().Element(CellStyle);
-                    table.Cell().Element(CellStyle);
-                }
             }
 
             IContainer CellStyle(IContainer container) =>
@@ -139,11 +119,6 @@ public class DeliveryNoteDocument : IDocument
             // Add the totals column
             table.Cell().ColumnSpan(2).Element(TotalCellStyle).Text("Total");
             table.Cell().Element(TotalCellStyle).AlignRight().Text(totalQuantity.ToString());
-            if (_deliveryNote.DirectSale)
-            {
-                table.Cell().Element(TotalCellStyle);
-                table.Cell().Element(TotalCellStyle);
-            }
 
             IContainer TotalCellStyle(IContainer container) =>
                 container.DefaultTextStyle(x => x.FontSize(11).Bold())
@@ -153,39 +128,17 @@ public class DeliveryNoteDocument : IDocument
 
     private void ComposeFooter(IContainer container)
     {
-        if (_deliveryNote.DirectSale)
+        container.Row(row =>
         {
-            container.Row(row =>
-            {
-                row.RelativeItem().Column(column =>
-                {
-                    column.Item().Text("Payment information:").FontSize(10);
-                    column.Item().Text($"Account Name: {GetSetting(SettingEnum.BankAccountName)}").FontSize(10);
-                    column.Item().Text($"Account Number: {GetSetting(SettingEnum.BankAccountNumber)}").FontSize(10);
-                    column.Item().Text($"Account Sort Code: {GetSetting(SettingEnum.BankAccountSortCode)}").FontSize(10);
-                });
-                row.RelativeItem().AlignBottom().Column(column =>
-                {
-                    column.Item().AlignRight().AlignBottom().Text(GetSetting(SettingEnum.BusinessWebsite))
-                        .FontSize(10)
-                        .FontColor(Colors.Blue.Medium);
-                });
-            });
-        }
-        else
-        {
-            container.Row(row =>
-            {
-                row.RelativeItem().AlignCenter().Text(GetSetting(SettingEnum.BusinessWebsite))
-                    .FontSize(10)
-                    .FontColor(Colors.Blue.Medium);
-            });
-        }
+            row.RelativeItem().AlignCenter().Text(GetSetting(SettingEnum.BusinessWebsite))
+                .FontSize(10)
+                .FontColor(Colors.Blue.Medium);
+        });
     }
 
     private string GetSetting(SettingEnum settingEnum)
     {
-        var setting = _settings.FirstOrDefault(s => s.Id == (int)settingEnum);
+        var setting = settings.FirstOrDefault(s => s.Id == (int)settingEnum);
         return setting?.SettingValue ?? string.Empty;
     }
 }

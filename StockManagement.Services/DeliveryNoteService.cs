@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using StockManagement.Models;
 using StockManagement.Models.Dto;
 using StockManagement.Repositories.Interfaces;

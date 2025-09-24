@@ -51,7 +51,7 @@
                                 <option value="">-- Select Action --</option>
                                 @if (Lookups?.ActionList != null)
                                 {
-                                    foreach (var action in Lookups.ActionList)
+                                    foreach (var action in Lookups.ActionList.Where(a => a.Id != 1 && a.Id != 5).ToList())
                                     {
                                         <option value="@action.Id">@action.ActionName</option>
                                     }
@@ -74,6 +74,10 @@
                         <div class="mb-2">
                             <label>Quantity:</label>
                             <InputNumber class="form-control" @bind-Value="EditActivity.Quantity" />
+                        </div>
+                        <div class="mb-2">
+                            <label>Notes:</label>
+                            <InputTextArea class="form-control" @bind-Value="EditActivity.Notes" autocomplete="off" rows="5" />
                         </div>
                         <div class="d-flex justify-content-end">
                             <button class="btn btn-success" type="submit">Save</button>
