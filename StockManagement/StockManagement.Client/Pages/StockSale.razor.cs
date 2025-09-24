@@ -78,14 +78,7 @@ public partial class StockSaleBase : ComponentBase
     { 
         get
         {
-            if (EditStockSale.DetailList.Count>1)
-            {
-                return EditStockSale.DetailList.Sum(ss => ss.Quantity);
-            }
-            else
-            {
-                return 0;
-            }
+            return EditStockSale.DetailList.Sum(ss => ss.Quantity);
         } 
     }
 
