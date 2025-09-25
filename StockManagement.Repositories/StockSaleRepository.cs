@@ -6,7 +6,7 @@ using System.Data;
 
 namespace StockManagement.Repositories
 {
-    public class StockSaleRepository(IDbConnection dbConnection) : IStockSaleRepository
+    public class StockSaleRepository(IDbConnection dbConnection, IErrorLogRepository errorLogRepository) : IStockSaleRepository
     {
         public async Task<bool> ConfirmStockSaleAsync(int currentUserId, StockSaleConfirmationModel stockSaleConfirmation)
         {
@@ -41,11 +41,13 @@ namespace StockManagement.Repositories
                 }
                 else
                 {
-                    throw new UnauthorizedAccessException();
+                    await errorLogRepository.LogErrorAsync(currentUserId, "StockSaleRepository.ConfirmStockSaleAsync", null, null, null, null, "Stored procedure returned Success = false");
+                    throw new UnauthorizedAccessException("Failed to confirm stock sale");
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!(ex is UnauthorizedAccessException))
             {
+                await errorLogRepository.LogExceptionAsync(currentUserId, "StockSaleRepository.ConfirmStockSaleAsync", ex);
                 throw;
             }
         }
@@ -69,79 +71,115 @@ namespace StockManagement.Repositories
                 }
                 else
                 {
-                    throw new UnauthorizedAccessException();
+                    await errorLogRepository.LogErrorAsync(currentUserId, "StockSaleRepository.ConfirmStockSalePaymentAsync", null, null, null, null, "Stored procedure returned Success = false");
+                    throw new UnauthorizedAccessException("Failed to confirm stock sale payment");
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!(ex is UnauthorizedAccessException))
             {
+                await errorLogRepository.LogExceptionAsync(currentUserId, "StockSaleRepository.ConfirmStockSalePaymentAsync", ex);
                 throw;
             }
         }
 
         public async Task<int> CreateAsync(int currentUserId, StockSaleDto stockSaleDto)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
-            parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
-            parameters.Add("@Date", stockSaleDto.Date);
-            parameters.Add("@LocationId", stockSaleDto.LocationId);
-            parameters.Add("@ContactId", stockSaleDto.ContactId);
-            parameters.Add("@Deleted", stockSaleDto.Deleted);
-            parameters.Add("@CurrentUserId", currentUserId);
-
-            await dbConnection.ExecuteAsync("dbo.StockSale_Create", parameters, commandType: CommandType.StoredProcedure);
-
-            if (parameters.Get<bool>("@Success"))
+            try
             {
-                return parameters.Get<int>("@Id");
+                var parameters = new DynamicParameters();
+                parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+                parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
+                parameters.Add("@Date", stockSaleDto.Date);
+                parameters.Add("@LocationId", stockSaleDto.LocationId);
+                parameters.Add("@ContactId", stockSaleDto.ContactId);
+                parameters.Add("@Deleted", stockSaleDto.Deleted);
+                parameters.Add("@CurrentUserId", currentUserId);
+
+                await dbConnection.ExecuteAsync("dbo.StockSale_Create", parameters, commandType: CommandType.StoredProcedure);
+
+                if (parameters.Get<bool>("@Success"))
+                {
+                    return parameters.Get<int>("@Id");
+                }
+                else
+                {
+                    await errorLogRepository.LogErrorAsync(currentUserId, "StockSaleRepository.CreateAsync", null, null, null, null, "Stored procedure returned Success = false");
+                    throw new UnauthorizedAccessException("Failed to create stock sale");
+                }
             }
-            else
+            catch (Exception ex) when (!(ex is UnauthorizedAccessException))
             {
-                throw new UnauthorizedAccessException();
+                await errorLogRepository.LogExceptionAsync(currentUserId, "StockSaleRepository.CreateAsync", ex);
+                throw;
             }
         }
 
         public async Task<bool> DeleteAsync(int currentUserId, int stockSaleId)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
-            parameters.Add("@StockSaleId", stockSaleId);
-            parameters.Add("@CurrentUserId", currentUserId);
-
-            await dbConnection.ExecuteAsync("dbo.StockSale_Delete", parameters, commandType: CommandType.StoredProcedure);
-
-            if (parameters.Get<bool>("@Success"))
+            try
             {
-                return true;
+                var parameters = new DynamicParameters();
+                parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+                parameters.Add("@StockSaleId", stockSaleId);
+                parameters.Add("@CurrentUserId", currentUserId);
+
+                await dbConnection.ExecuteAsync("dbo.StockSale_Delete", parameters, commandType: CommandType.StoredProcedure);
+
+                if (parameters.Get<bool>("@Success"))
+                {
+                    return true;
+                }
+                else
+                {
+                    await errorLogRepository.LogErrorAsync(currentUserId, "StockSaleRepository.DeleteAsync", null, null, null, null, "Stored procedure returned Success = false");
+                    throw new UnauthorizedAccessException("Failed to delete stock sale");
+                }
             }
-            else
+            catch (Exception ex) when (!(ex is UnauthorizedAccessException))
             {
-                throw new UnauthorizedAccessException();
+                await errorLogRepository.LogExceptionAsync(currentUserId, "StockSaleRepository.DeleteAsync", ex);
+                throw;
             }
         }
 
         public async Task<List<StockSaleDto>> GetAllAsync()
         {
-            var parameters = new DynamicParameters();
-            var stockSales = await dbConnection.QueryAsync<StockSaleDto>("dbo.StockSale_LoadAll", parameters, commandType: CommandType.StoredProcedure);
-            return stockSales.ToList();
+            try
+            {
+                var parameters = new DynamicParameters();
+                var stockSales = await dbConnection.QueryAsync<StockSaleDto>("dbo.StockSale_LoadAll", parameters, commandType: CommandType.StoredProcedure);
+                return stockSales.ToList();
+            }
+            catch (Exception ex)
+            {
+                await errorLogRepository.LogExceptionAsync(0, "StockSaleRepository.GetAllAsync", ex);
+                throw;
+            }
         }
 
         public async Task<StockSaleDto> GetByIdAsync(int stockSaleId)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@Id", stockSaleId);
-
-            var stockSale = new StockSaleDto();
-            using (var multipleResults = await dbConnection.QueryMultipleAsync("dbo.StockSale_LoadById", parameters, commandType: CommandType.StoredProcedure))
+            try
             {
-                stockSale = multipleResults.Read<StockSaleDto>().FirstOrDefault();
+                var parameters = new DynamicParameters();
+                parameters.Add("@Id", stockSaleId);
 
-                if (stockSale != null)
+                var stockSale = new StockSaleDto();
+                using (var multipleResults = await dbConnection.QueryMultipleAsync("dbo.StockSale_LoadById", parameters, commandType: CommandType.StoredProcedure))
                 {
-                    stockSale.DetailList = multipleResults.Read<StockSaleDetailDto>().ToList();
+                    stockSale = multipleResults.Read<StockSaleDto>().FirstOrDefault();
+
+                    if (stockSale != null)
+                    {
+                        stockSale.DetailList = multipleResults.Read<StockSaleDetailDto>().ToList();
+                    }
+                    return stockSale!;
                 }
-                return stockSale!;
+            }
+            catch (Exception ex)
+            {
+                await errorLogRepository.LogExceptionAsync(0, "StockSaleRepository.GetByIdAsync", ex);
+                throw;
             }
         }
 
@@ -162,35 +200,46 @@ namespace StockManagement.Repositories
                 }
                 else
                 {
-                    throw new UnauthorizedAccessException();
+                    await errorLogRepository.LogErrorAsync(currentUserId, "StockSaleRepository.ResetStockSaleAsync", null, null, null, null, "Stored procedure returned Success = false");
+                    throw new UnauthorizedAccessException("Failed to reset stock sale");
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!(ex is UnauthorizedAccessException))
             {
+                await errorLogRepository.LogExceptionAsync(currentUserId, "StockSaleRepository.ResetStockSaleAsync", ex);
                 throw;
             }
         }
 
         public async Task<bool> UpdateAsync(int currentUserId, StockSaleDto stockSaleDto)
         {
-            var parameters = new DynamicParameters();
-            parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
-            parameters.Add("@Id", stockSaleDto.Id);
-            parameters.Add("@Date", stockSaleDto.Date);
-            parameters.Add("@LocationId", stockSaleDto.LocationId);
-            parameters.Add("@ContactId", stockSaleDto.ContactId);
-            parameters.Add("@Deleted", stockSaleDto.Deleted);
-            parameters.Add("@CurrentUserId", currentUserId);
-
-            await dbConnection.ExecuteAsync("dbo.StockSale_Update", parameters, commandType: CommandType.StoredProcedure);
-
-            if (parameters.Get<bool>("@Success"))
+            try
             {
-                return true;
+                var parameters = new DynamicParameters();
+                parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+                parameters.Add("@Id", stockSaleDto.Id);
+                parameters.Add("@Date", stockSaleDto.Date);
+                parameters.Add("@LocationId", stockSaleDto.LocationId);
+                parameters.Add("@ContactId", stockSaleDto.ContactId);
+                parameters.Add("@Deleted", stockSaleDto.Deleted);
+                parameters.Add("@CurrentUserId", currentUserId);
+
+                await dbConnection.ExecuteAsync("dbo.StockSale_Update", parameters, commandType: CommandType.StoredProcedure);
+
+                if (parameters.Get<bool>("@Success"))
+                {
+                    return true;
+                }
+                else
+                {
+                    await errorLogRepository.LogErrorAsync(currentUserId, "StockSaleRepository.UpdateAsync", null, null, null, null, "Stored procedure returned Success = false");
+                    throw new UnauthorizedAccessException("Failed to update stock sale");
+                }
             }
-            else
+            catch (Exception ex) when (!(ex is UnauthorizedAccessException))
             {
-                throw new UnauthorizedAccessException();
+                await errorLogRepository.LogExceptionAsync(currentUserId, "StockSaleRepository.UpdateAsync", ex);
+                throw;
             }
         }
     }

@@ -95,6 +95,7 @@ builder.Services.AddScoped<IStockSaleRepository, StockSaleRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILocationRepository, LocationRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<IErrorLogRepository, ErrorLogRepository>();
 
 // Client data services
 builder.Services.AddScoped<IAccountDataService, ClientAccountDataService>();
