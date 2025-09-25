@@ -6,6 +6,14 @@
 
 <h3>Stock Sale</h3>
 
+@if (HasError)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error:</strong> @ErrorMessage
+        <button type="button" class="btn-close" aria-label="Close" @onclick="ClearError"></button>
+    </div>
+}
+
 @if (IsLoading)
 {
     <p>Loading...</p>

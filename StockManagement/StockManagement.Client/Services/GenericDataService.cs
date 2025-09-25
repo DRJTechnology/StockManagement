@@ -21,12 +21,20 @@ namespace StockManagement.Client.Services
                 var response = await httpClient.PostAsJsonAsync<TCreateEntity>($"api/{ApiControllerName}", entity);
                 if (response == null || !response.IsSuccessStatusCode)
                 {
-                    throw new Exception($"Failed to create {ApiControllerName}.");
+                    throw new Exception($"Failed to create {ApiControllerName}: HTTP {response?.StatusCode}");
                 }
 
                 var returnValue = await response.Content.ReadFromJsonAsync<ApiResponse>();
+                
+                if (returnValue != null && !returnValue.Success)
+                {
+                    var errorMessage = !string.IsNullOrEmpty(returnValue.ErrorMessage) 
+                        ? returnValue.ErrorMessage 
+                        : $"Failed to create {ApiControllerName}";
+                    throw new Exception(errorMessage);
+                }
 
-                return returnValue.CreatedId;
+                return returnValue?.CreatedId ?? 0;
             }
             catch (Exception)
             {
@@ -41,12 +49,20 @@ namespace StockManagement.Client.Services
                 var response = await httpClient.DeleteAsync($"api/{ApiControllerName}/{id}");
                 if (response == null || !response.IsSuccessStatusCode)
                 {
-                    throw new Exception($"Failed to delete {ApiControllerName}.");
+                    throw new Exception($"Failed to delete {ApiControllerName}: HTTP {response?.StatusCode}");
                 }
 
                 var returnValue = await response.Content.ReadFromJsonAsync<ApiResponse>();
+                
+                if (returnValue != null && !returnValue.Success)
+                {
+                    var errorMessage = !string.IsNullOrEmpty(returnValue.ErrorMessage) 
+                        ? returnValue.ErrorMessage 
+                        : $"Failed to delete {ApiControllerName}";
+                    throw new Exception(errorMessage);
+                }
 
-                return returnValue.Success;
+                return returnValue?.Success ?? false;
             }
             catch (Exception)
             {
@@ -86,12 +102,20 @@ namespace StockManagement.Client.Services
                 var response = await httpClient.PutAsJsonAsync<TCreateEntity>($"api/{ApiControllerName}", entity);
                 if (response == null || !response.IsSuccessStatusCode)
                 {
-                    throw new Exception($"Failed to update {ApiControllerName}.");
+                    throw new Exception($"Failed to update {ApiControllerName}: HTTP {response?.StatusCode}");
                 }
 
                 var returnValue = await response.Content.ReadFromJsonAsync<ApiResponse>();
+                
+                if (returnValue != null && !returnValue.Success)
+                {
+                    var errorMessage = !string.IsNullOrEmpty(returnValue.ErrorMessage) 
+                        ? returnValue.ErrorMessage 
+                        : $"Failed to update {ApiControllerName}";
+                    throw new Exception(errorMessage);
+                }
 
-                return returnValue.CreatedId > 0;
+                return returnValue?.CreatedId > 0;
             }
             catch (Exception)
             {
