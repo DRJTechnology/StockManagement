@@ -23,27 +23,10 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Get");
+                logger.LogError(ex, $"{nameof(ProductController)}: Get");
                 return this.BadRequest();
             }
         }
-
-        //// GET api/<ProductController>/5
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> Get(int id)
-        //{
-        //    try
-        //    {
-        //        var appUser = await UserAccessor.GetRequiredUserAsync(HttpContext);
-        //        var product = await productService.GetByIdAsync(appUser.Id, id);
-        //        return this.Ok(product);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        logger.LogError(ex, $"GetById{id}");
-        //        return this.BadRequest();
-        //    }
-        //}
 
         // POST api/<ProductController>
         [HttpPost]
@@ -63,7 +46,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"Post");
+                logger.LogError(ex, $"{nameof(ProductController)}: Post");
                 return new ApiResponse()
                 {
                     Success = false,
@@ -99,7 +82,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"Put");
+                logger.LogError(ex, $"{nameof(ProductController)}: Put");
                 return new ApiResponse()
                 {
                     Success = false,
@@ -126,7 +109,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"Delete");
+                logger.LogError(ex, $"{nameof(ProductController)}: Delete");
                 return new ApiResponse()
                 {
                     Success = false,

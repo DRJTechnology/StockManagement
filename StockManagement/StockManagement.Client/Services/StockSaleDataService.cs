@@ -19,12 +19,20 @@ namespace StockManagement.Client.Services
                 var response = await httpClient.PostAsJsonAsync<StockSaleConfirmationModel>($"api/{ApiControllerName}/ConfirmStockSale", stockSaleConfirmation);
                 if (response == null || !response.IsSuccessStatusCode)
                 {
-                    throw new Exception($"Failed to confirm stock sale.");
+                    throw new Exception($"Failed to confirm stock sale: HTTP {response?.StatusCode}");
                 }
 
                 var returnValue = await response.Content.ReadFromJsonAsync<ApiResponse>();
+                
+                if (returnValue != null && !returnValue.Success)
+                {
+                    var errorMessage = !string.IsNullOrEmpty(returnValue.ErrorMessage) 
+                        ? returnValue.ErrorMessage 
+                        : "Failed to confirm stock sale";
+                    throw new Exception(errorMessage);
+                }
 
-                return returnValue.Success;
+                return returnValue?.Success ?? false;
             }
             catch (Exception)
             {
@@ -39,12 +47,20 @@ namespace StockManagement.Client.Services
                 var response = await httpClient.PostAsJsonAsync<StockSaleConfirmPaymentModel>($"api/{ApiControllerName}/ConfirmStockSalePayment", stockSaleConfirmPaymentModel);
                 if (response == null || !response.IsSuccessStatusCode)
                 {
-                    throw new Exception($"Failed to confirm stock sale payment.");
+                    throw new Exception($"Failed to confirm stock sale payment: HTTP {response?.StatusCode}");
                 }
 
                 var returnValue = await response.Content.ReadFromJsonAsync<ApiResponse>();
+                
+                if (returnValue != null && !returnValue.Success)
+                {
+                    var errorMessage = !string.IsNullOrEmpty(returnValue.ErrorMessage) 
+                        ? returnValue.ErrorMessage 
+                        : "Failed to confirm stock sale payment";
+                    throw new Exception(errorMessage);
+                }
 
-                return returnValue.Success;
+                return returnValue?.Success ?? false;
             }
             catch (Exception)
             {
@@ -59,12 +75,20 @@ namespace StockManagement.Client.Services
                 var response = await httpClient.PostAsJsonAsync<int>($"api/{ApiControllerName}/ResetStockSale", stockSaleId);
                 if (response == null || !response.IsSuccessStatusCode)
                 {
-                    throw new Exception($"Failed to reset stock sale.");
+                    throw new Exception($"Failed to reset stock sale: HTTP {response?.StatusCode}");
                 }
 
                 var returnValue = await response.Content.ReadFromJsonAsync<ApiResponse>();
+                
+                if (returnValue != null && !returnValue.Success)
+                {
+                    var errorMessage = !string.IsNullOrEmpty(returnValue.ErrorMessage) 
+                        ? returnValue.ErrorMessage 
+                        : "Failed to reset stock sale";
+                    throw new Exception(errorMessage);
+                }
 
-                return returnValue.Success;
+                return returnValue?.Success ?? false;
             }
             catch (Exception)
             {

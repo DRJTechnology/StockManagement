@@ -19,7 +19,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "GetSalesReport");
+                logger.LogError(ex, $"{nameof(ReportController)}: GetSalesReport");
                 return this.BadRequest();
             }
         }
@@ -34,7 +34,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "GetStockReport");
+                logger.LogError(ex, $"{nameof(ReportController)}: GetStockReport");
                 return this.BadRequest();
             }
         }
@@ -49,7 +49,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "GetBalanceSheetReport");
+                logger.LogError(ex, $"{nameof(ReportController)}: GetBalanceSheetReport");
                 return this.BadRequest();
             }
         }
@@ -64,7 +64,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "GetInventoryValueReport");
+                logger.LogError(ex, $"{nameof(ReportController)}: GetInventoryValueReport");
                 return this.BadRequest();
             }
         }

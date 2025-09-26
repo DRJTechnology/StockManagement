@@ -9,17 +9,10 @@ namespace StockManagement.Repositories.Finance
     {
         public async Task<List<AccountTypeDto>> GetAllAsync()
         {
-            try
-            {
-                var parameters = new DynamicParameters();
+            var parameters = new DynamicParameters();
 
-                var productTypeList = await dbConnection.QueryAsync<AccountTypeDto>("finance.AccountType_LoadAll", parameters, commandType: CommandType.StoredProcedure);
-                return productTypeList.Cast<AccountTypeDto>().ToList();
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
+            var productTypeList = await dbConnection.QueryAsync<AccountTypeDto>("finance.AccountType_LoadAll", parameters, commandType: CommandType.StoredProcedure);
+            return productTypeList.Cast<AccountTypeDto>().ToList();
         }
     }
 }

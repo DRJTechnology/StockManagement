@@ -19,7 +19,7 @@ namespace StockManagement.ApiControllers.Finance
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Get");
+                logger.LogError(ex, $"{nameof(AccountTypeController)}: Get");
                 return BadRequest();
             }
         }

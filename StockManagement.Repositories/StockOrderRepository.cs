@@ -33,44 +33,37 @@ namespace StockManagement.Repositories
 
         public async Task<bool> CreateStockOrderPayments(int currentUserId, StockOrderPaymentsCreateModel stockOrderDetailPayments)
         {
-            try
+            var recordList = new DataTable();
+            recordList.Columns.Add("UnitPrice", typeof(decimal));
+            recordList.Columns.Add("StockOrderDetailId", typeof(int));
+            recordList.Columns.Add("ProductId", typeof(int));
+            recordList.Columns.Add("ProductTypeId", typeof(int));
+            recordList.Columns.Add("Quantity", typeof(int));
+
+            foreach (var item in stockOrderDetailPayments.StockOrderDetailPayments)
             {
-                var recordList = new DataTable();
-                recordList.Columns.Add("UnitPrice", typeof(decimal));
-                recordList.Columns.Add("StockOrderDetailId", typeof(int));
-                recordList.Columns.Add("ProductId", typeof(int));
-                recordList.Columns.Add("ProductTypeId", typeof(int));
-                recordList.Columns.Add("Quantity", typeof(int));
-
-                foreach (var item in stockOrderDetailPayments.StockOrderDetailPayments)
-                {
-                    recordList.Rows.Add(item.UnitPrice, item.Id, item.ProductId, item.ProductTypeId, item.Quantity);
-                }
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
-                parameters.Add("@StockOrderId", stockOrderDetailPayments.StockOrderId);
-                parameters.Add("@ContactId", stockOrderDetailPayments.ContactId);
-                parameters.Add("@Cost", stockOrderDetailPayments.Cost);
-                parameters.Add("@Description", stockOrderDetailPayments.Description);
-                parameters.Add("@PaymentDate", stockOrderDetailPayments.PaymentDate);
-                parameters.Add("@StockPaymentDetails", recordList.AsTableValuedParameter("[finance].[StockPaymentTableType]"));
-                parameters.Add("@CurrentUserId", currentUserId);
-
-                await dbConnection.ExecuteAsync("dbo.StockOrder_CreateStockOrderPayments", parameters, commandType: CommandType.StoredProcedure);
-
-                if (parameters.Get<bool>("@Success"))
-                {
-                    return true;
-                }
-                else
-                {
-                    throw new UnauthorizedAccessException();
-                }
+                recordList.Rows.Add(item.UnitPrice, item.Id, item.ProductId, item.ProductTypeId, item.Quantity);
             }
-            catch (Exception ex)
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+            parameters.Add("@StockOrderId", stockOrderDetailPayments.StockOrderId);
+            parameters.Add("@ContactId", stockOrderDetailPayments.ContactId);
+            parameters.Add("@Cost", stockOrderDetailPayments.Cost);
+            parameters.Add("@Description", stockOrderDetailPayments.Description);
+            parameters.Add("@PaymentDate", stockOrderDetailPayments.PaymentDate);
+            parameters.Add("@StockPaymentDetails", recordList.AsTableValuedParameter("[finance].[StockPaymentTableType]"));
+            parameters.Add("@CurrentUserId", currentUserId);
+
+            await dbConnection.ExecuteAsync("dbo.StockOrder_CreateStockOrderPayments", parameters, commandType: CommandType.StoredProcedure);
+
+            if (parameters.Get<bool>("@Success"))
             {
-                throw;
+                return true;
+            }
+            else
+            {
+                throw new UnauthorizedAccessException();
             }
         }
 
@@ -120,27 +113,20 @@ namespace StockManagement.Repositories
 
         public async Task<bool> MarkStockReceivedAsync(int currentUserId, int stockOrderId)
         {
-            try
+            var parameters = new DynamicParameters();
+            parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+            parameters.Add("@StockOrderId", stockOrderId);
+            parameters.Add("@CurrentUserId", currentUserId);
+
+            await dbConnection.ExecuteAsync("dbo.StockOrder_ActivateStock", parameters, commandType: CommandType.StoredProcedure);
+
+            if (parameters.Get<bool>("@Success"))
             {
-                var parameters = new DynamicParameters();
-                parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
-                parameters.Add("@StockOrderId", stockOrderId);
-                parameters.Add("@CurrentUserId", currentUserId);
-
-                await dbConnection.ExecuteAsync("dbo.StockOrder_ActivateStock", parameters, commandType: CommandType.StoredProcedure);
-
-                if (parameters.Get<bool>("@Success"))
-                {
-                    return true;
-                }
-                else
-                {
-                    throw new UnauthorizedAccessException();
-                }
+                return true;
             }
-            catch (Exception ex)
+            else
             {
-                throw;
+                throw new UnauthorizedAccessException();
             }
         }
 

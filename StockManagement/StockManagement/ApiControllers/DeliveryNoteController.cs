@@ -22,7 +22,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "GetById");
+                logger.LogError(ex, $"{nameof(DeliveryNoteController)}: GetById");
                 return this.BadRequest();
             }
         }
@@ -37,7 +37,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Get");
+                logger.LogError(ex, $"{nameof(DeliveryNoteController)}: Get");
                 return BadRequest();
             }
         }
@@ -58,7 +58,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Post");
+                logger.LogError(ex, $"{nameof(DeliveryNoteController)}: Post");
                 return new ApiResponse()
                 {
                     Success = false,
@@ -92,7 +92,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Put");
+                logger.LogError(ex, $"{nameof(DeliveryNoteController)}: Put");
                 return new ApiResponse()
                 {
                     Success = false,
@@ -117,7 +117,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Delete");
+                logger.LogError(ex, $"{nameof(DeliveryNoteController)}: Delete");
                 return new ApiResponse()
                 {
                     Success = false,

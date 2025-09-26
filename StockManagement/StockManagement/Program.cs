@@ -61,6 +61,7 @@ builder.Services.AddScoped<IActivityService, ActivityService>();
 builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IDeliveryNoteDetailService, DeliveryNoteDetailService>();
 builder.Services.AddScoped<IDeliveryNoteService, DeliveryNoteService>();
+builder.Services.AddScoped<IErrorLogService, ErrorLogService>();
 builder.Services.AddScoped<ILookupsService, LookupsService>();
 builder.Services.AddScoped<IInventoryBatchService, InventoryBatchService>();
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -82,6 +83,7 @@ builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IContactRepository, ContactRepository>();
 builder.Services.AddScoped<IDeliveryNoteDetailRepository, DeliveryNoteDetailRepository>();
 builder.Services.AddScoped<IDeliveryNoteRepository, DeliveryNoteRepository>();
+builder.Services.AddScoped<IErrorLogRepository, ErrorLogRepository>();
 builder.Services.AddScoped<IInventoryBatchRepository, InventoryBatchRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
@@ -116,6 +118,12 @@ builder.Services.AddScoped<IStockSaleDataService, ClientStockSaleDataService>();
 builder.Services.AddScoped<IStockSaleDetailDataService, ClientStockSaleDetailDataService>();
 builder.Services.AddScoped<ILocationDataService, ClientLocationDataService>();
 builder.Services.AddScoped<ITransactionDataService, ClientTransactionDataService>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IUserContextAccessor, UserContextAccessor>();
+
+// Add the custom logger provider for logging to the database
+builder.Services.AddSingleton<ILoggerProvider, DatabaseLoggerProvider>();
 
 // Auto Mapper Configurations
 var mappingConfig = new MapperConfiguration(mc =>

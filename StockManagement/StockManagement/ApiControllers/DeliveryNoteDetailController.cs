@@ -28,7 +28,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Post");
+                logger.LogError(ex, $"{nameof(DeliveryNoteDetailController)}: Post");
                 return new ApiResponse()
                 {
                     Success = false,
@@ -62,7 +62,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Put");
+                logger.LogError(ex, $"{nameof(DeliveryNoteDetailController)}: Put");
                 return new ApiResponse()
                 {
                     Success = false,
@@ -87,7 +87,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Delete");
+                logger.LogError(ex, $"{nameof(DeliveryNoteDetailController)}: Delete");
                 return new ApiResponse()
                 {
                     Success = false,
