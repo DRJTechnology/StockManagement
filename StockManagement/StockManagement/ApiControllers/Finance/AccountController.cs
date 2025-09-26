@@ -23,7 +23,7 @@ namespace StockManagement.ApiControllers.Finance
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "GetAll");
+                logger.LogError(ex, $"{nameof(AccountController)}: Get");
                 return BadRequest();
             }
         }
@@ -38,7 +38,7 @@ namespace StockManagement.ApiControllers.Finance
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "GetByType");
+                logger.LogError(ex, $"{nameof(AccountController)}: GetByType");
                 return BadRequest();
             }
         }
@@ -54,7 +54,7 @@ namespace StockManagement.ApiControllers.Finance
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"GetById{id}");
+                logger.LogError(ex, $"{nameof(AccountController)}: Get");
                 return BadRequest();
             }
         }
@@ -77,7 +77,7 @@ namespace StockManagement.ApiControllers.Finance
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"Post");
+                logger.LogError(ex, $"{nameof(AccountController)}: Post");
                 return new ApiResponse()
                 {
                     Success = false,
@@ -113,7 +113,7 @@ namespace StockManagement.ApiControllers.Finance
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"Put");
+                logger.LogError(ex, $"{nameof(AccountController)}: Put");
                 return new ApiResponse()
                 {
                     Success = false,
@@ -140,7 +140,7 @@ namespace StockManagement.ApiControllers.Finance
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"Delete");
+                logger.LogError(ex, $"{nameof(AccountController)}: Delete");
                 return new ApiResponse()
                 {
                     Success = false,

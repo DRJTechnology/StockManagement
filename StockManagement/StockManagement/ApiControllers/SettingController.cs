@@ -22,7 +22,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Get");
+                logger.LogError(ex, $"{nameof(SettingController)}: Get");
                 return this.BadRequest();
             }
         }
@@ -53,7 +53,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"Put");
+                logger.LogError(ex, $"{nameof(SettingController)}: Put");
                 return new ApiResponse()
                 {
                     Success = false,

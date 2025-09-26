@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StockManagement.Client.Pages;
 using StockManagement.Models;
-using StockManagement.Services;
 using StockManagement.Services.Interfaces;
 
 namespace StockManagement.ApiControllers
@@ -22,7 +20,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "GetFiltered");
+                logger.LogError(ex, $"{nameof(InventoryBatchController)}: GetFiltered");
                 return this.BadRequest();
             }
         }
@@ -37,7 +35,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "GetActivity");
+                logger.LogError(ex, $"{nameof(InventoryBatchController)}: GetActivity");
                 return this.BadRequest();
             }
         }
@@ -52,7 +50,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "GetSaleCost");
+                logger.LogError(ex, $"{nameof(InventoryBatchController)}: GetSaleCost");
                 return this.BadRequest();
             }
         }

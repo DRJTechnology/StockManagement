@@ -1,25 +1,30 @@
 using Dapper;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
+using StockManagement.Models.Dto;
 using StockManagement.Repositories.Interfaces;
 using System.Data;
 
 namespace StockManagement.Repositories
 {
-    public class ErrorLogRepository(IDbConnection dbConnection) : IErrorLogRepository
+    public class ErrorLogRepository(IConfiguration configuration) : IErrorLogRepository
     {
-        public async Task<int?> LogErrorAsync(int? userId, string procedureName, int? errorNumber, int? errorSeverity, int? errorState, int? errorLine, string errorMessage)
+        public async Task<int?> LogErrorAsync(ErrorLogDto errorDetails)
         {
             try
             {
+                using var dbConnection = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
+
+                await dbConnection.OpenAsync();
+
                 var parameters = new DynamicParameters();
                 parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
                 parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
-                parameters.Add("@ProcedureName", procedureName);
-                parameters.Add("@ErrorNumber", errorNumber);
-                parameters.Add("@ErrorSeverity", errorSeverity);
-                parameters.Add("@ErrorState", errorState);
-                parameters.Add("@ErrorLine", errorLine);
-                parameters.Add("@ErrorMessage", errorMessage);
-                parameters.Add("@UserId", userId);
+                parameters.Add("@LogLevel", errorDetails.LogLevel);
+                parameters.Add("@Location", errorDetails.Location);
+                parameters.Add("@ErrorMessage", errorDetails.ErrorMessage);
+                parameters.Add("@StackTrace", errorDetails.StackTrace);
+                parameters.Add("@UserId", errorDetails.UserId);
 
                 await dbConnection.ExecuteAsync("dbo.ErrorLog_Create", parameters, commandType: CommandType.StoredProcedure);
 
@@ -29,24 +34,11 @@ namespace StockManagement.Repositories
                 }
                 return null;
             }
-            catch
+            catch (Exception ex)
             {
                 // If we can't log the error, we shouldn't throw another exception
                 return null;
             }
-        }
-
-        public async Task<int?> LogExceptionAsync(int userId, string procedureName, Exception exception)
-        {
-            return await LogErrorAsync(
-                userId,
-                procedureName,
-                null, // No SQL error number for C# exceptions
-                null, // No SQL error severity for C# exceptions
-                null, // No SQL error state for C# exceptions
-                null, // No SQL error line for C# exceptions
-                $"{exception.GetType().Name}: {exception.Message}"
-            );
         }
     }
 }

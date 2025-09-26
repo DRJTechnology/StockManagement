@@ -1,8 +1,8 @@
 using StockManagement.Models.Dto;
 
-namespace StockManagement.Repositories.Interfaces
+namespace StockManagement.Services.Interfaces
 {
-    public interface IErrorLogRepository
+    public interface IErrorLogService
     {
         Task<int?> LogErrorAsync(ErrorLogDto errorDetails);
     }

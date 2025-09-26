@@ -27,7 +27,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error generating delivery note PDF");
+                logger.LogError(ex, $"{nameof(PdfController)}: GetStockSalePdf");
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while generating the PDF.");
             }
         }
@@ -48,7 +48,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error generating delivery note PDF");
+                logger.LogError(ex, $"{nameof(PdfController)}: GetDeliveryNotePdf");
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while generating the PDF.");
             }
         }

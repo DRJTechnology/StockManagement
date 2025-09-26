@@ -22,7 +22,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Get");
+                logger.LogError(ex, $"{nameof(LocationController)}: Get");
                 return this.BadRequest();
             }
         }
@@ -43,7 +43,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"Post");
+                logger.LogError(ex, $"{nameof(LocationController)}: Post");
                 return new ApiResponse()
                 {
                     Success = false,
@@ -78,7 +78,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"Put");
+                logger.LogError(ex, $"{nameof(LocationController)}: Put");
                 return new ApiResponse()
                 {
                     Success = false,
@@ -104,7 +104,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"Delete");
+                logger.LogError(ex, $"{nameof(LocationController)}: Delete");
                 return new ApiResponse()
                 {
                     Success = false,

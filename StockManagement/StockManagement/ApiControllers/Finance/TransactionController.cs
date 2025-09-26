@@ -20,7 +20,7 @@ namespace StockManagement.ApiControllers.Finance
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "GetTransactionsByAccountType");
+                logger.LogError(ex, $"{nameof(TransactionController)}: GetTransactionsByAccountType");
                 return this.BadRequest();
             }
         }
@@ -35,7 +35,7 @@ namespace StockManagement.ApiControllers.Finance
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "GetTransactionsByAccount");
+                logger.LogError(ex, $"{nameof(TransactionController)}: GetTransactionsByAccount");
                 return this.BadRequest();
             }
         }
@@ -50,7 +50,7 @@ namespace StockManagement.ApiControllers.Finance
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "GetFiltered");
+                logger.LogError(ex, $"{nameof(TransactionController)}: GetFiltered");
                 return this.BadRequest();
             }
         }
@@ -65,7 +65,7 @@ namespace StockManagement.ApiControllers.Finance
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "GetFiltered");
+                logger.LogError(ex, $"{nameof(TransactionController)}: GetTotalAmountFiltered");
                 return this.BadRequest();
             }
         }
@@ -87,7 +87,7 @@ namespace StockManagement.ApiControllers.Finance
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"CreateExpenseIncome");
+                logger.LogError(ex, $"{nameof(TransactionController)}: CreateExpenseIncome");
                 return new ApiResponse()
                 {
                     Success = false,
@@ -122,7 +122,7 @@ namespace StockManagement.ApiControllers.Finance
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"UpdateExpense");
+                logger.LogError(ex, $"{nameof(TransactionController)}: UpdateExpenseIncome");
                 return new ApiResponse()
                 {
                     Success = false,
@@ -148,7 +148,7 @@ namespace StockManagement.ApiControllers.Finance
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"Delete");
+                logger.LogError(ex, $"{nameof(TransactionController)}: DeleteByDetailId");
                 return new ApiResponse()
                 {
                     Success = false,
