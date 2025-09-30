@@ -7,8 +7,8 @@ namespace StockManagement.Client.Services
 {
     public class StockSaleDataService : GenericDataService<StockSaleEditModel, StockSaleResponseModel>, IStockSaleDataService
     {
-        public StockSaleDataService(HttpClient httpClient)
-            : base(httpClient)
+        public StockSaleDataService(HttpClient httpClient, ErrorNotificationService errorService)
+            : base(httpClient, errorService)
         {
             ApiControllerName = "StockSale";
         }
@@ -34,8 +34,9 @@ namespace StockManagement.Client.Services
 
                 return returnValue?.Success ?? false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }
@@ -62,8 +63,9 @@ namespace StockManagement.Client.Services
 
                 return returnValue?.Success ?? false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }
@@ -90,8 +92,9 @@ namespace StockManagement.Client.Services
 
                 return returnValue?.Success ?? false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }

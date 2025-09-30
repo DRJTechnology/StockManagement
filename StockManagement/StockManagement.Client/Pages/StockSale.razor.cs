@@ -146,7 +146,6 @@ public partial class StockSaleBase : ComponentBase
         }
         catch (Exception ex)
         {
-            ErrorMessage = ex.Message;
             IsLoading = false;
             StateHasChanged();
         }

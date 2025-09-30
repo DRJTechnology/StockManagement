@@ -7,11 +7,13 @@ namespace StockManagement.Client.Services
     public abstract class GenericDataService<TCreateEntity, TResponseEntity> : IGenericDataService<TCreateEntity, TResponseEntity>
     {
         protected HttpClient httpClient { get; }
+        protected ErrorNotificationService ErrorService { get; }
         protected string ApiControllerName { get; set; } = string.Empty;
 
-        public GenericDataService(HttpClient httpClient)
+        public GenericDataService(HttpClient httpClient, ErrorNotificationService errorService)
         {
             this.httpClient = httpClient;
+            this.ErrorService = errorService;
         }
 
         public async Task<int> CreateAsync(TCreateEntity entity)
@@ -36,8 +38,9 @@ namespace StockManagement.Client.Services
 
                 return returnValue?.CreatedId ?? 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }
@@ -64,8 +67,9 @@ namespace StockManagement.Client.Services
 
                 return returnValue?.Success ?? false;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }
@@ -77,8 +81,9 @@ namespace StockManagement.Client.Services
                 var returnVal = await httpClient.GetFromJsonAsync<IEnumerable<TResponseEntity>>($"api/{ApiControllerName}");
                 return returnVal;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }
@@ -89,8 +94,9 @@ namespace StockManagement.Client.Services
             {
                 return await httpClient.GetFromJsonAsync<TResponseEntity>($"api/{ApiControllerName}/{id}");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }
@@ -117,8 +123,9 @@ namespace StockManagement.Client.Services
 
                 return returnValue?.CreatedId > 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }

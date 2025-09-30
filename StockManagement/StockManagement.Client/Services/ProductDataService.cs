@@ -5,8 +5,8 @@ namespace StockManagement.Client.Services
 {
     public class ProductDataService : GenericDataService<ProductEditModel, ProductResponseModel>, IProductDataService
     {
-        public ProductDataService(HttpClient httpClient)
-            : base(httpClient)
+        public ProductDataService(HttpClient httpClient, ErrorNotificationService errorService)
+            : base(httpClient, errorService)
         {
             ApiControllerName = "Product";
         }

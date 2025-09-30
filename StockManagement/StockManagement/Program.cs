@@ -136,6 +136,9 @@ builder.Services.AddSingleton(mapper);
 // Add API Endpoints
 builder.Services.AddControllers();
 
+// This is needed for pre-rendering the components on the server
+builder.Services.AddSingleton<ErrorNotificationService>();
+
 var app = builder.Build();
 
 // Set the culture globally to en-GB (UK)

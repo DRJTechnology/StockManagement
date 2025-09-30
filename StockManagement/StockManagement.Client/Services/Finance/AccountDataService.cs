@@ -6,8 +6,8 @@ namespace StockManagement.Client.Services.Finance
 {
     public class AccountDataService : GenericDataService<AccountEditModel, AccountResponseModel>, IAccountDataService
     {
-        public AccountDataService(HttpClient httpClient)
-            : base(httpClient)
+        public AccountDataService(HttpClient httpClient, ErrorNotificationService errorService)
+            : base(httpClient, errorService)
         {
             ApiControllerName = "Account";
         }

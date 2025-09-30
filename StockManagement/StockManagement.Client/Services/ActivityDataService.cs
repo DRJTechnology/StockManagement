@@ -6,8 +6,8 @@ namespace StockManagement.Client.Services
 {
     public class ActivityDataService : GenericDataService<ActivityEditModel, ActivityResponseModel>, IActivityDataService
     {
-        public ActivityDataService(HttpClient httpClient)
-            : base(httpClient)
+        public ActivityDataService(HttpClient httpClient, ErrorNotificationService errorService)
+            : base(httpClient, errorService)
         {
             ApiControllerName = "Activity";
         }
@@ -41,6 +41,7 @@ namespace StockManagement.Client.Services
             }
             catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }
