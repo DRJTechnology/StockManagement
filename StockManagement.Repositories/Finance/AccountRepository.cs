@@ -9,36 +9,29 @@ namespace StockManagement.Repositories.Finance
     {
         public async Task<int> CreateAsync(int currentUserId, AccountDto accountDto)
         {
-            try
+            if (accountDto == null)
             {
-                if (accountDto == null)
-                {
-                    throw new ArgumentNullException(nameof(accountDto));
-                }
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
-                parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
-                parameters.Add("@Name", accountDto.Name);
-                parameters.Add("@Notes", accountDto.Notes);
-                parameters.Add("@AccountTypeId", accountDto.AccountTypeId);
-                parameters.Add("@Active", accountDto.Active);
-                parameters.Add("@CurrentUserId", currentUserId);
-
-                await dbConnection.ExecuteAsync("finance.Account_Create", parameters, commandType: CommandType.StoredProcedure);
-
-                if (parameters.Get<bool>("@Success"))
-                {
-                    return parameters.Get<int>("@Id");
-                }
-                else
-                {
-                    throw new UnauthorizedAccessException();
-                }
+                throw new ArgumentNullException(nameof(accountDto));
             }
-            catch (Exception ex)
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+            parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("@Name", accountDto.Name);
+            parameters.Add("@Notes", accountDto.Notes);
+            parameters.Add("@AccountTypeId", accountDto.AccountTypeId);
+            parameters.Add("@Active", accountDto.Active);
+            parameters.Add("@CurrentUserId", currentUserId);
+
+            await dbConnection.ExecuteAsync("finance.Account_Create", parameters, commandType: CommandType.StoredProcedure);
+
+            if (parameters.Get<bool>("@Success"))
             {
-                throw;
+                return parameters.Get<int>("@Id");
+            }
+            else
+            {
+                throw new UnauthorizedAccessException();
             }
         }
 
@@ -90,36 +83,29 @@ namespace StockManagement.Repositories.Finance
 
         public async Task<bool> UpdateAsync(int currentUserId, AccountDto accountDto)
         {
-            try
+            if (accountDto == null)
             {
-                if (accountDto == null)
-                {
-                    throw new ArgumentNullException(nameof(accountDto));
-                }
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
-                parameters.Add("@Id", accountDto.Id);
-                parameters.Add("@AccountTypeId", accountDto.AccountTypeId);
-                parameters.Add("@Name", accountDto.Name);
-                parameters.Add("@Notes", accountDto.Notes);
-                parameters.Add("@Active", accountDto.Active);
-                parameters.Add("@CurrentUserId", currentUserId);
-
-                await dbConnection.ExecuteAsync("finance.Account_Update", parameters, commandType: CommandType.StoredProcedure);
-
-                if (parameters.Get<bool>("@Success"))
-                {
-                    return true;
-                }
-                else
-                {
-                    throw new UnauthorizedAccessException();
-                }
+                throw new ArgumentNullException(nameof(accountDto));
             }
-            catch (Exception ex)
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+            parameters.Add("@Id", accountDto.Id);
+            parameters.Add("@AccountTypeId", accountDto.AccountTypeId);
+            parameters.Add("@Name", accountDto.Name);
+            parameters.Add("@Notes", accountDto.Notes);
+            parameters.Add("@Active", accountDto.Active);
+            parameters.Add("@CurrentUserId", currentUserId);
+
+            await dbConnection.ExecuteAsync("finance.Account_Update", parameters, commandType: CommandType.StoredProcedure);
+
+            if (parameters.Get<bool>("@Success"))
             {
-                throw;
+                return true;
+            }
+            else
+            {
+                throw new UnauthorizedAccessException();
             }
         }
     }

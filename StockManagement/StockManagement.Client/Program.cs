@@ -37,6 +37,8 @@ builder.Services.AddScoped<ILocationDataService, LocationDataService>();
 builder.Services.AddScoped<ITransactionDataService, TransactionDataService>();
 builder.Services.AddScoped<IInventoryBatchDataService, InventoryBatchDataService>();
 
+builder.Services.AddSingleton<ErrorNotificationService>();
+
 var host = builder.Build();
 
 // Set the culture globally to en-GB (UK)

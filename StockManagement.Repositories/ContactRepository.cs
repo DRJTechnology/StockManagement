@@ -74,36 +74,29 @@ namespace StockManagement.Repositories
 
         public async Task<bool> UpdateAsync(int currentUserId, ContactDto contactDto)
         {
-            try
+            if (contactDto == null)
             {
-                if (contactDto == null)
-                {
-                    throw new ArgumentNullException(nameof(contactDto));
-                }
-
-                var parameters = new DynamicParameters();
-                parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
-                parameters.Add("@Id", contactDto.Id);
-                parameters.Add("@ContactTypeId", contactDto.ContactTypeId);
-                parameters.Add("@Name", contactDto.Name);
-                parameters.Add("@Notes", contactDto.Notes);
-                parameters.Add("@Deleted", contactDto.Deleted);
-                parameters.Add("@CurrentUserId", currentUserId);
-
-                await dbConnection.ExecuteAsync("dbo.Contact_Update", parameters, commandType: CommandType.StoredProcedure);
-
-                if (parameters.Get<bool>("@Success"))
-                {
-                    return true;
-                }
-                else
-                {
-                    throw new UnauthorizedAccessException();
-                }
+                throw new ArgumentNullException(nameof(contactDto));
             }
-            catch (Exception ex)
+
+            var parameters = new DynamicParameters();
+            parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
+            parameters.Add("@Id", contactDto.Id);
+            parameters.Add("@ContactTypeId", contactDto.ContactTypeId);
+            parameters.Add("@Name", contactDto.Name);
+            parameters.Add("@Notes", contactDto.Notes);
+            parameters.Add("@Deleted", contactDto.Deleted);
+            parameters.Add("@CurrentUserId", currentUserId);
+
+            await dbConnection.ExecuteAsync("dbo.Contact_Update", parameters, commandType: CommandType.StoredProcedure);
+
+            if (parameters.Get<bool>("@Success"))
             {
-                throw;
+                return true;
+            }
+            else
+            {
+                throw new UnauthorizedAccessException();
             }
         }
     }

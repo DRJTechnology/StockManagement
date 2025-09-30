@@ -1,0 +1,10 @@
+@rendermode InteractiveWebAssembly
+@inherits ErrorDisplayBase
+
+@if (!string.IsNullOrEmpty(_message))
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error:</strong> @_message
+        <button type="button" class="btn-close" aria-label="Close" @onclick="Clear"></button>
+    </div>
+}

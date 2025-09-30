@@ -47,6 +47,8 @@ public partial class StockSaleBase : ComponentBase
     protected string SelectedItemName { get; set; } = string.Empty;
 
     protected bool IsLoading { get; set; }
+    protected string ErrorMessage { get; set; } = string.Empty;
+    protected bool HasError => !string.IsNullOrEmpty(ErrorMessage);
     protected StockSaleResponseModel EditStockSale { get; set; } = new();
     protected StockSaleDetailEditModel EditStockSaleDetail { get; set; } = new();
     protected StockSaleConfirmationModel StockSaleConfirmationObject { get; set; } = new();
@@ -94,41 +96,59 @@ public partial class StockSaleBase : ComponentBase
     }
     protected async Task HandleValidSubmit()
     {
-        if (EditStockSale.Id == 0)
+        try
         {
-            var newId = await StockSaleService.CreateAsync(EditStockSale);
-            EditStockSale.Id = newId;
+            ErrorMessage = string.Empty;
+            if (EditStockSale.Id == 0)
+            {
+                var newId = await StockSaleService.CreateAsync(EditStockSale);
+                EditStockSale.Id = newId;
+            }
+            else
+            {
+                await StockSaleService.UpdateAsync(EditStockSale);
+            }
+            IsDirty = false;
         }
-        else
+        catch (Exception ex)
         {
-            await StockSaleService.UpdateAsync(EditStockSale);
+            ErrorMessage = ex.Message;
+            StateHasChanged();
         }
-        IsDirty = false;
     }
 
     protected async Task LoadStockSale()
     {
-        if (StockSaleId == 0)
+        try
         {
-            var localNow = await JavascriptMethodsService.GetLocalDateTimeAsync();
-            EditStockSale = new StockSaleResponseModel() { Date = localNow, LocationId = 0, ContactId = 0, DetailList = new List<StockSaleDetailResponseModel>() };
-        }
-        else
-        {
-            EditStockSale = await StockSaleService.GetByIdAsync(StockSaleId);
-            if (EditStockSale == null)
+            ErrorMessage = string.Empty;
+            if (StockSaleId == 0)
             {
-                throw new Exception("Invalid Stock Sale");
+                var localNow = await JavascriptMethodsService.GetLocalDateTimeAsync();
+                EditStockSale = new StockSaleResponseModel() { Date = localNow, LocationId = 0, ContactId = 0, DetailList = new List<StockSaleDetailResponseModel>() };
             }
-        }
-        CreateValidationContext();
+            else
+            {
+                EditStockSale = await StockSaleService.GetByIdAsync(StockSaleId);
+                if (EditStockSale == null)
+                {
+                    throw new Exception("Invalid Stock Sale");
+                }
+            }
+            CreateValidationContext();
 
-        if (EditStockSale.SaleConfirmed)
+            if (EditStockSale.SaleConfirmed)
+            {
+                StockCostPrice = await InventoryBatchService.GetSaleCostAsync(EditStockSale.Id);
+            }
+
+            IsLoading = false;
+        }
+        catch (Exception ex)
         {
-            StockCostPrice = await InventoryBatchService.GetSaleCostAsync(EditStockSale.Id);
+            IsLoading = false;
+            StateHasChanged();
         }
-
-        IsLoading = false;
     }
     protected async Task LoadCustomers()
     {
@@ -215,22 +235,33 @@ public partial class StockSaleBase : ComponentBase
 
     protected async Task HandleDeleteConfirmation(bool confirmed)
     {
-        if (confirmed && ShowDeleteNoteConfirm)
+        try
         {
-            if (confirmed)
+            ErrorMessage = string.Empty;
+            if (confirmed && ShowDeleteNoteConfirm)
             {
-                await StockSaleService.DeleteAsync(EditStockSale.Id);
-                Navigation.NavigateTo("/stock-sale-list");
+                if (confirmed)
+                {
+                    await StockSaleService.DeleteAsync(EditStockSale.Id);
+                    Navigation.NavigateTo("/stock-sale-list");
+                }
             }
-        }
-        else if (confirmed && ShowDeleteDetailConfirm)
-        {
-            await StockSaleDetailService.DeleteAsync(EditStockSaleDetail.Id);
-            EditStockSale.DetailList.RemoveAll(dnd => dnd.Id == EditStockSaleDetail.Id);
-        }
+            else if (confirmed && ShowDeleteDetailConfirm)
+            {
+                await StockSaleDetailService.DeleteAsync(EditStockSaleDetail.Id);
+                EditStockSale.DetailList.RemoveAll(dnd => dnd.Id == EditStockSaleDetail.Id);
+            }
 
-        ShowDeleteNoteConfirm = false;
-        ShowDeleteDetailConfirm = false;
+            ShowDeleteNoteConfirm = false;
+            ShowDeleteDetailConfirm = false;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+            ShowDeleteNoteConfirm = false;
+            ShowDeleteDetailConfirm = false;
+            StateHasChanged();
+        }
     }
 
     protected void ResetStockSale()
@@ -244,16 +275,26 @@ public partial class StockSaleBase : ComponentBase
 
     protected async Task HandleResetConfirmation(bool confirmed)
     {
-        if (confirmed)
+        try
         {
-            await StockSaleService.ResetAsync(EditStockSale.Id);
-            EditStockSale.SaleConfirmed = false;
-            EditStockSale.PaymentReceived = false;
-            EditStockSale.TotalPrice = 0;
-            StockCostPrice = 0;
-        }
+            ErrorMessage = string.Empty;
+            if (confirmed)
+            {
+                await StockSaleService.ResetAsync(EditStockSale.Id);
+                EditStockSale.SaleConfirmed = false;
+                EditStockSale.PaymentReceived = false;
+                EditStockSale.TotalPrice = 0;
+                StockCostPrice = 0;
+            }
 
-        ShowResetConfirm = false;
+            ShowResetConfirm = false;
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+            ShowResetConfirm = false;
+            StateHasChanged();
+        }
     }
 
     protected void EditDetail(StockSaleDetailResponseModel activity)
@@ -303,14 +344,24 @@ public partial class StockSaleBase : ComponentBase
 
     protected async Task HandleConfirmSale()
     {
-        var response = await StockSaleService.ConfirmStockSale(StockSaleConfirmationObject);
-        if (response)
+        try
         {
-            EditStockSale.SaleConfirmed = true;
-            EditStockSale.TotalPrice = StockSaleConfirmationObject.TotalPrice;
-            StockCostPrice = await InventoryBatchService.GetSaleCostAsync(EditStockSale.Id);
+            ErrorMessage = string.Empty;
+            var response = await StockSaleService.ConfirmStockSale(StockSaleConfirmationObject);
+            if (response)
+            {
+                EditStockSale.SaleConfirmed = true;
+                EditStockSale.TotalPrice = StockSaleConfirmationObject.TotalPrice;
+                StockCostPrice = await InventoryBatchService.GetSaleCostAsync(EditStockSale.Id);
+            }
+            ShowSaleConfirmForm = false;
         }
-        ShowSaleConfirmForm = false;
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+            ShowSaleConfirmForm = false;
+            StateHasChanged();
+        }
     }
 
     protected async Task ConfirmSale()
@@ -372,16 +423,32 @@ public partial class StockSaleBase : ComponentBase
 
     protected async Task HandleRecordPayment()
     {
-        var response = await StockSaleService.ConfirmStockSalePayment(StockSaleConfirmPayment);
-        if (response)
+        try
         {
-            EditStockSale.PaymentReceived = true;
+            ErrorMessage = string.Empty;
+            var response = await StockSaleService.ConfirmStockSalePayment(StockSaleConfirmPayment);
+            if (response)
+            {
+                EditStockSale.PaymentReceived = true;
+            }
+            ShowSaleConfirmPayment = false;
         }
-        ShowSaleConfirmPayment = false;
+        catch (Exception ex)
+        {
+            ErrorMessage = ex.Message;
+            ShowSaleConfirmPayment = false;
+            StateHasChanged();
+        }
     }
 
     protected void CancelRecordPaymentSale()
     {
         ShowSaleConfirmPayment = false;
+    }
+
+    protected void ClearError()
+    {
+        ErrorMessage = string.Empty;
+        StateHasChanged();
     }
 }

@@ -39,21 +39,12 @@ namespace StockManagement.Repositories
         }
         public async Task<decimal> GetInventoryValueReportAsync()
         {
-            try
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@TotalValue", dbType: DbType.Currency, direction: ParameterDirection.Output);
-                //parameters.Add("@TotalAmount", dbType: DbType.Currency, direction: ParameterDirection.Output);
+            var parameters = new DynamicParameters();
+            parameters.Add("@TotalValue", dbType: DbType.Currency, direction: ParameterDirection.Output);
 
-                await dbConnection.ExecuteAsync("[finance].[Report_InventoryValue]", parameters, commandType: CommandType.StoredProcedure);
+            await dbConnection.ExecuteAsync("[finance].[Report_InventoryValue]", parameters, commandType: CommandType.StoredProcedure);
 
-                return parameters.Get<decimal>("@TotalValue");
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-
+            return parameters.Get<decimal>("@TotalValue");
         }
     }
 }

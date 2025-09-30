@@ -61,7 +61,7 @@ public partial class StockOrderRecordPaymentModalBase : ComponentBase
             item.UnitPrice = item.Total / item.Quantity;
         }
         CalculatedTotal = _paymentDetail.StockOrderDetailPayments.Sum(d => d.Total);
-        //CalculatedTotal = Math.Round(CalculatedTotal, 2);
+        CalculatedTotal = Math.Round(CalculatedTotal, 2);
     }
     protected bool DisableRecordPayment()
     { 

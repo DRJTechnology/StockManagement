@@ -22,7 +22,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "GetById");
+                logger.LogError(ex, $"{nameof(StockOrderController)}: GetById");
                 return this.BadRequest();
             }
         }
@@ -37,7 +37,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Get");
+                logger.LogError(ex, $"{nameof(StockOrderController)}: Get");
                 return BadRequest();
             }
         }
@@ -58,7 +58,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Post");
+                logger.LogError(ex, $"{nameof(StockOrderController)}: Post");
                 return new ApiResponse()
                 {
                     Success = false,
@@ -92,7 +92,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Put");
+                logger.LogError(ex, $"{nameof(StockOrderController)}: Put");
                 return new ApiResponse()
                 {
                     Success = false,
@@ -117,7 +117,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Delete");
+                logger.LogError(ex, $"{nameof(StockOrderController)}: Delete");
                 return new ApiResponse()
                 {
                     Success = false,
@@ -141,7 +141,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "CreateStockOrderPayments");
+                logger.LogError(ex, $"{nameof(StockOrderController)}: CreateStockOrderPayments");
                 return new ApiResponse()
                 {
                     Success = false,
@@ -165,7 +165,7 @@ namespace StockManagement.ApiControllers
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "MarkStockReceived");
+                logger.LogError(ex, $"{nameof(StockOrderController)}: MarkStockReceived");
                 return new ApiResponse()
                 {
                     Success = false,

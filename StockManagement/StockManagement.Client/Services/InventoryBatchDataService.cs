@@ -8,11 +8,13 @@ namespace StockManagement.Client.Services
     public class InventoryBatchDataService : IInventoryBatchDataService
     {
         protected HttpClient httpClient { get; }
+        protected ErrorNotificationService ErrorService { get; }
         protected string ApiControllerName { get; set; } = string.Empty;
 
-        public InventoryBatchDataService(HttpClient httpClient)
+        public InventoryBatchDataService(HttpClient httpClient, ErrorNotificationService errorService)
         {
             this.httpClient = httpClient;
+            ErrorService = errorService;
             ApiControllerName = "InventoryBatch";
         }
 
@@ -42,6 +44,7 @@ namespace StockManagement.Client.Services
             }
             catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }
@@ -56,14 +59,23 @@ namespace StockManagement.Client.Services
             }
             catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }
 
         public async Task<decimal> GetSaleCostAsync(int stockSaleId)
         {
-            var returnVal = await httpClient.GetFromJsonAsync<decimal>($"api/{ApiControllerName}/GetSaleCost/{stockSaleId}");
-            return returnVal;
+            try
+            {
+                var returnVal = await httpClient.GetFromJsonAsync<decimal>($"api/{ApiControllerName}/GetSaleCost/{stockSaleId}");
+                return returnVal;
+            }
+            catch (Exception ex)
+            {
+                await ErrorService.NotifyErrorAsync(ex.Message);
+                throw;
+            }
         }
     }
 }

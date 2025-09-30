@@ -3,6 +3,8 @@
 -- Create date: 28 Aug 2025
 -- Description:	Create Stock order payments
 -- =========================================================
+-- 30 Sep 2025 - Dave Brown - OriginalInventoryBatchId set in InventoryBatch
+-- =========================================================
 CREATE PROCEDURE [dbo].[StockOrder_CreateStockOrderPayments]
 (
 	@Success bit output,
@@ -73,6 +75,10 @@ BEGIN
 			WHERE	StockOrderDetailId = @StockOrderDetailId
 
 			SET @InventoryBatchId = SCOPE_IDENTITY()
+
+			UPDATE	finance.InventoryBatch
+			SET		OriginalInventoryBatchId = @InventoryBatchId
+			WHERE	Id = @InventoryBatchId
 
 			-- Insert into InventoryBatchActivity
 			INSERT INTO finance.InventoryBatchActivity (InventoryBatchId, ActivityId, Quantity, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)

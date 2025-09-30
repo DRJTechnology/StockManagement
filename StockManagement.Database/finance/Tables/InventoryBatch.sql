@@ -9,7 +9,7 @@
     [QuantityRemaining] INT     NOT NULL, 
     [UnitCost]      MONEY       NOT NULL, 
     [PurchaseDate]  DATETIME    NOT NULL,
-    [OriginalInventoryBatchId] INT NOT NULL,
+    [OriginalInventoryBatchId] INT NULL,
     [Deleted]       BIT         DEFAULT ((0)) NOT NULL,
     [CreateUserId]  INT         NOT NULL,
     [CreateDate]    DATETIME    CONSTRAINT [DF_InventoryBatch_CreateDate] DEFAULT (getdate()) NOT NULL,

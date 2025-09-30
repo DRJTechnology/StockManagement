@@ -6,8 +6,8 @@ namespace StockManagement.Client.Services
 {
     public class ContactDataService : GenericDataService<ContactEditModel, ContactResponseModel>, IContactDataService
     {
-        public ContactDataService(HttpClient httpClient)
-            : base(httpClient)
+        public ContactDataService(HttpClient httpClient, ErrorNotificationService errorService)
+            : base(httpClient, errorService)
         {
             ApiControllerName = "Contact";
         }
@@ -18,8 +18,9 @@ namespace StockManagement.Client.Services
                 var returnVal = await httpClient.GetFromJsonAsync<IEnumerable<ContactResponseModel>>($"api/{ApiControllerName}/GetByType/{contactTypeId}");
                 return returnVal;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }
