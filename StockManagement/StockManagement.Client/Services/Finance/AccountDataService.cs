@@ -19,8 +19,9 @@ namespace StockManagement.Client.Services.Finance
                 var returnVal = await httpClient.GetFromJsonAsync<IEnumerable<AccountResponseModel>>($"api/{ApiControllerName}/GetAll/{includeInactive}");
                 return returnVal;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }
@@ -32,8 +33,9 @@ namespace StockManagement.Client.Services.Finance
                 var returnVal = await httpClient.GetFromJsonAsync<IEnumerable<AccountResponseModel>>($"api/{ApiControllerName}/GetByType/{accountTypeId}");
                 return returnVal;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }

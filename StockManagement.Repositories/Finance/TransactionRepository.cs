@@ -21,7 +21,7 @@ namespace StockManagement.Repositories.Finance
 
             var parameters = new DynamicParameters();
             parameters.Add("@Success", dbType: DbType.Boolean, direction: ParameterDirection.Output);
-            parameters.Add("@Id", dbType: DbType.Int32, direction: ParameterDirection.Output);
+            parameters.Add("@TransactionDetailId", dbType: DbType.Int32, direction: ParameterDirection.Output);
             parameters.Add("@TransactionId", dbType: DbType.Int32, direction: ParameterDirection.Output);
             parameters.Add("@TransactionTypeId", transactionDetailDto.TransactionTypeId);
             parameters.Add("@AccountId", transactionDetailDto.AccountId);
@@ -35,7 +35,7 @@ namespace StockManagement.Repositories.Finance
 
             if (parameters.Get<bool>("@Success"))
             {
-                return parameters.Get<int>("@Id");
+                return parameters.Get<int>("@TransactionDetailId");
             }
             else
             {

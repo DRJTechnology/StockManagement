@@ -9,11 +9,13 @@ namespace StockManagement.Client.Services.Finance
     public class TransactionDataService : ITransactionDataService
     {
         protected HttpClient httpClient { get; }
+        protected ErrorNotificationService ErrorService { get; }
         protected string ApiControllerName { get; set; } = string.Empty;
 
-        public TransactionDataService(HttpClient httpClient)
+        public TransactionDataService(HttpClient httpClient, ErrorNotificationService errorService)
         {
             this.httpClient = httpClient;
+            ErrorService = errorService;
             ApiControllerName = "Transaction";
         }
 
@@ -86,6 +88,7 @@ namespace StockManagement.Client.Services.Finance
             }
             catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }
@@ -102,10 +105,15 @@ namespace StockManagement.Client.Services.Finance
 
                 var returnValue = await response.Content.ReadFromJsonAsync<ApiResponse>();
 
+                if (returnValue == null || !returnValue.Success)
+                {
+                    throw new Exception($"Failed to create expense/income.");
+                }
                 return returnValue.CreatedId;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }
@@ -122,10 +130,16 @@ namespace StockManagement.Client.Services.Finance
 
                 var returnValue = await response.Content.ReadFromJsonAsync<ApiResponse>();
 
+                if (returnValue == null || !returnValue.Success)
+                {
+                    throw new Exception($"Failed to update expense/income.");
+                }
+
                 return returnValue.CreatedId > 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }
@@ -142,10 +156,16 @@ namespace StockManagement.Client.Services.Finance
 
                 var returnValue = await response.Content.ReadFromJsonAsync<ApiResponse>();
 
+                if (returnValue == null || !returnValue.Success)
+                {
+                    throw new Exception($"Failed to delete {ApiControllerName}.");
+                }
+
                 return returnValue.Success;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }
@@ -157,8 +177,9 @@ namespace StockManagement.Client.Services.Finance
                 var returnVal = await httpClient.GetFromJsonAsync<IEnumerable<TransactionDetailResponseModel>>($"api/{ApiControllerName}/GetTransactionsByAccount/{accountId}");
                 return returnVal != null ? returnVal.ToList() : new List<TransactionDetailResponseModel>();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                await ErrorService.NotifyErrorAsync(ex.Message);
                 throw;
             }
         }
