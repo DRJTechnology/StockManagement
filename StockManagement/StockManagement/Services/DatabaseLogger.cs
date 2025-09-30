@@ -21,25 +21,38 @@ public class DatabaseLogger : ILogger
     {
         if (!IsEnabled(logLevel)) return;
 
-        using var scope = scopeFactory.CreateScope();
-        var errorLogService = scope.ServiceProvider.GetRequiredService<IErrorLogService>();
-        var userContextAccessor = scope.ServiceProvider.GetRequiredService<IUserContextAccessor>();
-
+        // Capture data that would be distorted if computed inside background task
         var message = formatter(state, exception);
         var stackTrace = exception?.StackTrace;
         var location = GetLocation();
-        var userId = userContextAccessor.GetCurrentUserId();
 
-        var errorDetails = new ErrorLogDto()
+        // Fire-and-forget logging
+        _ = Task.Run(async () =>
         {
-            Location = location,
-            LogLevel = logLevel.ToString(),
-            ErrorMessage = $"{message}: {exception?.Message}",
-            StackTrace = stackTrace,
-            UserId = userId ?? 0
-        };
+            try
+            {
+                using var scope = scopeFactory.CreateScope();
+                var errorLogService = scope.ServiceProvider.GetRequiredService<IErrorLogService>();
+                var userContextAccessor = scope.ServiceProvider.GetRequiredService<IUserContextAccessor>();
+                var userId = userContextAccessor.GetCurrentUserId();
 
-        errorLogService.LogErrorAsync(errorDetails);
+                var errorDetails = new ErrorLogDto()
+                {
+                    Location = location,
+                    LogLevel = logLevel.ToString(),
+                    ErrorMessage = $"{message}: {exception?.Message}",
+                    StackTrace = stackTrace,
+                    UserId = userId ?? 0
+                };
+
+                await errorLogService.LogErrorAsync(errorDetails).ConfigureAwait(false);
+            }
+            catch (Exception logEx)
+            {
+                // Swallow to avoid impacting the caller; trace for diagnostics
+                Debug.WriteLine($"DatabaseLogger fire-and-forget failed: {logEx}");
+            }
+        }, CancellationToken.None);
     }
 
     private string GetLocation()
