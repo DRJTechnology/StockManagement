@@ -14,6 +14,18 @@ namespace StockManagement.Services
             return reportItems;
         }
 
+        public async Task<List<TrialBalanceDto>> GetTrialBalanceReportAsync()
+        {
+            var reportItems = mapper.Map<List<TrialBalanceDto>>(await reportRepository.GetTrialBalanceReportAsync());
+            return reportItems;
+        }
+
+        public async Task<List<ProfitAndLossDto>> GetProfitAndLossReportAsync()
+        {
+            var reportItems = mapper.Map<List<ProfitAndLossDto>>(await reportRepository.GetProfitAndLossReportAsync());
+            return reportItems;
+        }
+
         public async Task<decimal> GetInventoryValueReportAsync()
         {
             var totalValue = await reportRepository.GetInventoryValueReportAsync();
