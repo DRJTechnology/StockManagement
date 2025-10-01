@@ -253,6 +253,8 @@
     <Build Include="dbo\Stored Procedures\StockSale_ResetSale.sql" />
     <Build Include="finance\Stored Procedures\InventoryBatch_SaleCost.sql" />
     <Build Include="dbo\Stored Procedures\ErrorLog_Create.sql" />
+    <Build Include="finance\Stored Procedures\Report_ProfitAndLoss.sql" />
+    <Build Include="finance\Stored Procedures\Report_TrialBalance.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\ContactType.sql" />

@@ -1,6 +1,6 @@
 -- =======================================================================
 -- Author:		Dave Brown
--- Create date: [Current Date]
+-- Create date: 01 Oct 2025
 -- Description:	Trial Balance Report
 -- =======================================================================
 CREATE PROCEDURE [finance].[Report_TrialBalance]

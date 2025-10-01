@@ -1,6 +1,6 @@
 -- =======================================================================
 -- Author:		Dave Brown
--- Create date: [Current Date]
+-- Create date: 01 Oct 2025
 -- Description:	Profit and Loss Report
 -- =======================================================================
 CREATE PROCEDURE [finance].[Report_ProfitAndLoss]
@@ -29,7 +29,7 @@ BEGIN
 		td.[Date] >= @FromDate
 		AND td.[Date] <= @ToDateAdjusted
 		AND td.Deleted = 0
-		AND act.[Type] IN ('Income', 'Expense')
+		AND act.Id IN (3 /*Revenue*/, 4 /*Expense*/)
 	GROUP BY
 		act.Id, a.Id, act.[Type], a.[Name]
 	ORDER BY
