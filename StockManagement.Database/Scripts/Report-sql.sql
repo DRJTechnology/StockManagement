@@ -61,3 +61,92 @@ INNER JOIN ProductType pt ON ib.ProductTypeId = pt.Id
 INNER JOIN Location l ON ib.LocationId = l.Id
 WHERE ib.Deleted = 0 AND ib.QuantityRemaining > 0
 GROUP BY l.[Name], pt.ProductTypeName, p.ProductName
+
+-- Trial Balance Report
+DECLARE @ToDate DATETIME
+SET @ToDate = '2025-11-01';
+
+SELECT 
+    a.Id AS AccountId,
+    a.Name AS AccountName,
+    act.Type AS AccountType,
+    Debit = SUM(
+        CASE 
+            WHEN (td.Amount * td.Direction * act.CreditDebit) > 0 
+            THEN (td.Amount * td.Direction * act.CreditDebit) 
+            ELSE 0 
+        END
+    ),
+    Credit = SUM(
+        CASE 
+            WHEN (td.Amount * td.Direction * act.CreditDebit) < 0 
+            THEN ABS(td.Amount * td.Direction * act.CreditDebit) 
+            ELSE 0 
+        END
+    )
+FROM finance.TransactionDetail td
+INNER JOIN finance.Account a 
+    ON td.AccountId = a.Id
+INNER JOIN finance.AccountType act 
+    ON a.AccountTypeId = act.Id
+WHERE td.Date < @ToDate
+GROUP BY a.Id, a.Name, act.Type
+ORDER BY a.Name;
+-- End of Trial Balance Report
+
+-- Profit and Loss Report
+DECLARE @FromDate DATETIME = '2025-01-01';
+DECLARE @ToDate   DATETIME = '2025-11-01';
+
+SELECT 
+    a.Id AS AccountId,
+    a.Name AS AccountName,
+    act.Type AS AccountType,
+    Balance = SUM(td.Amount * td.Direction * act.CreditDebit)
+FROM finance.TransactionDetail td
+INNER JOIN finance.Account a 
+    ON td.AccountId = a.Id
+INNER JOIN finance.AccountType act 
+    ON a.AccountTypeId = act.Id
+WHERE td.Date >= @FromDate
+  AND td.Date < @ToDate
+  AND act.Type IN ('Revenue','Expense')   -- only P&L accounts
+GROUP BY a.Id, a.Name, act.Type
+ORDER BY act.Type, a.Name;
+
+-- End of Profit and Loss Report
+
+-- "Full set of accounts" report. Combined Balance Sheet and Profit & Loss in a single.
+DECLARE @FromDate DATETIME = '2025-01-01';
+DECLARE @ToDate   DATETIME = '2025-11-01';
+
+SELECT 
+    a.Id AS AccountId,
+    a.Name AS AccountName,
+    act.Type AS AccountType,
+    SUM(td.Amount * td.Direction * act.CreditDebit) AS Balance
+FROM finance.TransactionDetail td
+INNER JOIN finance.Account a 
+    ON td.AccountId = a.Id
+INNER JOIN finance.AccountType act 
+    ON a.AccountTypeId = act.Id
+WHERE (
+        -- Balance Sheet accounts: Assets, Liabilities, Equity
+        (act.Type IN ('Asset','Liability','Equity') AND td.Date < @ToDate)
+        
+        OR
+        
+        -- Profit & Loss accounts: Revenue & Expenses
+        (act.Type IN ('Revenue','Expense') AND td.Date >= @FromDate AND td.Date < @ToDate)
+      )
+GROUP BY a.Id, a.Name, act.Type
+ORDER BY 
+    CASE act.Type 
+        WHEN 'Asset' THEN 1
+        WHEN 'Liability' THEN 2
+        WHEN 'Equity' THEN 3
+        WHEN 'Revenue' THEN 4
+        WHEN 'Expense' THEN 5
+    END,
+    a.Name;
+
