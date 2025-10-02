@@ -7,5 +7,6 @@
         BankAccountName = 3,
         BankAccountNumber = 4,
         BankAccountSortCode = 5,
+        OwnerName = 6,
     }
 }

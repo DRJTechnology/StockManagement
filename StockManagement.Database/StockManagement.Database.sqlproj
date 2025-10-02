@@ -71,6 +71,7 @@
     <Folder Include="Scripts\V1.8.0" />
     <Folder Include="Scripts\V2.0.0" />
     <Folder Include="Scripts\V2.0.3" />
+    <Folder Include="Scripts\V2.0.7" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\ProductType.sql" />
@@ -272,5 +273,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\V2.0.3\0. Rename column.sql" />
+    <None Include="Scripts\V2.0.7\Data Updates V2.0.7.sql" />
   </ItemGroup>
 </Project>

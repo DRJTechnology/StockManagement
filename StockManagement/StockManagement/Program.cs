@@ -118,6 +118,7 @@ builder.Services.AddScoped<IStockSaleDataService, ClientStockSaleDataService>();
 builder.Services.AddScoped<IStockSaleDetailDataService, ClientStockSaleDetailDataService>();
 builder.Services.AddScoped<ILocationDataService, ClientLocationDataService>();
 builder.Services.AddScoped<ITransactionDataService, ClientTransactionDataService>();
+builder.Services.AddScoped<IGlobalSettingsService, ClientGlobalSettingsService>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserContextAccessor, UserContextAccessor>();
