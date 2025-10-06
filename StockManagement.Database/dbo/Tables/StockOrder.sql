@@ -2,6 +2,7 @@
     [Id]                    INT      IDENTITY (1, 1) NOT NULL,
     [Date]                  DATETIME NOT NULL,
     [ContactId]             INT      NOT NULL,
+    [TotalCost]             MONEY    NULL,
     [PaymentRecorded]       BIT      CONSTRAINT [DF_StockOrder_PaymentRecorded] DEFAULT ((0)) NOT NULL,
     [StockReceiptRecorded]  BIT      CONSTRAINT [DF_StockOrder_StockOrderRecorded] DEFAULT ((0)) NOT NULL,
     [TransactionId]		    INT      NULL,

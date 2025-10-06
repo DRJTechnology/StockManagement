@@ -23,10 +23,10 @@ namespace StockManagement.Services
             return await reportRepository.GetProfitAndLossReportAsync();
         }
 
-        public async Task<decimal> GetInventoryValueReportAsync()
+        public async Task<InventoryValueDto> GetInventoryValueReportAsync()
         {
-            var totalValue = await reportRepository.GetInventoryValueReportAsync();
-            return totalValue;
+            var inventoryValue = await reportRepository.GetInventoryValueReportAsync();
+            return inventoryValue;
         }
 
         public async Task<List<SalesReportItemDto>> GetSalesReportAsync(int locationId, int productTypeId, int productId)

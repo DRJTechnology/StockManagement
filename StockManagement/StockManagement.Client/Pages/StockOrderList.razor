@@ -25,12 +25,17 @@ else
                                 Date
                             </div>
                         </div>
-                        <div class="col-md-5 col-lg-4">
+                        <div class="col-md-4 col-lg-3">
                             <div class="fw-bold">
                                 Supplier
                             </div>
                         </div>
                         <div class="col-md-2 col-lg-2">
+                            <div class="fw-bold">
+                                Cost
+                            </div>
+                        </div>
+                        <div class="col-md-1 col-lg-1">
                             <div class="fw-bold">
                                 Paid
                             </div>
@@ -63,13 +68,22 @@ else
                             <div class="col-4 d-md-none">
                                 Supplier:
                             </div>
-                            <div class="col-8 col-md-5 col-lg-4">
+                            <div class="col-8 col-md-4 col-lg-3">
                                 @stockOrder.ContactName
+                            </div>
+                            <div class="col-4 d-md-none">
+                                Cost:
+                            </div>
+                            <div class="col-8 col-md-2 col-lg-2">
+                                @if (stockOrder.TotalCost > 0)
+                                {
+                                    @stockOrder.TotalCost.ToString("C")
+                                }
                             </div>
                             <div class="col-4 d-md-none">
                                 Paid:
                             </div>
-                            <div class="col-8 col-md-2 col-lg-2">
+                            <div class="col-8 col-md-1 col-lg-1">
                                 @if (stockOrder.PaymentRecorded)
                                 {
                                     <span class="px-1">Yes</span>

@@ -86,25 +86,39 @@ else
 
     @if (EditStockSale.Id > 0)
     {
-        <div class="row">
-            <div class="col d-flex justify-content-between pt-2">
-                <div>
-                    <button class="btn btn-primary mb-2" @onclick="ShowAddDetailForm" disabled="@( IsDirty || EditStockSale.SaleConfirmed )">Add Product</button>
+        <div class="row gy-2 pt-2 mb-2 mb-md-0">
+            <div class="col-12 col-md-auto">
+                <button class="btn btn-primary w-100 w-md-auto"
+                        @onclick="ShowAddDetailForm"
+                        disabled="@( IsDirty || EditStockSale.SaleConfirmed )">
+                    Add Product
+                </button>
+            </div>
+
+            @if (EditStockSale.SaleConfirmed)
+            {
+                <div class="col-12 col-sm-auto d-flex flex-row flex-wrap gap-3 fw-bold small">
+                    <div class="text-nowrap">Stock Cost: @StockCostPrice.ToString("C")</div>
+                    <div class="text-nowrap">Sale Price: @EditStockSale.TotalPrice.ToString("C")</div>
                 </div>
-                @if (EditStockSale.SaleConfirmed)
-                {
-                    <div class="fw-bold my-auto px-2">
-                        Stock Cost: @StockCostPrice.ToString("C")
-                    </div>
-                    <div class="fw-bold my-auto px-2">
-                        Sale Price: @EditStockSale.TotalPrice.ToString("C")
-                    </div>
-                }
-                <div class="d-flex justify-content-end">
-                    <button class="btn btn-success mb-2 ms-2" @onclick="ConfirmSale" disabled="@( IsDirty || EditStockSale.SaleConfirmed )">Confirm Sale</button>
-                    <button class="btn btn-primary mb-2 ms-2" @onclick="DownloadInvoicePdf" disabled="@( IsDirty || !EditStockSale.SaleConfirmed )">Print Invoice</button>
-                    <button class="btn btn-success mb-2 ms-2" @onclick="RecordPayment" disabled="@( IsDirty  || !EditStockSale.SaleConfirmed || EditStockSale.PaymentReceived)">Record Payment</button>
-                </div>
+            }
+
+            <div class="col-12 col-md d-flex flex-wrap justify-content-start justify-content-md-end gap-2">
+                <button class="btn btn-success"
+                        @onclick="ConfirmSale"
+                        disabled="@( IsDirty || EditStockSale.SaleConfirmed )">
+                    Confirm Sale
+                </button>
+                <button class="btn btn-primary"
+                        @onclick="DownloadInvoicePdf"
+                        disabled="@( IsDirty || !EditStockSale.SaleConfirmed )">
+                    Print Invoice
+                </button>
+                <button class="btn btn-success"
+                        @onclick="RecordPayment"
+                        disabled="@( IsDirty || !EditStockSale.SaleConfirmed || EditStockSale.PaymentReceived)">
+                    Record Payment
+                </button>
             </div>
         </div>
 

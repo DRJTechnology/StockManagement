@@ -55,14 +55,20 @@ namespace StockManagement.Repositories
             var reportItemList = await dbConnection.QueryAsync<ProfitAndLossDto>("[finance].[Report_ProfitAndLoss]", parameters, commandType: CommandType.StoredProcedure);
             return reportItemList.Cast<ProfitAndLossDto>().ToList(); ;
         }
-        public async Task<decimal> GetInventoryValueReportAsync()
+        public async Task<InventoryValueDto> GetInventoryValueReportAsync()
         {
             var parameters = new DynamicParameters();
+            parameters.Add("@TotalActiveValue", dbType: DbType.Currency, direction: ParameterDirection.Output);
             parameters.Add("@TotalValue", dbType: DbType.Currency, direction: ParameterDirection.Output);
 
             await dbConnection.ExecuteAsync("[finance].[Report_InventoryValue]", parameters, commandType: CommandType.StoredProcedure);
 
-            return parameters.Get<decimal>("@TotalValue");
+            var inventoryValueDto = new InventoryValueDto
+            {
+                TotalValue = parameters.Get<decimal>("@TotalValue"),
+                TotalActiveValue = parameters.Get<decimal>("@TotalActiveValue"),
+            };
+            return inventoryValueDto;
         }
     }
 }

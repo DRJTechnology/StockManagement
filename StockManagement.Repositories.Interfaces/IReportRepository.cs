@@ -10,6 +10,6 @@ namespace StockManagement.Repositories.Interfaces
         Task<List<BalanceSheetDto>> GetBalanceSheetReportAsync();
         Task<List<TrialBalanceDto>> GetTrialBalanceReportAsync();
         Task<List<ProfitAndLossDto>> GetProfitAndLossReportAsync();
-        Task<decimal> GetInventoryValueReportAsync();
+        Task<InventoryValueDto> GetInventoryValueReportAsync();
     }
 }

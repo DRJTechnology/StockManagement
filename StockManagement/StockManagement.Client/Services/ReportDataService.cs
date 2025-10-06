@@ -88,11 +88,11 @@ namespace StockManagement.Client.Services
             }
         }
 
-        public async Task<decimal> GetInventoryValueReportAsync()
+        public async Task<InventoryValueDto> GetInventoryValueReportAsync()
         {
             try
             {
-                var returnVal = await httpClient.GetFromJsonAsync<decimal>($"api/{ApiControllerName}/inventoryvalue");
+                var returnVal = await httpClient.GetFromJsonAsync<InventoryValueDto>($"api/{ApiControllerName}/inventoryvalue");
                 return returnVal;
             }
             catch (Exception ex)

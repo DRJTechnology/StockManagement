@@ -46,7 +46,8 @@ BEGIN
 
 		-- Link the transaction to the stock order
 		UPDATE	dbo.StockOrder
-		SET		TransactionId = @TransactionId,
+		SET		TotalCost = @Cost,
+				TransactionId = @TransactionId,
 				PaymentRecorded = 1,
 				AmendUserID = @CurrentUserId,
 				AmendDate = @UpdateDate
