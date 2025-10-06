@@ -36,6 +36,7 @@ builder.Services.AddScoped<IStockSaleDetailDataService, StockSaleDetailDataServi
 builder.Services.AddScoped<ILocationDataService, LocationDataService>();
 builder.Services.AddScoped<ITransactionDataService, TransactionDataService>();
 builder.Services.AddScoped<IInventoryBatchDataService, InventoryBatchDataService>();
+builder.Services.AddScoped<IGlobalSettingsService, GlobalSettingsService>();
 
 builder.Services.AddSingleton<ErrorNotificationService>();
 

@@ -4,6 +4,7 @@ namespace StockManagement.Models
     {
         public string? ContactName { get; set; }
         public List<StockOrderDetailResponseModel> DetailList { get; set; } = new();
+        public decimal TotalCost { get; set; }
         public bool PaymentRecorded { get; set; }
         public bool StockReceiptRecorded { get; set; }
     }

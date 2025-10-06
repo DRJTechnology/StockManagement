@@ -7,6 +7,10 @@
 else
 {
     <div class="inventory-value">
-        Total Inventory Value: @TotalValue.ToString("C")
+        Total Inventory Value: @TotalActiveValue.ToString("C")
+        @if (@TotalValue != TotalActiveValue)
+        {
+            @( $" ({TotalValue.ToString("C")})" )
+        }
     </div>
 }
