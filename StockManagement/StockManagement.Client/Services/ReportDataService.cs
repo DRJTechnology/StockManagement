@@ -60,11 +60,39 @@ namespace StockManagement.Client.Services
             }
         }
 
-        public async Task<decimal> GetInventoryValueReportAsync()
+        public async Task<List<TrialBalanceDto>> GetTrialBalanceReportAsync()
         {
             try
             {
-                var returnVal = await httpClient.GetFromJsonAsync<decimal>($"api/{ApiControllerName}/inventoryvalue");
+                var returnVal = await httpClient.GetFromJsonAsync<List<TrialBalanceDto>>($"api/{ApiControllerName}/trialbalance");
+                return returnVal;
+            }
+            catch (Exception ex)
+            {
+                await ErrorService.NotifyErrorAsync(ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<List<ProfitAndLossDto>> GetProfitAndLossReportAsync()
+        {
+            try
+            {
+                var returnVal = await httpClient.GetFromJsonAsync<List<ProfitAndLossDto>>($"api/{ApiControllerName}/profitandloss");
+                return returnVal;
+            }
+            catch (Exception ex)
+            {
+                await ErrorService.NotifyErrorAsync(ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<InventoryValueDto> GetInventoryValueReportAsync()
+        {
+            try
+            {
+                var returnVal = await httpClient.GetFromJsonAsync<InventoryValueDto>($"api/{ApiControllerName}/inventoryvalue");
                 return returnVal;
             }
             catch (Exception ex)

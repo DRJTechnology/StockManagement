@@ -37,14 +37,38 @@ namespace StockManagement.Repositories
             var reportItemList = await dbConnection.QueryAsync<BalanceSheetDto>("[finance].[Report_BalanceSheet]", parameters, commandType: CommandType.StoredProcedure);
             return reportItemList.Cast<BalanceSheetDto>().ToList(); ;
         }
-        public async Task<decimal> GetInventoryValueReportAsync()
+        public async Task<List<TrialBalanceDto>> GetTrialBalanceReportAsync()
         {
             var parameters = new DynamicParameters();
+            //parameters.Add("@FromDate", fromDate);
+            //parameters.Add("@ToDate", toDate);
+
+            var reportItemList = await dbConnection.QueryAsync<TrialBalanceDto>("[finance].[Report_TrialBalance]", parameters, commandType: CommandType.StoredProcedure);
+            return reportItemList.Cast<TrialBalanceDto>().ToList(); ;
+        }
+        public async Task<List<ProfitAndLossDto>> GetProfitAndLossReportAsync()
+        {
+            var parameters = new DynamicParameters();
+            //parameters.Add("@FromDate", fromDate);
+            //parameters.Add("@ToDate", toDate);
+
+            var reportItemList = await dbConnection.QueryAsync<ProfitAndLossDto>("[finance].[Report_ProfitAndLoss]", parameters, commandType: CommandType.StoredProcedure);
+            return reportItemList.Cast<ProfitAndLossDto>().ToList(); ;
+        }
+        public async Task<InventoryValueDto> GetInventoryValueReportAsync()
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@TotalActiveValue", dbType: DbType.Currency, direction: ParameterDirection.Output);
             parameters.Add("@TotalValue", dbType: DbType.Currency, direction: ParameterDirection.Output);
 
             await dbConnection.ExecuteAsync("[finance].[Report_InventoryValue]", parameters, commandType: CommandType.StoredProcedure);
 
-            return parameters.Get<decimal>("@TotalValue");
+            var inventoryValueDto = new InventoryValueDto
+            {
+                TotalValue = parameters.Get<decimal>("@TotalValue"),
+                TotalActiveValue = parameters.Get<decimal>("@TotalActiveValue"),
+            };
+            return inventoryValueDto;
         }
     }
 }

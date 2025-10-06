@@ -1,0 +1,133 @@
+@page "/trial-balance"
+@layout MainLayoutClient
+@using StockManagement.Client.Components.Finance
+@using StockManagement.Client.Shared
+@inherits TrialBalanceReportBase
+@rendermode InteractiveWebAssembly
+<PageTitle>Trial Balance</PageTitle>
+
+<h3>Trial Balance</h3>
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="d-none d-lg-block">
+        <div class="px-3 py-2">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="fw-bold">
+                                Account
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="fw-bold">
+                                Account Type
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="fw-bold">
+                                Debit
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <div class="fw-bold">
+                                Credit
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    int rowIndex = 0;
+    decimal totalDebit = 0;
+    decimal totalCredit = 0;
+    @foreach (var item in TrialBalanceReportItems)
+    {
+        var rowClass = rowIndex % 2 == 0 ? "alt-row" : "";
+        totalDebit += item.Debit;
+        totalCredit += item.Credit;
+        <div class="card mb-3 mb-lg-0 @rowClass">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-5 d-lg-none">
+                                Account:
+                            </div>
+                            <div class="col-7 col-lg-4">
+                                <div class="">
+                                    @item.AccountName
+                                </div>
+                            </div>
+                            <div class="col-5 d-lg-none">
+                                Account Type:
+                            </div>
+                            <div class="col-7 col-lg-4">
+                                <div class="">
+                                    @item.AccountType
+                                </div>
+                            </div>
+                            <div class="col-5 d-lg-none">
+                                Debit:
+                            </div>
+                            <div class="col-7 col-lg-2">
+                                <div class="">
+                                    @(item.Debit > 0 ? item.Debit.ToString("C") : "")
+                                </div>
+                            </div>
+                            <div class="col-5 d-lg-none">
+                                Credit:
+                            </div>
+                            <div class="col-7 col-lg-2">
+                                <div class="">
+                                    @(item.Credit > 0 ? item.Credit.ToString("C") : "")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        rowIndex++;
+    }
+    <div class="card mb-3 mb-lg-0 fw-bold">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-5 d-lg-none">
+                            Total:
+                        </div>
+                        <div class="col-7 col-lg-8">
+                            <div class="">
+                                Total
+                            </div>
+                        </div>
+                        <div class="col-5 d-lg-none">
+                            Debit:
+                        </div>
+                        <div class="col-7 col-lg-2">
+                            <div class="">
+                                @totalDebit.ToString("C")
+                            </div>
+                        </div>
+                        <div class="col-5 d-lg-none">
+                            Credit:
+                        </div>
+                        <div class="col-7 col-lg-2">
+                            <div class="">
+                                @totalCredit.ToString("C")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
