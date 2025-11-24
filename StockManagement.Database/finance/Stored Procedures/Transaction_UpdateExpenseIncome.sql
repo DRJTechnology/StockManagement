@@ -36,6 +36,12 @@ BEGIN
 	BEGIN
 		SET @AssociatedAccountId = 4 -- Owner's Drawings account
 	END
+	ELSE
+	BEGIN
+		-- Invalid transaction type - only Expense (2) and Income (3) are supported
+		SET @Success = 0
+		RETURN 1
+	END
 	
 	SELECT	@TransactionId = td.TransactionId
 	FROM	finance.[TransactionDetail] td
