@@ -1,10 +1,11 @@
-﻿-- ==========================================================================
+﻿-- ==========================================================================================
 -- Author:		Dave Brown
 -- Create date: 03 Aug 2025
 -- Description:	Updates an expense transaction and transaction detail records
--- ==========================================================================
--- 04 Aug 2025 - Updated Expense procedure to handle Income too
--- ==========================================================================
+-- ==========================================================================================
+-- 04 Aug 2025 - Dave Brown - Updated Expense procedure to handle Income too
+-- 24 Nov 2025 - Copilot/Dave Brown - Set the associated account based on transaction type
+-- ==========================================================================================
 CREATE PROCEDURE [finance].[Transaction_UpdateExpenseIncome]
 	@Success			BIT OUTPUT,
 	@TransactionTypeId	INT, -- Expense = 2, Income = 3
