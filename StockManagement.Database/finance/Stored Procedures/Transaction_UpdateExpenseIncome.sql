@@ -25,7 +25,17 @@ BEGIN
 	SET @UpdateDate = GetDate()
 
 	DECLARE @TransactionId			INT,
-			@AssociatedAccountId	INT = 3 -- Owner’s Investment/Drawings account
+			@AssociatedAccountId	INT
+	
+	-- Determine the correct associated account based on transaction type
+	IF (@TransactionTypeId = 2) -- Expense
+	BEGIN
+		SET @AssociatedAccountId = 3 -- Owner's Capital/Investment account
+	END
+	ELSE IF (@TransactionTypeId = 3) -- Income
+	BEGIN
+		SET @AssociatedAccountId = 4 -- Owner's Drawings account
+	END
 	
 	SELECT	@TransactionId = td.TransactionId
 	FROM	finance.[TransactionDetail] td
