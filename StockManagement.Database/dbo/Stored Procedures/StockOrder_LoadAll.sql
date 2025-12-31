@@ -14,6 +14,7 @@ BEGIN
 		so.[Date],
 		so.[ContactId],
 		c.[Name] AS ContactName,
+		so.TotalCost,
 		so.[PaymentRecorded],
 		so.[StockReceiptRecorded],
 		so.[Deleted],

@@ -17,6 +17,7 @@ namespace StockManagement.Models.Finance
         public decimal UnitCost { get; set; }
         public DateTime PurchaseDate { get; set; }
         public DateTime AmendDate { get; set; }
+        public DateTime CreateDate { get; set; }
         public bool Deleted { get; set; }
     }
 }

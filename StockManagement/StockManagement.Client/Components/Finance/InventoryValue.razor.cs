@@ -11,6 +11,7 @@ public partial class InventoryValueBase : ComponentBase
     [Inject]
     public IJSRuntime JSRuntime { get; set; } = default!;
 
+    public decimal TotalActiveValue { get; set; }
     public decimal TotalValue { get; set; }
     protected bool IsLoading = true;
 
@@ -25,7 +26,9 @@ public partial class InventoryValueBase : ComponentBase
     private async Task PopulateReport()
     {
         IsLoading = true;
-        TotalValue = await ReportDataService.GetInventoryValueReportAsync();
+        var inventoryValue = await ReportDataService.GetInventoryValueReportAsync();
+        TotalValue = inventoryValue.TotalValue;
+        TotalActiveValue = inventoryValue.TotalActiveValue;
         IsLoading = false;
         StateHasChanged();
     }
