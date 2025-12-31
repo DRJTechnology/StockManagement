@@ -3,6 +3,8 @@
 -- Create date: 03 Sep 2025
 -- Description:	Get Inventory Batch records with filtering and paging
 -- =====================================================================
+-- 31 Dec 2025	Dave Brown	Added CreateDate to output
+-- =====================================================================
 CREATE PROCEDURE [finance].[InventoryBatch_LoadFiltered]
     @InventoryBatchStatusId int,
     @ProductId int = NULL,
@@ -52,6 +54,7 @@ BEGIN
         ib.[PurchaseDate],
         ib.[Deleted],
         ib.[AmendUserID],
+        ib.[CreateDate],
         ib.[AmendDate]
     FROM [finance].[InventoryBatch] ib
     INNER JOIN [Product] p ON ib.[ProductId] = p.Id
