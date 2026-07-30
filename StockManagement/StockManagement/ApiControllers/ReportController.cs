@@ -10,11 +10,11 @@ namespace StockManagement.ApiControllers
     public class ReportController(ILogger<ReportController> logger, IReportService reportService) : ControllerBase
     {
         [HttpGet("sales")]
-        public async Task<IActionResult> GetSalesReport(int locationId, int productTypeId, int productId)
+        public async Task<IActionResult> GetSalesReport(int salesReportType, int locationId, int customerId, int productTypeId, int productId)
         {
             try
             {
-                var reportItems = await reportService.GetSalesReportAsync(locationId, productTypeId, productId);
+                var reportItems = await reportService.GetSalesReportAsync(salesReportType, locationId, customerId, productTypeId, productId);
                 return this.Ok(reportItems);
             }
             catch (Exception ex)

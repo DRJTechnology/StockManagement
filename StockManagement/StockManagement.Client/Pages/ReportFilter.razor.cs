@@ -5,17 +5,44 @@ public partial class ReportFilterBase : ComponentBase
 {
     [Parameter] public LookupsModel Lookups { get; set; } = new LookupsModel();
 
+    /// <summary>
+    /// When true, a "Group By" selector (Location / Customer) and a Customer
+    /// filter are shown. Used by the Sales Report; other reports leave this off
+    /// and only ever filter by Location.
+    /// </summary>
+    [Parameter] public bool ShowReportTypeSelector { get; set; } = false;
+
+    [Parameter] public EventCallback<int> SalesReportTypeChanged { get; set; }
+
     [Parameter] public EventCallback<int> LocationIdChanged { get; set; }
+
+    [Parameter] public EventCallback<int> CustomerIdChanged { get; set; }
 
     [Parameter] public EventCallback<int> ProductTypeIdChanged { get; set; }
 
     [Parameter] public EventCallback<int> ProductIdChanged { get; set; }
 
+    private int _salesReportType = 1;
     private int _locationId;
+    private int _customerId;
     private int _productTypeId;
     private int _productd;
 
     protected bool filtersExpanded = true;
+
+    [Parameter]
+    public int SalesReportType
+    {
+        get => _salesReportType;
+        set
+        {
+            if (_salesReportType != value)
+            {
+                _salesReportType = value;
+                _ = SalesReportTypeChanged.InvokeAsync(_salesReportType);
+            }
+        }
+    }
 
     [Parameter]
     public int LocationId
@@ -27,6 +54,20 @@ public partial class ReportFilterBase : ComponentBase
             {
                 _locationId = value;
                 _ = LocationIdChanged.InvokeAsync(_locationId);
+            }
+        }
+    }
+
+    [Parameter]
+    public int CustomerId
+    {
+        get => _customerId;
+        set
+        {
+            if (_customerId != value)
+            {
+                _customerId = value;
+                _ = CustomerIdChanged.InvokeAsync(_customerId);
             }
         }
     }

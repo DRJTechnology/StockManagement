@@ -18,10 +18,12 @@ namespace StockManagement.Repositories
             var reportItemList = await dbConnection.QueryAsync<StockReportItemDto>("dbo.Report_Stock", parameters, commandType: CommandType.StoredProcedure);
             return reportItemList.Cast<StockReportItemDto>().ToList(); ;
         }
-        public async Task<List<SalesReportItemDto>> GetSalesReportAsync(int locationId, int productTypeId, int productId)
+        public async Task<List<SalesReportItemDto>> GetSalesReportAsync(int salesReportType, int locationId, int customerId, int productTypeId, int productId)
         {
             var parameters = new DynamicParameters();
+            parameters.Add("@SalesReportType", salesReportType); // 1 = By Location, 2 = By Customer
             parameters.Add("@LocationId", locationId);
+            parameters.Add("@CustomerId", customerId);
             parameters.Add("@ProductTypeId", productTypeId);
             parameters.Add("@ProductId", productId);
 
