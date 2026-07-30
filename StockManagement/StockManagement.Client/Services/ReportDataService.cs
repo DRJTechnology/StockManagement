@@ -18,11 +18,11 @@ namespace StockManagement.Client.Services
             ErrorService = errorService;
         }
 
-        public async Task<List<SalesReportItemDto>> GetSalesReportAsync(int locationId, int productTypeId, int productId)
+        public async Task<List<SalesReportItemDto>> GetSalesReportAsync(int salesReportType, int locationId, int customerId, int productTypeId, int productId)
         {
             try
             {
-                var returnVal = await httpClient.GetFromJsonAsync<List<SalesReportItemDto>>($"api/{ApiControllerName}/sales?locationId={locationId}&productTypeId={productTypeId}&productId={productId}");
+                var returnVal = await httpClient.GetFromJsonAsync<List<SalesReportItemDto>>($"api/{ApiControllerName}/sales?salesReportType={salesReportType}&locationId={locationId}&customerId={customerId}&productTypeId={productTypeId}&productId={productId}");
                 return returnVal;
             }
             catch (Exception ex)

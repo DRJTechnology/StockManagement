@@ -35,5 +35,10 @@ namespace StockManagement.ClientDataServices
         {
             throw new NotImplementedException();
         }
+
+        public Task<List<SalesReportItemDto>> GetSalesReportAsync(int salesReportType, int locationId, int customerId, int productTypeId, int productId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
