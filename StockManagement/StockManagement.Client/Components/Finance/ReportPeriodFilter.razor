@@ -1,0 +1,48 @@
+@using Microsoft.AspNetCore.Components.Forms
+@using StockManagement.Models.Dto.Finance
+@inherits ReportPeriodFilterBase
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row g-2 align-items-end">
+            @if (ShowFromDate)
+            {
+                <div class="col-6 col-lg-3">
+                    <div class="form-floating">
+                        <InputDate id="reportFromDate" @bind-Value="FromDateValue" class="form-control" />
+                        <label for="reportFromDate">From:</label>
+                    </div>
+                </div>
+            }
+            <div class="col-6 col-lg-3">
+                <div class="form-floating">
+                    <InputDate id="reportToDate" @bind-Value="ToDateValue" class="form-control" />
+                    <label for="reportToDate">@(ShowFromDate ? "To:" : "As at:")</label>
+                </div>
+            </div>
+            @if (ShowBasis)
+            {
+                <div class="col-12 col-lg-3">
+                    <div class="form-floating">
+                        <InputSelect id="reportBasis" @bind-Value="BasisValue" TValue="AccountingBasis" class="form-control">
+                            <option value="@AccountingBasis.Accruals">Accruals (stock carried)</option>
+                            <option value="@AccountingBasis.Cash">Cash basis (stock expensed)</option>
+                        </InputSelect>
+                        <label for="reportBasis">Basis:</label>
+                    </div>
+                </div>
+            }
+            <div class="col-12 col-lg-3 d-flex gap-2">
+                <button type="button" class="btn btn-outline-secondary flex-fill" @onclick="SetTaxYear">
+                    Tax year @TaxYearLabel
+                </button>
+                @if (!string.IsNullOrEmpty(PdfUrl))
+                {
+                    <a class="btn btn-outline-primary" href="@PdfUrl" target="_blank" title="Download PDF">
+                        <span class="bi bi-file-earmark-pdf" aria-hidden="true"></span> PDF
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

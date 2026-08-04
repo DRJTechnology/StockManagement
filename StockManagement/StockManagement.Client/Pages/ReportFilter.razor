@@ -98,6 +98,31 @@
                     </div>
                 </div>
             </div>
+            @if (ShowDateRange)
+            {
+                <div class="row mt-2 g-2 align-items-end">
+                    <div class="col-6 col-lg-3">
+                        <div class="form-floating">
+                            <InputDate id="fromDateFilter" @bind-Value="FromDate" class="form-control" />
+                            <label for="fromDateFilter">From:</label>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="form-floating">
+                            <InputDate id="toDateFilter" @bind-Value="ToDate" class="form-control" />
+                            <label for="toDateFilter">To:</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary" @onclick="SetTaxYear">
+                            Last tax year
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" @onclick="ClearDateRange">
+                            All dates
+                        </button>
+                    </div>
+                </div>
+            }
         </div>
     }
 </div>

@@ -7,127 +7,64 @@
 <PageTitle>Trial Balance</PageTitle>
 
 <h3>Trial Balance</h3>
+<p class="text-muted mb-2">@PeriodLabel</p>
+
+<ReportPeriodFilter @bind-FromDate="FromDate" @bind-ToDate="ToDate"
+                    PdfUrl="@PdfUrl" OnChanged="ReloadAsync" />
 
 @if (IsLoading)
 {
     <p>Loading...</p>
 }
+else if (!Items.Any())
+{
+    <p>No transactions in this period.</p>
+}
 else
 {
-    <div class="d-none d-lg-block">
-        <div class="px-3 py-2">
-            <div class="row">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="fw-bold">
-                                Account
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="fw-bold">
-                                Account Type
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="fw-bold">
-                                Debit
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="fw-bold">
-                                Credit
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="table-responsive">
+        <table class="table table-sm align-middle">
+            <thead>
+                <tr>
+                    <th>Account</th>
+                    <th>Type</th>
+                    <th class="text-end">Debit</th>
+                    <th class="text-end">Credit</th>
+                    <th class="text-end">Balance Dr</th>
+                    <th class="text-end">Balance Cr</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Items)
+                {
+                    <tr>
+                        <td>@item.AccountName</td>
+                        <td>@item.AccountType</td>
+                        <td class="text-end">@(item.Debit > 0 ? item.Debit.ToString("C") : "")</td>
+                        <td class="text-end">@(item.Credit > 0 ? item.Credit.ToString("C") : "")</td>
+                        <td class="text-end">@(item.BalanceDebit > 0 ? item.BalanceDebit.ToString("C") : "")</td>
+                        <td class="text-end">@(item.BalanceCredit > 0 ? item.BalanceCredit.ToString("C") : "")</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr class="fw-bold border-top border-2">
+                    <td colspan="2">Total</td>
+                    <td class="text-end">@TotalDebit.ToString("C")</td>
+                    <td class="text-end">@TotalCredit.ToString("C")</td>
+                    <td class="text-end">@TotalBalanceDebit.ToString("C")</td>
+                    <td class="text-end">@TotalBalanceCredit.ToString("C")</td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
-    int rowIndex = 0;
-    decimal totalDebit = 0;
-    decimal totalCredit = 0;
-    @foreach (var item in TrialBalanceReportItems)
+
+    @if (!Balances)
     {
-        var rowClass = rowIndex % 2 == 0 ? "alt-row" : "";
-        totalDebit += item.Debit;
-        totalCredit += item.Credit;
-        <div class="card mb-3 mb-lg-0 @rowClass">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="row">
-                            <div class="col-5 d-lg-none">
-                                Account:
-                            </div>
-                            <div class="col-7 col-lg-4">
-                                <div class="">
-                                    @item.AccountName
-                                </div>
-                            </div>
-                            <div class="col-5 d-lg-none">
-                                Account Type:
-                            </div>
-                            <div class="col-7 col-lg-4">
-                                <div class="">
-                                    @item.AccountType
-                                </div>
-                            </div>
-                            <div class="col-5 d-lg-none">
-                                Debit:
-                            </div>
-                            <div class="col-7 col-lg-2">
-                                <div class="">
-                                    @(item.Debit > 0 ? item.Debit.ToString("C") : "")
-                                </div>
-                            </div>
-                            <div class="col-5 d-lg-none">
-                                Credit:
-                            </div>
-                            <div class="col-7 col-lg-2">
-                                <div class="">
-                                    @(item.Credit > 0 ? item.Credit.ToString("C") : "")
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="alert alert-danger">
+            <strong>The trial balance does not balance.</strong>
+            Debits of @TotalDebit.ToString("C") do not agree to credits of
+            @TotalCredit.ToString("C"). A transaction is missing one side.
         </div>
-        rowIndex++;
     }
-    <div class="card mb-3 mb-lg-0 fw-bold">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-5 d-lg-none">
-                            Total:
-                        </div>
-                        <div class="col-7 col-lg-8">
-                            <div class="">
-                                Total
-                            </div>
-                        </div>
-                        <div class="col-5 d-lg-none">
-                            Debit:
-                        </div>
-                        <div class="col-7 col-lg-2">
-                            <div class="">
-                                @totalDebit.ToString("C")
-                            </div>
-                        </div>
-                        <div class="col-5 d-lg-none">
-                            Credit:
-                        </div>
-                        <div class="col-7 col-lg-2">
-                            <div class="">
-                                @totalCredit.ToString("C")
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 }

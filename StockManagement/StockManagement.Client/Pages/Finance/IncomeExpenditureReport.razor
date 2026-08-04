@@ -1,0 +1,82 @@
+@page "/income-expenditure"
+@layout MainLayoutClient
+@using StockManagement.Client.Components.Finance
+@using StockManagement.Client.Shared
+@inherits IncomeExpenditureReportBase
+@rendermode InteractiveWebAssembly
+<PageTitle>Income and Expenditure</PageTitle>
+
+<h3>Income and Expenditure</h3>
+<p class="text-muted mb-2">@PeriodLabel</p>
+
+<ReportPeriodFilter @bind-FromDate="FromDate" @bind-ToDate="ToDate"
+                    PdfUrl="@PdfUrl" OnChanged="ReloadAsync" />
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else if (!Items.Any())
+{
+    <p>No transactions in this period.</p>
+}
+else
+{
+    @foreach (var section in new[] { 1, 2 })
+    {
+        @if (HasSection(section))
+        {
+            <h4 class="mt-4">@(section == 1 ? "Income" : "Expenditure")</h4>
+            @foreach (var account in AccountsIn(section))
+            {
+                <h6 class="mt-3">@account.Key</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle">
+                        <thead>
+                            <tr>
+                                <th style="width:7rem">Date</th>
+                                <th>Description</th>
+                                <th>Contact</th>
+                                <th class="text-end" style="width:8rem">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var line in account)
+                            {
+                                <tr>
+                                    <td>@line.Date.ToString("dd/MM/yyyy")</td>
+                                    <td>
+                                        @line.Description
+                                        @if (line.IsNonCash)
+                                        {
+                                            <span class="badge bg-secondary ms-1">non-cash</span>
+                                        }
+                                    </td>
+                                    <td>@line.ContactName</td>
+                                    <td class="text-end">@line.Amount.ToString("C")</td>
+                                </tr>
+                            }
+                            <tr class="fw-bold">
+                                <td colspan="3">@account.Key total</td>
+                                <td class="text-end">@account.Sum(l => l.Amount).ToString("C")</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            }
+            <div class="fw-bold fs-5 border-top border-2 pt-2 mb-3 d-flex justify-content-between">
+                <span>Total @(section == 1 ? "income" : "expenditure")</span>
+                <span>@SectionTotal(section).ToString("C")</span>
+            </div>
+        }
+    }
+
+    @if (NonCashTotal != 0)
+    {
+        <div class="alert alert-info">
+            @NonCashTotal.ToString("C") of the above is non-cash &mdash; stock consumed
+            rather than money spent (cost of goods sold, stock written off, stock used
+            for promotion). These lines are excluded under the cash basis.
+        </div>
+    }
+}

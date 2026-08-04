@@ -1,0 +1,58 @@
+@page "/nominal-ledger"
+@layout MainLayoutClient
+@using StockManagement.Client.Components.Finance
+@using StockManagement.Client.Shared
+@inherits NominalLedgerReportBase
+@rendermode InteractiveWebAssembly
+<PageTitle>Nominal Ledger</PageTitle>
+
+<h3>Nominal Ledger</h3>
+<p class="text-muted mb-2">@PeriodLabel</p>
+
+<ReportPeriodFilter @bind-FromDate="FromDate" @bind-ToDate="ToDate"
+                    PdfUrl="@PdfUrl" OnChanged="ReloadAsync" />
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else if (!Items.Any())
+{
+    <p>No transactions in this period.</p>
+}
+else
+{
+    @foreach (var account in ByAccount)
+    {
+        <h5 class="mt-4">@account.Key <small class="text-muted">(@account.First().AccountType)</small></h5>
+        <div class="table-responsive">
+            <table class="table table-sm align-middle">
+                <thead>
+                    <tr>
+                        <th style="width:7rem">Date</th>
+                        <th>Description</th>
+                        <th>Contact</th>
+                        <th>Reference</th>
+                        <th class="text-end">Debit</th>
+                        <th class="text-end">Credit</th>
+                        <th class="text-end">Balance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var line in account)
+                    {
+                        <tr class="@(line.LineType == 0 ? "table-light fst-italic" : "")">
+                            <td>@(line.Date.HasValue ? line.Date.Value.ToString("dd/MM/yyyy") : "")</td>
+                            <td>@line.Description</td>
+                            <td>@line.ContactName</td>
+                            <td>@line.Reference</td>
+                            <td class="text-end">@(line.Debit > 0 ? line.Debit.ToString("C") : "")</td>
+                            <td class="text-end">@(line.Credit > 0 ? line.Credit.ToString("C") : "")</td>
+                            <td class="text-end">@line.RunningBalance.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}

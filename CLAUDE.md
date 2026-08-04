@@ -77,6 +77,45 @@ There are two implementations of each `IXxxDataService`:
 
 `GenericDataService` centralizes CRUD-over-HTTP, unwraps the `ApiResponse` envelope, and reports failures through `ErrorNotificationService`.
 
+### Dates
+
+Transaction, sale and stock-order dates are **calendar dates, not instants**, and
+are stored as `DATE`: `finance.Transaction.Date`, `finance.TransactionDetail.Date`,
+`dbo.StockSale.Date`, `dbo.StockOrder.Date`, `finance.InventoryBatch.PurchaseDate`.
+`CreateDate` / `AmendDate` remain `DATETIME` — those are genuine audit timestamps.
+
+The client sends dates via `ApiJson.Options` (`StockManagement.Client/Services/ApiJson.cs`),
+which serialises `DateTime` with **no timezone offset**. Use it for every
+`PostAsJsonAsync` / `PutAsJsonAsync`. Without it, Blazor WASM sends browser-local
+time, the UTC container converts it back, and dates entered during British Summer
+Time are stored a day early — a bug that silently corrupted 42 sale receipts and
+was invisible all winter. Query-string dates go as `yyyy-MM-dd`.
+
+Report date ranges are half-open in SQL: `>= @FromDate AND < DATEADD(DAY, 1, @ToDate)`.
+Never `<= DATEADD(DAY, 1, @ToDate)` — that pulls in the day after the period end.
+
+### Finance reports
+
+The year-end reports live in `finance/Stored Procedures/Report_*.sql` and are
+surfaced through `ReportController` → `IReportService` → `IReportRepository`.
+`Report_ProfitAndLoss` and `Report_BalanceSheet` take an `@Basis` parameter
+(1 = accruals, 2 = cash); on the cash basis, stock is expensed when paid for and
+every journal that credits the Inventory account is excluded.
+
+`Report_ProfitAndLoss` returns **all amounts positive**, grouped into Income /
+Cost of Sales / Expenses. Net profit is `Income - CostOfSales - Expenses`, never
+a plain sum of the rows.
+
+Point-in-time stock valuation is rebuilt from `finance.vw_InventoryBatchMovement`,
+which reconstructs each batch's quantity from its movement history. That view
+deliberately does **not** filter on `Activity.Deleted`: `Activity_Delete` only
+soft-deletes the activity row and does not reverse the stock movement, so the
+`InventoryBatchActivity` rows remain authoritative.
+
+PDF reports derive from `PdfDocuments/FinanceReportDocument.cs`, which supplies
+the shared header, footer and cell styles. `api/Pdf/year-end-pack` merges all of
+them into a single document.
+
 ### Stored-procedure conventions
 
 - Naming: `dbo.<Entity>_<Action>` — e.g. `Product_Create`, `Product_LoadAll`, `Product_Update`, `Product_Delete`, `Activity_LoadFiltered`.

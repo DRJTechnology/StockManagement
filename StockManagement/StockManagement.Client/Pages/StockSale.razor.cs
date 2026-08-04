@@ -395,7 +395,7 @@ public partial class StockSaleBase : ComponentBase
         StockSaleConfirmPayment = new StockSaleConfirmPaymentModel()
         {
             StockSaleId = EditStockSale.Id,
-            PaymentDate = DateTime.Now.Date,
+            PaymentDate = DateTime.Today,
             Description = DescribeSale(),
         };
         ShowSaleConfirmPayment = true;

@@ -70,8 +70,11 @@ BEGIN
 		WHILE @@FETCH_STATUS = 0
 		BEGIN
 
+			-- PurchaseDate drives FIFO ordering and the point-in-time stock
+			-- valuation, so it must be the date the stock was paid for, not the
+			-- moment the payment happened to be keyed in.
 			INSERT INTO finance.InventoryBatch (InventoryBatchStatusId, ProductId, ProductTypeId, LocationId, InitialQuantity, QuantityRemaining, UnitCost, PurchaseDate, Deleted, CreateUserId, CreateDate, AmendUserId, AmendDate)
-			SELECT	1 /* pending */, ProductId, ProductTypeId, 1 /* stockroom */, Quantity, Quantity, UnitPrice, @UpdateDate, 0, @CurrentUserId, @UpdateDate, @CurrentUserId, @UpdateDate
+			SELECT	1 /* pending */, ProductId, ProductTypeId, 1 /* stockroom */, Quantity, Quantity, UnitPrice, @PaymentDate, 0, @CurrentUserId, @UpdateDate, @CurrentUserId, @UpdateDate
 			FROM	@StockPaymentDetails
 			WHERE	StockOrderDetailId = @StockOrderDetailId
 

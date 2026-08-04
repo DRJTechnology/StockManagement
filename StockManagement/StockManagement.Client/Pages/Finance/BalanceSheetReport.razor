@@ -2,83 +2,96 @@
 @layout MainLayoutClient
 @using StockManagement.Client.Components.Finance
 @using StockManagement.Client.Shared
+@using StockManagement.Models.Dto.Finance
 @inherits BalanceSheetReportBase
 @rendermode InteractiveWebAssembly
 <PageTitle>Balance Sheet</PageTitle>
 
 <h3>Balance Sheet</h3>
+<p class="text-muted mb-2">As at @ToDate.ToString("d MMMM yyyy") &mdash; @BasisLabel</p>
+
+<ReportPeriodFilter @bind-FromDate="FromDate" @bind-ToDate="ToDate" @bind-Basis="Basis"
+                    ShowBasis="true" PdfUrl="@PdfUrl" OnChanged="ReloadAsync" />
 
 @if (IsLoading)
 {
     <p>Loading...</p>
 }
+else if (!Items.Any())
+{
+    <p>No balances at this date.</p>
+}
 else
 {
-    <InventoryValue />
+    <div class="table-responsive">
+        <table class="table table-sm align-middle">
+            <thead>
+                <tr>
+                    <th>Account</th>
+                    <th class="text-end" style="width:10rem">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var section in new[] { 1, 2, 3 })
+                {
+                    @if (Section(section).Any())
+                    {
+                        <tr class="table-light">
+                            <th colspan="2">@Section(section).First().Section</th>
+                        </tr>
+                        @foreach (var item in Section(section))
+                        {
+                            <tr>
+                                <td class="ps-4">@item.AccountName</td>
+                                <td class="text-end">@item.Amount.ToString("C")</td>
+                            </tr>
+                        }
+                    }
+                }
+                <tr class="fw-bold border-top border-2">
+                    <td>Net assets</td>
+                    <td class="text-end">@NetAssets.ToString("C")</td>
+                </tr>
 
-    <div class="d-none d-lg-block">
-        <div class="px-3 py-2">
-            <div class="row">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-5">
-                            <div class="fw-bold">
-                                Account
-                            </div>
-                        </div>
-                        <div class="col-5">
-                            <div class="fw-bold">
-                                Account Type
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="fw-bold">
-                                Balance
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                <tr class="table-light"><th colspan="2">Capital</th></tr>
+                @foreach (var item in Section(4))
+                {
+                    <tr>
+                        <td class="ps-4">@item.AccountName</td>
+                        <td class="text-end">@item.Amount.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr class="fw-bold border-top border-2 fs-5">
+                    <td>Total capital</td>
+                    <td class="text-end">@TotalCapital.ToString("C")</td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
-    int rowIndex = 0;
-    @foreach (var item in BalanceSheetReportItems)
+
+    @if (!Balances)
     {
-        var rowClass = rowIndex % 2 == 0 ? "alt-row" : "";
-        <div class="card mb-3 mb-lg-0 @rowClass">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="row">
-                            <div class="col-5 d-lg-none">
-                                Account:
-                            </div>
-                            <div class="col-7 col-lg-5">
-                                <div class="">
-                                    @item.AccountName
-                                </div>
-                            </div>
-                            <div class="col-5 d-lg-none">
-                                Account Type:
-                            </div>
-                            <div class="col-7 col-lg-5">
-                                <div class="">
-                                    @item.AccountType
-                                </div>
-                            </div>
-                            <div class="col-5 d-lg-none">
-                                Balance:
-                            </div>
-                            <div class="col-7 col-lg-2">
-                                <div class="">
-                                    @item.Balance.ToString("C")
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="alert alert-danger">
+            <strong>This balance sheet does not balance.</strong>
+            Net assets of @NetAssets.ToString("C") do not agree to total capital of
+            @TotalCapital.ToString("C"), a difference of
+            @((NetAssets - TotalCapital).ToString("C")). Check the Trial Balance for a
+            transaction that is missing one side before sending these accounts out.
         </div>
-        rowIndex++;
+    }
+
+    @if (Basis == AccountingBasis.Cash)
+    {
+        <div class="alert alert-info">
+            On the cash basis, stock is expensed when it is paid for, so no closing
+            stock is carried here. With no business bank account, the business holds
+            no assets and net assets are nil.
+        </div>
+    }
+    else
+    {
+        <InventoryValue />
     }
 }

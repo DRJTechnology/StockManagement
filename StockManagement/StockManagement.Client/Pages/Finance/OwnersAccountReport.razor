@@ -1,0 +1,93 @@
+@* "/owners-account" is the existing interactive Owner's Account screen
+   (add income / add expense). This is the read-only year-end report. *@
+@page "/owners-account-report"
+@layout MainLayoutClient
+@using StockManagement.Client.Components.Finance
+@using StockManagement.Client.Shared
+@inherits OwnersAccountReportBase
+@rendermode InteractiveWebAssembly
+<PageTitle>Capital and Drawings</PageTitle>
+
+<h3>Owner's Capital and Drawings</h3>
+<p class="text-muted mb-2">@PeriodLabel</p>
+
+<ReportPeriodFilter @bind-FromDate="FromDate" @bind-ToDate="ToDate"
+                    PdfUrl="@PdfUrl" OnChanged="ReloadAsync" />
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else if (!Items.Any())
+{
+    <p>No movements in this period.</p>
+}
+else
+{
+    <div class="card mb-3">
+        <div class="card-body">
+            <h6 class="card-title">Summary</h6>
+            <table class="table table-sm mb-0">
+                <tbody>
+                    @foreach (var category in ByCategory)
+                    {
+                        <tr>
+                            <td>@category.Category</td>
+                            <td class="text-muted text-end">@category.Count item(s)</td>
+                            <td class="text-end" style="width:9rem">@category.Total.ToString("C")</td>
+                        </tr>
+                    }
+                    <tr class="fw-bold border-top">
+                        <td colspan="2">Net movement</td>
+                        <td class="text-end">@NetMovement.ToString("C")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    @foreach (var account in ByAccount)
+    {
+        <h5 class="mt-4">@account.Key</h5>
+        <div class="table-responsive">
+            <table class="table table-sm align-middle">
+                <thead>
+                    <tr>
+                        <th style="width:7rem">Date</th>
+                        <th>Description</th>
+                        <th>Contact</th>
+                        <th>Category</th>
+                        <th class="text-end" style="width:8rem">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-light fst-italic">
+                        <td colspan="4">Opening balance</td>
+                        <td class="text-end">@account.First().OpeningBalance.ToString("C")</td>
+                    </tr>
+                    @foreach (var line in account)
+                    {
+                        <tr>
+                            <td>@line.Date.ToString("dd/MM/yyyy")</td>
+                            <td>@line.Description</td>
+                            <td>@line.ContactName</td>
+                            <td><small class="text-muted">@line.Category</small></td>
+                            <td class="text-end">@line.Amount.ToString("C")</td>
+                        </tr>
+                    }
+                    <tr class="fw-bold border-top">
+                        <td colspan="4">Movement in period</td>
+                        <td class="text-end">@account.Sum(l => l.Amount).ToString("C")</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <div class="alert alert-info">
+        The business has no separate bank account. Money the owner puts in is capital
+        introduced, and money taken out &mdash; including sale proceeds received
+        personally &mdash; is drawings. This is the only record of cash flow between the
+        owner and the business.
+    </div>
+}
