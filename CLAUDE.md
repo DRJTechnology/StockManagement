@@ -34,6 +34,31 @@ The database is a SQL Server Database Project (`.sqlproj`). Schema and stored pr
 
 Production deploy is a manual PowerShell flow, not CI. `.github/workflows/` is empty. `PowerShell/DeployStockManagement.ps1` builds the Docker image, saves it to a tar, `scp`s it to a home server, and runs `docker compose up -d` over SSH. Bump the `"Version"` field in `appsettings.json` when releasing.
 
+## Documentation
+
+Prose/design documentation — explanations of how a piece of the system works, and why — lives in
+the physical `Documents/` folder at the repository root. Markdown, PascalCase filenames
+(e.g. `Documents/StockValuationPointInTime.md`).
+
+Adding a document is **two steps**:
+
+1. Write the `.md` file into `Documents/`.
+2. Add it to the `Documents` **solution folder** in `StockManagement.sln`, so it appears in Visual
+   Studio's Solution Explorer:
+
+```
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{962C731E-842A-4A54-AA8B-6D3B861193DE}"
+	ProjectSection(SolutionItems) = preProject
+		Documents\StockValuationPointInTime.md = Documents\StockValuationPointInTime.md
+	EndProjectSection
+EndProject
+```
+
+Add one `Documents\X.md = Documents\X.md` line per document inside the existing
+`ProjectSection(SolutionItems)` block — do not create a second solution folder. Solution folders
+take no `ProjectConfigurationPlatforms` entries. Use relative links (`../StockManagement.Database/...`)
+inside documents so they resolve both in the editor and on GitHub.
+
 ## Architecture
 
 ### Project layout & dependency direction
