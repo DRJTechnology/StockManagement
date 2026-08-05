@@ -94,6 +94,39 @@ public partial class SalesReportBase : ComponentBase
         }
     }
 
+    private DateTime _fromDate = new DateTime(2000, 1, 1);
+    private DateTime _toDate = new DateTime(2099, 12, 31);
+
+    /// <summary>
+    /// Defaults to all dates so the report behaves as it always has. Narrow it
+    /// to a financial year when preparing accounts.
+    /// </summary>
+    protected DateTime FromDate
+    {
+        get => _fromDate;
+        set
+        {
+            if (_fromDate != value)
+            {
+                _fromDate = value;
+                _ = PopulateReport();
+            }
+        }
+    }
+
+    protected DateTime ToDate
+    {
+        get => _toDate;
+        set
+        {
+            if (_toDate != value)
+            {
+                _toDate = value;
+                _ = PopulateReport();
+            }
+        }
+    }
+
     protected List<SalesReportItemDto> SalesReportItems = new();
     protected Dictionary<string, Dictionary<string, List<SalesReportItemDto>>> GroupedSalesReport = new();
 
@@ -109,7 +142,7 @@ public partial class SalesReportBase : ComponentBase
     {
         IsLoading = true;
 
-        SalesReportItems = await ReportDataService.GetSalesReportAsync(SalesReportType, LocationId, CustomerId, ProductTypeId, ProductId);
+        SalesReportItems = await ReportDataService.GetSalesReportAsync(SalesReportType, LocationId, CustomerId, ProductTypeId, ProductId, FromDate, ToDate);
 
         // Group by Customer when the report is run by customer, otherwise by Location.
         Func<SalesReportItemDto, string> groupSelector = SalesReportType == 2

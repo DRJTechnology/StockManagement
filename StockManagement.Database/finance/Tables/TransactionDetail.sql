@@ -2,7 +2,7 @@
     [Id]            INT            IDENTITY (1, 1) NOT NULL,
     [TransactionId] INT            NOT NULL,
     [AccountId]     INT            NOT NULL,
-    [Date]          DATETIME       NOT NULL,
+    [Date]          DATE           NOT NULL,
     [Description]   NVARCHAR (512) NOT NULL,
     [Amount]        MONEY          NOT NULL,
     [Direction]     SMALLINT       NOT NULL,

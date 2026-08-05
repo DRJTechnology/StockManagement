@@ -2,109 +2,96 @@
 @layout MainLayoutClient
 @using StockManagement.Client.Components.Finance
 @using StockManagement.Client.Shared
+@using StockManagement.Models.Dto.Finance
 @inherits ProfitAndLossReportBase
 @rendermode InteractiveWebAssembly
 <PageTitle>Profit and Loss</PageTitle>
 
 <h3>Profit and Loss</h3>
+<p class="text-muted mb-2">@PeriodLabel &mdash; @BasisLabel</p>
+
+<ReportPeriodFilter @bind-FromDate="FromDate" @bind-ToDate="ToDate" @bind-Basis="Basis"
+                    ShowBasis="true" PdfUrl="@PdfUrl" OnChanged="ReloadAsync" />
 
 @if (IsLoading)
 {
     <p>Loading...</p>
 }
+else if (!Items.Any())
+{
+    <p>No transactions in this period.</p>
+}
 else
 {
-    <div class="d-none d-lg-block">
-        <div class="px-3 py-2">
-            <div class="row">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-5">
-                            <div class="fw-bold">
-                                Account
-                            </div>
-                        </div>
-                        <div class="col-5">
-                            <div class="fw-bold">
-                                Account Type
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="fw-bold">
-                                Balance
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="table-responsive">
+        <table class="table table-sm align-middle">
+            <thead>
+                <tr>
+                    <th>Account</th>
+                    <th class="text-end" style="width:10rem">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="table-light"><th colspan="2">Income</th></tr>
+                @foreach (var item in Section(1))
+                {
+                    <tr>
+                        <td class="ps-4">@item.AccountName</td>
+                        <td class="text-end">@item.Amount.ToString("C")</td>
+                    </tr>
+                }
+                <tr class="fw-bold border-top">
+                    <td>Turnover</td>
+                    <td class="text-end">@Income.ToString("C")</td>
+                </tr>
+
+                @if (Section(2).Any())
+                {
+                    <tr class="table-light"><th colspan="2">Cost of Sales</th></tr>
+                    @foreach (var item in Section(2))
+                    {
+                        <tr>
+                            <td class="ps-4">@item.AccountName</td>
+                            <td class="text-end">(@item.Amount.ToString("C"))</td>
+                        </tr>
+                    }
+                    <tr class="fw-bold border-top">
+                        <td>Gross profit</td>
+                        <td class="text-end">@GrossProfit.ToString("C")</td>
+                    </tr>
+                }
+
+                @if (Section(3).Any())
+                {
+                    <tr class="table-light"><th colspan="2">Expenses</th></tr>
+                    @foreach (var item in Section(3))
+                    {
+                        <tr>
+                            <td class="ps-4">@item.AccountName</td>
+                            <td class="text-end">(@item.Amount.ToString("C"))</td>
+                        </tr>
+                    }
+                    <tr class="fw-bold border-top">
+                        <td>Total expenses</td>
+                        <td class="text-end">(@Expenses.ToString("C"))</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr class="fw-bold border-top border-2 fs-5">
+                    <td>Net @(NetProfit >= 0 ? "profit" : "loss")</td>
+                    <td class="text-end">@NetProfit.ToString("C")</td>
+                </tr>
+            </tfoot>
+        </table>
     </div>
-    int rowIndex = 0;
-    decimal netProfit = 0;
-    @foreach (var item in ProfitAndLossReportItems)
+
+    @if (Basis == AccountingBasis.Cash)
     {
-        var rowClass = rowIndex % 2 == 0 ? "alt-row" : "";
-        netProfit += item.Balance;
-        <div class="card mb-3 mb-lg-0 @rowClass">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="row">
-                            <div class="col-5 d-lg-none">
-                                Account:
-                            </div>
-                            <div class="col-7 col-lg-5">
-                                <div class="">
-                                    @item.AccountName
-                                </div>
-                            </div>
-                            <div class="col-5 d-lg-none">
-                                Account Type:
-                            </div>
-                            <div class="col-7 col-lg-5">
-                                <div class="">
-                                    @item.AccountType
-                                </div>
-                            </div>
-                            <div class="col-5 d-lg-none">
-                                Balance:
-                            </div>
-                            <div class="col-7 col-lg-2">
-                                <div class="">
-                                    @item.Balance.ToString("C")
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="alert alert-info">
+            On the cash basis, stock is expensed when it is paid for. Cost of goods sold,
+            stock written off, stock used for promotion and stock taken for own use are
+            excluded, and no closing stock is carried on the Balance Sheet.
         </div>
-        rowIndex++;
     }
-    <div class="card mb-3 mb-lg-0 fw-bold">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="row">
-                        <div class="col-5 d-lg-none">
-                            Net Profit/Loss:
-                        </div>
-                        <div class="col-7 col-lg-10">
-                            <div class="">
-                                Net @(netProfit >= 0 ? "Profit" : "Loss")
-                            </div>
-                        </div>
-                        <div class="col-5 d-lg-none">
-                            Amount:
-                        </div>
-                        <div class="col-7 col-lg-2">
-                            <div class="">
-                                @netProfit.ToString("C")
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 }

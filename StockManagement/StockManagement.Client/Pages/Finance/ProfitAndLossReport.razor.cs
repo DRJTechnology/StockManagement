@@ -1,40 +1,31 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using StockManagement.Client.Interfaces;
-using StockManagement.Models;
 using StockManagement.Models.Dto.Finance;
-using StockManagement.Models.Dto.Reports;
 
-[Authorize]
-public partial class ProfitAndLossReportBase : ComponentBase
+namespace StockManagement.Client.Pages.Finance
 {
-    [Inject]
-    protected IReportDataService ReportDataService { get; set; } = default!;
-
-    [Inject]
-    public IJSRuntime JSRuntime { get; set; } = default!;
-
-    [Inject]
-    protected IJavascriptMethodsService JavascriptMethodsService { get; set; } = default!;
-
-    protected bool IsLoading = true;
-
-    protected List<ProfitAndLossDto> ProfitAndLossReportItems = new();
-
-    protected override async Task OnInitializedAsync()
+    public partial class ProfitAndLossReportBase : FinanceReportBase
     {
-        if (JSRuntime is IJSInProcessRuntime)
+        protected List<ProfitAndLossDto> Items = new();
+
+        protected override async Task LoadReportDataAsync()
         {
-            await PopulateReport();
+            Items = await ReportDataService.GetProfitAndLossReportAsync(FromDate, ToDate, Basis);
         }
-    }
 
-    protected async Task PopulateReport()
-    {
-        IsLoading = true;
-        ProfitAndLossReportItems = await ReportDataService.GetProfitAndLossReportAsync();
-        IsLoading = false;
-        StateHasChanged();
+        protected decimal Income => Items.Where(i => i.SectionId == 1).Sum(i => i.Amount);
+        protected decimal CostOfSales => Items.Where(i => i.SectionId == 2).Sum(i => i.Amount);
+        protected decimal Expenses => Items.Where(i => i.SectionId == 3).Sum(i => i.Amount);
+
+        protected decimal GrossProfit => Income - CostOfSales;
+
+        /// <summary>
+        /// Income less cost of sales less expenses. Never a plain sum of every
+        /// row: the stored procedure returns all amounts positive.
+        /// </summary>
+        protected decimal NetProfit => Income - CostOfSales - Expenses;
+
+        protected IEnumerable<ProfitAndLossDto> Section(int sectionId)
+            => Items.Where(i => i.SectionId == sectionId);
+
+        protected string PdfUrl => $"api/Pdf/profit-and-loss?{PeriodQuery}&basis={(int)Basis}";
     }
 }

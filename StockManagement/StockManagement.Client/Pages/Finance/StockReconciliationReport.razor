@@ -1,0 +1,50 @@
+@page "/stock-reconciliation"
+@layout MainLayoutClient
+@using StockManagement.Client.Components.Finance
+@using StockManagement.Client.Shared
+@inherits StockReconciliationReportBase
+@rendermode InteractiveWebAssembly
+<PageTitle>Stock Reconciliation</PageTitle>
+
+<h3>Stock Reconciliation</h3>
+<p class="text-muted mb-2">@PeriodLabel</p>
+
+<ReportPeriodFilter @bind-FromDate="FromDate" @bind-ToDate="ToDate"
+                    PdfUrl="@PdfUrl" OnChanged="ReloadAsync" />
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-sm align-middle">
+            <tbody>
+                @foreach (var item in Items)
+                {
+                    <tr class="@(item.IsTotal ? "fw-bold border-top" : "")">
+                        <td>@item.Description</td>
+                        <td class="text-end" style="width:10rem">@item.Amount.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (Math.Abs(Difference) > 0.50m)
+    {
+        <div class="alert alert-warning">
+            The ledger and the stock records differ by @Difference.ToString("C").
+            A difference of a few pence is FIFO rounding and is expected; anything
+            larger needs investigating before the accounts are finalised.
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-success">
+            The Inventory account agrees to the physical stock records to within
+            @Math.Abs(Difference).ToString("C") &mdash; FIFO rounding only.
+        </div>
+    }
+}

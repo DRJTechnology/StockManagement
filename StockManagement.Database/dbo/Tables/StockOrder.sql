@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[StockOrder] (
     [Id]                    INT      IDENTITY (1, 1) NOT NULL,
-    [Date]                  DATETIME NOT NULL,
+    [Date]                  DATE     NOT NULL,
     [ContactId]             INT      NOT NULL,
     [TotalCost]             MONEY    NULL,
     [PaymentRecorded]       BIT      CONSTRAINT [DF_StockOrder_PaymentRecorded] DEFAULT ((0)) NOT NULL,

@@ -16,7 +16,7 @@ namespace StockManagement.Client.Services
         {
             try
             {
-                var response = await httpClient.PostAsJsonAsync<StockSaleConfirmationModel>($"api/{ApiControllerName}/ConfirmStockSale", stockSaleConfirmation);
+                var response = await httpClient.PostAsJsonAsync<StockSaleConfirmationModel>($"api/{ApiControllerName}/ConfirmStockSale", stockSaleConfirmation, ApiJson.Options);
                 if (response == null || !response.IsSuccessStatusCode)
                 {
                     throw new Exception($"Failed to confirm stock sale: HTTP {response?.StatusCode}");
@@ -45,7 +45,7 @@ namespace StockManagement.Client.Services
         {
             try
             {
-                var response = await httpClient.PostAsJsonAsync<StockSaleConfirmPaymentModel>($"api/{ApiControllerName}/ConfirmStockSalePayment", stockSaleConfirmPaymentModel);
+                var response = await httpClient.PostAsJsonAsync<StockSaleConfirmPaymentModel>($"api/{ApiControllerName}/ConfirmStockSalePayment", stockSaleConfirmPaymentModel, ApiJson.Options);
                 if (response == null || !response.IsSuccessStatusCode)
                 {
                     throw new Exception($"Failed to confirm stock sale payment: HTTP {response?.StatusCode}");

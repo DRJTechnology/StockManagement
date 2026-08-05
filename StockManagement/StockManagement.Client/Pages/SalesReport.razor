@@ -15,11 +15,14 @@ else
 {
     <ReportFilter Lookups="Lookups"
                   ShowReportTypeSelector="true"
+                  ShowDateRange="true"
                   @bind-SalesReportType="SalesReportType"
                   @bind-LocationId="LocationId"
                   @bind-CustomerId="CustomerId"
                   @bind-ProductTypeId="ProductTypeId"
-                  @bind-ProductId="ProductId" />
+                  @bind-ProductId="ProductId"
+                  @bind-FromDate="FromDate"
+                  @bind-ToDate="ToDate" />
 
     if (SalesReportItems == null || !SalesReportItems.Any())
     {

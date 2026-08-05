@@ -1,40 +1,33 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using StockManagement.Client.Interfaces;
-using StockManagement.Models;
 using StockManagement.Models.Dto.Finance;
-using StockManagement.Models.Dto.Reports;
 
-[Authorize]
-public partial class BalanceSheetReportBase : ComponentBase
+namespace StockManagement.Client.Pages.Finance
 {
-    [Inject]
-    protected IReportDataService ReportDataService { get; set; } = default!;
-
-    [Inject]
-    public IJSRuntime JSRuntime { get; set; } = default!;
-
-    [Inject]
-    protected IJavascriptMethodsService JavascriptMethodsService { get; set; } = default!;
-
-    protected bool IsLoading = true;
-
-    protected List<BalanceSheetDto> BalanceSheetReportItems = new();
-
-    protected override async Task OnInitializedAsync()
+    public partial class BalanceSheetReportBase : FinanceReportBase
     {
-        if (JSRuntime is IJSInProcessRuntime)
+        protected List<BalanceSheetDto> Items = new();
+
+        protected override async Task LoadReportDataAsync()
         {
-            await PopulateReport();
+            Items = await ReportDataService.GetBalanceSheetReportAsync(FromDate, ToDate, Basis);
         }
-    }
 
-    protected async Task PopulateReport()
-    {
-        IsLoading = true;
-        BalanceSheetReportItems = await ReportDataService.GetBalanceSheetReportAsync();
-        IsLoading = false;
-        StateHasChanged();
+        protected IEnumerable<BalanceSheetDto> Section(int sectionId)
+            => Items.Where(i => i.SectionId == sectionId);
+
+        protected decimal SectionTotal(int sectionId) => Section(sectionId).Sum(i => i.Amount);
+
+        protected decimal NetAssets =>
+            SectionTotal(1) - SectionTotal(2) - SectionTotal(3);
+
+        protected decimal TotalCapital => SectionTotal(4);
+
+        /// <summary>
+        /// Net assets should always equal total capital. Anything else means a
+        /// posting is missing a side, so the report says so rather than quietly
+        /// presenting a sheet that does not balance.
+        /// </summary>
+        protected bool Balances => Math.Round(NetAssets, 2) == Math.Round(TotalCapital, 2);
+
+        protected string PdfUrl => $"api/Pdf/balance-sheet?{PeriodQuery}&basis={(int)Basis}";
     }
 }
