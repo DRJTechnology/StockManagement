@@ -3,8 +3,9 @@
 **How double-entry bookkeeping, the chart of accounts, and the year-end reports are implemented in
 StockManagement — and what to change when porting the same design into another solution.**
 
-The last section is written specifically for **Property Portfolio Manager**, which has a
-portfolio rather than stock, and needs transactions allocated to individual properties.
+Sections 9 and 10 are written specifically for **Property Portfolio Manager**, which has a
+portfolio rather than stock, needs transactions allocated to individual properties, and is
+migrating off FreshBooks.
 
 ---
 
@@ -571,7 +572,182 @@ all in the year.
 
 ---
 
-## 10. Traps worth restating
+## 10. Migrating from FreshBooks
+
+The Property Portfolio Manager accounts are currently kept in FreshBooks. The ledger there is
+already double-entry, so this is a ledger-to-ledger migration, not a reconstruction — provided the
+right report is exported.
+
+### 10.1 What to export
+
+**The General Ledger export is the one that matters.** It is a list of journal lines and maps
+almost 1:1 onto `finance.TransactionDetail`. Everything else is supporting cast.
+
+`Reports → General Ledger` (under Accounting Reports) → `More Actions → Export for Excel` (CSV).
+
+The default columns are only Date, Transaction Type, Transaction Number, Amount and Balance —
+**not enough to reconstruct double entry.** Enable the additional columns before exporting:
+
+- **Debit** and **Credit** — become `Amount` + `Direction`
+- **Related Account** — the other side of each posting; the cross-check that the pairing is right
+- **Client**, **Vendor** — become `ContactId`
+- **Project** — most likely the property dimension; see §10.2
+- **Note**, **Account Type**, **Account Subtype**, **Account Number**, **Currency**
+
+Then also export:
+
+| FreshBooks export | Feeds |
+|---|---|
+| Chart of Accounts (CSV, includes archived and deleted) | `finance.Account`, `finance.AccountType` |
+| General Ledger (CSV, one file per financial year) | `finance.Transaction` + `finance.TransactionDetail` |
+| Trial Balance (CSV, per year) | Reconciliation only — never imported |
+| Clients, Vendors (CSV, includes archived) | `dbo.Contact` |
+| Expenses (CSV) + bulk receipt image download | Receipts; the General Ledger does not carry them |
+| Invoices (CSV batch) | Cross-check against the receivable postings |
+| Balance Sheet and P&L per year (PDF) | Evidence for the accountant, not import |
+
+The accounting reports (Chart of Accounts, General Ledger, Trial Balance) require a **Plus,
+Premium or Select** plan. On Lite they do not exist, and the journals would have to be
+reconstructed from the invoice and expense lists — a materially harder job. Confirm the plan
+before planning anything else.
+
+FreshBooks also has a REST API (OAuth2) with a General Ledger endpoint. For a one-time migration
+the CSV exports are simpler; the API only pays off if the extract will be re-run.
+
+### 10.2 Establish the property dimension first
+
+This decides whether `PropertyId` (§9.4) can be populated by rule or by hand, and it is the
+question to answer before exporting anything.
+
+| How property is recorded in FreshBooks | Consequence |
+|---|---|
+| **Projects** | Best case. The Project column comes through on the export and maps straight to `PropertyId`. |
+| **Clients** (one per property or tenant) | Works, but `ContactId` and `PropertyId` are conflated; needs a lookup that splits one FreshBooks client into a contact *and* a property. |
+| **Separate account per property** (e.g. "Repairs — 14 Acacia Ave") | Works, but property is baked into the chart of accounts — exactly what `PropertyId` exists to avoid. Collapse them back to one category account and lift the property out into `PropertyId`. |
+| **Free text in the description or note** | Worst case. Partially machine-extractable; expect manual allocation. |
+
+### 10.3 Mapping onto the schema
+
+The Debit and Credit columns are exactly the shape the schema wants:
+
+```
+Debit  > 0  →  Amount = Debit,  Direction =  1
+Credit > 0  →  Amount = Credit, Direction = -1
+```
+
+Group rows by **Transaction Number + Transaction Type** to rebuild the `finance.Transaction`
+header; the rows themselves become the detail lines.
+
+Do **not** import the **Balance** column — it is a running total, and `Report_NominalLedger`
+recomputes it from the postings.
+
+Two things to plan for:
+
+- The FreshBooks General Ledger is **accrual basis**, so it contains receivable postings from
+  raised invoices, not just cash movements. That is an argument for building the accruals ledger
+  from day one (§9.3) — it is the shape the data arrives in.
+- FreshBooks' equity and retained-earnings accounts will not line up with the seeded chart.
+  Map those by hand; do not try to write a rule for them.
+
+### 10.4 How much history
+
+A real trade-off, and it should be decided before any code is written:
+
+- **Opening balances only** — take the Trial Balance at the last completed year end, post it as a
+  single opening journal, run forward from there. Far less work and far less risk, and it is what
+  an accountant would normally do. Loses per-property history.
+- **Full history** — every year's General Ledger imported. Multi-year per-property performance is
+  arguably the point of a portfolio system, but the reconciliation burden is real.
+- **Recommended middle path** — opening balances at the last year end plus full detail for the
+  current year. Earlier years can be backfilled later, because the import is idempotent (§10.5).
+
+### 10.5 Staging and import design
+
+Land the CSVs verbatim in a `staging` schema, map them, then post through the *same*
+`Transaction_Create` the application uses. Never `INSERT` into `finance.TransactionDetail`
+directly — the posting proc is where balance is enforced, and an import that bypasses it will
+eventually write something the application could not have produced.
+
+```sql
+CREATE TABLE [staging].[FreshBooksGeneralLedger] (
+    [Id]                      INT IDENTITY (1, 1) NOT NULL,
+    [ImportBatchId]           UNIQUEIDENTIFIER NOT NULL,
+    [SourceTransactionNumber] NVARCHAR (50)  NOT NULL,
+    [SourceTransactionType]   NVARCHAR (100) NOT NULL,
+    [Date]                    DATE           NOT NULL,
+    [AccountName]             NVARCHAR (255) NOT NULL,
+    [AccountNumber]           NVARCHAR (50)  NULL,
+    [RelatedAccountName]      NVARCHAR (255) NULL,
+    [Description]             NVARCHAR (512) NULL,
+    [Note]                    NVARCHAR (4000) NULL,
+    [Debit]                   MONEY          NOT NULL CONSTRAINT [DF_FBGL_Debit]  DEFAULT (0),
+    [Credit]                  MONEY          NOT NULL CONSTRAINT [DF_FBGL_Credit] DEFAULT (0),
+    [Currency]                NVARCHAR (3)   NULL,
+    [ClientName]              NVARCHAR (255) NULL,
+    [VendorName]              NVARCHAR (255) NULL,
+    [ProjectName]             NVARCHAR (255) NULL,
+    [ImportedTransactionId]   INT            NULL,   -- set once posted
+    CONSTRAINT [PK_FreshBooksGeneralLedger] PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+```
+
+Plus three hand-maintained mapping tables — `staging.AccountMap`, `staging.PropertyMap`,
+`staging.ContactMap` — each holding the FreshBooks name and the target id. Populate them by hand,
+review them, and keep them in source control: they *are* the migration decisions, and they are
+what someone will need to read in two years to understand why a figure is where it is.
+
+Add a source key to the ledger so re-import is safe and every posting traces back:
+
+```sql
+ALTER TABLE [finance].[Transaction] ADD [SourceReference] NVARCHAR (100) NULL;
+CREATE UNIQUE INDEX [UX_Transaction_SourceReference]
+    ON [finance].[Transaction] ([SourceReference]) WHERE [SourceReference] IS NOT NULL;
+```
+
+This mirrors the pattern already used between `StockSaleDetail.TransactionDetailId` and its
+posting — the source document and the ledger entry are linked both ways.
+
+`staging.FreshBooksGeneralLedger_Import` then, per source transaction:
+
+1. Skips it if `SourceReference` already exists — that is what makes the import idempotent and
+   re-runnable.
+2. **Refuses to post unless `SUM(Debit) = SUM(Credit)`** for the group, recording a rejection
+   rather than posting half a journal.
+3. Fails loudly on any unmapped account, contact or property — never silently defaults to a
+   suspense account or to `PropertyId = NULL`.
+4. Calls `Transaction_Create` and writes the resulting id back to `ImportedTransactionId`.
+
+Rejections belong in a `staging.ImportException` table with the batch id and the reason, so the
+run produces a work list rather than a stack trace.
+
+### 10.6 Reconciliation is the acceptance test
+
+Import is not "done" when it runs without error. It is done when, **for every financial year**:
+
+- Total debits equal total credits in `finance.TransactionDetail`.
+- `Report_TrialBalance` for the year matches the FreshBooks Trial Balance for the same year,
+  account by account.
+- `Report_ProfitAndLoss` net profit matches the FreshBooks P&L.
+- `Report_BalanceSheet` at the year end matches the FreshBooks Balance Sheet, and balances.
+- Every property's allocated total agrees with whatever per-property figures exist today.
+
+This is the only reason to export the Trial Balance at all. Reconcile each year as it is imported,
+not all of them at the end — a discrepancy is far cheaper to find in one year's data.
+
+### 10.7 Cautions
+
+- **Export year by year**, not all at once. Avoids timeouts and gives a natural reconciliation unit.
+- **Do not cancel FreshBooks until the import is reconciled and signed off.** There will be a need
+  to go back. There are also record-retention obligations on property income — confirm the
+  retention period with the accountant before letting the source system lapse.
+- **Keep the raw CSVs.** Commit them, or archive them somewhere durable, exactly as exported. The
+  staging tables can be rebuilt from them; they cannot be re-exported once the subscription ends.
+- **Check the Currency column** before assuming everything is GBP. Mixed currency changes the
+  design well beyond the import.
+
+---
+
+## 11. Traps worth restating
 
 1. **Never sum P&L rows.** `Income − CostOfSales − Expenses`. All rows come back positive.
 2. **Half-open date ranges.** `< DATEADD(DAY, 1, @ToDate)`, never `<=`.
@@ -585,3 +761,6 @@ all in the year.
    code column if you want to avoid that entirely.
 7. **Post journals from the source-document stored procedure, in the same SQL transaction.**
    Never from C#, or the ledger will drift from the documents it is supposed to describe.
+8. **A migration that runs without error is not a migration that worked.** Reconcile every year
+   against the source system's own trial balance before trusting a single figure, and never let an
+   import post an unbalanced transaction or silently default an unmapped account.
