@@ -126,6 +126,7 @@
     <Build Include="Security\auth.sql" />
     <Build Include="dbo\Stored Procedures\Activity_Update.sql" />
     <Build Include="dbo\Stored Procedures\Report_Sales.sql" />
+    <Build Include="dbo\Stored Procedures\Report_SalesInsights.sql" />
     <Build Include="dbo\Stored Procedures\Report_Stock.sql" />
     <Build Include="dbo\Stored Procedures\Activity_LoadFiltered.sql" />
     <Build Include="dbo\Tables\StockSaleDetail.sql" />

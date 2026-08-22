@@ -40,6 +40,20 @@ namespace StockManagement.Repositories
             return reportItemList.ToList();
         }
 
+        public async Task<List<SalesInsightItemDto>> GetSalesInsightsAsync(int locationId, int customerId, int productTypeId, int productId, DateTime fromDate, DateTime toDate)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@LocationId", locationId);
+            parameters.Add("@CustomerId", customerId);
+            parameters.Add("@ProductTypeId", productTypeId);
+            parameters.Add("@ProductId", productId);
+            AddDate(parameters, "@FromDate", fromDate);
+            AddDate(parameters, "@ToDate", toDate);
+
+            var reportItemList = await dbConnection.QueryAsync<SalesInsightItemDto>("dbo.Report_SalesInsights", parameters, commandType: CommandType.StoredProcedure);
+            return reportItemList.ToList();
+        }
+
         public async Task<List<BalanceSheetDto>> GetBalanceSheetReportAsync(DateTime fromDate, DateTime toDate, AccountingBasis basis)
         {
             var parameters = new DynamicParameters();

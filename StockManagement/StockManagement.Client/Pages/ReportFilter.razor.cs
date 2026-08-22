@@ -13,6 +13,37 @@ public partial class ReportFilterBase : ComponentBase
     /// </summary>
     [Parameter] public bool ShowReportTypeSelector { get; set; } = false;
 
+    /// <summary>
+    /// When true, the Customer filter is shown alongside Location rather than
+    /// instead of it. Used by Sales Insights, which slices by both at once.
+    /// </summary>
+    [Parameter] public bool ShowCustomerFilter { get; set; } = false;
+
+    /// <summary>
+    /// When false, the "-- Totals --" (-1) option is omitted. That option only
+    /// means anything to the Sales Report, which has a totals-only mode.
+    /// </summary>
+    [Parameter] public bool ShowTotalsOption { get; set; } = true;
+
+    /// <summary>Location is hidden only when the Sales Report is grouping by customer.</summary>
+    protected bool LocationVisible => ShowCustomerFilter || !ShowReportTypeSelector || SalesReportType == 1;
+
+    protected bool CustomerVisible => ShowCustomerFilter || (ShowReportTypeSelector && SalesReportType == 2);
+
+    /// <summary>Bootstrap column class sized so the visible filters share the row evenly.</summary>
+    protected string ColumnClass
+    {
+        get
+        {
+            var columns = (ShowReportTypeSelector ? 1 : 0)
+                        + (LocationVisible ? 1 : 0)
+                        + (CustomerVisible ? 1 : 0)
+                        + 2; // product type and product are always shown
+
+            return columns >= 5 ? "col-lg-3 col-md-6" : columns == 4 ? "col-lg-3" : "col-lg-4";
+        }
+    }
+
     [Parameter] public EventCallback<int> SalesReportTypeChanged { get; set; }
 
     [Parameter] public EventCallback<int> LocationIdChanged { get; set; }

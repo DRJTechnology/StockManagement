@@ -1,0 +1,212 @@
+@page "/sales-insights"
+@layout MainLayoutClient
+@using StockManagement.Client.Components
+@using StockManagement.Client.Shared
+@inherits SalesInsightsBase
+@rendermode InteractiveWebAssembly
+<PageTitle>Sales Insights</PageTitle>
+
+<h3>Sales Insights</h3>
+<p class="text-muted mb-3">@PeriodLabel</p>
+
+<ReportFilter Lookups="Lookups"
+              ShowDateRange="true"
+              ShowCustomerFilter="true"
+              ShowTotalsOption="false"
+              @bind-LocationId="LocationId"
+              @bind-CustomerId="CustomerId"
+              @bind-ProductTypeId="ProductTypeId"
+              @bind-ProductId="ProductId"
+              @bind-FromDate="FromDate"
+              @bind-ToDate="ToDate" />
+
+@if (IsLoading)
+{
+    <p>Loading...</p>
+}
+else if (!HasData)
+{
+    <p>No sales in this period.</p>
+}
+else
+{
+    <div class="row row-cols-2 row-cols-md-4 g-2 mb-3">
+        @foreach (var tile in KpiTiles)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body py-2 px-3">
+                        <div class="text-muted text-uppercase small">@tile.Caption</div>
+                        <div class="fs-4 fw-semibold">@tile.Value</div>
+                        <div class="text-muted small">@tile.Note</div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (UnvaluedUnits > 0)
+    {
+        <div class="alert alert-info">
+            <strong>@UnvaluedUnits.ToString("N0") units (@UnvaluedPercent.ToString("N1")% of volume) have no recorded sale value.</strong>
+            Sales recorded before the finance module went live are not linked to a sale
+            line and so carry no price. Revenue, gross profit and the averages above are
+            based on the remaining @ValuedUnits.ToString("N0") units.
+        </div>
+    }
+
+    <div class="card mb-3">
+        <div class="card-header d-flex flex-wrap gap-2 align-items-center justify-content-between">
+            <strong>Trend <span class="text-muted fw-normal">@TrendGranularityLabel</span></strong>
+            <div class="btn-group btn-group-sm" role="group">
+                @foreach (var measure in new[] { InsightMeasure.Revenue, InsightMeasure.GrossProfit, InsightMeasure.Units })
+                {
+                    <button type="button"
+                            class="btn @(TrendMeasure == measure ? "btn-primary" : "btn-outline-primary")"
+                            @onclick="() => TrendMeasure = measure">
+                        @MeasureLabel(measure)
+                    </button>
+                }
+            </div>
+        </div>
+        <div class="card-body">
+            <InsightsChart Id="insights-trend" Config="TrendConfig" Height="300" />
+        </div>
+    </div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-lg-5">
+            <div class="card h-100">
+                <div class="card-header d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                    <strong>Revenue split</strong>
+                    <select class="form-select form-select-sm w-auto"
+                            value="@((int)BreakdownDimension)"
+                            @onchange="OnBreakdownDimensionChanged">
+                        @foreach (var dimension in AllDimensions)
+                        {
+                            <option value="@((int)dimension)">By @(DimensionLabel(dimension).ToLower())</option>
+                        }
+                    </select>
+                </div>
+                <div class="card-body">
+                    @if (BreakdownConfig == null)
+                    {
+                        <p class="text-muted mb-0">No revenue recorded in this period.</p>
+                    }
+                    else
+                    {
+                        <InsightsChart Id="insights-breakdown" Config="BreakdownConfig" Height="320" />
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="card h-100">
+                <div class="card-header d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                    <strong>@(RankingWorst ? "Bottom" : "Top") 10</strong>
+                    <div class="d-flex flex-wrap gap-2">
+                        <select class="form-select form-select-sm w-auto"
+                                value="@((int)RankingDimension)"
+                                @onchange="OnRankingDimensionChanged">
+                            @foreach (var dimension in AllDimensions)
+                            {
+                                <option value="@((int)dimension)">@DimensionLabel(dimension)</option>
+                            }
+                        </select>
+                        <select class="form-select form-select-sm w-auto"
+                                value="@((int)RankingMeasure)"
+                                @onchange="OnRankingMeasureChanged">
+                            @foreach (var measure in AllMeasures)
+                            {
+                                <option value="@((int)measure)">@MeasureLabel(measure)</option>
+                            }
+                        </select>
+                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                @onclick="() => RankingWorst = !RankingWorst">
+                            Show @(RankingWorst ? "top" : "bottom")
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <InsightsChart Id="insights-ranking" Config="RankingConfig" Height="320" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header"><strong>@(RankingWorst ? "Bottom" : "Top") 10 by @(MeasureLabel(RankingMeasure).ToLower())</strong></div>
+        <div class="table-responsive">
+            <table class="table table-sm table-striped align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>@DimensionLabel(RankingDimension)</th>
+                        <th class="text-end">@MeasureLabel(RankingMeasure)</th>
+                        <th class="text-end">Share</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in RankingRows)
+                    {
+                        <tr>
+                            <td>@row.Name</td>
+                            <td class="text-end">
+                                @(RankingMeasure == InsightMeasure.Units
+                                    ? row.Value.ToString("N0")
+                                    : row.Value.ToString("C"))
+                            </td>
+                            <td class="text-end">@row.Share.ToString("N1")%</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><strong>By product</strong></div>
+        <div class="table-responsive">
+            <table class="table table-sm align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Product type</th>
+                        <th>Product</th>
+                        <th class="text-end">Units</th>
+                        <th class="text-end">Revenue</th>
+                        <th class="text-end">Cost</th>
+                        <th class="text-end">Gross profit</th>
+                        <th class="text-end">Margin</th>
+                        <th class="text-end">Avg price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in ProductRows)
+                    {
+                        <tr>
+                            <td>@row.ProductTypeName</td>
+                            <td>@row.ProductName</td>
+                            <td class="text-end">@row.Quantity.ToString("N0")</td>
+                            <td class="text-end">@row.Revenue.ToString("C")</td>
+                            <td class="text-end">@row.Cost.ToString("C")</td>
+                            <td class="text-end">@row.GrossProfit.ToString("C")</td>
+                            <td class="text-end">@row.MarginPercent.ToString("N1")%</td>
+                            <td class="text-end">@row.AverageUnitPrice.ToString("C")</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr class="fw-bold border-top border-2">
+                        <td colspan="2">Total</td>
+                        <td class="text-end">@UnitsSold.ToString("N0")</td>
+                        <td class="text-end">@Revenue.ToString("C")</td>
+                        <td class="text-end">@CostOfSales.ToString("C")</td>
+                        <td class="text-end">@GrossProfit.ToString("C")</td>
+                        <td class="text-end">@MarginPercent.ToString("N1")%</td>
+                        <td class="text-end">@AverageUnitPrice.ToString("C")</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+}

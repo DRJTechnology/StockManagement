@@ -14,7 +14,7 @@
     {
         <div class="card-body">
             @{
-                var colClass = ShowReportTypeSelector ? "col-lg-3" : "col-lg-4";
+                var colClass = ColumnClass;
             }
             <div class="row">
                 @if (ShowReportTypeSelector)
@@ -29,12 +29,15 @@
                         </div>
                     </div>
                 }
-                @if (!ShowReportTypeSelector || SalesReportType == 1)
+                @if (LocationVisible)
                 {
                     <div class="@colClass">
                         <div class="form-floating">
                             <InputSelect id="locationFilter" @bind-Value="LocationId" TValue="int" class="form-control">
-                                <option value="-1">-- Totals --</option>
+                                @if (ShowTotalsOption)
+                                {
+                                    <option value="-1">-- Totals --</option>
+                                }
                                 <option value="0">All Locations</option>
                                 @if (Lookups?.LocationList != null)
                                 {
@@ -48,12 +51,15 @@
                         </div>
                     </div>
                 }
-                else
+                @if (CustomerVisible)
                 {
                     <div class="@colClass">
                         <div class="form-floating">
                             <InputSelect id="customerFilter" @bind-Value="CustomerId" TValue="int" class="form-control">
-                                <option value="-1">-- Totals --</option>
+                                @if (ShowTotalsOption)
+                                {
+                                    <option value="-1">-- Totals --</option>
+                                }
                                 <option value="0">All Customers</option>
                                 @if (Lookups?.CustomerList != null)
                                 {
