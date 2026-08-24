@@ -8,5 +8,15 @@ namespace StockManagement.ClientDataServices
         {
             throw new NotImplementedException();
         }
+
+        public Task RenderChartAsync(string canvasId, object config)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DestroyChartAsync(string canvasId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

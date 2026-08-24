@@ -35,6 +35,15 @@ namespace StockManagement.Services
             return reportItems;
         }
 
+        /// <summary>
+        /// Sale lines at their natural grain. Returned as they come back from
+        /// the database - the Insights page does its own aggregating.
+        /// </summary>
+        public async Task<List<SalesInsightItemDto>> GetSalesInsightsAsync(int locationId, int customerId, int productTypeId, int productId, DateTime fromDate, DateTime toDate)
+        {
+            return await reportRepository.GetSalesInsightsAsync(locationId, customerId, productTypeId, productId, fromDate, toDate);
+        }
+
         public async Task<List<StockReportItemDto>> GetStockReportAsync(int locationId, int productTypeId, int productId)
         {
             var reportItems = mapper.Map<List<StockReportItemDto>>(await reportRepository.GetStockReportAsync(locationId, productTypeId, productId));

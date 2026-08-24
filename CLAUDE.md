@@ -32,7 +32,13 @@ The database is a SQL Server Database Project (`.sqlproj`). Schema and stored pr
 
 ## Deployment
 
-Production deploy is a manual PowerShell flow, not CI. `.github/workflows/` is empty. `PowerShell/DeployStockManagement.ps1` builds the Docker image, saves it to a tar, `scp`s it to a home server, and runs `docker compose up -d` over SSH. Bump the `"Version"` field in `appsettings.json` when releasing.
+Production deploy is a manual PowerShell flow, not CI. `.github/workflows/` is empty. `PowerShell/DeployStockManagement.ps1` builds the Docker image, saves it to a tar, `scp`s it to a home server, and runs `docker compose up -d` over SSH.
+
+**Every release must bump the `"Version"` field in
+[`StockManagement/StockManagement/appsettings.json`](StockManagement/StockManagement/appsettings.json).**
+Nothing derives or checks it automatically, so it is easy to forget — and it is the only thing that
+tells you which build is actually running, since the client renders it as "Client Version: x.y.z" in
+the page header. Bump it as part of the release, before building the image.
 
 ## Documentation
 

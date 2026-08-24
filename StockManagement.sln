@@ -32,6 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment Scripts", "Deplo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{962C731E-842A-4A54-AA8B-6D3B861193DE}"
 	ProjectSection(SolutionItems) = preProject
+		Documents\AccountsModuleDesign.md = Documents\AccountsModuleDesign.md
 		Documents\StockValuationPointInTime.md = Documents\StockValuationPointInTime.md
 	EndProjectSection
 EndProject

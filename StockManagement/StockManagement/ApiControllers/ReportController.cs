@@ -25,6 +25,21 @@ namespace StockManagement.ApiControllers
             }
         }
 
+        [HttpGet("salesinsights")]
+        public async Task<IActionResult> GetSalesInsights(int locationId, int customerId, int productTypeId, int productId, DateTime fromDate, DateTime toDate)
+        {
+            try
+            {
+                var reportItems = await reportService.GetSalesInsightsAsync(locationId, customerId, productTypeId, productId, fromDate, toDate);
+                return this.Ok(reportItems);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, $"{nameof(ReportController)}: GetSalesInsights");
+                return this.BadRequest();
+            }
+        }
+
         [HttpGet("stock")]
         public async Task<IActionResult> GetStockReport(int locationId, int productTypeId, int productId)
         {

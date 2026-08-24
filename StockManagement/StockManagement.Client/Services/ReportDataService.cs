@@ -39,6 +39,9 @@ namespace StockManagement.Client.Services
         public Task<List<SalesReportItemDto>> GetSalesReportAsync(int salesReportType, int locationId, int customerId, int productTypeId, int productId, DateTime fromDate, DateTime toDate)
             => GetAsync<List<SalesReportItemDto>>($"sales?salesReportType={salesReportType}&locationId={locationId}&customerId={customerId}&productTypeId={productTypeId}&productId={productId}&fromDate={Iso(fromDate)}&toDate={Iso(toDate)}");
 
+        public Task<List<SalesInsightItemDto>> GetSalesInsightsAsync(int locationId, int customerId, int productTypeId, int productId, DateTime fromDate, DateTime toDate)
+            => GetAsync<List<SalesInsightItemDto>>($"salesinsights?locationId={locationId}&customerId={customerId}&productTypeId={productTypeId}&productId={productId}&fromDate={Iso(fromDate)}&toDate={Iso(toDate)}");
+
         public Task<List<StockReportItemDto>> GetStockReportAsync(int locationId, int productTypeId, int productId)
             => GetAsync<List<StockReportItemDto>>($"stock?locationId={locationId}&productTypeId={productTypeId}&productId={productId}");
 
