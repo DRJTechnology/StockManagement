@@ -1,40 +1,23 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using StockManagement.Client.Interfaces;
-using StockManagement.Models;
 using StockManagement.Models.Dto.Finance;
-using StockManagement.Models.Dto.Reports;
 
-[Authorize]
-public partial class TrialBalanceReportBase : ComponentBase
+namespace StockManagement.Client.Pages.Finance
 {
-    [Inject]
-    protected IReportDataService ReportDataService { get; set; } = default!;
-
-    [Inject]
-    public IJSRuntime JSRuntime { get; set; } = default!;
-
-    [Inject]
-    protected IJavascriptMethodsService JavascriptMethodsService { get; set; } = default!;
-
-    protected bool IsLoading = true;
-
-    protected List<TrialBalanceDto> TrialBalanceReportItems = new();
-
-    protected override async Task OnInitializedAsync()
+    public partial class TrialBalanceReportBase : FinanceReportBase
     {
-        if (JSRuntime is IJSInProcessRuntime)
+        protected List<TrialBalanceDto> Items = new();
+
+        protected override async Task LoadReportDataAsync()
         {
-            await PopulateReport();
+            Items = await ReportDataService.GetTrialBalanceReportAsync(FromDate, ToDate);
         }
-    }
 
-    protected async Task PopulateReport()
-    {
-        IsLoading = true;
-        TrialBalanceReportItems = await ReportDataService.GetTrialBalanceReportAsync();
-        IsLoading = false;
-        StateHasChanged();
+        protected decimal TotalDebit => Items.Sum(i => i.Debit);
+        protected decimal TotalCredit => Items.Sum(i => i.Credit);
+        protected decimal TotalBalanceDebit => Items.Sum(i => i.BalanceDebit);
+        protected decimal TotalBalanceCredit => Items.Sum(i => i.BalanceCredit);
+
+        protected bool Balances => Math.Round(TotalDebit, 2) == Math.Round(TotalCredit, 2);
+
+        protected string PdfUrl => $"api/Pdf/trial-balance?{PeriodQuery}";
     }
 }

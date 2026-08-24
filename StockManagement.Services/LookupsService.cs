@@ -38,6 +38,7 @@ namespace StockManagement.Services
                     ProductTypeList = await _productTypeService.GetAllAsync(),
                     LocationList = await _locationService.GetAllAsync(),
                     SupplierList = await _contactService.GetByTypeAsync(ContactTypeEnum.Supplier),
+                    CustomerList = await _contactService.GetByTypeAsync(ContactTypeEnum.Customer),
                 }
             };
         }

@@ -143,7 +143,7 @@ public partial class StockOrderBase : ComponentBase
         {
             StockOrderId = EditStockOrder.Id,
             Cost = 0,
-            PaymentDate = DateTime.Now,
+            PaymentDate = DateTime.Today,
             Description = description,
             ContactId = EditStockOrder.ContactId,
             StockOrderDetailPayments = EditStockOrder.DetailList

@@ -18,7 +18,7 @@ namespace StockManagement.Client.Services
         {
             try
             {
-                var response = await httpClient.PostAsJsonAsync<StockOrderPaymentsCreateModel>($"api/{ApiControllerName}/CreateStockOrderPayments", stockOrderDetailPayments);
+                var response = await httpClient.PostAsJsonAsync<StockOrderPaymentsCreateModel>($"api/{ApiControllerName}/CreateStockOrderPayments", stockOrderDetailPayments, ApiJson.Options);
                 if (response == null || !response.IsSuccessStatusCode)
                 {
                     throw new Exception($"Failed to stock order payments.");

@@ -14,9 +14,15 @@
 else
 {
     <ReportFilter Lookups="Lookups"
+                  ShowReportTypeSelector="true"
+                  ShowDateRange="true"
+                  @bind-SalesReportType="SalesReportType"
                   @bind-LocationId="LocationId"
+                  @bind-CustomerId="CustomerId"
                   @bind-ProductTypeId="ProductTypeId"
-                  @bind-ProductId="ProductId" />
+                  @bind-ProductId="ProductId"
+                  @bind-FromDate="FromDate"
+                  @bind-ToDate="ToDate" />
 
     if (SalesReportItems == null || !SalesReportItems.Any())
     {
@@ -28,7 +34,7 @@ else
         {
             <h4 class="location-group">
                 @location.Key
-                @if (location.Key != "Totals")
+                @if (SalesReportType == 1 && location.Key != "Totals")
                 {
                     <button class="btn btn-link ms-2" title="Show Notes" @onclick="() => ShowLocationNotes(location.Key)">
                         <i class="bi bi-journal-text"></i>

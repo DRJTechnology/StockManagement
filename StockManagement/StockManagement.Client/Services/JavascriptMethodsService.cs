@@ -17,5 +17,15 @@ namespace StockManagement.Client.Services
             // Parse as local time
             return DateTime.Parse(isoString);
         }
+
+        public async Task RenderChartAsync(string canvasId, object config)
+        {
+            await JSRuntime.InvokeVoidAsync("insightsCharts.render", canvasId, config);
+        }
+
+        public async Task DestroyChartAsync(string canvasId)
+        {
+            await JSRuntime.InvokeVoidAsync("insightsCharts.destroy", canvasId);
+        }
     }
 }

@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /StockManagement/StockManagement/appsettings.Development.json
+/.claude/launch.json

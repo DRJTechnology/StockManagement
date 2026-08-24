@@ -7,5 +7,6 @@
         public List<LocationResponseModel> LocationList { get; set; } = new();
         public List<ActionResponseModel> ActionList { get; set; } = new();
         public List<ContactResponseModel> SupplierList { get; set; } = new();
+        public List<ContactResponseModel> CustomerList { get; set; } = new();
     }
 }

@@ -13,24 +13,67 @@
     @if (filtersExpanded)
     {
         <div class="card-body">
+            @{
+                var colClass = ColumnClass;
+            }
             <div class="row">
-                <div class="col-lg-4">
-                    <div class="form-floating">
-                        <InputSelect id="locationFilter" @bind-Value="LocationId" TValue="int" class="form-control">
-                            <option value="-1">-- Totals --</option>
-                            <option value="0">All Locations</option>
-                            @if (Lookups?.LocationList != null)
-                            {
-                                @foreach (var location in Lookups.LocationList)
-                                {
-                                    <option value="@location.Id">@location.Name</option>
-                                }
-                            }
-                        </InputSelect>
-                        <label for="locationFilter">Location:</label>
+                @if (ShowReportTypeSelector)
+                {
+                    <div class="@colClass">
+                        <div class="form-floating">
+                            <InputSelect id="reportTypeFilter" @bind-Value="SalesReportType" TValue="int" class="form-control">
+                                <option value="1">Location</option>
+                                <option value="2">Customer</option>
+                            </InputSelect>
+                            <label for="reportTypeFilter">Group By:</label>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-4">
+                }
+                @if (LocationVisible)
+                {
+                    <div class="@colClass">
+                        <div class="form-floating">
+                            <InputSelect id="locationFilter" @bind-Value="LocationId" TValue="int" class="form-control">
+                                @if (ShowTotalsOption)
+                                {
+                                    <option value="-1">-- Totals --</option>
+                                }
+                                <option value="0">All Locations</option>
+                                @if (Lookups?.LocationList != null)
+                                {
+                                    @foreach (var location in Lookups.LocationList)
+                                    {
+                                        <option value="@location.Id">@location.Name</option>
+                                    }
+                                }
+                            </InputSelect>
+                            <label for="locationFilter">Location:</label>
+                        </div>
+                    </div>
+                }
+                @if (CustomerVisible)
+                {
+                    <div class="@colClass">
+                        <div class="form-floating">
+                            <InputSelect id="customerFilter" @bind-Value="CustomerId" TValue="int" class="form-control">
+                                @if (ShowTotalsOption)
+                                {
+                                    <option value="-1">-- Totals --</option>
+                                }
+                                <option value="0">All Customers</option>
+                                @if (Lookups?.CustomerList != null)
+                                {
+                                    @foreach (var customer in Lookups.CustomerList)
+                                    {
+                                        <option value="@customer.Id">@customer.Name</option>
+                                    }
+                                }
+                            </InputSelect>
+                            <label for="customerFilter">Customer:</label>
+                        </div>
+                    </div>
+                }
+                <div class="@colClass">
                     <div class="form-floating">
                         <InputSelect id="productTypeFilter" @bind-Value="ProductTypeId" TValue="int" class="form-control">
                             <option value="0">All Product Types</option>
@@ -45,7 +88,7 @@
                         <label for="productTypeFilter">Product Type:</label>
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="@colClass">
                     <div class="form-floating">
                         <InputSelect id="productFilter" @bind-Value="ProductId" TValue="int" class="form-control">
                             <option value="0">All Products</option>
@@ -61,6 +104,31 @@
                     </div>
                 </div>
             </div>
+            @if (ShowDateRange)
+            {
+                <div class="row mt-2 g-2 align-items-end">
+                    <div class="col-6 col-lg-3">
+                        <div class="form-floating">
+                            <InputDate id="fromDateFilter" @bind-Value="FromDate" class="form-control" />
+                            <label for="fromDateFilter">From:</label>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="form-floating">
+                            <InputDate id="toDateFilter" @bind-Value="ToDate" class="form-control" />
+                            <label for="toDateFilter">To:</label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 d-flex gap-2">
+                        <button type="button" class="btn btn-outline-secondary" @onclick="SetTaxYear">
+                            Last tax year
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary" @onclick="ClearDateRange">
+                            All dates
+                        </button>
+                    </div>
+                </div>
+            }
         </div>
     }
 </div>

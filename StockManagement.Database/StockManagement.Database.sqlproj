@@ -67,11 +67,13 @@
     <Folder Include="finance\Tables\" />
     <Folder Include="finance\Stored Procedures\" />
     <Folder Include="finance\User Defined Types\" />
+    <Folder Include="finance\Views\" />
     <Folder Include="Scripts" />
     <Folder Include="Scripts\V1.8.0" />
     <Folder Include="Scripts\V2.0.0" />
     <Folder Include="Scripts\V2.0.3" />
     <Folder Include="Scripts\V2.0.7" />
+    <Folder Include="Scripts\V2.1.0" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\ProductType.sql" />
@@ -124,6 +126,7 @@
     <Build Include="Security\auth.sql" />
     <Build Include="dbo\Stored Procedures\Activity_Update.sql" />
     <Build Include="dbo\Stored Procedures\Report_Sales.sql" />
+    <Build Include="dbo\Stored Procedures\Report_SalesInsights.sql" />
     <Build Include="dbo\Stored Procedures\Report_Stock.sql" />
     <Build Include="dbo\Stored Procedures\Activity_LoadFiltered.sql" />
     <Build Include="dbo\Tables\StockSaleDetail.sql" />
@@ -256,6 +259,13 @@
     <Build Include="dbo\Stored Procedures\ErrorLog_Create.sql" />
     <Build Include="finance\Stored Procedures\Report_ProfitAndLoss.sql" />
     <Build Include="finance\Stored Procedures\Report_TrialBalance.sql" />
+    <Build Include="finance\Views\vw_InventoryBatchMovement.sql" />
+    <Build Include="finance\Stored Procedures\Report_StockValuation.sql" />
+    <Build Include="finance\Stored Procedures\Report_StockReconciliation.sql" />
+    <Build Include="finance\Stored Procedures\Report_NominalLedger.sql" />
+    <Build Include="finance\Stored Procedures\Report_IncomeExpenditure.sql" />
+    <Build Include="finance\Stored Procedures\Report_OwnersAccount.sql" />
+    <Build Include="finance\Stored Procedures\Report_YearEndChecks.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\ContactType.sql" />
@@ -274,5 +284,6 @@
   <ItemGroup>
     <None Include="Scripts\V2.0.3\0. Rename column.sql" />
     <None Include="Scripts\V2.0.7\Data Updates V2.0.7.sql" />
+    <None Include="Scripts\V2.1.0\1. Fix BST dates and convert to DATE.sql" />
   </ItemGroup>
 </Project>

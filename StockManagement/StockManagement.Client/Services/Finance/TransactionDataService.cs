@@ -97,7 +97,7 @@ namespace StockManagement.Client.Services.Finance
         {
             try
             {
-                var response = await httpClient.PostAsJsonAsync<TransactionDetailEditModel>($"api/{ApiControllerName}/CreateExpenseIncome", editTransactionDetail);
+                var response = await httpClient.PostAsJsonAsync<TransactionDetailEditModel>($"api/{ApiControllerName}/CreateExpenseIncome", editTransactionDetail, ApiJson.Options);
                 if (response == null || !response.IsSuccessStatusCode)
                 {
                     throw new Exception($"Failed to create expense/income.");
@@ -122,7 +122,7 @@ namespace StockManagement.Client.Services.Finance
         {
             try
             {
-                var response = await httpClient.PutAsJsonAsync<TransactionDetailEditModel>($"api/{ApiControllerName}/UpdateExpenseIncome", editTransactionDetail);
+                var response = await httpClient.PutAsJsonAsync<TransactionDetailEditModel>($"api/{ApiControllerName}/UpdateExpenseIncome", editTransactionDetail, ApiJson.Options);
                 if (response == null || !response.IsSuccessStatusCode)
                 {
                     throw new Exception($"Failed to update expense/income.");

@@ -20,7 +20,7 @@ namespace StockManagement.Client.Services
         {
             try
             {
-                var response = await httpClient.PostAsJsonAsync<TCreateEntity>($"api/{ApiControllerName}", entity);
+                var response = await httpClient.PostAsJsonAsync<TCreateEntity>($"api/{ApiControllerName}", entity, ApiJson.Options);
                 if (response == null || !response.IsSuccessStatusCode)
                 {
                     throw new Exception($"Failed to create {ApiControllerName}: HTTP {response?.StatusCode}");
@@ -105,7 +105,7 @@ namespace StockManagement.Client.Services
         {
             try
             {
-                var response = await httpClient.PutAsJsonAsync<TCreateEntity>($"api/{ApiControllerName}", entity);
+                var response = await httpClient.PutAsJsonAsync<TCreateEntity>($"api/{ApiControllerName}", entity, ApiJson.Options);
                 if (response == null || !response.IsSuccessStatusCode)
                 {
                     throw new Exception($"Failed to update {ApiControllerName}: HTTP {response?.StatusCode}");

@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [finance].[Transaction] (
     [Id]                INT            IDENTITY (1, 1) NOT NULL,
     [TransactionTypeId] SMALLINT       NOT NULL,
-    [Date]              DATETIME       NOT NULL,
+    [Date]              DATE           NOT NULL,
     [Reference]         NVARCHAR (256) NOT NULL,
     [Deleted]           BIT            NOT NULL,
     [CreateUserId]      INT            NOT NULL,

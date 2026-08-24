@@ -20,12 +20,27 @@ public partial class SalesReportBase : ComponentBase
     public LookupsModel Lookups { get; private set; } = new LookupsModel();
 
     protected bool IsLoading = true;
+    private int _salesReportType = 1;
     private int _locationId;
+    private int _customerId;
     private int _productTypeId;
     private int _productId;
         protected bool ShowNotesPanel { get; set; } = false;
     protected string SelectedLocationNotes { get; set; } = string.Empty;
     protected string SelectedLocationTitle { get; set; } = string.Empty;
+
+    protected int SalesReportType
+    {
+        get => _salesReportType;
+        set
+        {
+            if (_salesReportType != value)
+            {
+                _salesReportType = value;
+                _ = PopulateReport();
+            }
+        }
+    }
 
     protected int LocationId
     {
@@ -35,6 +50,19 @@ public partial class SalesReportBase : ComponentBase
             if (_locationId != value)
             {
                 _locationId = value;
+                _ = PopulateReport();
+            }
+        }
+    }
+
+    protected int CustomerId
+    {
+        get => _customerId;
+        set
+        {
+            if (_customerId != value)
+            {
+                _customerId = value;
                 _ = PopulateReport();
             }
         }
@@ -66,6 +94,39 @@ public partial class SalesReportBase : ComponentBase
         }
     }
 
+    private DateTime _fromDate = new DateTime(2000, 1, 1);
+    private DateTime _toDate = new DateTime(2099, 12, 31);
+
+    /// <summary>
+    /// Defaults to all dates so the report behaves as it always has. Narrow it
+    /// to a financial year when preparing accounts.
+    /// </summary>
+    protected DateTime FromDate
+    {
+        get => _fromDate;
+        set
+        {
+            if (_fromDate != value)
+            {
+                _fromDate = value;
+                _ = PopulateReport();
+            }
+        }
+    }
+
+    protected DateTime ToDate
+    {
+        get => _toDate;
+        set
+        {
+            if (_toDate != value)
+            {
+                _toDate = value;
+                _ = PopulateReport();
+            }
+        }
+    }
+
     protected List<SalesReportItemDto> SalesReportItems = new();
     protected Dictionary<string, Dictionary<string, List<SalesReportItemDto>>> GroupedSalesReport = new();
 
@@ -81,9 +142,15 @@ public partial class SalesReportBase : ComponentBase
     {
         IsLoading = true;
 
-        SalesReportItems = await ReportDataService.GetSalesReportAsync(LocationId, ProductTypeId, ProductId);
+        SalesReportItems = await ReportDataService.GetSalesReportAsync(SalesReportType, LocationId, CustomerId, ProductTypeId, ProductId, FromDate, ToDate);
+
+        // Group by Customer when the report is run by customer, otherwise by Location.
+        Func<SalesReportItemDto, string> groupSelector = SalesReportType == 2
+            ? item => item.CustomerName
+            : item => item.LocationName;
+
         GroupedSalesReport = SalesReportItems
-            .GroupBy(item => item.LocationName)
+            .GroupBy(groupSelector)
             .ToDictionary(
                 locationGroup => locationGroup.Key,
                 locationGroup => locationGroup

@@ -8,7 +8,7 @@
     [InitialQuantity]   INT     NOT NULL, 
     [QuantityRemaining] INT     NOT NULL, 
     [UnitCost]      MONEY       NOT NULL, 
-    [PurchaseDate]  DATETIME    NOT NULL,
+    [PurchaseDate]  DATE        NOT NULL,
     [OriginalInventoryBatchId] INT NULL,
     [Deleted]       BIT         DEFAULT ((0)) NOT NULL,
     [CreateUserId]  INT         NOT NULL,

@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[StockSale] (
     [Id]          INT      IDENTITY (1, 1) NOT NULL,
-    [Date]        DATETIME NOT NULL,
+    [Date]        DATE     NOT NULL,
     [LocationId]  INT      NOT NULL,
     [ContactId]   INT      NOT NULL,
     [SaleConfirmed]   BIT  CONSTRAINT [DF_StockSale_SaleConfirmed] DEFAULT ((0)) NOT NULL,
