@@ -141,6 +141,20 @@ public partial class StockReportBase : ComponentBase
         ShowNotesPanel = false;
     }
 
+    /// <summary>
+    /// The printable stock sheet for a location group. The grouping is keyed by
+    /// location name, so the id has to come back off the rows.
+    /// </summary>
+    protected static string LocationPdfUrl(Dictionary<string, List<StockReportItemDto>> productTypeGroups)
+    {
+        var locationId = productTypeGroups.Values
+            .SelectMany(items => items)
+            .Select(item => item.LocationId)
+            .FirstOrDefault();
+
+        return $"api/Pdf/stock-report?locationId={locationId}";
+    }
+
     protected async Task HandleValidSubmit()
     {
         var newId = await ActivityService.CreateAsync(NewActivity);
