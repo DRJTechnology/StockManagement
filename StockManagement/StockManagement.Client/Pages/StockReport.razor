@@ -41,6 +41,9 @@ else
                     <button class="btn btn-link ms-2" title="Show Notes" @onclick="() => ShowLocationNotes(locationGroup.Key)">
                         <i class="bi bi-journal-text"></i>
                     </button>
+                    <a class="btn btn-link" href="@LocationPdfUrl(locationGroup.Value)" target="_blank" title="Print stock sheet">
+                        <i class="bi bi-file-earmark-pdf"></i>
+                    </a>
                 }
             </h4>
             @foreach (var productTypeGroup in locationGroup.Value)

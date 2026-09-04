@@ -12,7 +12,7 @@ namespace StockManagement.ApiControllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class PdfController(ILogger<StockSaleController> logger, IDeliveryNoteService deliveryNoteService, IStockSaleService stockSaleService, ISettingService settingService, IReportService reportService) : ControllerBase
+    public class PdfController(ILogger<StockSaleController> logger, IDeliveryNoteService deliveryNoteService, IStockSaleService stockSaleService, ISettingService settingService, IReportService reportService, ILocationService locationService) : ControllerBase
     {
         [HttpGet("invoice/{id}")]
         public async Task<IActionResult> GetStockSalePdf(int id)
@@ -153,6 +153,47 @@ namespace StockManagement.ApiControllers
             catch (Exception ex)
             {
                 logger.LogError(ex, $"{nameof(PdfController)}: {nameof(GetYearEndPackPdf)}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while generating the PDF.");
+            }
+        }
+
+        // ---- Stock ------------------------------------------------------------
+
+        /// <summary>
+        /// The stock held at one location as a printable tally sheet. Always the
+        /// whole location - the product type / product filters on the Stock Report
+        /// page deliberately do not narrow it, so the printed sheet is always the
+        /// complete picture.
+        /// </summary>
+        [HttpGet("stock-report")]
+        public async Task<IActionResult> GetStockReportPdf(int locationId)
+        {
+            try
+            {
+                // Named from the Location record rather than the returned rows, so
+                // the sheet is titled correctly even when the location is empty, and
+                // so the pseudo-locations the report uses (0 = all, -1 = totals) are
+                // rejected rather than producing a whole-database sheet.
+                var location = (await locationService.GetAllAsync()).FirstOrDefault(l => l.Id == locationId);
+                if (location == null)
+                {
+                    return NotFound();
+                }
+
+                var items = await reportService.GetStockReportAsync(locationId, 0, 0);
+                var locationName = location.Name;
+
+                var logo = await LoadLogoAsync();
+                var settings = await settingService.GetAllAsync();
+                var document = new StockReportDocument(items, locationName, logo, settings);
+                var pdfBytes = document.GeneratePdf();
+
+                var safeName = string.Concat(locationName.Split(Path.GetInvalidFileNameChars()));
+                return File(pdfBytes, "application/pdf", $"Stock at {safeName} {DateTime.Today:yyyy-MM-dd}.pdf");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, $"{nameof(PdfController)}: {nameof(GetStockReportPdf)}");
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while generating the PDF.");
             }
         }
